@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/experience_controller.dart';
+import '../controllers/digital_readiness_controller.dart';
 
-class ExperienceView extends GetView<ExperienceController> {
-  const ExperienceView({super.key});
+class DigitalReadinessView extends GetView<DigitalReadinessController> {
+  const DigitalReadinessView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
         title: const Text(
-          "Step 2 of 4",
+          'Step 3 of 4',
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -31,10 +30,10 @@ class ExperienceView extends GetView<ExperienceController> {
           children: [
             const SizedBox(height: 20),
 
-            /// ================= TITLE =================
+            // ================= TITLE =================
             const Center(
               child: Text(
-                "Experience & Expertise",
+                'Digital Readiness & Logistics',
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 20,
@@ -45,11 +44,11 @@ class ExperienceView extends GetView<ExperienceController> {
 
             const SizedBox(height: 15),
 
-            /// ================= PROGRESS =================
+            // ================= PROGRESS =================
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: const LinearProgressIndicator(
-                value: 2 / 4,
+                value: 3 / 4,
                 minHeight: 6,
                 backgroundColor: Color(0xFFE5E7EB),
                 valueColor: AlwaysStoppedAnimation(Color(0xFF0D9488)),
@@ -58,9 +57,9 @@ class ExperienceView extends GetView<ExperienceController> {
 
             const SizedBox(height: 30),
 
-            /// ================= EXPERIENCE SECTION =================
+            // ================= TECH & PROTOCOLS =================
             const Text(
-              "Experience Section",
+              'Tech & Protocols',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
@@ -70,94 +69,69 @@ class ExperienceView extends GetView<ExperienceController> {
 
             const SizedBox(height: 20),
 
+            Obx(() => Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Column(
+                    children: [
+                      _toggleRow(
+                        title: 'Experienced in Teleconsultation?',
+                        value: controller.teleconsultation.value,
+                        onChanged: (val) =>
+                            controller.teleconsultation.value = val,
+                      ),
+                      const SizedBox(height: 24),
+                      _toggleRow(
+                        title: 'Familiar with EMR Systems?',
+                        value: controller.emrSystems.value,
+                        onChanged: (val) => controller.emrSystems.value = val,
+                      ),
+                      const SizedBox(height: 24),
+                      _toggleRow(
+                        title: 'Willing to follow PHIR clinical protocols?',
+                        value: controller.clinicalProtocols.value,
+                        onChanged: (val) =>
+                            controller.clinicalProtocols.value = val,
+                      ),
+                      const SizedBox(height: 24),
+                      _toggleRow(
+                        title: 'Willing to work in multidisciplinary teams?',
+                        value: controller.multidisciplinaryTeams.value,
+                        onChanged: (val) =>
+                            controller.multidisciplinaryTeams.value = val,
+                      ),
+                    ],
+                  ),
+                )),
+
+            const SizedBox(height: 40),
+            const Divider(),
+            const SizedBox(height: 30),
+
+            // ================= LOGISTICS =================
             const Text(
-              "Total Experience",
+              'Logistics Sections',
               style: TextStyle(
                 fontFamily: 'Mulish',
-                fontSize: 14,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 20),
-
-            /// ================= SLIDER BOX =================
-            Obx(() {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: const Color(0xFF0D9488),
-                        inactiveTrackColor: const Color(0xFFE5E7EB),
-                        thumbColor: const Color(0xFF0D9488),
-                        overlayColor: const Color(0x330D9488),
-                        trackHeight: 6,
-                        thumbShape: const RoundSliderThumbShape(
-                          enabledThumbRadius: 12,
-                        ),
-                      ),
-                      child: Slider(
-                        value: controller.totalExperience.value,
-                        min: 0,
-                        max: 40,
-                        divisions: 40,
-                        onChanged: (value) {
-                          controller.totalExperience.value = value;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "0 yrs",
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF9CA3AF),
-                          ),
-                        ),
-                        Text(
-                          "${controller.totalExperience.value.toInt()} Years",
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF0D9488),
-                          ),
-                        ),
-                        const Text(
-                          "40+ yrs",
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF9CA3AF),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }),
-
             const SizedBox(height: 30),
 
-            /// ================= PRIMARY SPECIALTY =================
+            // ================= AVAILABILITY =================
             const Text(
-              "Primary Specialty",
+              'Availability',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
 
@@ -172,66 +146,23 @@ class ExperienceView extends GetView<ExperienceController> {
                 border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: TextField(
-                controller: controller.specialtyController,
+                controller: controller.availabilityController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Enter specialty",
-                  hintStyle: TextStyle(
-                    fontFamily: 'Mulish',
-                    color: Color(0xFF9CA3AF),
-                  ),
+                  hintText: "Part-time",
                 ),
               ),
             ),
 
-            const SizedBox(height: 40),
-            const Divider(),
             const SizedBox(height: 30),
 
-            /// ================= PRACTICE DETAILS =================
+            // ================= LANGUAGE =================
             const Text(
-              "Practice Details",
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              "Current Practice Place",
+              'Language',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Obx(() => Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: controller.practicePlaces
-                      .map((item) => _chip(
-                            label: item,
-                            selected: controller.selectedPracticePlaces
-                                .contains(item),
-                            onTap: () => controller.togglePracticePlace(item),
-                          ))
-                      .toList(),
-                )),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              "Care Experience",
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
 
@@ -241,34 +172,33 @@ class ExperienceView extends GetView<ExperienceController> {
                   spacing: 12,
                   runSpacing: 12,
                   children: [
-                    ...controller.careExperiences.map(
+                    ...controller.languages.map(
                       (item) => _chip(
                         label: item,
-                        selected:
-                            controller.selectedCareExperience.contains(item),
-                        onTap: () => controller.toggleCareExperience(item),
+                        selected: controller.selectedLanguages.contains(item),
+                        onTap: () => controller.toggleLanguage(item),
                       ),
                     ),
-                    _addOtherChip(),
+                    _addOtherLanguageChip(),
                   ],
                 )),
 
             const SizedBox(height: 30),
 
-            /// ================= HISTORY =================
+            // ================= FEE =================
             const Text(
-              "Gynecological History",
+              'Per Session Fee',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
 
             Container(
-              height: 120,
+              height: 56,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -276,16 +206,12 @@ class ExperienceView extends GetView<ExperienceController> {
                 border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: TextField(
-                controller: controller.historyController,
-                maxLines: null,
+                controller: controller.feeController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText:
-                      "Briefly describe your experience\nwith OPD / Emergency care...",
-                  hintStyle: TextStyle(
-                    fontFamily: 'Mulish',
-                    color: Color(0xFF9CA3AF),
-                  ),
+                  prefixText: "₹  ",
+                  hintText: "800",
                 ),
               ),
             ),
@@ -301,7 +227,35 @@ class ExperienceView extends GetView<ExperienceController> {
     );
   }
 
-  /// ================= CHIP =================
+  // ================= SWITCH TILE =================
+  Widget _toggleRow({
+    required String title,
+    required bool value,
+    required Function(bool) onChanged,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontFamily: 'Mulish',
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Switch(
+          value: value,
+          activeColor: const Color(0xFF0D9488),
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+
+  // ================= CHIP =================
   Widget _chip({
     required String label,
     required bool selected,
@@ -342,10 +296,9 @@ class ExperienceView extends GetView<ExperienceController> {
     );
   }
 
-  /// ================= ADD OTHER CHIP =================
-  Widget _addOtherChip() {
+  Widget _addOtherLanguageChip() {
     return GestureDetector(
-      onTap: controller.openAddOtherBottomSheet,
+      onTap: controller.openAddLanguageBottomSheet,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
@@ -353,13 +306,30 @@ class ExperienceView extends GetView<ExperienceController> {
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: const Color(0xFFE5E7EB)),
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add_circle_outline, size: 18, color: Color(0xFF111827)),
-            SizedBox(width: 8),
-            Text(
-              "Add Other",
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1.5,
+                ),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.add,
+                  size: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'Add Other',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
@@ -372,7 +342,6 @@ class ExperienceView extends GetView<ExperienceController> {
     );
   }
 
-  /// ================= NEXT BUTTON =================
   Widget _buildNextButton() {
     return SizedBox(
       width: double.infinity,
@@ -398,7 +367,7 @@ class ExperienceView extends GetView<ExperienceController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Next Step",
+                'Next Step',
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,

@@ -33,6 +33,13 @@ import '../../Doctor/profile_setup/registration/bindings/registration_binding.da
 
 import '../../Doctor/profile_setup/experience/views/experience_view.dart';
 import '../../Doctor/profile_setup/experience/bindings/experience_binding.dart';
+
+import '../../Doctor/profile_setup/digital_readiness/views/digital_readiness_view.dart';
+import '../../Doctor/profile_setup/digital_readiness/bindings/digital_readiness_binding.dart';
+
+import '../../Doctor/profile_setup/final_verification/views/final_verification_view.dart';
+import '../../Doctor/profile_setup/final_verification/bindings/final_verification_binding.dart';
+
 import 'app_routes.dart';
 
 class AppPages {
@@ -101,6 +108,18 @@ class AppPages {
       name: Routes.DOCTOR_EXPERIENCE,
       page: () => const ExperienceView(),
       binding: ExperienceBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_DIGITAL_READINESS,
+      page: () => const DigitalReadinessView(),
+      binding: DigitalReadinessBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_FINAL_VERIFICATION,
+      page: () => const FinalVerificationView(),
+      binding: FinalVerificationBinding(),
     ),
   ];
 }

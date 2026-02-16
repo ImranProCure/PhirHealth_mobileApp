@@ -14,4 +14,6 @@ abstract class Routes {
   // Doctor
   static const DOCTOR_REGISTRATION = '/doctor/registration';
   static const DOCTOR_EXPERIENCE = '/doctor/experience';
+  static const DOCTOR_DIGITAL_READINESS = '/doctor/digital-readiness';
+  static const DOCTOR_FINAL_VERIFICATION = '/doctor/final-verification';
 }
