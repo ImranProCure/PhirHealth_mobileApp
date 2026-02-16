@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
+import '../../../routes/app_routes.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -173,16 +174,16 @@ class LoginView extends GetView<LoginController> {
                       // Get OTP Button
                       Container(
                         width: 370,
-                        height: 56,
+                        height: 60,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: [
                               Color(0xFF00786F), // #00786F
                               Color(0xFF009689), // #009689
                               Color(0xFF1447E6), // #1447E6
                             ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
                           ),
                           borderRadius: BorderRadius.circular(85),
                           boxShadow: [
@@ -224,17 +225,34 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                       const SizedBox(height: 20),
-
-                      // Center(child:Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     const Text("Don't have an account?"),
-                      //     style: TextStyle(
-                      //       fontFamily: 'Mulish',
-
-                      //     )
-                      //   ],
-                      // ))
+                      Center(
+                        child: GestureDetector(
+                          onTap: controller.goToSignup,
+                          child: RichText(
+                            text: const TextSpan(
+                              text: "Don't have an account? ",
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF6B7280),
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Sign up',
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0D9488),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
                       const SizedBox(height: 32),
                     ],

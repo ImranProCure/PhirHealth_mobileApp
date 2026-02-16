@@ -3,46 +3,41 @@ import 'package:get/get.dart';
 import 'package:sample/app/modules/verify_mobile/bindings/verify_mobile_binding.dart';
 import 'package:sample/app/modules/verify_mobile/views/verify_mobile_view.dart';
 
+import '../../../controllers/role_controller.dart';
+import '../../../routes/app_routes.dart';
+
 class LoginController extends GetxController {
-  // Text Controller for phone number
+  /// =========================
+  /// DEPENDENCIES
+  /// =========================
+  final RoleController _roleController = Get.find<RoleController>();
+
+  /// =========================
+  /// TEXT CONTROLLERS
+  /// =========================
   final TextEditingController phoneController = TextEditingController();
 
-  // Observable for loading state
+  /// =========================
+  /// STATE
+  /// =========================
   final RxBool isLoading = false.obs;
 
-  // Get OTP Function
+  /// =========================
+  /// LOGIN → GET OTP
+  /// =========================
   void getOTP() {
-    String phoneNumber = phoneController.text.trim();
+    final phoneNumber = phoneController.text.trim();
 
-    // Validation
     if (phoneNumber.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please enter your mobile number',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.red.shade900,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12,
-      );
+      _showError('Please enter your mobile number');
       return;
     }
 
     if (phoneNumber.length != 10) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid 10-digit mobile number',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.red.shade900,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12,
-      );
+      _showError('Please enter a valid 10-digit mobile number');
       return;
     }
 
-    // Success - Navigate to OTP screen
-    print('Phone Number: +91$phoneNumber');
     Get.snackbar(
       'Success',
       'OTP sent to +91$phoneNumber',
@@ -56,7 +51,53 @@ class LoginController extends GetxController {
     Get.to(
       () => const VerifyMobileView(),
       binding: VerifyMobileBinding(),
-      arguments: {'phone': phoneNumber},
+      arguments: {
+        'phone': phoneNumber,
+        'role': _roleController.role,
+      },
+    );
+  }
+
+  /// =========================
+  /// ROLE-BASED SIGNUP FLOW
+  /// =========================
+  void goToSignup() {
+    final role = _roleController.role;
+
+    if (role == null) {
+      _showError('Please select a role first');
+      return;
+    }
+
+    switch (role) {
+      case UserRole.patient:
+        Get.toNamed(Routes.PATIENT_IDENTITY_VITALS);
+        break;
+
+      case UserRole.doctor:
+        Get.toNamed(Routes.DOCTOR_REGISTRATION);
+        break;
+
+      case UserRole.partner:
+      case UserRole.counsellor:
+      case UserRole.corporate:
+        _showError('Signup flow not implemented yet for this role');
+        break;
+    }
+  }
+
+  /// =========================
+  /// COMMON ERROR HANDLER
+  /// =========================
+  void _showError(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.shade100,
+      colorText: Colors.red.shade900,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
     );
   }
 

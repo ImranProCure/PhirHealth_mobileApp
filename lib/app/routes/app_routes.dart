@@ -2,4 +2,16 @@ abstract class Routes {
   static const SPLASH = '/';
   static const VERIFY_MOBILE = '/verify-mobile';
   static const DASHBOARD = '/dashboard';
+
+  // patient
+  static const PATIENT_IDENTITY_VITALS = '/patient/identity-vitals';
+  static const PATIENT_MEDICAL_HISTORY = '/patient/medical-history';
+  static const PATIENT_LIFESTYLE = '/patient/lifestyle';
+  static const PATIENT_FAMILY_WELLBEING = '/patient/family-wellbeing';
+  static const PATIENT_WOMENS_HEALTH = '/patient/Women-health';
+  static const PATIENT_COMPLETION = '/patient/completion';
+
+  // Doctor
+  static const DOCTOR_REGISTRATION = '/doctor/registration';
+  static const DOCTOR_EXPERIENCE = '/doctor/experience';
 }

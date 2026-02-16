@@ -20,8 +20,6 @@ class DashboardView extends GetView<DashboardController> {
               SizedBox(height: 16),
               _DoctorActionsSection(),
               SizedBox(height: 24),
-              _InsuranceSection(),
-              SizedBox(height: 24),
               _AiMedicineFitnessSection(),
               SizedBox(height: 24),
               _PromoBanner(),
@@ -116,8 +114,16 @@ class _DoctorActionsSection extends StatelessWidget {
     },
     {'icon': 'assets/icons/health_cross.png', 'label': 'Network\nLocator'},
     {
-      'icon': 'assets/icons/published_with_changes.png',
-      'label': 'Policy\nRenew'
+      'icon': 'assets/icons/health_and_safety.png',
+      'label': 'Counsellor\nand Coaches'
+    },
+    {
+      'icon': 'assets/icons/lab_research.png',
+      'label': 'Lab Tests\n(Diagnostics)'
+    },
+    {
+      'icon': 'assets/icons/supervisor_account.png',
+      'label': 'Insurance &\nProtection'
     },
   ];
 
@@ -129,14 +135,23 @@ class _DoctorActionsSection extends StatelessWidget {
         children: [
           const _SectionTitle('Doctor & Quick Actions'),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _actions
-                .map((action) => _DoctorActionItem(
-                      imagePath: action['icon']!,
-                      label: action['label']!,
-                    ))
-                .toList(),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _actions.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.05,
+            ),
+            itemBuilder: (context, index) {
+              final action = _actions[index];
+              return _DoctorActionItem(
+                imagePath: action['icon']!,
+                label: action['label']!,
+              );
+            },
           ),
         ],
       ),
@@ -171,8 +186,8 @@ class _DoctorActionItem extends StatelessWidget {
           child: Center(
             child: Image.asset(
               imagePath,
-              width: 30,
-              height: 30,
+              width: 34,
+              height: 34,
               color: Colors.white,
               errorBuilder: (_, __, ___) => const Icon(
                 Icons.local_hospital,
@@ -182,9 +197,9 @@ class _DoctorActionItem extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         SizedBox(
-          width: 75,
+          width: 90,
           child: Text(
             label,
             textAlign: TextAlign.center,
@@ -194,100 +209,6 @@ class _DoctorActionItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
               height: 1.2,
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ================= INSURANCE & PROTECTION =================
-class _InsuranceSection extends StatelessWidget {
-  const _InsuranceSection();
-
-  static const List<Map<String, String>> _insuranceItems = [
-    {
-      'icon': 'assets/icons/health_and_safety.png',
-      'label': 'Health\nInsurance'
-    },
-    {'icon': 'assets/icons/diversity_1.png', 'label': 'Family\nHealth'},
-    {'icon': 'assets/icons/flight_takeoff.png', 'label': 'Travel\nInsurance'},
-    {'icon': 'assets/icons/add_moderator.png', 'label': 'Super\nTop-up'},
-    {'icon': 'assets/icons/cast_for_education.png', 'label': 'Student\nTravel'},
-    {'icon': 'assets/icons/workspace_premium.png', 'label': 'Ultimate\nCare'},
-    {'icon': 'assets/icons/assist_walker.png', 'label': 'Senior\nCitizen'},
-    {'icon': 'assets/icons/arrow_circle_right.png', 'label': 'View\nAll'},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return _WhiteCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _SectionTitle('Insurance & Protection'),
-          const SizedBox(height: 20),
-          GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 0.85,
-            ),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _insuranceItems.length,
-            itemBuilder: (context, index) {
-              final item = _insuranceItems[index];
-              return _InsuranceItem(
-                imagePath: item['icon']!,
-                label: item['label']!,
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _InsuranceItem extends StatelessWidget {
-  final String imagePath;
-  final String label;
-
-  const _InsuranceItem({
-    required this.imagePath,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          imagePath,
-          width: 32,
-          height: 32,
-          errorBuilder: (_, __, ___) => const Icon(
-            Icons.shield,
-            size: 32,
-            color: Color(0xFF0D9488),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Flexible(
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              height: 1.2,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
@@ -464,7 +385,7 @@ class _PromoBanner extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        height: 140,
+        height: 130,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),

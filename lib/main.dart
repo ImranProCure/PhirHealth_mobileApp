@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/controllers/role_controller.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 
 void main() {
+  Get.put(RoleController());
   runApp(const MyApp());
 }
 

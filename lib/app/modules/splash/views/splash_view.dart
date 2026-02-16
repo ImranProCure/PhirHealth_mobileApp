@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart'; // Get package add kiya
+import 'package:get/get.dart';
 import '../../home/views/home_view.dart';
-import '../../home/bindings/home_binding.dart'; // Binding import karna zaroori hai
+import '../../home/bindings/home_binding.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -12,6 +12,8 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  bool _navigated = false; // ✅ GUARD FLAG
+
   @override
   void initState() {
     super.initState();
@@ -19,24 +21,20 @@ class _SplashViewState extends State<SplashView> {
     // Full screen mode
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    // Timer Logic
     Future.delayed(const Duration(seconds: 3), () {
-      // Check if widget is mounted (active)
-      // Note: GetX use karte waqt 'mounted' check karna optional hota hai,
-      // par safety ke liye rakh sakte hain.
+      // ✅ PREVENT MULTIPLE NAVIGATION
+      if (_navigated || !mounted) return;
+      _navigated = true;
 
-      // Navigate to Home with Binding
       Get.off(
         () => const HomeView(),
-        binding:
-            HomeBinding(), // <-- YEH MAIN CHANGE HAI (Controller Load karega)
+        binding: HomeBinding(),
       );
     });
   }
 
   @override
   void dispose() {
-    // Wapas normal screen mode
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
@@ -49,12 +47,12 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image
           Positioned.fill(
-            child: Image.asset('assets/background.png', fit: BoxFit.cover),
+            child: Image.asset(
+              'assets/background.png',
+              fit: BoxFit.cover,
+            ),
           ),
-
-          // Logo in Center
           Center(
             child: Container(
               width: 250,
@@ -70,8 +68,11 @@ class _SplashViewState extends State<SplashView> {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+              padding: const EdgeInsets.all(30),
+              child: Image.asset(
+                'assets/logo.png',
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ],

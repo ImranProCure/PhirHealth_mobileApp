@@ -1,15 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../home/views/home_view.dart';
+import '../../home/bindings/home_binding.dart';
 
-class SplashController {
-  void startSplashTimer(BuildContext context) {
+class SplashController extends GetxController {
+  bool _hasNavigated = false;
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    if (_hasNavigated) return;
+    _hasNavigated = true;
+
     Future.delayed(const Duration(seconds: 3), () {
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeView()),
-        );
-      }
+      Get.off(
+        () => const HomeView(),
+        binding: HomeBinding(),
+      );
     });
   }
 }

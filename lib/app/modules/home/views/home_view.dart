@@ -57,9 +57,8 @@ class HomeView extends GetView<HomeController> {
                     final item = controller.roleItems[index];
                     return Padding(
                       padding: EdgeInsets.only(
-                        bottom: index == controller.roleItems.length - 1
-                            ? 0
-                            : 10,
+                        bottom:
+                            index == controller.roleItems.length - 1 ? 0 : 10,
                       ),
                       child: _buildRoleCard(
                         icon: item['icon'],

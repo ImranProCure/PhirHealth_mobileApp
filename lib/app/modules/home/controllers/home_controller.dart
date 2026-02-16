@@ -1,60 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../login/views/login_view.dart';
 import '../../login/bindings/login_binding.dart';
+import '../../../controllers/role_controller.dart';
 
 class HomeController extends GetxController {
-  // Role items with better matching icons
-  final List<Map<String, dynamic>> roleItems = [
+  /// =========================
+  /// GLOBAL ROLE CONTROLLER
+  /// =========================
+  final RoleController _roleController = Get.find<RoleController>();
+
+  /// =========================
+  /// ROLE LIST FOR UI
+  /// =========================
+  final List<Map<String, dynamic>> roleItems = const [
     {
-      "icon": Icons.person_outline, // Customer/Patient
+      "icon": Icons.person_outline,
       "title": "Customer / Patient",
       "subtitle": "Access your health records and appointments.",
-      "role": "Patient",
+      "role": UserRole.patient,
     },
     {
-      "icon": Icons.local_hospital_outlined, // Doctor (Stethoscope alternative)
+      "icon": Icons.local_hospital_outlined,
       "title": "Doctor",
       "subtitle": "Manage your patients and consultations.",
-      "role": "Doctor",
+      "role": UserRole.doctor,
     },
     {
-      "icon": Icons.handshake_outlined, // Collaboration/Partners
+      "icon": Icons.handshake_outlined,
       "title": "Collaboration / Partners",
       "subtitle": "Connect and grow with our health network.",
-      "role": "Partner",
+      "role": UserRole.partner,
     },
     {
-      "icon": Icons.chat_bubble_outline, // Coaches/Counsellors (alternative)
+      "icon": Icons.chat_bubble_outline,
       "title": "Coaches / Counsellors",
       "subtitle": "Guide your clients towards wellness.",
-      "role": "Coach",
+      "role": UserRole.counsellor,
     },
     {
-      "icon": Icons.business_center_outlined, // Corporates
+      "icon": Icons.business_center_outlined,
       "title": "Corporates",
       "subtitle": "Solutions for employee health and insurance.",
-      "role": "Corporate",
+      "role": UserRole.corporate,
     },
   ];
 
-  // Observable to store selected role
-  final Rx<String> selectedRole = ''.obs;
+  /// =========================
+  /// ROLE SELECTION HANDLER
+  /// =========================
+  void onRoleSelected(UserRole role) {
+    /// 1️⃣ Store selected role globally
+    _roleController.selectRole(role);
 
-  // Navigate to Login with selected role
-  void onRoleSelected(String role) {
-    print("Selected Role: $role");
-
-    // Store selected role
-    selectedRole.value = role;
-
-    // Navigate to Login Screen with binding
+    /// 2️⃣ Navigate to common Login Screen
     Get.to(
       () => const LoginView(),
       binding: LoginBinding(),
       transition: Transition.rightToLeft,
-      duration: const Duration(milliseconds: 300),
-      arguments: {'role': role}, // Pass role to login screen
     );
   }
 }
