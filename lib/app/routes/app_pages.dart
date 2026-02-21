@@ -9,6 +9,9 @@ import '../modules/verify_mobile/bindings/verify_mobile_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 
+import 'package:sample/app/modules/doctor_consult/bindings/doctor_consult_binding.dart';
+import 'package:sample/app/modules/doctor_consult/views/doctor_consult_view.dart';
+
 // ❗ patient is OUTSIDE app folder
 import '../../patient/profile_setup/identity_vitals/views/identity_vitals_view.dart';
 import '../../patient/profile_setup/identity_vitals/bindings/identity_vitals_binding.dart';
@@ -39,6 +42,18 @@ import '../../Doctor/profile_setup/digital_readiness/bindings/digital_readiness_
 
 import '../../Doctor/profile_setup/final_verification/views/final_verification_view.dart';
 import '../../Doctor/profile_setup/final_verification/bindings/final_verification_binding.dart';
+
+import 'package:sample/app/modules/profile_details/bindings/profile_details_binding.dart';
+import 'package:sample/app/modules/profile_details/views/profile_details_view.dart';
+
+import 'package:sample/app/modules/select_doctor/bindings/select_doctor_binding.dart';
+import 'package:sample/app/modules/select_doctor/views/select_doctor_view.dart';
+
+import 'package:sample/app/modules/all_slots/bindings/all_slots_binding.dart';
+import 'package:sample/app/modules/all_slots/views/all_slots_views.dart';
+
+import 'package:sample/app/modules/patient_details/bindings/patient_details_binding.dart';
+import 'package:sample/app/modules/patient_details/views/patient_details_view.dart';
 
 import 'app_routes.dart';
 
@@ -120,6 +135,37 @@ class AppPages {
       name: Routes.DOCTOR_FINAL_VERIFICATION,
       page: () => const FinalVerificationView(),
       binding: FinalVerificationBinding(),
+    ),
+
+    // Doctor Consult
+    GetPage(
+      name: Routes.DOCTOR_CONSULT,
+      page: () => const DoctorConsultView(),
+      binding: DoctorConsultBinding(),
+    ),
+
+    GetPage(
+      name: Routes.SELECT_DOCTOR,
+      page: () => const SelectDoctorView(),
+      binding: SelectDoctorBinding(),
+    ),
+
+    GetPage(
+      name: Routes.PROFILE_DETAILS,
+      page: () => const ProfileDetailsView(),
+      binding: ProfileDetailsBinding(),
+    ),
+
+    GetPage(
+      name: Routes.ALL_SLOTS,
+      page: () => const AllSlotsView(),
+      binding: AllSlotsBinding(),
+    ),
+
+    GetPage(
+      name: Routes.PATIENT_DETAILS,
+      page: () => const PatientDetailsView(),
+      binding: PatientDetailsBinding(),
     ),
   ];
 }

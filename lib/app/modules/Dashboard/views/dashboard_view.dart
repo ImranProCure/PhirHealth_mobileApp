@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
+import '../../../routes/app_routes.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -107,7 +108,7 @@ class _DoctorActionsSection extends StatelessWidget {
   const _DoctorActionsSection();
 
   static const List<Map<String, String>> _actions = [
-    {'icon': 'assets/icons/stethoscope.png', 'label': 'Doctor\nConsult'},
+    {'icon': 'assets/icons/stethoscope1.png', 'label': 'Doctor\nConsult'},
     {
       'icon': 'assets/icons/ar_on_you.png',
       'label': 'Face Scan /\nHealth Vitals'
@@ -147,9 +148,15 @@ class _DoctorActionsSection extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final action = _actions[index];
+
               return _DoctorActionItem(
                 imagePath: action['icon']!,
                 label: action['label']!,
+                onTap: () {
+                  if (index == 0) {
+                    Get.toNamed(Routes.DOCTOR_CONSULT);
+                  }
+                },
               );
             },
           ),
@@ -162,56 +169,46 @@ class _DoctorActionsSection extends StatelessWidget {
 class _DoctorActionItem extends StatelessWidget {
   final String imagePath;
   final String label;
+  final VoidCallback? onTap;
 
   const _DoctorActionItem({
     required this.imagePath,
     required this.label,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Color(0xFF0D9488), Color(0xFF2563EB)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Image.asset(
+            imagePath,
+            width: 50,
+            height: 50,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => const Icon(
+              Icons.local_hospital,
+              size: 40,
             ),
           ),
-          child: Center(
-            child: Image.asset(
-              imagePath,
-              width: 34,
-              height: 34,
-              color: Colors.white,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.local_hospital,
-                color: Colors.white,
-                size: 30,
+          const SizedBox(height: 6),
+          SizedBox(
+            width: 90,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                height: 1.2,
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 6),
-        SizedBox(
-          width: 90,
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              height: 1.2,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

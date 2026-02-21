@@ -72,33 +72,33 @@ class HomeView extends GetView<HomeController> {
               ),
 
               // Footer Section
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0, top: 20.0),
-                  child: RichText(
-                    text: const TextSpan(
-                      text: "Need help deciding? ",
-                      style: TextStyle(
-                        color: Color(0xFF6B7280),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Mulish',
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Corporates",
-                          style: TextStyle(
-                            color: Color(0xFF0D9488),
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.underline,
-                            fontFamily: 'Mulish',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(bottom: 24.0, top: 20.0),
+              //     child: RichText(
+              //       text: const TextSpan(
+              //         text: "Need help deciding? ",
+              //         style: TextStyle(
+              //           color: Color(0xFF6B7280),
+              //           fontSize: 14,
+              //           fontWeight: FontWeight.w400,
+              //           fontFamily: 'Mulish',
+              //         ),
+              //         children: [
+              //           TextSpan(
+              //             text: "Corporates",
+              //             style: TextStyle(
+              //               color: Color(0xFF0D9488),
+              //               fontWeight: FontWeight.w600,
+              //               decoration: TextDecoration.underline,
+              //               fontFamily: 'Mulish',
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
