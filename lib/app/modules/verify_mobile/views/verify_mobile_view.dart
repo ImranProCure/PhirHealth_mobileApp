@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/verify_mobile_controller.dart';
+import 'package:flutter/services.dart';
 
 class VerifyMobileView extends GetView<VerifyMobileController> {
   const VerifyMobileView({super.key});
@@ -163,6 +164,9 @@ class _OtpBox extends GetView<VerifyMobileController> {
         border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
       ),
       child: TextField(
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+        ],
         controller: controller.otpControllers[index],
         focusNode: controller.otpFocusNodes[index],
         keyboardType: TextInputType.number,

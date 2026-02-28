@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import '../controllers/login_controller.dart';
-import '../../../routes/app_routes.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -142,6 +142,9 @@ class LoginView extends GetView<LoginController> {
                               child: TextField(
                                 controller: controller.phoneController,
                                 keyboardType: TextInputType.phone,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 maxLength: 10,
                                 style: const TextStyle(
                                   fontFamily: 'Mulish',

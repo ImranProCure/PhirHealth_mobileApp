@@ -65,9 +65,21 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 
-		<!-- 🔽 PHOTO LIBRARY PERMISSION (REQUIRED FOR IMAGE PICKER) -->
+		<!-- PHOTO LIBRARY -->
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>We need access to your photos to upload profile picture</string>
+
+		<!-- CAMERA -->
+		<key>NSCameraUsageDescription</key>
+		<string>We need access to your camera to take profile picture</string>
+
+		<!-- SAVE TO GALLERY -->
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need access to save images to your gallery</string>
+
+		<key>NSDocumentsFolderUsageDescription</key>
+		<string>Access needed to pick PDF files</string>
+		
 
 	</dict>
 </plist>

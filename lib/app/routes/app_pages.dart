@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
+import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 
 // app/modules
 import '../modules/splash/views/splash_view.dart';
@@ -6,54 +8,92 @@ import '../modules/splash/views/splash_view.dart';
 import '../modules/verify_mobile/views/verify_mobile_view.dart';
 import '../modules/verify_mobile/bindings/verify_mobile_binding.dart';
 
-import '../modules/dashboard/views/dashboard_view.dart';
-import '../modules/dashboard/bindings/dashboard_binding.dart';
-
-import 'package:sample/app/modules/doctor_consult/bindings/doctor_consult_binding.dart';
-import 'package:sample/app/modules/doctor_consult/views/doctor_consult_view.dart';
+import 'package:sample/app/patient/doctor_consult/bindings/doctor_consult_binding.dart';
+import 'package:sample/app/patient/doctor_consult/views/doctor_consult_view.dart';
 
 // ❗ patient is OUTSIDE app folder
-import '../../patient/profile_setup/identity_vitals/views/identity_vitals_view.dart';
-import '../../patient/profile_setup/identity_vitals/bindings/identity_vitals_binding.dart';
+import '../patient/patient_signup/identity_vitals/views/identity_vitals_view.dart';
+import '../patient/patient_signup/identity_vitals/bindings/identity_vitals_binding.dart';
 
-import '../../patient/profile_setup/medical_history/views/medical_history_view.dart';
-import '../../patient/profile_setup/medical_history/bindings/medical_history_binding.dart';
+import '../patient/patient_signup/medical_history/views/medical_history_view.dart';
+import '../patient/patient_signup/medical_history/bindings/medical_history_binding.dart';
 
-import '../../patient/profile_setup/Lifestyle/views/lifestyle_view.dart';
-import '../../patient/profile_setup/Lifestyle/bindings/lifestyle_binding.dart';
+import '../patient/patient_signup/Lifestyle/views/lifestyle_view.dart';
+import '../patient/patient_signup/Lifestyle/bindings/lifestyle_binding.dart';
 
-import '../../patient/profile_setup/family_wellbeing/views/family_wellbeing_view.dart';
-import '../../patient/profile_setup/family_wellbeing/bindings /family_wellbeing_binding.dart';
+import '../patient/patient_signup/family_wellbeing/views/family_wellbeing_view.dart';
+import '../patient/patient_signup/family_wellbeing/bindings /family_wellbeing_binding.dart';
 
-import '../../patient/profile_setup/Womens_health/views/womens_health_view.dart';
-import '../../patient/profile_setup/Womens_health/bindings/womens_health_binding.dart';
+import '../patient/patient_signup/Womens_health/views/womens_health_view.dart';
+import '../patient/patient_signup/Womens_health/bindings/womens_health_binding.dart';
 
-import '../../patient/profile_setup/completion/views/completion_view.dart';
-import '../../patient/profile_setup/completion/bindings/completion_binding.dart';
+import '../patient/patient_signup/completion/views/completion_view.dart';
+import '../patient/patient_signup/completion/bindings/completion_binding.dart';
 
-import '../../Doctor/profile_setup/registration/views/registration_view.dart';
-import '../../Doctor/profile_setup/registration/bindings/registration_binding.dart';
+import '../Doctor/doctor_signup/registration/views/registration_view.dart';
+import '../Doctor/doctor_signup/registration/bindings/registration_binding.dart';
 
-import '../../Doctor/profile_setup/experience/views/experience_view.dart';
-import '../../Doctor/profile_setup/experience/bindings/experience_binding.dart';
+import '../Doctor/doctor_signup/experience/views/experience_view.dart';
+import '../Doctor/doctor_signup/experience/bindings/experience_binding.dart';
 
-import '../../Doctor/profile_setup/digital_readiness/views/digital_readiness_view.dart';
-import '../../Doctor/profile_setup/digital_readiness/bindings/digital_readiness_binding.dart';
+import '../Doctor/doctor_signup/digital_readiness/views/digital_readiness_view.dart';
+import '../Doctor/doctor_signup/digital_readiness/bindings/digital_readiness_binding.dart';
 
-import '../../Doctor/profile_setup/final_verification/views/final_verification_view.dart';
-import '../../Doctor/profile_setup/final_verification/bindings/final_verification_binding.dart';
+import '../Doctor/doctor_signup/final_verification/views/final_verification_view.dart';
+import '../Doctor/doctor_signup/final_verification/bindings/final_verification_binding.dart';
 
-import 'package:sample/app/modules/profile_details/bindings/profile_details_binding.dart';
-import 'package:sample/app/modules/profile_details/views/profile_details_view.dart';
+import 'package:sample/app/patient/appointment_confirmed/views/appointment_confirmed_view.dart';
 
-import 'package:sample/app/modules/select_doctor/bindings/select_doctor_binding.dart';
-import 'package:sample/app/modules/select_doctor/views/select_doctor_view.dart';
+import 'package:sample/app/patient/profile_details/bindings/profile_details_binding.dart';
+import 'package:sample/app/patient/profile_details/views/profile_details_view.dart';
 
-import 'package:sample/app/modules/all_slots/bindings/all_slots_binding.dart';
-import 'package:sample/app/modules/all_slots/views/all_slots_views.dart';
+import 'package:sample/app/patient/select_doctor/bindings/select_doctor_binding.dart';
+import 'package:sample/app/patient/select_doctor/views/select_doctor_view.dart';
 
-import 'package:sample/app/modules/patient_details/bindings/patient_details_binding.dart';
-import 'package:sample/app/modules/patient_details/views/patient_details_view.dart';
+import 'package:sample/app/patient/all_slots/bindings/all_slots_binding.dart';
+import 'package:sample/app/patient/all_slots/views/all_slots_views.dart';
+
+import 'package:sample/app/patient/patient_details/bindings/patient_details_binding.dart';
+import 'package:sample/app/patient/patient_details/views/patient_details_view.dart';
+
+import 'package:sample/app/patient/booking_confirmation/bindings/booking_confirmation_binding.dart';
+import 'package:sample/app/patient/booking_confirmation/views/booking_confirmation_view.dart';
+
+import 'package:sample/app/patient/doctor_visits/bindings/doctor_visits_binding.dart';
+import 'package:sample/app/patient/doctor_visits/views/doctor_visits_view.dart';
+
+import 'package:sample/app/patient/visit_details/bindings/visit_details_binding.dart';
+import 'package:sample/app/patient/visit_details/views/visit_details_view.dart';
+
+import 'package:sample/app/patient/medical_records/bindings/medical_records_binding.dart';
+import 'package:sample/app/patient/medical_records/views/medical_records_view.dart';
+
+import 'package:sample/app/patient/save_report/bindings/save_report_binding.dart';
+import 'package:sample/app/patient/save_report/views/save_report_view.dart';
+
+import 'package:sample/app/patient/savings_offers/bindings/savings_offers_binding.dart';
+import 'package:sample/app/patient/savings_offers/views/savings_offers_view.dart';
+
+import 'package:sample/app/patient/my_profile/bindings/my_profile_binding.dart';
+import 'package:sample/app/patient/my_profile/views/my_profile_view.dart';
+
+import 'package:sample/app/patient/add_money/bindings/add_money_binding.dart';
+import 'package:sample/app/patient/add_money/views/add_money_view.dart';
+
+import 'package:sample/app/patient/wallet/bindings/wallet_binding.dart';
+import 'package:sample/app/patient/wallet/views/wallet_view.dart';
+
+import 'package:sample/app/patient/transaction_history/bindings/transaction_history_binding.dart';
+import 'package:sample/app/patient/transaction_history/views/transaction_history_view.dart';
+
+import 'package:sample/app/patient/cancer_assessment/bindings/cancer_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_assessment/views/cancer_assessment_view.dart';
+
+import 'package:sample/app/patient/cancer_risk/bindings/cancer_risk_binding.dart';
+import 'package:sample/app/patient/cancer_risk/views/cancer_risk_view.dart';
+
+import 'package:sample/app/patient/cancer_risk_area/bindings/cancer_risk_area_binding.dart';
+import 'package:sample/app/patient/cancer_risk_area/views/cancer_rish_area_view.dart';
 
 import 'app_routes.dart';
 
@@ -167,5 +207,81 @@ class AppPages {
       page: () => const PatientDetailsView(),
       binding: PatientDetailsBinding(),
     ),
+
+    GetPage(
+      name: Routes.BOOKING_CONFIRMATION,
+      page: () => const BookingConfirmationView(),
+      binding: BookingConfirmationBinding(),
+    ),
+
+    GetPage(
+      name: Routes.APPOINTMENT_CONFIRMED,
+      page: () => const AppointmentConfirmedView(),
+      // binding: BookingConfirmationBinding(),
+    ),
+
+    GetPage(
+      name: '/doctor-visits',
+      page: () => const DoctorVisitsView(),
+      binding: DoctorVisitsBinding(),
+    ),
+
+    GetPage(
+      name: '/visit-details',
+      page: () => const VisitDetailsView(),
+      binding: VisitDetailsBinding(),
+    ),
+
+    GetPage(
+      name: '/medical-records',
+      page: () => const MedicalRecordsView(),
+      binding: MedicalRecordsBinding(),
+    ),
+
+    GetPage(
+      name: '/save-report',
+      page: () => SaveReportView(),
+      binding: SaveReportBinding(),
+    ),
+
+    GetPage(
+      name: '/savings-offers',
+      page: () => SavingsOffersView(),
+      binding: SavingsOffersBinding(),
+    ),
+
+    GetPage(
+      name: '/my-profile',
+      page: () => const MyProfileView(),
+      binding: MyProfileBinding(),
+    ),
+
+    GetPage(
+        name: '/wallet',
+        page: () => const WalletView(),
+        binding: WalletBinding()),
+
+    GetPage(
+        name: '/add-money',
+        page: () => const AddMoneyView(),
+        binding: AddMoneyBinding()),
+
+    GetPage(
+        name: '/transaction-history',
+        page: () => const TransactionHistoryView(),
+        binding: TransactionHistoryBinding()),
+
+    GetPage(
+        name: '/cancer-ai-scan',
+        page: () => const CancerRiskView(),
+        binding: CancerRiskBinding()),
+    GetPage(
+        name: '/cancer-risk-area',
+        page: () => const CancerRiskAreaView(),
+        binding: CancerRiskAreaBinding()),
+    GetPage(
+        name: '/cancer-assessment',
+        page: () => const CancerAssessmentView(),
+        binding: CancerAssessmentBinding()),
   ];
 }

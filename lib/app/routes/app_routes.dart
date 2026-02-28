@@ -23,4 +23,16 @@ abstract class Routes {
   static const PROFILE_DETAILS = '/profile-details';
   static const ALL_SLOTS = '/all-slots';
   static const PATIENT_DETAILS = '/patient-details';
+  static const BOOKING_CONFIRMATION = '/booking-confirmation';
+  static const APPOINTMENT_CONFIRMED = '/appointment-confirmed';
+  static const DOCTOR_VISITS = '/doctor-visits';
+  static const VISIT_DETAILS = '/visit-details';
+  static const MEDICAL_RECORDS = '/medical-records';
+  static const MY_PROFILE = '/my-profile';
+  static const WALLET = '/wallet';
+  static const ADD_MONEY = '/add-money';
+  static const TRANSACTION_HISTORY = '/transaction-history';
+  static const CANCER_RISK = '/cancer-risk';
+  static const CANCER_RISK_AREA = '/cancer-risk-area';
+  static const CANCER_ASSESSMENT = '/cancer-assessment';
 }
