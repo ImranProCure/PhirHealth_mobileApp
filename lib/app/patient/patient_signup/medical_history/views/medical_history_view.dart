@@ -8,232 +8,235 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: const Text(
-          'Step 2 of 6 : Basic Profile',
-          style: TextStyle(
-            fontFamily: 'Mulish',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () => Get.back(),
           ),
+          title: const Text(
+            'Step 2 of 6 : Basic Profile',
+            style: TextStyle(
+              fontFamily: 'Mulish',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
+        body: SafeArea(
+          bottom: true,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 14),
 
-            const Center(
-              child: Text(
-                'Medical History',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: const LinearProgressIndicator(
-                value: 2 / 6,
-                minHeight: 8,
-                backgroundColor: Color(0xFFE5E7EB),
-                valueColor: AlwaysStoppedAnimation(Color(0xFF0D9488)),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            // ================= CONDITIONS =================
-            const Text(
-              'Existing Medical Conditions',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            Obx(
-              () => Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  ...controller.conditions.map(
-                    (item) => _chip(
-                      label: item,
-                      selected: controller.selectedConditions.contains(item),
-                      onTap: () => controller.toggleCondition(item),
+                const Center(
+                  child: Text(
+                    'Medical History',
+                    style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  _chip(
-                    label: 'Add Other',
-                    isAdd: true,
-                    onTap: _showAddOtherCondition,
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            const SizedBox(height: 30),
+                const SizedBox(height: 15),
 
-            // ================= ALLERGIES =================
-            const Text(
-              'Allergies',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              'Do you have any known allergies?',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Obx(
-              () => Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  ...controller.allergies.map(
-                    (item) => _chip(
-                      label: item,
-                      selected: controller.selectedAllergies.contains(item),
-                      onTap: () => controller.toggleAllergy(item),
-                    ),
-                  ),
-                  _chip(
-                    label: 'Add Other',
-                    isAdd: true,
-                    onTap: _showAddOtherAllergy,
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            // ================= PAST PROCEDURES =================
-            const Text(
-              'Allergies',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              'Do you have any known allergies?',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            _textArea(
-              controller: controller.pastProceduresController,
-              hint: 'List any past procedures or hospital stays...',
-            ),
-
-            const SizedBox(height: 30),
-
-            // ================= MEDICATIONS =================
-            const Text(
-              'Current Medications',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            _singleInput(
-              controller: controller.medicationsController,
-              hint: 'Name, dosage, and frequency',
-            ),
-
-            const SizedBox(height: 40),
-
-            // ================= BUTTON =================
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF00786F),
-                      Color(0xFF009689),
-                      Color(0xFF1447E6),
-                    ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: const LinearProgressIndicator(
+                    value: 2 / 6,
+                    minHeight: 8,
+                    backgroundColor: Color(0xFFE5E7EB),
+                    valueColor: AlwaysStoppedAnimation(Color(0xFF0D9488)),
                   ),
                 ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
+
+                const SizedBox(height: 30),
+
+                // ================= CONDITIONS =================
+                const Text(
+                  'Existing Medical Conditions',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
-                  onPressed: controller.goToNextStep,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                ),
+
+                const SizedBox(height: 16),
+
+                Obx(
+                  () => Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
                     children: [
-                      Text(
-                        'Next Step',
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                      ...controller.conditions.map(
+                        (item) => _chip(
+                          label: item,
+                          selected:
+                              controller.selectedConditions.contains(item),
+                          onTap: () => controller.toggleCondition(item),
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Icon(Icons.arrow_forward, color: Colors.white),
+                      _chip(
+                        label: 'Add Other',
+                        isAdd: true,
+                        onTap: _showAddOtherCondition,
+                      ),
                     ],
                   ),
                 ),
-              ),
-            ),
 
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
+                const SizedBox(height: 30),
+
+                // ================= ALLERGIES =================
+                const Text(
+                  'Allergies',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
+                  'Do you have any known allergies?',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Obx(
+                  () => Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      ...controller.allergies.map(
+                        (item) => _chip(
+                          label: item,
+                          selected: controller.selectedAllergies.contains(item),
+                          onTap: () => controller.toggleAllergy(item),
+                        ),
+                      ),
+                      _chip(
+                        label: 'Add Other',
+                        isAdd: true,
+                        onTap: _showAddOtherAllergy,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // ================= PAST PROCEDURES =================
+                const Text(
+                  'Allergies',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
+                  'Do you have any known allergies?',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                _textArea(
+                  controller: controller.pastProceduresController,
+                  hint: 'List any past procedures or hospital stays...',
+                ),
+
+                const SizedBox(height: 30),
+
+                // ================= MEDICATIONS =================
+                const Text(
+                  'Current Medications',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                _singleInput(
+                  controller: controller.medicationsController,
+                  hint: 'Name, dosage, and frequency',
+                ),
+
+                const SizedBox(height: 40),
+
+                // ================= BUTTON =================
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF00786F),
+                          Color(0xFF009689),
+                          Color(0xFF1447E6),
+                        ],
+                      ),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: controller.goToNextStep,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Next Step',
+                            style: TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ));
   }
 
   // ================= CHIP =================

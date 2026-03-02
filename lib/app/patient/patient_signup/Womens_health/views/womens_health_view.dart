@@ -26,7 +26,9 @@ class WomensHealthView extends GetView<WomensHealthController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body:SafeArea(
+        bottom: true,
+        child:  SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +231,7 @@ class WomensHealthView extends GetView<WomensHealthController> {
           ],
         ),
       ),
-    );
+     ) );
   }
 
   // ================= CHIP =================

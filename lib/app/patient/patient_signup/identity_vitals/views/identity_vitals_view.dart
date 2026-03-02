@@ -26,11 +26,13 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body:SafeArea(
+        bottom: true,
+        child:  SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
             // Title
             const Text(
@@ -57,7 +59,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 22),
 
             // ================= PROFILE IMAGE WITH WHITE RING =================
             Stack(
@@ -111,7 +113,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ],
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
             const Text(
               'Upload Photo',
@@ -133,7 +135,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 53),
+            const SizedBox(height: 30),
 
             // ================= FULL NAME =================
             const Align(
@@ -178,7 +180,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             // ================= DATE OF BIRTH =================
             const Align(
@@ -194,7 +196,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
             Container(
               height: 56,
@@ -238,7 +240,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
 
             const Align(
               alignment: Alignment.centerLeft,
@@ -253,7 +255,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Obx(
               () => Row(
                 children: [
@@ -278,7 +280,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
 
             const Align(
               alignment: Alignment.centerLeft,
@@ -292,7 +294,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             Container(
               padding: const EdgeInsets.all(16),
@@ -376,7 +378,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 );
               }),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -389,7 +391,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             Container(
               padding: const EdgeInsets.all(16),
@@ -471,7 +473,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 );
               }),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
 
             const Align(
               alignment: Alignment.centerLeft,
@@ -486,7 +488,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
 
             Obx(
               () => Wrap(
@@ -539,7 +541,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 }).toList(),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 16),
 
             SizedBox(
               width: double.infinity,
@@ -597,10 +599,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 10),
           ],
         ),
-      ),
+      )),
     );
   }
 

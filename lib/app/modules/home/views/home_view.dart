@@ -15,11 +15,10 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 30),
 
               // Header Section
               const SizedBox(
-                width: 283,
                 height: 40,
                 child: Text(
                   "Select Your Role",
@@ -32,9 +31,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               const SizedBox(
-                width: 283,
                 height: 23,
                 child: Text(
                   "Choose how you want to continue",
@@ -47,7 +45,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               const SizedBox(height: 30),
-
               // Role Cards List
               Expanded(
                 child: ListView.builder(
@@ -71,34 +68,7 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
 
-              // Footer Section
-              // Center(
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(bottom: 24.0, top: 20.0),
-              //     child: RichText(
-              //       text: const TextSpan(
-              //         text: "Need help deciding? ",
-              //         style: TextStyle(
-              //           color: Color(0xFF6B7280),
-              //           fontSize: 14,
-              //           fontWeight: FontWeight.w400,
-              //           fontFamily: 'Mulish',
-              //         ),
-              //         children: [
-              //           TextSpan(
-              //             text: "Corporates",
-              //             style: TextStyle(
-              //               color: Color(0xFF0D9488),
-              //               fontWeight: FontWeight.w600,
-              //               decoration: TextDecoration.underline,
-              //               fontFamily: 'Mulish',
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
+            
             ],
           ),
         ),

@@ -26,7 +26,9 @@ class CompletionView extends GetView<CompletionController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body:SafeArea(
+        bottom: true,
+        child:  SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +310,7 @@ class CompletionView extends GetView<CompletionController> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   // ================= INPUT FIELD =================

@@ -26,7 +26,9 @@ class LifestyleView extends GetView<LifestyleController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body:SafeArea(
+        bottom: true,
+        child:  SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,7 +283,7 @@ class LifestyleView extends GetView<LifestyleController> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   // ================= CHIP =================

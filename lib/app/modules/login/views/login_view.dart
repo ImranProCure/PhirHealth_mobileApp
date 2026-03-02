@@ -20,12 +20,11 @@ class LoginView extends GetView<LoginController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 68),
+                      const SizedBox(height: 10),
 
                       // Header Image
                       Center(
                         child: Container(
-                          width: 370,
                           height: 250,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -37,14 +36,14 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
 
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 22),
 
                       // Welcome Text
                       const Text(
                         'Welcome to PHIRHealth',
                         style: TextStyle(
                           fontFamily: 'Mulish',
-                          fontSize: 32,
+                          fontSize: 28,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
                           height: 1.0,
@@ -67,7 +66,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
 
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 30),
 
                       // Mobile Number Label
                       const Text(
@@ -84,7 +83,6 @@ class LoginView extends GetView<LoginController> {
 
                       // Mobile Number Input Box
                       Container(
-                        width: 370,
                         height: 60,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -172,11 +170,10 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
 
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 30),
 
                       // Get OTP Button
                       Container(
-                        width: 370,
                         height: 60,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -227,7 +224,7 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       Center(
                         child: GestureDetector(
                           onTap: controller.goToSignup,
