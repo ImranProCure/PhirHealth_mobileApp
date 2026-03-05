@@ -46,7 +46,7 @@ class MyProfileController extends GetxController {
       {
         'icon': Icons.language_outlined,
         'label': 'App Language',
-        'route': '/language',
+        'route': '/app-language',
         'trailing': 'English',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)

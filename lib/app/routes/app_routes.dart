@@ -35,4 +35,16 @@ abstract class Routes {
   static const CANCER_RISK = '/cancer-risk';
   static const CANCER_RISK_AREA = '/cancer-risk-area';
   static const CANCER_ASSESSMENT = '/cancer-assessment';
+  static const FACE_SCAN = '/face-scan';
+  static const SCAN_REPORT = '/scan-report';
+  static const EMERGENCY_CONTACTS = '/emergency-contacts';
+  static const APP_LANGUAGE = '/app-language';
+  static const BMI = '/bmi';
+  static const BMI_RESULT = '/bmi-result';
+  static const CANCER_RESULT = '/cancer-result';
+  static const FIND_HOSPITAL = '/find-hospital';
+  static const HOSPITAL_DETAILS = '/hospital-details';
+  static const ADD_MEDICINE = '/add-medicine';
+  static const SET_SCHEDULE = '/set-schedule';
+  static const MY_MEDS = '/my-meds';
 }

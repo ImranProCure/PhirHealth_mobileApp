@@ -32,6 +32,8 @@ class DashboardController extends GetxController {
 
   void onDoctorActionTap(int index) {
     if (index == 0) Get.toNamed('/doctor-consult');
+    if (index == 1) Get.toNamed('/face-scan');
+    if (index == 2) Get.toNamed('/find-hospital');
   }
 
   // ===== SMART HEALTH TOOLS =====
@@ -49,7 +51,7 @@ class DashboardController extends GetxController {
     {
       'title': 'Medicine\nReminder',
       'icon': 'assets/icons/time 1.png',
-      'route': '/reminder'
+      'route': '/add-medicine'
     },
   ];
 

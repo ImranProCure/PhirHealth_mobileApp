@@ -95,6 +95,45 @@ import 'package:sample/app/patient/cancer_risk/views/cancer_risk_view.dart';
 import 'package:sample/app/patient/cancer_risk_area/bindings/cancer_risk_area_binding.dart';
 import 'package:sample/app/patient/cancer_risk_area/views/cancer_rish_area_view.dart';
 
+import 'package:sample/app/patient/face_scan/bindings/face_scan_binding.dart';
+import 'package:sample/app/patient/face_scan/views/face_scan_view.dart';
+
+import 'package:sample/app/patient/scan_report/bindings/scan_report_binding.dart';
+import 'package:sample/app/patient/scan_report/views/scan_report_view.dart';
+
+import 'package:sample/app/patient/app_language/bindings/app_language_binding.dart';
+import 'package:sample/app/patient/app_language/views/app_language_view.dart';
+
+import 'package:sample/app/patient/emergency_contacts/bindings/emergency_contacts_binding.dart';
+import 'package:sample/app/patient/emergency_contacts/views/emergency_contacts_view.dart';
+
+import 'package:sample/app/patient/fitness_tracker/bindings/fitness_tracker_binding.dart';
+import 'package:sample/app/patient/fitness_tracker/views/fitness_tracker_view.dart';
+
+import 'package:sample/app/patient/bmi/bindings/bmi_binding.dart';
+import 'package:sample/app/patient/bmi/views/bmi_view.dart';
+
+import 'package:sample/app/patient/bmi_result/bindings/bmi_result_binding.dart';
+import 'package:sample/app/patient/bmi_result/views/bmi_result_view.dart';
+
+import 'package:sample/app/patient/cancer_result/bindings/cancer_result_binding.dart';
+import 'package:sample/app/patient/cancer_result/views/cancer_result_view.dart';
+
+import 'package:sample/app/patient/find_hospital/bindings/find_hospital_binding.dart';
+import 'package:sample/app/patient/find_hospital/views/find_hospital_view.dart';
+
+import 'package:sample/app/patient/hospital_details/bindings/hospital_details_binding.dart';
+import 'package:sample/app/patient/hospital_details/views/hospital_details_view.dart';
+
+import 'package:sample/app/patient/add_medicine/bindings/add_medicine_binding.dart';
+import 'package:sample/app/patient/add_medicine/views/add_medicine_view.dart';
+
+import 'package:sample/app/patient/medicine_reminder/bindings/medicine_reminder_binding.dart';
+import 'package:sample/app/patient/medicine_reminder/views/medicine_reminder_view.dart';
+
+import 'package:sample/app/patient/set_schedule/bindings/set_schedule_binding.dart';
+import 'package:sample/app/patient/set_schedule/views/set_schedule_view.dart';
+
 import 'app_routes.dart';
 
 class AppPages {
@@ -275,13 +314,73 @@ class AppPages {
         name: '/cancer-ai-scan',
         page: () => const CancerRiskView(),
         binding: CancerRiskBinding()),
+
     GetPage(
         name: '/cancer-risk-area',
         page: () => const CancerRiskAreaView(),
         binding: CancerRiskAreaBinding()),
+
     GetPage(
         name: '/cancer-assessment',
         page: () => const CancerAssessmentView(),
         binding: CancerAssessmentBinding()),
+
+    GetPage(
+        name: '/face-scan',
+        page: () => const FaceScanView(),
+        binding: FaceScanBinding()),
+
+    GetPage(
+        name: '/scan-report',
+        page: () => const ScanReportView(),
+        binding: ScanReportBinding()),
+
+    GetPage(
+        name: '/emergency-contacts',
+        page: () => const EmergencyContactsView(),
+        binding: EmergencyContactsBinding()),
+    GetPage(
+        name: '/app-language',
+        page: () => const AppLanguageView(),
+        binding: AppLanguageBinding()),
+
+    GetPage(
+        name: '/fitness-tracker',
+        page: () => const FitnessTrackerView(),
+        binding: FitnessTrackerBinding()),
+
+    GetPage(name: '/bmi', page: () => const BmiView(), binding: BmiBinding()),
+
+    GetPage(
+        name: '/bmi-result',
+        page: () => const BmiResultView(),
+        binding: BmiResultBinding()),
+
+    GetPage(
+        name: '/cancer-result',
+        page: () => const CancerResultView(),
+        binding: CancerResultBinding()),
+    GetPage(
+        name: '/find-hospital',
+        page: () => const FindHospitalView(),
+        binding: FindHospitalBinding()),
+
+    GetPage(
+        name: '/hospital-details',
+        page: () => const HospitalDetailsView(),
+        binding: HospitalDetailsBinding()),
+
+    GetPage(
+        name: '/add-medicine',
+        page: () => const AddMedicineView(),
+        binding: AddMedicineBinding()),
+    GetPage(
+        name: '/set-schedule',
+        page: () => const SetScheduleView(),
+        binding: SetScheduleBinding()),
+    GetPage(
+        name: '/my-meds',
+        page: () => const MedicineReminderView(),
+        binding: MedicineReminderBinding()),
   ];
 }
