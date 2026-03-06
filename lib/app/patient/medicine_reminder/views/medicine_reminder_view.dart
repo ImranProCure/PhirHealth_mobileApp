@@ -34,26 +34,29 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // ===== DATE STRIP =====
-          _dateStrip(),
-          const SizedBox(height: 12),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ===== DATE STRIP =====
+            _dateStrip(),
+            const SizedBox(height: 16),
 
-          // ===== MEDICINE LIST =====
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: controller.medicines.length,
-              itemBuilder: (context, i) => _medCard(i),
+            // ===== MEDICINE LIST =====
+            Expanded(
+              child: Obx(() => ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: controller.medicines.length,
+                    itemBuilder: (context, i) => _medCard(i),
+                  )),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.addMedicine,
         backgroundColor: const Color(0xFF0D9488),
-        child: const Icon(Icons.add, color: Colors.white),
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
@@ -62,7 +65,7 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
   Widget _dateStrip() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(controller.dates.length, (i) {
@@ -73,12 +76,16 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   width: 56,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xFF0D9488)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(14),
+                    color: isSelected ? const Color(0xFF0D9488) : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFF0D9488)
+                          : const Color(0xFFE5E7EB),
+                      width: 1.5,
+                    ),
                   ),
                   child: Column(
                     children: [
@@ -86,19 +93,19 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                         d['date'] as String,
                         style: TextStyle(
                           fontFamily: 'Mulish',
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: isSelected ? Colors.white : Colors.black,
                         ),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         d['day'] as String,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 12,
-                          color: isSelected
-                              ? Colors.white70
-                              : const Color(0xFF9CA3AF),
+                          fontWeight: FontWeight.w700,
+                          color: isSelected ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -117,7 +124,7 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -132,70 +139,75 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Time + status
+          // ===== ROW 1: image + time + status =====
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                med['time'] as String,
-                style: const TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-              _statusBadge(status),
-            ],
-          ),
-          const SizedBox(height: 10),
-
-          // Icon + name + detail
-          Row(
-            children: [
+              // Medicine image
               Image.asset(
                 med['imagePath'] as String,
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
                 errorBuilder: (_, __, ___) => const Icon(
                   Icons.medication,
                   color: Color(0xFFF97316),
-                  size: 36,
+                  size: 40,
                 ),
               ),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    med['name'] as String,
-                    style: const TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black,
+
+              // Time + name + detail
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          med['time'] as String,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 13,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                        _statusBadge(status),
+                      ],
                     ),
-                  ),
-                  Text(
-                    med['detail'] as String,
-                    style: const TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      color: Color(0xFF6B7280),
+                    const SizedBox(height: 4),
+                    Text(
+                      med['name'] as String,
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      med['detail'] as String,
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 13,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
 
-          // Take + Snooze buttons (only for pending)
+          // ===== TAKE + SNOOZE (only pending) =====
           if (status == 'pending') ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Row(
               children: [
                 Expanded(
                   child: SizedBox(
-                    height: 42,
+                    height: 44,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -212,12 +224,12 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                               borderRadius: BorderRadius.circular(30)),
                         ),
                         icon: const Icon(Icons.check_circle_outline,
-                            color: Colors.white, size: 16),
+                            color: Colors.white, size: 18),
                         label: const Text(
                           'Take',
                           style: TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 14,
+                            fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -229,7 +241,7 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: SizedBox(
-                    height: 42,
+                    height: 44,
                     child: OutlinedButton.icon(
                       onPressed: () => controller.snoozeMedicine(i),
                       style: OutlinedButton.styleFrom(
@@ -239,12 +251,12 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       icon: const Icon(Icons.snooze_outlined,
-                          color: Color(0xFF0D9488), size: 16),
+                          color: Color(0xFF0D9488), size: 18),
                       label: const Text(
                         'Snooze',
                         style: TextStyle(
                           fontFamily: 'Mulish',
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0D9488),
                         ),
@@ -260,10 +272,11 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
     );
   }
 
+  // ===== STATUS BADGE =====
   Widget _statusBadge(String status) {
     if (status == 'taken') {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: const Color(0xFFDCFCE7),
           borderRadius: BorderRadius.circular(20),
@@ -287,7 +300,7 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
       );
     } else if (status == 'upcoming') {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: const Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(20),
@@ -295,7 +308,7 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.access_time, color: Color(0xFF9CA3AF), size: 14),
+            Icon(Icons.access_time_rounded, color: Color(0xFF9CA3AF), size: 14),
             SizedBox(width: 4),
             Text(
               'Upcoming',

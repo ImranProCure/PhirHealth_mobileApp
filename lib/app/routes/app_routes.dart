@@ -47,4 +47,9 @@ abstract class Routes {
   static const ADD_MEDICINE = '/add-medicine';
   static const SET_SCHEDULE = '/set-schedule';
   static const MY_MEDS = '/my-meds';
+  static const AI_NUTRITIONIST = '/ai-nutritionist';
+  static const AI_NUTRITIONIST_RESULT = '/ai-nutritionist-result';
+  static const LAB_TESTS = '/lab-tests';
+  static const LAB_NEAR_YOU = '/labs-near-you';
+  static const LAB_DETAILS = '/lab-details';
 }

@@ -34,6 +34,7 @@ class DashboardController extends GetxController {
     if (index == 0) Get.toNamed('/doctor-consult');
     if (index == 1) Get.toNamed('/face-scan');
     if (index == 2) Get.toNamed('/find-hospital');
+    if (index == 4) Get.toNamed('/lab-tests');
   }
 
   // ===== SMART HEALTH TOOLS =====
@@ -46,7 +47,7 @@ class DashboardController extends GetxController {
     {
       'title': 'Diet &\nNutrition',
       'icon': 'assets/icons/salad 1.png',
-      'route': '/diet'
+      'route': '/ai-nutritionist'
     },
     {
       'title': 'Medicine\nReminder',

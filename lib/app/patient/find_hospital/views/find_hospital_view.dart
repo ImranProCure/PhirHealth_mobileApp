@@ -31,21 +31,23 @@ class FindHospitalView extends GetView<FindHospitalController> {
         children: [
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
             child: Column(
               children: [
-                // ===== LOCATION =====
+                // ===== LOCATION BOX =====
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF3F4F6),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
+                    border:
+                        Border.all(color: const Color(0xFFE5E7EB), width: 1.5),
                   ),
                   child: Row(
                     children: [
                       const Icon(Icons.location_on_outlined,
-                          color: Color(0xFF0D9488), size: 20),
+                          color: Colors.black, size: 20),
                       const SizedBox(width: 8),
                       Text(
                         controller.location,
@@ -58,29 +60,25 @@ class FindHospitalView extends GetView<FindHospitalController> {
                       ),
                       const Spacer(),
                       const Icon(Icons.keyboard_arrow_down,
-                          color: Color(0xFF6B7280), size: 20),
+                          color: Colors.black, size: 20),
                     ],
                   ),
                 ),
                 const SizedBox(height: 12),
 
-                // ===== FILTERS =====
+                // ===== FILTER CHIPS =====
                 Obx(() => Row(
-                      children: controller.filters.map((f) {
+                      children: controller.filterData.map((f) {
                         final bool isSelected =
-                            controller.selectedFilter.value == f;
-                        IconData icon = Icons.grid_view_rounded;
-                        if (f == 'Emergency') icon = Icons.emergency_outlined;
-                        if (f == 'Pharmacy')
-                          icon = Icons.local_pharmacy_outlined;
-
+                            controller.selectedFilter.value == f['label'];
                         return GestureDetector(
-                          onTap: () => controller.selectFilter(f),
+                          onTap: () =>
+                              controller.selectFilter(f['label'] as String),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             margin: const EdgeInsets.only(right: 10),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 7),
+                                horizontal: 12, vertical: 7),
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? const Color(0xFF0D9488)
@@ -90,19 +88,30 @@ class FindHospitalView extends GetView<FindHospitalController> {
                                 color: isSelected
                                     ? const Color(0xFF0D9488)
                                     : const Color(0xFFE5E7EB),
+                                width: 1.5,
                               ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(icon,
+                                Image.asset(
+                                  f['imagePath'] as String,
+                                  width: 14,
+                                  height: 14,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : const Color(0xFF0D9488),
+                                  errorBuilder: (_, __, ___) => Icon(
+                                    Icons.circle,
                                     size: 14,
                                     color: isSelected
                                         ? Colors.white
-                                        : const Color(0xFF0D9488)),
-                                const SizedBox(width: 4),
+                                        : const Color(0xFF0D9488),
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
                                 Text(
-                                  f,
+                                  f['label'] as String,
                                   style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 13,
@@ -125,7 +134,7 @@ class FindHospitalView extends GetView<FindHospitalController> {
           // ===== HOSPITAL LIST =====
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
               itemCount: controller.hospitals.length,
               itemBuilder: (context, i) =>
                   _hospitalCard(controller.hospitals[i]),
@@ -146,8 +155,8 @@ class FindHospitalView extends GetView<FindHospitalController> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
               offset: const Offset(0, 2),
             ),
           ],
@@ -155,17 +164,17 @@ class FindHospitalView extends GetView<FindHospitalController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
+            // ===== IMAGE =====
             ClipRRect(
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.asset(
                 hospital['imagePath'] as String,
                 width: double.infinity,
-                height: 150,
+                height: 160,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  height: 150,
+                  height: 160,
                   color: const Color(0xFFE5E7EB),
                   child: const Center(
                     child: Icon(Icons.local_hospital,
@@ -176,7 +185,7 @@ class FindHospitalView extends GetView<FindHospitalController> {
             ),
 
             Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -185,7 +194,7 @@ class FindHospitalView extends GetView<FindHospitalController> {
                     hospital['name'] as String,
                     style: const TextStyle(
                       fontFamily: 'Mulish',
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: Colors.black,
                     ),
@@ -195,8 +204,16 @@ class FindHospitalView extends GetView<FindHospitalController> {
                   // Status + Distance
                   Row(
                     children: [
-                      const Icon(Icons.access_time_outlined,
-                          size: 14, color: Color(0xFF0D9488)),
+                      // Open 24x7 image icon — replace path if needed
+                      Image.asset(
+                        'assets/icons/acute.png',
+                        width: 16,
+                        height: 16,
+                        errorBuilder: (_, __, ___) => const Icon(
+                            Icons.access_time_outlined,
+                            size: 14,
+                            color: Color(0xFF0D9488)),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         hospital['status'] as String,
@@ -207,9 +224,17 @@ class FindHospitalView extends GetView<FindHospitalController> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      const Icon(Icons.location_on_outlined,
-                          size: 14, color: Color(0xFF9CA3AF)),
+                      const SizedBox(width: 14),
+                      // Distance image icon
+                      Image.asset(
+                        'assets/icons/distance.png',
+                        width: 14,
+                        height: 14,
+                        errorBuilder: (_, __, ___) => const Icon(
+                            Icons.location_on_outlined,
+                            size: 14,
+                            color: Color(0xFF9CA3AF)),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         hospital['distance'] as String,
@@ -223,22 +248,26 @@ class FindHospitalView extends GetView<FindHospitalController> {
                   ),
                   const SizedBox(height: 10),
 
-                  // Tags
+                  // ===== TAGS =====
                   Wrap(
                     spacing: 8,
+                    runSpacing: 6,
                     children: (hospital['tags'] as List<String>).map((tag) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                            horizontal: 12, vertical: 5),
                         decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFFE5E7EB)),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: const Color(0xFFE5E7EB), width: 1.2),
                         ),
                         child: Text(
                           tag,
                           style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 12,
+                            fontWeight: FontWeight.w500,
                             color: Color(0xFF374151),
                           ),
                         ),
@@ -247,12 +276,12 @@ class FindHospitalView extends GetView<FindHospitalController> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Buttons
+                  // ===== BUTTONS =====
                   Row(
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 42,
+                          height: 44,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -287,7 +316,7 @@ class FindHospitalView extends GetView<FindHospitalController> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: SizedBox(
-                          height: 42,
+                          height: 44,
                           child: OutlinedButton.icon(
                             onPressed: controller.directions,
                             style: OutlinedButton.styleFrom(

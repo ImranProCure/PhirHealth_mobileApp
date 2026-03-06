@@ -32,18 +32,17 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ===== MAP IMAGE =====
+                  // ===== MAP =====
                   Stack(
                     children: [
                       Image.asset(
-                        'assets/Mask group copy.png',
+                        'assets/map_placeholder.png',
                         width: double.infinity,
-                        height: 180,
+                        height: 200,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Container(
-                          height: 180,
+                          height: 200,
                           color: const Color(0xFFE5E7EB),
                           child: const Center(
                             child: Icon(Icons.map_outlined,
@@ -51,20 +50,19 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                           ),
                         ),
                       ),
-                      // Open Now badge
                       Positioned(
-                        bottom: 12,
-                        left: 12,
+                        bottom: 14,
+                        left: 14,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
+                              horizontal: 14, vertical: 7),
                           decoration: BoxDecoration(
                             color: const Color(0xFF0D9488),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
+                            children: [
                               Icon(Icons.circle, color: Colors.white, size: 8),
                               SizedBox(width: 6),
                               Text(
@@ -83,233 +81,281 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                     ],
                   ),
 
-                  // ===== DETAILS CARD =====
+                  const SizedBox(height: 12),
+
+                  // ===== MAIN CARD =====
                   Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          controller.name,
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          controller.address,
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 13,
-                            color: Color(0xFF6B7280),
-                            height: 1.4,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(Icons.access_time_outlined,
-                                size: 14, color: Color(0xFF0D9488)),
-                            const SizedBox(width: 4),
-                            Text(
-                              controller.status,
-                              style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 12,
-                                color: Color(0xFF0D9488),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            const Icon(Icons.location_on_outlined,
-                                size: 14, color: Color(0xFF9CA3AF)),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${controller.distance} - 5 mins away',
-                              style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 12,
-                                color: Color(0xFF9CA3AF),
-                              ),
-                            ),
-                          ],
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // ===== SERVICES =====
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Services Available',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                        // ===== HOSPITAL INFO =====
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.name,
+                                style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                controller.address,
+                                style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 13,
+                                  color: Color(0xFF6B7280),
+                                  height: 1.4,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/open_24.png',
+                                    width: 16,
+                                    height: 16,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.access_time_outlined,
+                                        size: 16,
+                                        color: Color(0xFF0D9488)),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    controller.status,
+                                    style: const TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF0D9488),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 18),
+                                  Image.asset(
+                                    'assets/icons/location_pin.png',
+                                    width: 16,
+                                    height: 16,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.location_on_outlined,
+                                        size: 16,
+                                        color: Color(0xFF9CA3AF)),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    '${controller.distance} - 5 mins away',
+                                    style: const TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 13,
+                                      color: Color(0xFF6B7280),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: controller.services.map((s) {
-                            return Column(
-                              children: [
-                                Container(
-                                  width: 56,
-                                  height: 56,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE0F2F1),
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Image.asset(
-                                      s['icon'] as String,
-                                      fit: BoxFit.contain,
-                                      errorBuilder: (_, __, ___) => const Icon(
-                                        Icons.local_hospital_outlined,
-                                        color: Color(0xFF0D9488),
-                                        size: 24,
+
+                        const Divider(height: 1, color: Color(0xFFF3F4F6)),
+
+                        // ===== SERVICES =====
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Services Available',
+                                style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: controller.services.map((s) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        width: 56,
+                                        height: 56,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF3F4F6),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12),
+                                          child: Image.asset(
+                                            s['imagePath'] as String,
+                                            fit: BoxFit.contain,
+                                            color: const Color(0xFF0D9488),
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                              Icons.local_hospital_outlined,
+                                              color: Color(0xFF0D9488),
+                                              size: 28,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        s['label'] as String,
+                                        style: const TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 11,
+                                          color: Color(0xFF6B7280),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Divider(height: 1, color: Color(0xFFF3F4F6)),
+
+                        // ===== DEPARTMENTS =====
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Department & Specialists',
+                                style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              ...List.generate(
+                                controller.departments.length,
+                                (i) {
+                                  final d = controller.departments[i];
+                                  final bool isLast =
+                                      i == controller.departments.length - 1;
+                                  return Column(
+                                    children: [
+                                      _departmentTile(d),
+                                      if (!isLast)
+                                        const Divider(
+                                            height: 1,
+                                            color: Color(0xFFF3F4F6)),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Divider(height: 1, color: Color(0xFFF3F4F6)),
+
+                        // ===== CALL + DIRECTIONS =====
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFF00897B),
+                                          Color(0xFF1565C0)
+                                        ],
+                                      ),
+                                    ),
+                                    child: ElevatedButton.icon(
+                                      onPressed: controller.call,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        shadowColor: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
+                                      ),
+                                      icon: const Icon(Icons.phone,
+                                          color: Colors.white, size: 18),
+                                      label: const Text(
+                                        'Call',
+                                        style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  s['label'] as String,
-                                  style: const TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 11,
-                                    color: Color(0xFF6B7280),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: OutlinedButton.icon(
+                                    onPressed: controller.directions,
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                          color: Color(0xFF0D9488), width: 1.5),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                    ),
+                                    icon: const Icon(Icons.navigation_outlined,
+                                        color: Color(0xFF0D9488), size: 18),
+                                    label: const Text(
+                                      'Directions',
+                                      style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF0D9488),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // ===== DEPARTMENTS =====
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Department & Specialists',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        ...List.generate(controller.departments.length, (i) {
-                          final d = controller.departments[i];
-                          final bool isLast =
-                              i == controller.departments.length - 1;
-                          return Column(
-                            children: [
-                              _departmentTile(d),
-                              if (!isLast)
-                                const Divider(
-                                    height: 1, color: Color(0xFFF3F4F6)),
-                            ],
-                          );
-                        }),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 90),
+
+                  const SizedBox(height: 24),
                 ],
               ),
-            ),
-          ),
-
-          // ===== BOTTOM BUTTONS =====
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 48,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-                        ),
-                      ),
-                      child: ElevatedButton.icon(
-                        onPressed: controller.call,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                        icon: const Icon(Icons.phone,
-                            color: Colors.white, size: 18),
-                        label: const Text(
-                          'Call',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: SizedBox(
-                    height: 48,
-                    child: OutlinedButton.icon(
-                      onPressed: controller.directions,
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(
-                            color: Color(0xFF0D9488), width: 1.5),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
-                      icon: const Icon(Icons.navigation_outlined,
-                          color: Color(0xFF0D9488), size: 18),
-                      label: const Text(
-                        'Directions',
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0D9488),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ],
@@ -320,20 +366,31 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
   Widget _departmentTile(Map<String, dynamic> d) {
     final bool isAvailable = d['isAvailable'] as bool;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       child: Row(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFFE0F2F1),
-              borderRadius: BorderRadius.circular(10),
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.medical_services_outlined,
-                color: Color(0xFF0D9488), size: 22),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(
+                d['imagePath'] as String,
+                fit: BoxFit.contain,
+                color: const Color(0xFF0D9488),
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.medical_services_outlined,
+                  color: Color(0xFF0D9488),
+                  size: 24,
+                ),
+              ),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,11 +399,12 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                   d['name'] as String,
                   style: const TextStyle(
                     fontFamily: 'Mulish',
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
                   d['sub'] as String,
                   style: const TextStyle(
@@ -355,7 +413,7 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                     color: Color(0xFF9CA3AF),
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 3),
                 Row(
                   children: [
                     Icon(
@@ -365,12 +423,12 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                           ? const Color(0xFF22C55E)
                           : const Color(0xFFEF4444),
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 5),
                     Text(
                       d['available'] as String,
                       style: TextStyle(
                         fontFamily: 'Mulish',
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: isAvailable
                             ? const Color(0xFF22C55E)

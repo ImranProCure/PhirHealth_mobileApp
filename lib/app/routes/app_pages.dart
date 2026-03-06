@@ -134,6 +134,21 @@ import 'package:sample/app/patient/medicine_reminder/views/medicine_reminder_vie
 import 'package:sample/app/patient/set_schedule/bindings/set_schedule_binding.dart';
 import 'package:sample/app/patient/set_schedule/views/set_schedule_view.dart';
 
+import 'package:sample/app/patient/ai_nutritionist/bindings/ai_nutritionist_binding.dart';
+import 'package:sample/app/patient/ai_nutritionist/views/ai_nutritionist_view.dart';
+
+import 'package:sample/app/patient/ai_nutritionist_result/bindings/ai_nutritionist_result_binding.dart';
+import 'package:sample/app/patient/ai_nutritionist_result/views/ai_nutritionist_result_view.dart';
+
+import 'package:sample/app/patient/lab_details/bindings/lab_details_binding.dart';
+import 'package:sample/app/patient/lab_details/views/lab_details_view.dart';
+
+import 'package:sample/app/patient/lab_tests/bindings/lab_tests_bindings.dart';
+import 'package:sample/app/patient/lab_tests/views/lab_tests_view.dart';
+
+import 'package:sample/app/patient/labs_near_you/bindings/labs_near_you_binding.dart';
+import 'package:sample/app/patient/labs_near_you/views/labs_near_you_view.dart';
+
 import 'app_routes.dart';
 
 class AppPages {
@@ -382,5 +397,29 @@ class AppPages {
         name: '/my-meds',
         page: () => const MedicineReminderView(),
         binding: MedicineReminderBinding()),
+
+    GetPage(
+        name: '/ai-nutritionist',
+        page: () => const AiNutritionistView(),
+        binding: AiNutritionistBinding()),
+
+    GetPage(
+      name: '/ai-nutritionist-result',
+      page: () => const AiNutritionistResultView(),
+      binding: AiNutritionistResultBinding(),
+    ),
+
+    GetPage(
+        name: '/lab-tests',
+        page: () => const LabTestsView(),
+        binding: LabTestsBinding()),
+    GetPage(
+        name: '/labs-near-you',
+        page: () => const LabsNearYouView(),
+        binding: LabsNearYouBinding()),
+    GetPage(
+        name: '/lab-details',
+        page: () => const LabDetailsView(),
+        binding: LabDetailsBinding()),
   ];
 }

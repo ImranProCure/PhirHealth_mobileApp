@@ -10,10 +10,10 @@ class AddMedicineController extends GetxController {
       TextEditingController(text: 'Dolo 650');
 
   final List<Map<String, dynamic>> types = [
-    {'label': 'Tablet', 'imagePath': 'assets/icons/tablet.png'},
-    {'label': 'Capsule', 'imagePath': 'assets/icons/capsule.png'},
-    {'label': 'Syrup', 'imagePath': 'assets/icons/syrup.png'},
-    {'label': 'Injection', 'imagePath': 'assets/icons/injection.png'},
+    {'label': 'Tablet', 'imagePath': 'assets/icons/medicine 1.png'},
+    {'label': 'Capsule', 'imagePath': 'assets/icons/capsule 1.png'},
+    {'label': 'Syrup', 'imagePath': 'assets/icons/syrup 1.png'},
+    {'label': 'Injection', 'imagePath': 'assets/icons/medical 1.png'},
   ];
 
   final List<String> strengths = ['250', '500', '650', '1000'];

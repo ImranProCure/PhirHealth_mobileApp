@@ -5,7 +5,11 @@ class FindHospitalController extends GetxController {
   final RxString selectedFilter = 'All'.obs;
   final String location = 'Near Vijay Nagar, Indore';
 
-  final List<String> filters = ['All', 'Emergency', 'Pharmacy'];
+  final List<Map<String, dynamic>> filterData = [
+    {'label': 'All', 'imagePath': 'assets/icons/medication.png'},
+    {'label': 'Emergency', 'imagePath': 'assets/icons/emergency.png'},
+    {'label': 'Pharmacy', 'imagePath': 'assets/icons/admin_meds.png'},
+  ];
 
   final List<Map<String, dynamic>> hospitals = [
     {
