@@ -27,7 +27,7 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +49,7 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
             const SizedBox(height: 12),
 
             ...controller.contacts.map((c) => _contactTile(c)),
-            const SizedBox(height: 8),
-
+            Spacer(),
             // ===== ADD NEW CONTACT =====
             _addNewContact(),
           ],

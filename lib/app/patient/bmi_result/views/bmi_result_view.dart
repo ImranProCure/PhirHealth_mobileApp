@@ -71,10 +71,10 @@ class BmiResultView extends GetView<BmiResultController> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF0D7377), Color(0xFF0D5C8A)],
+            colors: [ Color(0xFF0D5C8A), Color(0xFF0D5C8A)],
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
         child: SizedBox(
           height: 54,
           child: ElevatedButton(

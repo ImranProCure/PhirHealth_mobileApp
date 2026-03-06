@@ -12,6 +12,7 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0, 
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
@@ -352,8 +353,12 @@ class HospitalDetailsView extends GetView<HospitalDetailsController> {
                       ],
                     ),
                   ),
+<<<<<<< Updated upstream
 
                   const SizedBox(height: 24),
+=======
+                  const SizedBox(height: 10),
+>>>>>>> Stashed changes
                 ],
               ),
             ),

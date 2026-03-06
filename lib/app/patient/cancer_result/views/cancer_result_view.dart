@@ -367,7 +367,6 @@ class CancerResultView extends GetView<CancerResultController> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
         ],
       ),
     );

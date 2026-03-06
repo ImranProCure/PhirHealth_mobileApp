@@ -32,6 +32,37 @@ class WomensHealthController extends GetxController {
       initialDate: now,
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF0D9488), // Selected date circle
+              onPrimary: Colors.white, // Text inside selected date
+              onSurface: Colors.black,
+            ),
+            datePickerTheme: DatePickerThemeData(
+              todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return const Color(0xFF0D9488); // Circle color
+                }
+                return null;
+              }),
+              todayForegroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.white; // Text color inside circle
+                }
+                return const Color(0xFF0D9488); // Normal today text color
+              }),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF0D9488),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {

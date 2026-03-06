@@ -132,7 +132,7 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                       }
 
                       return Padding(
-                        padding: const EdgeInsets.only(right: 12),
+                        padding: const EdgeInsets.only(right: 6),
                         child: GestureDetector(
                           onTap: () => controller.selectSpecialty(item),
                           child: Container(
@@ -155,7 +155,7 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                                   size: 18,
                                   color: const Color(0xFF0D9488), // ALWAYS TEAL
                                 ),
-                                const SizedBox(width: 8),
+                                const SizedBox(width: 4),
                                 Text(
                                   item,
                                   style: const TextStyle(
@@ -278,7 +278,7 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFCE7B2),
+                    color: const Color(0xFFFFFBD3),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Row(
@@ -290,6 +290,7 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
+                          color: Color(0XFFA76D24)
                         ),
                       ),
                     ],
@@ -314,15 +315,16 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                 RichText(
                   text: TextSpan(
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Colors.black,
                     ),
                     children: [
                       const TextSpan(text: "Fee "),
                       TextSpan(
-                        text: "₹ ${doctor["fee"]}",
+                        text: " ₹ ${doctor["fee"]}",
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
+                          fontSize: 20
                         ),
                       ),
                     ],
@@ -335,10 +337,10 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(
                       color: Color(0xFF0D9488),
-                      width: 1.5,
+                      width: 1,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 22, vertical: 10),

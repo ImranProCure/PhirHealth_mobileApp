@@ -9,26 +9,38 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      bottomNavigationBar: _BottomNav(controller: controller),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Header(),
-              const SizedBox(height: 16),
-              _DoctorActionsSection(controller: controller),
-              const SizedBox(height: 24),
-              _AiMedicineFitnessSection(controller: controller),
-              const SizedBox(height: 24),
-              const _PromoBanner(),
-              const SizedBox(height: 24),
-              _SmartHealthToolsSection(controller: controller),
-              const SizedBox(height: 40),
-            ],
+      body: Stack(
+        children: [
+          /// Main Content
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 90),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _Header(),
+                  const SizedBox(height: 16),
+                  _DoctorActionsSection(controller: controller),
+                  const SizedBox(height: 24),
+                  _AiMedicineFitnessSection(controller: controller),
+                  const SizedBox(height: 24),
+                  const _PromoBanner(),
+                  const SizedBox(height: 24),
+                  _SmartHealthToolsSection(controller: controller),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
           ),
-        ),
+
+          /// Floating Bottom Navigation
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 20,
+            child: _BottomNav(controller: controller),
+          ),
+        ],
       ),
     );
   }
@@ -104,8 +116,8 @@ class _DoctorActionsSection extends StatelessWidget {
                   children: [
                     Image.asset(
                       action['icon']!,
-                      width: 50,
-                      height: 50,
+                      width: 55,
+                      height: 55,
                       fit: BoxFit.contain,
                       errorBuilder: (_, __, ___) =>
                           const Icon(Icons.local_hospital, size: 40),
@@ -181,7 +193,7 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Early detection saves lives.\nCheck your risk now.',
+                          'Early detection saves lives. Check your\nrisk now.',
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 12,
@@ -197,8 +209,8 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                       right: 0,
                       child: Image.asset(
                         'assets/icons/cancer-cell 1.png',
-                        width: 80,
-                        height: 80,
+                        width: 60,
+                        height: 60,
                         errorBuilder: (_, __, ___) =>
                             const SizedBox(width: 80, height: 80),
                       ),
@@ -317,29 +329,15 @@ class _PromoBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        height: 130,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image.asset(
-            'assets/Gemini_Generated_Image_rb2batrb2batrb2b.png',
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
-              color: const Color(0xFFE5E7EB),
-              child: const Center(
-                child: Icon(Icons.image, size: 50, color: Color(0xFF9CA3AF)),
-              ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.asset(
+          'assets/Gemini_Generated_Image_rb2batrb2batrb2b 1.png',
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => Container(
+            color: const Color(0xFFE5E7EB),
+            child: const Center(
+              child: Icon(Icons.image, size: 50, color: Color(0xFF9CA3AF)),
             ),
           ),
         ),
@@ -472,43 +470,40 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       height: 70,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
         gradient: const LinearGradient(
           colors: [Color(0xFF0D9488), Color(0xFF2563EB)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0D9488).withOpacity(0.3),
+            color: Colors.black.withOpacity(.25),
             blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
+            offset: const Offset(0, 10),
+          )
         ],
       ),
       child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _NavItem(
-                  icon: Icons.home,
+                  icon: "assets/home.png",
                   label: 'Home',
                   isActive: controller.selectedNavIndex.value == 0,
                   onTap: () => controller.selectNav(0)),
               _NavItem(
-                  icon: Icons.medical_services_outlined,
+                  icon: "assets/stethoscope.png",
                   label: 'Doctor',
                   isActive: controller.selectedNavIndex.value == 1,
                   onTap: () => controller.selectNav(1)),
               _NavItem(
-                  icon: Icons.receipt_long_outlined,
+                  icon: "assets/article.png",
                   label: 'Policy',
                   isActive: controller.selectedNavIndex.value == 2,
                   onTap: () => controller.selectNav(2)),
               _NavItem(
-                  icon: Icons.person_outline,
+                  icon: "assets/account_circle.png",
                   label: 'My Profile',
                   isActive: controller.selectedNavIndex.value == 3,
                   onTap: () => controller.selectNav(3)),
@@ -519,7 +514,7 @@ class _BottomNav extends StatelessWidget {
 }
 
 class _NavItem extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String label;
   final bool isActive;
   final VoidCallback onTap;
@@ -538,7 +533,7 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white, size: isActive ? 26 : 24),
+          Image.asset(icon, color: Colors.white, height: isActive ? 26 : 24),
           const SizedBox(height: 4),
           Text(
             label,

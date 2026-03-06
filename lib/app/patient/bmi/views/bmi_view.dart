@@ -46,7 +46,6 @@ class BmiView extends GetView<BmiController> {
                   ],
                 ),
               ),
-
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -122,10 +121,10 @@ class BmiView extends GetView<BmiController> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF0D7377), Color(0xFF0D5C8A)],
+            colors: [ Color(0xFF0D5C8A), Color(0xFF0D5C8A)],
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
         child: SizedBox(
           height: 54,
           child: ElevatedButton(
@@ -181,13 +180,13 @@ class BmiView extends GetView<BmiController> {
                   child: Column(
                     children: [
                       Icon(g['icon'] as IconData,
-                          color: Colors.white, size: 28),
+                          color: Colors.white, size: 35),
                       const SizedBox(height: 6),
                       Text(
                         g['label'] as String,
                         style: const TextStyle(
                           fontFamily: 'Mulish',
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
@@ -232,8 +231,8 @@ class BmiView extends GetView<BmiController> {
           // Image icon
           Image.asset(
             imagePath,
-            width: 28,
-            height: 28,
+            width: 40,
+            height: 40,
             color: Colors.white70,
             errorBuilder: (_, __, ___) =>
                 const Icon(Icons.info_outline, color: Colors.white70, size: 28),

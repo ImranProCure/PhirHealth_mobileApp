@@ -15,16 +15,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child:  GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Health App',
       theme: ThemeData(scaffoldBackgroundColor: const Color(0xFFF5F5F5)),
-
+      
       // ✅ App start point (Splash se)
       initialRoute: Routes.SPLASH,
 
       // ✅ All app routes in one place
       getPages: AppPages.routes,
-    );
+    ));
   }
 }

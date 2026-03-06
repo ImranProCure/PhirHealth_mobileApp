@@ -139,7 +139,6 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
 
                   // ===== BILL DETAILS =====
                   _billDetailsCard(),
-                  const SizedBox(height: 80),
                 ],
               ),
             ),

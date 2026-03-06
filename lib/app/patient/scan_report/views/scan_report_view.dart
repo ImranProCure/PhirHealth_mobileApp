@@ -91,7 +91,7 @@ class ScanReportView extends GetView<ScanReportController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
             child: SizedBox(
               width: double.infinity,
               height: 52,

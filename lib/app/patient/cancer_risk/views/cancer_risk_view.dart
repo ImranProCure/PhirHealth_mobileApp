@@ -146,7 +146,6 @@ class CancerRiskView extends GetView<CancerRiskController> {
                                     useImage: false)),
                           ],
                         ),
-                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
@@ -201,7 +200,7 @@ class CancerRiskView extends GetView<CancerRiskController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
             child: OutlinedButton(
               onPressed: controller.consultDoctor,
               style: OutlinedButton.styleFrom(

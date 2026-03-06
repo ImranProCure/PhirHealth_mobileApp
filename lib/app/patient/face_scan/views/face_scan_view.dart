@@ -6,17 +6,19 @@ class FaceScanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Get.toNamed('/scan-report'),
-      child: Scaffold(
-        body: SizedBox.expand(
+    return Scaffold(
+      backgroundColor: const Color(0xFF002F2B), // prevents white flash
+      body: GestureDetector(
+        onTap: () => Get.toNamed('/scan-report'),
+        child: SizedBox.expand(
           child: Image.asset(
             'assets/PHIR Health - PHIR Face Scan 1.png',
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
-              color: const Color(0xFF0D2137),
-              child: const Center(
-                child: Icon(Icons.face, size: 80, color: Colors.white54),
+            errorBuilder: (_, __, ___) => const Center(
+              child: Icon(
+                Icons.face,
+                size: 80,
+                color: Colors.white54,
               ),
             ),
           ),

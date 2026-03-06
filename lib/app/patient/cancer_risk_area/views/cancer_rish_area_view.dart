@@ -220,7 +220,7 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
   // ===== CONTINUE BUTTON =====
   Widget _continueButton() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: SizedBox(
         width: double.infinity,
         height: 54,

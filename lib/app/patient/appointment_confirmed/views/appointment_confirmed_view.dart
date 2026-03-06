@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/routes/app_routes.dart';
 
 class AppointmentConfirmedView extends StatelessWidget {
   const AppointmentConfirmedView({super.key});
@@ -114,6 +115,7 @@ class AppointmentConfirmedView extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Get.offAllNamed(Routes.MY_APPOINTMENTS);
+                    Get.toNamed(Routes.DOCTOR_VISITS);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -142,6 +144,7 @@ class AppointmentConfirmedView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     // Get.offAllNamed(Routes.HOME);
+                    Get.toNamed(Routes.DASHBOARD);
                   },
                   child: const Text(
                     "Go to Home",

@@ -38,7 +38,7 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
                   children: [
                     // ===== HERO IMAGE =====
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Image.asset(
@@ -204,7 +204,7 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: OutlinedButton(
                 onPressed: controller.goBack,
                 style: OutlinedButton.styleFrom(

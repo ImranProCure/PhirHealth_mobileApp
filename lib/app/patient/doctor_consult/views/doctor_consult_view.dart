@@ -8,7 +8,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -66,7 +66,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
 
             const Text(
               "Connect with certified medical professionals for expert advice and diagnosis.",
@@ -86,7 +86,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
               onTap: controller.bookConsultation,
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
             // ================= OUTLINE BUTTON 1 =================
             _outlineButton(
@@ -94,7 +94,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
               onTap: controller.viewHistory,
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
             // ================= OUTLINE BUTTON 2 =================
             _outlineButton(
