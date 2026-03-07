@@ -1,4 +1,15 @@
 import 'package:get/get.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
+import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
+import 'package:sample/app/patient/counsellor_coaches/bindings/counsellor_coaches_binding.dart';
+import 'package:sample/app/patient/counsellor_coaches/views/counsellor_coaches_view.dart';
+import 'package:sample/app/patient/counsellor_profile_details/bindings/counsellor_profile_details_binding.dart';
+import 'package:sample/app/patient/counsellor_profile_details/views/counsellor_profile_details_view.dart';
+import 'package:sample/app/patient/select_counsellor/bindings/select_counsellor_binding.dart';
+import 'package:sample/app/patient/select_counsellor/views/select_counsellor_view.dart';
+>>>>>>> Stashed changes
 
 // app/modules
 import '../modules/splash/views/splash_view.dart';
@@ -255,6 +266,26 @@ class AppPages {
       page: () => const FinalVerificationView(),
       binding: FinalVerificationBinding(),
     ),
+
+    // Counsellors
+    GetPage(
+      name: Routes.COUNSELLOR_COACHES,
+      page: () => const CounsellorCoachesView(),
+      binding: CounsellorCoachesBinding(),
+    ),
+
+    GetPage(
+      name: Routes.SELECT_COUNSELLOR,
+      page: () => const SelectCounsellorView(),
+      binding: SelectCounsellorBinding(),
+    ),
+
+     GetPage(
+      name: Routes.COUNSELLOR_PROFILE_DETAILS,
+      page: () => const CounsellorProfileDetailsView(),
+      binding: CounsellorProfileDetailsBinding(),
+    ),
+
 
     // Doctor Consult
     GetPage(

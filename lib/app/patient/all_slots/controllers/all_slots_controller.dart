@@ -4,6 +4,7 @@ import '../../../routes/app_routes.dart';
 
 class AllSlotsController extends GetxController {
   late int tabType;
+  late int type;
   final RxString screenTitle = "".obs;
 
   // ===== MONTH NAVIGATION =====
@@ -199,17 +200,27 @@ class AllSlotsController extends GetxController {
       );
       return;
     }
-    Get.toNamed(Routes.PATIENT_DETAILS, arguments: {
-      'tabType': tabType,
-      'slot': selectedSlot.value,
-      'date': selectedDateLabel.value,
-    });
+    if (type == 1) {
+      Get.toNamed('/booking-confirmation', arguments: {
+        'date': Get.arguments?['date'] ?? '',
+        'slot': Get.arguments?['slot'] ?? '',
+        'tabType': Get.arguments?['tabType'] ?? 0,
+        'patientName': 'Rahul Sharma',
+      });
+    } else {
+      Get.toNamed(Routes.PATIENT_DETAILS, arguments: {
+        'tabType': tabType,
+        'slot': selectedSlot.value,
+        'date': selectedDateLabel.value,
+      });
+    }
   }
 
   @override
   void onInit() {
     super.onInit();
     tabType = Get.arguments?['tabType'] ?? 0;
+    type = Get.arguments?['type'] ?? 0;
     screenTitle.value =
         tabType == 0 ? "Clinic Visit Slots" : "Video Consult Slots";
     _generateDates();

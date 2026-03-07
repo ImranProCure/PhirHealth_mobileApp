@@ -34,6 +34,7 @@ class DashboardController extends GetxController {
     if (index == 0) Get.toNamed('/doctor-consult');
     if (index == 1) Get.toNamed('/face-scan');
     if (index == 2) Get.toNamed('/find-hospital');
+    if (index == 3) Get.toNamed('/counsellor-consult');
     if (index == 4) Get.toNamed('/lab-tests');
   }
 

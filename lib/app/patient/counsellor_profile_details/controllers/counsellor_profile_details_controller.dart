@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileDetailsController extends GetxController {
+class CounsellorProfileDetailsController extends GetxController {
   // ===== TAB =====
   final selectedTab = 0.obs;
 
@@ -11,7 +11,7 @@ class ProfileDetailsController extends GetxController {
 
   void viewAllSlots() {
     Get.toNamed('/all-slots',
-        arguments: {'tabType': selectedTab.value, 'type': 0});
+        arguments: {'tabType': selectedTab.value, 'type': 1});
   }
 
   // ===== MONTH NAVIGATION =====

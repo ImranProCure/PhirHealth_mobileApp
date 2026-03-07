@@ -17,6 +17,11 @@ abstract class Routes {
   static const DOCTOR_DIGITAL_READINESS = '/doctor/digital-readiness';
   static const DOCTOR_FINAL_VERIFICATION = '/doctor/final-verification';
 
+  //Counsellor
+  static const COUNSELLOR_COACHES = '/counsellor-consult';
+  static const SELECT_COUNSELLOR = '/counsellor-select';
+  static const COUNSELLOR_PROFILE_DETAILS = '/counsellor-profile';
+
   //Doctor Consult
   static const DOCTOR_CONSULT = '/doctor-consult';
   static const SELECT_DOCTOR = '/select-doctor';
