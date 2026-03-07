@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
 import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 import 'package:sample/app/patient/counsellor_coaches/bindings/counsellor_coaches_binding.dart';
@@ -9,7 +7,6 @@ import 'package:sample/app/patient/counsellor_profile_details/bindings/counsello
 import 'package:sample/app/patient/counsellor_profile_details/views/counsellor_profile_details_view.dart';
 import 'package:sample/app/patient/select_counsellor/bindings/select_counsellor_binding.dart';
 import 'package:sample/app/patient/select_counsellor/views/select_counsellor_view.dart';
->>>>>>> Stashed changes
 
 // app/modules
 import '../modules/splash/views/splash_view.dart';
