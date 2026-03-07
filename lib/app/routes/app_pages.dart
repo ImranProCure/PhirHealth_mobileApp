@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
-import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 
 // app/modules
 import '../modules/splash/views/splash_view.dart';
@@ -43,6 +41,9 @@ import '../Doctor/doctor_signup/final_verification/views/final_verification_view
 import '../Doctor/doctor_signup/final_verification/bindings/final_verification_binding.dart';
 
 import 'package:sample/app/patient/appointment_confirmed/views/appointment_confirmed_view.dart';
+
+import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
+import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 
 import 'package:sample/app/patient/profile_details/bindings/profile_details_binding.dart';
 import 'package:sample/app/patient/profile_details/views/profile_details_view.dart';
@@ -148,6 +149,30 @@ import 'package:sample/app/patient/lab_tests/views/lab_tests_view.dart';
 
 import 'package:sample/app/patient/labs_near_you/bindings/labs_near_you_binding.dart';
 import 'package:sample/app/patient/labs_near_you/views/labs_near_you_view.dart';
+
+import 'package:sample/app/Doctor/doctor_dashboard/bindings/doctor_dashboard_binding.dart';
+import 'package:sample/app/Doctor/doctor_dashboard/views/doctor_dashboard_view.dart';
+
+import 'package:sample/app/Doctor/doctor_notification/bindings/doctor_notification_binding.dart';
+import 'package:sample/app/Doctor/doctor_notification/views/doctor_notification_view.dart';
+
+import 'package:sample/app/Doctor/doctor_profile/bindings/doctor_profile_binding.dart';
+import 'package:sample/app/Doctor/doctor_profile/views/doctor_profile_view.dart';
+
+import 'package:sample/app/Doctor/doctor_earnings/bindings/doctor_earnings_binding.dart';
+import 'package:sample/app/Doctor/doctor_earnings/views/doctor_earnings_view.dart';
+
+import 'package:sample/app/Doctor/doctor_availability/views/doctor_availability_view.dart';
+import 'package:sample/app/Doctor/doctor_availability/bindings/doctor_availability_binding.dart';
+
+import 'package:sample/app/Doctor/doctor_edit_schedule/bindings/doctor_edit_schedule_binding.dart';
+import 'package:sample/app/Doctor/doctor_edit_schedule/views/doctor_edit_schedule_view.dart';
+
+import 'package:sample/app/Doctor/doctor_reviews/bindings/doctor_reviews_binding.dart';
+import 'package:sample/app/Doctor/doctor_reviews/views/doctor_reviews_view.dart';
+
+import 'package:sample/app/Doctor/doctor_requests/bindings/doctor_requests_binding.dart';
+import 'package:sample/app/Doctor/doctor_requests/views/doctor_requests_view.dart';
 
 import 'app_routes.dart';
 
@@ -394,7 +419,7 @@ class AppPages {
         page: () => const SetScheduleView(),
         binding: SetScheduleBinding()),
     GetPage(
-        name: '/my-meds',
+        name: '/medicine-reminder',
         page: () => const MedicineReminderView(),
         binding: MedicineReminderBinding()),
 
@@ -421,5 +446,45 @@ class AppPages {
         name: '/lab-details',
         page: () => const LabDetailsView(),
         binding: LabDetailsBinding()),
+
+    GetPage(
+        name: '/doctor-dashboard',
+        page: () => const DoctorDashboardView(),
+        binding: DoctorDashboardBinding()),
+
+    GetPage(
+        name: '/doctor-notifications',
+        page: () => const DoctorNotificationView(),
+        binding: DoctorNotificationBinding()),
+
+    GetPage(
+        name: '/doctor-profile',
+        page: () => const DoctorProfileView(),
+        binding: DoctorProfileBinding()),
+
+    GetPage(
+        name: '/doctor-earnings',
+        page: () => const DoctorEarningsView(),
+        binding: DoctorEarningsBinding()),
+
+    GetPage(
+        name: '/doctor-reviews',
+        page: () => const DoctorReviewsView(),
+        binding: DoctorReviewsBinding()),
+
+    GetPage(
+        name: '/doctor-availability',
+        page: () => const DoctorAvailabilityView(),
+        binding: DoctorAvailabilityBinding()),
+
+    GetPage(
+        name: '/doctor-edit-schedule',
+        page: () => const DoctorEditScheduleView(),
+        binding: DoctorEditScheduleBinding()),
+
+    GetPage(
+        name: '/doctor-requests',
+        page: () => const DoctorRequestsView(),
+        binding: DoctorRequestsBinding()),
   ];
 }

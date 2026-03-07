@@ -44,6 +44,6 @@ class SetScheduleController extends GetxController {
       selectedOptions[doseIndex] = option;
 
   void saveSchedule() {
-    Get.toNamed('/my-meds');
+    Get.toNamed('/medicine-reminder');
   }
 }

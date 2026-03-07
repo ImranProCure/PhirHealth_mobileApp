@@ -39,7 +39,7 @@ class MyProfileController extends GetxController {
       {
         'icon': Icons.notifications_outlined,
         'label': 'Reminders',
-        'route': '/reminders',
+        'route': '/medicine-reminder',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)
       },
@@ -56,14 +56,14 @@ class MyProfileController extends GetxController {
       {
         'icon': Icons.help_outline,
         'label': 'Help & Support',
-        'route': '/help',
+        // 'route': '/help',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)
       },
       {
         'icon': Icons.shield_outlined,
         'label': 'Privacy Policy',
-        'route': '/privacy',
+        // 'route': '/privacy',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)
       },
@@ -75,11 +75,11 @@ class MyProfileController extends GetxController {
   }
 
   void editProfile() {
-    Get.toNamed('/edit-profile');
+    // Get.toNamed('/edit-profile');
   }
 
   void openSettings() {
-    Get.toNamed('/settings');
+    // Get.toNamed('/settings');
   }
 
   void logout() {
@@ -105,7 +105,7 @@ class MyProfileController extends GetxController {
           TextButton(
             onPressed: () {
               Get.back();
-              Get.offAllNamed('/login');
+              Get.offAllNamed('/Dashboard');
             },
             child: const Text(
               'Log Out',

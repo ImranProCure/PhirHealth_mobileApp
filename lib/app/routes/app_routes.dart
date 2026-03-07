@@ -46,10 +46,21 @@ abstract class Routes {
   static const HOSPITAL_DETAILS = '/hospital-details';
   static const ADD_MEDICINE = '/add-medicine';
   static const SET_SCHEDULE = '/set-schedule';
-  static const MY_MEDS = '/my-meds';
+  static const MEDICINE_REMINDER = '/medicine-reminder';
   static const AI_NUTRITIONIST = '/ai-nutritionist';
   static const AI_NUTRITIONIST_RESULT = '/ai-nutritionist-result';
   static const LAB_TESTS = '/lab-tests';
   static const LAB_NEAR_YOU = '/labs-near-you';
   static const LAB_DETAILS = '/lab-details';
+
+  // Doctor
+
+  static const DOCTOR_DASHBOARD = '/doctor-dashboard';
+  static const DOCTOR_NOTIFICATION = '/doctor-notification';
+  static const DOCTOR_PROFILE = '/doctor-profile';
+  static const DOCTOR_EARNINGS = '/doctor-earnings';
+  static const DOCTOR_REVIEWS = '/doctor-reviews';
+  static const DOCTOR_AVAILABILITY = '/doctor-availability';
+  static const DOCTOR_EDIT_SCHEDULE = '/doctor-edit-schedule';
+  static const DOCTOR_REQUESTS = '/doctor-requests';
 }
