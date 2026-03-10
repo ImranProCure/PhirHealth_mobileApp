@@ -33,7 +33,7 @@ class DoctorRequestsController extends GetxController {
   ].obs;
 
   void accept(int index) {
-    requests.removeAt(index);
+    Get.toNamed('/doctor-accept-booking', arguments: requests[index]);
   }
 
   void decline(int index) {

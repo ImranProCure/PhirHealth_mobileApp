@@ -68,4 +68,9 @@ abstract class Routes {
   static const DOCTOR_AVAILABILITY = '/doctor-availability';
   static const DOCTOR_EDIT_SCHEDULE = '/doctor-edit-schedule';
   static const DOCTOR_REQUESTS = '/doctor-requests';
+  static const DOCTOR_ACCEPT_BOOKINGS = '/doctor-accept-booking';
+  static const DOCTOR_APPOINTMENT_ACCEPTED = '/doctor-appointment-accepted';
+  static const DOCTOR_TODAYS_SESSION = '/doctor-todays-session';
+  static const DOCTOR_PATIENT_DETAIL = '/doctor-patient-detail';
+  static const DOCTOR_CANCEL_SESSION = '/doctor-cancel-session';
 }

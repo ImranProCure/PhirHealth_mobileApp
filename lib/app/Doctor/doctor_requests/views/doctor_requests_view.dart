@@ -14,7 +14,7 @@ class DoctorRequestsView extends GetView<DoctorRequestsController> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.offAllNamed('/doctor-dashboard'),
         ),
         centerTitle: true,
         title: const Text('Pending Requests',

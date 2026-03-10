@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
 import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 import 'package:sample/app/patient/counsellor_coaches/bindings/counsellor_coaches_binding.dart';
@@ -182,6 +183,25 @@ import 'package:sample/app/Doctor/doctor_reviews/views/doctor_reviews_view.dart'
 import 'package:sample/app/Doctor/doctor_requests/bindings/doctor_requests_binding.dart';
 import 'package:sample/app/Doctor/doctor_requests/views/doctor_requests_view.dart';
 
+import 'package:sample/app/Doctor/doctor_accept_booking/bindings/doctor_accept_booking_binding.dart';
+import 'package:sample/app/Doctor/doctor_accept_booking/views/doctor_accept_booking_view.dart';
+
+import 'package:sample/app/Doctor/doctor_appointment_accepted/views/doctor_appointment_accepted_view.dart';
+
+import 'package:sample/app/Doctor/doctor_todays_session/bindings/doctor_todays_session_binding.dart';
+import 'package:sample/app/Doctor/doctor_todays_session/views/doctor_todays_session_view.dart';
+
+import 'package:sample/app/Doctor/doctor_patient_detail/bindings/doctor_patient_detail_binding.dart';
+import 'package:sample/app/Doctor/doctor_patient_detail/views/doctor_patient_detail_view.dart';
+
+import 'package:sample/app/Doctor/doctor_patient_reschedule/bindings/doctor_patient_reschedule_binding.dart';
+import 'package:sample/app/Doctor/doctor_patient_reschedule/views/doctor_patient_reschedule_view.dart';
+
+import 'package:sample/app/Doctor/doctor_patient_reschedule_sent/views/doctor_patient_reschedule_sent_view.dart';
+
+import 'package:sample/app/Doctor/doctor_cancel_session/bindings/doctor_cancel_session_binding.dart';
+import 'package:sample/app/Doctor/doctor_cancel_session/views/doctor_cancel_session_view.dart';
+
 import 'app_routes.dart';
 
 class AppPages {
@@ -277,12 +297,11 @@ class AppPages {
       binding: SelectCounsellorBinding(),
     ),
 
-     GetPage(
+    GetPage(
       name: Routes.COUNSELLOR_PROFILE_DETAILS,
       page: () => const CounsellorProfileDetailsView(),
       binding: CounsellorProfileDetailsBinding(),
     ),
-
 
     // Doctor Consult
     GetPage(
@@ -514,5 +533,38 @@ class AppPages {
         name: '/doctor-requests',
         page: () => const DoctorRequestsView(),
         binding: DoctorRequestsBinding()),
+
+    GetPage(
+        name: '/doctor-accept-booking',
+        page: () => const DoctorAcceptBookingView(),
+        binding: DoctorAcceptBookingBinding()),
+
+    GetPage(
+        name: '/doctor-appointment-accepted',
+        page: () => const DoctorAppointmentAcceptedView()),
+
+    GetPage(
+        name: '/doctor-todays-session',
+        page: () => const DoctorTodaysSessionView(),
+        binding: DoctorTodaysSessionBinding()),
+
+    GetPage(
+        name: '/doctor-patient-detail',
+        page: () => const DoctorPatientDetailView(),
+        binding: DoctorPatientDetailBinding()),
+
+    GetPage(
+        name: '/doctor-patient-reschedule',
+        page: () => const DoctorPatientRescheduleView(),
+        binding: DoctorPatientRescheduleBinding()),
+
+    GetPage(
+        name: '/doctor-patient-reschedule-sent',
+        page: () => const DoctorPatientRescheduleSentView()),
+
+    GetPage(
+        name: '/doctor-cancel-session',
+        page: () => const DoctorCancelSessionView(),
+        binding: DoctorCancelSessionBinding()),
   ];
 }
