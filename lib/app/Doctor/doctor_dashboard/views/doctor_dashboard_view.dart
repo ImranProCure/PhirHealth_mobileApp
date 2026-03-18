@@ -246,7 +246,7 @@ class _TabletSideRail extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(width: 28, height: 1.5, color: Colors.white38),
-            const SizedBox(height: 20),
+            const SizedBox(height: 19),
             Expanded(
               child: Obx(() => Column(
                     mainAxisAlignment: MainAxisAlignment.start,
