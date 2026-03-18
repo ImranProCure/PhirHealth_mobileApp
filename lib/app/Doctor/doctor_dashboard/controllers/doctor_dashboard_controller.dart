@@ -64,7 +64,7 @@ class DoctorDashboardController extends GetxController {
   void onNavTap(int index) {
     currentIndex.value = index;
     if (index == 1) Get.toNamed('/doctor-requests');
-    if (index == 2) Get.toNamed('/doctor-todays-session');
+    if (index == 2) Get.toNamed('/doctor-schedule');
     if (index == 3) Get.toNamed('/doctor-profile');
   }
 

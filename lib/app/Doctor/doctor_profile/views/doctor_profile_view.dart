@@ -7,6 +7,27 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final bool isTablet = width >= 600;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF3F4F6),
+      body: isTablet
+          ? _TabletLayout(controller: controller)
+          : _PhoneLayout(controller: controller),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PHONE LAYOUT  (original — untouched)
+// ══════════════════════════════════════════════════════════════
+class _PhoneLayout extends StatelessWidget {
+  final DoctorProfileController controller;
+  const _PhoneLayout({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
@@ -34,63 +55,174 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // ===== PROFILE CARD =====
-            _profileCard(),
+            _ProfileCard(controller: controller),
             const SizedBox(height: 14),
-
-            // ===== SECTION 1: Availability + Clinic =====
-            _menuCard(controller.section1),
+            _MenuCard(items: controller.section1, controller: controller),
             const SizedBox(height: 14),
-
-            // ===== SECTION 2: Earnings + Reviews =====
-            _menuCard(controller.section2),
+            _MenuCard(items: controller.section2, controller: controller),
             const SizedBox(height: 14),
-
-            // ===== SECTION 3: Language + Help + Privacy =====
-            _menuCard(controller.section4),
+            _MenuCard(items: controller.section4, controller: controller),
             const SizedBox(height: 20),
-
-            // ===== LOGOUT =====
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: OutlinedButton.icon(
-                onPressed: controller.logout,
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-                icon: const Icon(Icons.logout,
-                    color: Color(0xFFEF4444), size: 20),
-                label: const Text('Log Out',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFFEF4444))),
-              ),
-            ),
+            _LogoutButton(controller: controller),
             const SizedBox(height: 16),
-
-            // ===== VERSION =====
-            const Text('PHIR Health version 1.0.2',
-                style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 12,
-                    color: Color(0xFF9CA3AF))),
+            const _VersionText(),
             const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
+}
 
-  // ===== PROFILE CARD =====
-  Widget _profileCard() {
+// ══════════════════════════════════════════════════════════════
+//  TABLET LAYOUT — side rail + two-column content
+// ══════════════════════════════════════════════════════════════
+class _TabletLayout extends StatelessWidget {
+  final DoctorProfileController controller;
+  const _TabletLayout({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // ── Side rail ──────────────────────────────────────
+        _TabletSideRail(controller: controller),
+
+        // ── Main content ───────────────────────────────────
+        Expanded(
+          child: SafeArea(
+            left: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top bar
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 28, vertical: 18),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Get.back(),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF3F4F6),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_new,
+                              color: Colors.black, size: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      const Expanded(
+                        child: Text('My Profile',
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black)),
+                      ),
+                      // Share button
+                      GestureDetector(
+                        onTap: controller.onShare,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF3F4F6),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.share_outlined,
+                              color: Colors.black, size: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Scrollable body
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(28, 24, 28, 32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Profile card — full width
+                        _ProfileCard(controller: controller, isTablet: true),
+                        const SizedBox(height: 20),
+
+                        // Two-column menu sections
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Left column: section1 + section2
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  _MenuCard(
+                                      items: controller.section1,
+                                      controller: controller),
+                                  const SizedBox(height: 16),
+                                  _MenuCard(
+                                      items: controller.section2,
+                                      controller: controller),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            // Right column: section4
+                            Expanded(
+                              child: _MenuCard(
+                                  items: controller.section4,
+                                  controller: controller),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Logout — constrained width on tablet
+                        Center(
+                          child: SizedBox(
+                            width: 320,
+                            child: _LogoutButton(controller: controller),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Center(child: _VersionText()),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PROFILE CARD
+// ══════════════════════════════════════════════════════════════
+class _ProfileCard extends StatelessWidget {
+  final DoctorProfileController controller;
+  final bool isTablet;
+  const _ProfileCard({required this.controller, this.isTablet = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final double avatarSize = isTablet ? 80 : 60;
+    final double nameSize = isTablet ? 20 : 16;
+    final double subSize = isTablet ? 13 : 12;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(isTablet ? 20 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -111,53 +243,62 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
               ClipOval(
                 child: Image.asset(
                   controller.imagePath,
-                  width: 60,
-                  height: 60,
+                  width: avatarSize,
+                  height: avatarSize,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    width: 60,
-                    height: 60,
+                    width: avatarSize,
+                    height: avatarSize,
                     color: const Color(0xFFE0F2F1),
-                    child: const Icon(Icons.person,
-                        color: Color(0xFF0D9488), size: 34),
+                    child: Icon(Icons.person,
+                        color: const Color(0xFF0D9488),
+                        size: avatarSize * 0.55),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(controller.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 16,
+                            fontSize: nameSize,
                             fontWeight: FontWeight.w800,
                             color: Colors.black)),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 3),
                     Text(controller.credentials,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 12,
-                            color: Color(0xFF6B7280))),
-                    const SizedBox(height: 2),
+                            fontSize: subSize,
+                            color: const Color(0xFF6B7280))),
+                    const SizedBox(height: 3),
                     Text(controller.regNo,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 12,
-                            color: Color(0xFF6B7280))),
+                            fontSize: subSize,
+                            color: const Color(0xFF6B7280))),
                   ],
                 ),
               ),
               // Edit icon
               GestureDetector(
                 onTap: controller.onEdit,
-                child: const Icon(Icons.edit_outlined,
-                    color: Color(0xFF0D9488), size: 20),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE0F2F1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.edit_outlined,
+                      color: Color(0xFF0D9488), size: 18),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Row(
             children: [
               // Online toggle
@@ -170,7 +311,8 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
                         activeTrackColor: const Color(0xFF0D9488),
                         inactiveThumbColor: Colors.white,
                         inactiveTrackColor: const Color(0xFFD1D5DB),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        materialTapTargetSize:
+                            MaterialTapTargetSize.shrinkWrap,
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -194,8 +336,8 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border:
-                      Border.all(color: const Color(0xFF0D9488), width: 1.5),
+                  border: Border.all(
+                      color: const Color(0xFF0D9488), width: 1.5),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
@@ -218,9 +360,18 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
       ),
     );
   }
+}
 
-  // ===== MENU CARD =====
-  Widget _menuCard(List<Map<String, dynamic>> items) {
+// ══════════════════════════════════════════════════════════════
+//  MENU CARD
+// ══════════════════════════════════════════════════════════════
+class _MenuCard extends StatelessWidget {
+  final List<Map<String, dynamic>> items;
+  final DoctorProfileController controller;
+  const _MenuCard({required this.items, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -233,16 +384,19 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: List.generate(items.length, (i) {
           final item = items[i];
           final bool isLast = i == items.length - 1;
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap: () => controller.onTileRoute(item['route'] as String),
+                onTap: () =>
+                    controller.onTileRoute(item['route'] as String),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 16),
                   child: Row(
                     children: [
                       // Icon box
@@ -276,7 +430,7 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black)),
                       ),
-                      // Trailing: rating star OR language value
+                      // Trailing: rating star
                       if (item['trailing'] != null) ...[
                         const Icon(Icons.star,
                             color: Color(0xFFFBBF24), size: 16),
@@ -289,6 +443,7 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
                                 color: Colors.black)),
                         const SizedBox(width: 6),
                       ],
+                      // Trailing: value text
                       if (item['value'] != null) ...[
                         Text(item['value'] as String,
                             style: const TextStyle(
@@ -312,6 +467,196 @@ class DoctorProfileView extends GetView<DoctorProfileController> {
             ],
           );
         }),
+      ),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SHARED SMALL WIDGETS
+// ══════════════════════════════════════════════════════════════
+class _LogoutButton extends StatelessWidget {
+  final DoctorProfileController controller;
+  const _LogoutButton({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: OutlinedButton.icon(
+        onPressed: controller.logout,
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+        icon: const Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+        label: const Text('Log Out',
+            style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFFEF4444))),
+      ),
+    );
+  }
+}
+
+class _VersionText extends StatelessWidget {
+  const _VersionText();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('PHIR Health version 1.0.2',
+        style: TextStyle(
+            fontFamily: 'Mulish',
+            fontSize: 12,
+            color: Color(0xFF9CA3AF)));
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TABLET SIDE RAIL
+// ══════════════════════════════════════════════════════════════
+class _TabletSideRail extends StatelessWidget {
+  final DoctorProfileController controller;
+  const _TabletSideRail({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      right: false,
+      child: Container(
+        width: 90,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0D9488), Color(0xFF2563EB)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 28),
+            // Avatar
+            ClipOval(
+              child: Image.asset(
+                'assets/profile.png',
+                width: 46,
+                height: 46,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 46,
+                  height: 46,
+                  color: Colors.white24,
+                  child: const Icon(Icons.person,
+                      color: Colors.white, size: 26),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(width: 28, height: 1.5, color: Colors.white38),
+            const SizedBox(height: 20),
+            // Nav items — Profile is active
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _RailNavItem(
+                    label: 'Home',
+                    isActive: false,
+                    icon: Icons.home_outlined,
+                    onTap: () => Get.offAllNamed('/doctor-dashboard'),
+                  ),
+                  const SizedBox(height: 4),
+                  _RailNavItem(
+                    label: 'Request',
+                    isActive: false,
+                    icon: Icons.inbox_outlined,
+                    onTap: () => Get.offAllNamed('/doctor-requests'),
+                  ),
+                  const SizedBox(height: 4),
+                  _RailNavItem(
+                    label: 'Schedule',
+                    isActive: false,
+                    icon: Icons.calendar_today_outlined,
+                    onTap: () => Get.offAllNamed('/doctor-schedule'),
+                  ),
+                  const SizedBox(height: 4),
+                  _RailNavItem(
+                    label: 'Profile',
+                    isActive: true,
+                    icon: Icons.person_outline,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RailNavItem extends StatelessWidget {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+  final IconData icon;
+
+  const _RailNavItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        width: 70,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isActive
+              ? Colors.white.withOpacity(0.2)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.white, size: 22),
+            const SizedBox(height: 5),
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                color: Colors.white,
+                fontSize: 11,
+                fontWeight:
+                    isActive ? FontWeight.w700 : FontWeight.w400,
+              ),
+            ),
+            if (isActive) ...[
+              const SizedBox(height: 4),
+              Container(
+                width: 20,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

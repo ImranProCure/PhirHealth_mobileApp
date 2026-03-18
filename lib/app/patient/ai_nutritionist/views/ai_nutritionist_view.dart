@@ -2,8 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/ai_nutritionist_controller.dart';
 
+// ─────────────────────────────────────────────
+// Breakpoint helper
+// ─────────────────────────────────────────────
+bool _isTablet(BuildContext context) =>
+    MediaQuery.of(context).size.shortestSide >= 600;
+
+// ═══════════════════════════════════════════════════════════
+//  ROOT VIEW
+// ═══════════════════════════════════════════════════════════
 class AiNutritionistView extends GetView<AiNutritionistController> {
   const AiNutritionistView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _isTablet(context)
+        ? _TabletAiNutritionistView(controller: controller)
+        : _PhoneAiNutritionistView(controller: controller);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PHONE LAYOUT  (original — untouched)
+// ═══════════════════════════════════════════════════════════
+class _PhoneAiNutritionistView extends StatelessWidget {
+  final AiNutritionistController controller;
+  const _PhoneAiNutritionistView({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -36,86 +60,162 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ===== GOAL =====
-                    _sectionTitle("What's your Goal?"),
+                    _SectionTitle("What's your Goal?"),
                     const SizedBox(height: 12),
-                    _goalGrid(),
+                    _GoalGrid(controller: controller),
                     const SizedBox(height: 22),
-
-                    // ===== FOOD PREFERENCE =====
-                    _sectionTitle('Food Preference'),
-                    _sectionSub('Select your primary dietary habit'),
+                    _SectionTitle('Food Preference'),
+                    _SectionSub('Select your primary dietary habit'),
                     const SizedBox(height: 12),
-                    _foodRow(),
+                    _FoodRow(controller: controller),
                     const SizedBox(height: 22),
-
-                    // ===== ACTIVITY LEVEL =====
-                    _sectionTitle('Activity Level?'),
-                    _sectionSub(
+                    _SectionTitle('Activity Level?'),
+                    _SectionSub(
                         "We'll adjust your daily caloric intake based on your 4-5 days/week gym schedule."),
                     const SizedBox(height: 14),
-                    _activitySlider(),
+                    _ActivitySlider(controller: controller),
                     const SizedBox(height: 22),
-
-                    // ===== ALLERGIES =====
-                    _sectionTitle('Allergies'),
-                    _sectionSub('Do you have any known allergies?'),
+                    _SectionTitle('Allergies'),
+                    _SectionSub('Do you have any known allergies?'),
                     const SizedBox(height: 12),
-                    _allergiesRow(),
+                    _AllergiesRow(controller: controller),
                     const SizedBox(height: 80),
                   ],
                 ),
               ),
             ),
+            _GenerateButton(controller: controller),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-            // ===== BUTTON =====
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-                    ),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: controller.generatePlan,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Generate AI Plan',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+// ═══════════════════════════════════════════════════════════
+//  TABLET LAYOUT
+// ═══════════════════════════════════════════════════════════
+class _TabletAiNutritionistView extends StatelessWidget {
+  final AiNutritionistController controller;
+  const _TabletAiNutritionistView({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF3F4F6),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'AI Nutritionist',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // ── LEFT PANEL: Goal + Food Preference ───────────
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.44,
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE0F2F1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Text(
+                        'Personalize your plan',
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF0D9488),
                         ),
-                        const SizedBox(width: 8),
-                        Image.asset(
-                          'assets/icons/wand_stars.png',
-                          width: 20,
-                          height: 20,
-                          color: Colors.white,
-                          colorBlendMode: BlendMode.srcIn,
-                          errorBuilder: (_, __, ___) => const Icon(
-                              Icons.auto_awesome,
-                              color: Colors.white,
-                              size: 20),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 14),
+                    const Text(
+                      'AI Nutritionist',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF1F2937),
+                        height: 1.15,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Tell us your goals and preferences to generate a personalised nutrition plan.',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 13,
+                        color: Color(0xFF6B7280),
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Goal section
+                    const _SectionTitle("What's your Goal?"),
+                    const SizedBox(height: 12),
+                    _GoalGrid(controller: controller, tablet: true),
+                    const SizedBox(height: 24),
+
+                    // Food preference
+                    const _SectionTitle('Food Preference'),
+                    _SectionSub('Select your primary dietary habit'),
+                    const SizedBox(height: 12),
+                    _FoodRow(controller: controller, tablet: true),
+
+                    const Spacer(),
+                    // Generate button anchored bottom-left
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: _GenerateButton(controller: controller),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── RIGHT PANEL: Activity + Allergies ────────────
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const _SectionTitle('Activity Level?'),
+                    _SectionSub(
+                        "We'll adjust your daily caloric intake based on your activity schedule."),
+                    const SizedBox(height: 14),
+                    _ActivitySlider(controller: controller),
+                    const SizedBox(height: 28),
+                    const _SectionTitle('Allergies'),
+                    _SectionSub('Do you have any known allergies?'),
+                    const SizedBox(height: 12),
+                    _AllergiesRow(controller: controller),
+                  ],
                 ),
               ),
             ),
@@ -124,44 +224,73 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
       ),
     );
   }
+}
 
-  // ===== HELPERS =====
-  Widget _sectionTitle(String t) => Text(
-        t,
+// ═══════════════════════════════════════════════════════════
+//  SHARED WIDGETS
+// ═══════════════════════════════════════════════════════════
+
+class _SectionTitle extends StatelessWidget {
+  final String text;
+  const _SectionTitle(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontFamily: 'Mulish',
+        fontSize: 16,
+        fontWeight: FontWeight.w800,
+        color: Colors.black,
+      ),
+    );
+  }
+}
+
+class _SectionSub extends StatelessWidget {
+  final String text;
+  const _SectionSub(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: Text(
+        text,
         style: const TextStyle(
           fontFamily: 'Mulish',
-          fontSize: 16,
-          fontWeight: FontWeight.w800,
-          color: Colors.black,
+          fontSize: 13,
+          color: Color(0xFF6B7280),
+          height: 1.4,
         ),
-      );
+      ),
+    );
+  }
+}
 
-  Widget _sectionSub(String t) => Padding(
-        padding: const EdgeInsets.only(top: 3),
-        child: Text(
-          t,
-          style: const TextStyle(
-            fontFamily: 'Mulish',
-            fontSize: 13,
-            color: Color(0xFF6B7280),
-            height: 1.4,
-          ),
-        ),
-      );
+// ── Goal Grid ─────────────────────────────────────────────
+class _GoalGrid extends StatelessWidget {
+  final AiNutritionistController controller;
+  final bool tablet;
+  const _GoalGrid({required this.controller, this.tablet = false});
 
-  // ===== GOAL GRID =====
-  Widget _goalGrid() {
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => Row(
           children: controller.goals.map((g) {
-            final bool isSelected = controller.selectedGoal.value == g['label'];
+            final bool isSelected =
+                controller.selectedGoal.value == g['label'];
+            final bool isFirst = g['label'] == controller.goals.first['label'];
             return Expanded(
               child: GestureDetector(
                 onTap: () => controller.selectGoal(g['label'] as String),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   margin: EdgeInsets.only(
-                      right: g['label'] == 'Weight Loss' ? 12 : 0),
-                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 14),
+                      right: isFirst ? 12 : 0),
+                  padding: EdgeInsets.fromLTRB(
+                      12, tablet ? 20 : 16, 12, tablet ? 18 : 14),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -185,20 +314,20 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                         children: [
                           Image.asset(
                             g['imagePath'] as String,
-                            height: 80,
+                            height: tablet ? 90 : 80,
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => const Icon(
+                            errorBuilder: (_, __, ___) => Icon(
                               Icons.fitness_center,
-                              size: 60,
-                              color: Color(0xFF0D9488),
+                              size: tablet ? 70 : 60,
+                              color: const Color(0xFF0D9488),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: tablet ? 12 : 10),
                           Text(
                             g['label'] as String,
                             style: TextStyle(
                               fontFamily: 'Mulish',
-                              fontSize: 15,
+                              fontSize: tablet ? 16 : 15,
                               fontWeight: FontWeight.w800,
                               color: isSelected
                                   ? const Color(0xFF0D9488)
@@ -219,27 +348,27 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                       Positioned(
                         top: 0,
                         right: 0,
-                        child: isSelected
-                            ? Container(
-                                width: 22,
-                                height: 22,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF0D9488),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.check,
-                                    color: Colors.white, size: 13),
-                              )
-                            : Container(
-                                width: 22,
-                                height: 22,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: const Color(0xFFD1D5DB),
-                                      width: 1.5),
-                                ),
-                              ),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? const Color(0xFF0D9488)
+                                : Colors.transparent,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? const Color(0xFF0D9488)
+                                  : const Color(0xFFD1D5DB),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: isSelected
+                              ? const Icon(Icons.check,
+                                  color: Colors.white, size: 13)
+                              : null,
+                        ),
                       ),
                     ],
                   ),
@@ -249,19 +378,28 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
           }).toList(),
         ));
   }
+}
 
-  // ===== FOOD ROW =====
-  Widget _foodRow() {
-    return Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// ── Food Row ──────────────────────────────────────────────
+class _FoodRow extends StatelessWidget {
+  final AiNutritionistController controller;
+  final bool tablet;
+  const _FoodRow({required this.controller, this.tablet = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Wrap(
+          spacing: 10,
+          runSpacing: 10,
           children: controller.foods.map((f) {
-            final bool isSelected = controller.selectedFood.value == f['label'];
+            final bool isSelected =
+                controller.selectedFood.value == f['label'];
             return GestureDetector(
               onTap: () => controller.selectFood(f['label'] as String),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                width: 85,
-                height: 104,
+                width: tablet ? 100 : 85,
+                height: tablet ? 116 : 104,
                 padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
                 decoration: BoxDecoration(
                   color: isSelected
@@ -290,13 +428,13 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                         children: [
                           Image.asset(
                             f['imagePath'] as String,
-                            width: 44,
-                            height: 44,
+                            width: tablet ? 50 : 44,
+                            height: tablet ? 50 : 44,
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => const Icon(
+                            errorBuilder: (_, __, ___) => Icon(
                               Icons.eco,
-                              size: 36,
-                              color: Color(0xFF0D9488),
+                              size: tablet ? 42 : 36,
+                              color: const Color(0xFF0D9488),
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -305,7 +443,7 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Mulish',
-                              fontSize: 11,
+                              fontSize: tablet ? 12 : 11,
                               fontWeight: FontWeight.w700,
                               color: isSelected
                                   ? const Color(0xFF0D9488)
@@ -318,26 +456,27 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: isSelected
-                          ? Container(
-                              width: 18,
-                              height: 18,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF0D9488),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.check,
-                                  color: Colors.white, size: 11),
-                            )
-                          : Container(
-                              width: 18,
-                              height: 18,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: const Color(0xFFD1D5DB), width: 1.5),
-                              ),
-                            ),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFF0D9488)
+                              : Colors.transparent,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? const Color(0xFF0D9488)
+                                : const Color(0xFFD1D5DB),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: isSelected
+                            ? const Icon(Icons.check,
+                                color: Colors.white, size: 11)
+                            : null,
+                      ),
                     ),
                   ],
                 ),
@@ -346,9 +485,15 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
           }).toList(),
         ));
   }
+}
 
-  // ===== ACTIVITY SLIDER =====
-  Widget _activitySlider() {
+// ── Activity Slider ───────────────────────────────────────
+class _ActivitySlider extends StatelessWidget {
+  final AiNutritionistController controller;
+  const _ActivitySlider({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
       decoration: BoxDecoration(
@@ -407,9 +552,15 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
           )),
     );
   }
+}
 
-  // ===== ALLERGIES =====
-  Widget _allergiesRow() {
+// ── Allergies Row ─────────────────────────────────────────
+class _AllergiesRow extends StatelessWidget {
+  final AiNutritionistController controller;
+  const _AllergiesRow({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => Wrap(
           spacing: 10,
           runSpacing: 10,
@@ -464,8 +615,6 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                 ),
               );
             }),
-
-            // Custom allergies added by user
             ...controller.customAllergies.map((a) {
               return GestureDetector(
                 onTap: () => controller.removeCustomAllergy(a),
@@ -497,10 +646,8 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                 ),
               );
             }),
-
-            // Add Other
             GestureDetector(
-              onTap: () => _showAddAllergySheet(),
+              onTap: () => _showAddAllergySheet(controller),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -533,7 +680,7 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
         ));
   }
 
-  void _showAddAllergySheet() {
+  void _showAddAllergySheet(AiNutritionistController ctrl) {
     final TextEditingController textCtrl = TextEditingController();
     Get.bottomSheet(
       Container(
@@ -594,7 +741,7 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
                   onPressed: () {
                     final val = textCtrl.text.trim();
                     if (val.isNotEmpty) {
-                      controller.addCustomAllergy(val);
+                      ctrl.addCustomAllergy(val);
                       Get.back();
                     }
                   },
@@ -620,6 +767,63 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
         ),
       ),
       isScrollControlled: true,
+    );
+  }
+}
+
+// ── Generate Button ───────────────────────────────────────
+class _GenerateButton extends StatelessWidget {
+  final AiNutritionistController controller;
+  const _GenerateButton({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 54,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+          ),
+        ),
+        child: ElevatedButton(
+          onPressed: controller.generatePlan,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Generate AI Plan',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Image.asset(
+                'assets/icons/wand_stars.png',
+                width: 20,
+                height: 20,
+                color: Colors.white,
+                colorBlendMode: BlendMode.srcIn,
+                errorBuilder: (_, __, ___) => const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 20),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -2,8 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/cancer_risk_area_controller.dart';
 
+// ─────────────────────────────────────────────
+// Breakpoint helper
+// ─────────────────────────────────────────────
+bool _isTablet(BuildContext context) =>
+    MediaQuery.of(context).size.shortestSide >= 600;
+
+// ═══════════════════════════════════════════════════════════
+//  ROOT VIEW
+// ═══════════════════════════════════════════════════════════
 class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
   const CancerRiskAreaView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _isTablet(context)
+        ? _TabletCancerRiskAreaView(controller: controller)
+        : _PhoneCancerRiskAreaView(controller: controller);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PHONE LAYOUT  (original — untouched)
+// ═══════════════════════════════════════════════════════════
+class _PhoneCancerRiskAreaView extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  const _PhoneCancerRiskAreaView({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +58,142 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _genderTabs(),
+                  _GenderTabs(controller: controller),
                   const SizedBox(height: 20),
-                  _areaGrid(),
+                  _AreaGrid(controller: controller, crossAxisCount: 2),
                 ],
               ),
             ),
           ),
-          _continueButton(),
+          _ContinueButton(controller: controller),
         ],
       ),
     );
   }
+}
 
-  // ===== GENDER TABS =====
-  Widget _genderTabs() {
+// ═══════════════════════════════════════════════════════════
+//  TABLET LAYOUT
+// ═══════════════════════════════════════════════════════════
+class _TabletCancerRiskAreaView extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  const _TabletCancerRiskAreaView({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF3F4F6),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Select Risk Area',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── LEFT: Info Panel ──────────────────────────────
+          Container(
+            width: screenWidth * 0.30,
+            color: Colors.white,
+            padding: const EdgeInsets.fromLTRB(28, 32, 28, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Section label
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE0F2F1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'Step 1 of 3',
+                    style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0D9488),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Select\nRisk Area',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF1F2937),
+                    height: 1.15,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Choose the body area you want to screen. Our AI will analyse risk indicators specific to that region.',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 14,
+                    color: Color(0xFF6B7280),
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Gender selector — vertical on tablet
+                _GenderTabsVertical(controller: controller),
+
+                const Spacer(),
+
+                // Continue button anchored to bottom of left panel
+                _ContinueButton(controller: controller),
+              ],
+            ),
+          ),
+
+          // ── RIGHT: Area Grid ──────────────────────────────
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: _AreaGrid(
+                controller: controller,
+                crossAxisCount: 3, // 3 cols on tablet
+                cardAspectRatio: 1.05,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SHARED WIDGETS
+// ═══════════════════════════════════════════════════════════
+
+// ── Horizontal gender tabs (phone) ────────────────────────
+class _GenderTabs extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  const _GenderTabs({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -109,9 +254,89 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
           ),
         ));
   }
+}
 
-  // ===== AREA GRID — single Obx =====
-  Widget _areaGrid() {
+// ── Vertical gender tabs (tablet left panel) ──────────────
+class _GenderTabsVertical extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  const _GenderTabsVertical({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Column(
+          children: ['Male', 'Female'].map((g) {
+            final bool isSelected = controller.selectedGender.value == g;
+            return GestureDetector(
+              onTap: () => controller.selectGender(g),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                decoration: BoxDecoration(
+                  gradient: isSelected
+                      ? const LinearGradient(
+                          colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+                        )
+                      : null,
+                  color: isSelected ? null : const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isSelected
+                        ? Colors.transparent
+                        : const Color(0xFFE5E7EB),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      g == 'Male' ? Icons.male : Icons.female,
+                      size: 20,
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF6B7280),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      g,
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: isSelected
+                            ? Colors.white
+                            : const Color(0xFF374151),
+                      ),
+                    ),
+                    if (isSelected) ...[
+                      const Spacer(),
+                      const Icon(Icons.check_circle,
+                          color: Colors.white, size: 18),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ));
+  }
+}
+
+// ── Area Grid ─────────────────────────────────────────────
+class _AreaGrid extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  final int crossAxisCount;
+  final double cardAspectRatio;
+
+  const _AreaGrid({
+    required this.controller,
+    this.crossAxisCount = 2,
+    this.cardAspectRatio = 1.1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() {
       final areas = controller.currentAreas;
       final selected = controller.selectedArea.value;
@@ -119,18 +344,33 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: areas.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 1.1,
+          childAspectRatio: cardAspectRatio,
         ),
-        itemBuilder: (context, i) => _areaCard(areas[i], selected),
+        itemBuilder: (context, i) =>
+            _AreaCard(area: areas[i], selected: selected, controller: controller),
       );
     });
   }
+}
 
-  Widget _areaCard(Map<String, dynamic> area, String selected) {
+// ── Area Card ─────────────────────────────────────────────
+class _AreaCard extends StatelessWidget {
+  final Map<String, dynamic> area;
+  final String selected;
+  final CancerRiskAreaController controller;
+
+  const _AreaCard({
+    required this.area,
+    required this.selected,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final bool isSelected = selected == area['label'];
     return GestureDetector(
       onTap: () => controller.selectArea(area['label'] as String),
@@ -141,7 +381,8 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? const Color(0xFF0D9488) : Colors.transparent,
+            color:
+                isSelected ? const Color(0xFF0D9488) : Colors.transparent,
             width: 1.5,
           ),
           boxShadow: [
@@ -197,8 +438,9 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
                 height: 22,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      isSelected ? const Color(0xFF0D9488) : Colors.transparent,
+                  color: isSelected
+                      ? const Color(0xFF0D9488)
+                      : Colors.transparent,
                   border: Border.all(
                     color: isSelected
                         ? const Color(0xFF0D9488)
@@ -216,11 +458,17 @@ class CancerRiskAreaView extends GetView<CancerRiskAreaController> {
       ),
     );
   }
+}
 
-  // ===== CONTINUE BUTTON =====
-  Widget _continueButton() {
+// ── Continue Button ───────────────────────────────────────
+class _ContinueButton extends StatelessWidget {
+  final CancerRiskAreaController controller;
+  const _ContinueButton({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: SizedBox(
         width: double.infinity,
         height: 54,

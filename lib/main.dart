@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       
       // ✅ App start point (Splash se)
       initialRoute: Routes.SPLASH,
-
+      
       // ✅ All app routes in one place
       getPages: AppPages.routes,
     ));

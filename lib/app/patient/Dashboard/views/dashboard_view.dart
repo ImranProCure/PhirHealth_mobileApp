@@ -5,40 +5,52 @@ import '../controllers/dashboard_controller.dart';
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
 
+  bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
   @override
   Widget build(BuildContext context) {
+    final tablet = isTablet(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: Stack(
         children: [
-          /// Main Content
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 90),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Header(),
-                  const SizedBox(height: 16),
-                  _DoctorActionsSection(controller: controller),
-                  const SizedBox(height: 24),
-                  _AiMedicineFitnessSection(controller: controller),
-                  const SizedBox(height: 24),
-                  const _PromoBanner(),
-                  const SizedBox(height: 24),
-                  _SmartHealthToolsSection(controller: controller),
-                  const SizedBox(height: 16),
-                ],
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 900),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Header(isTablet: tablet),
+                      const SizedBox(height: 16),
+                      _DoctorActionsSection(
+                          controller: controller, isTablet: tablet),
+                      const SizedBox(height: 24),
+                      _AiMedicineFitnessSection(
+                          controller: controller, isTablet: tablet),
+                      const SizedBox(height: 24),
+                      const _PromoBanner(),
+                      const SizedBox(height: 24),
+                      _SmartHealthToolsSection(
+                          controller: controller, isTablet: tablet),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
 
-          /// Floating Bottom Navigation
+          /// Bottom Navigation
           Positioned(
             left: 16,
             right: 16,
             bottom: 20,
-            child: _BottomNav(controller: controller),
+            child: _BottomNav(controller: controller, isTablet: tablet),
           ),
         ],
       ),
@@ -46,37 +58,44 @@ class DashboardView extends GetView<DashboardController> {
   }
 }
 
-// ================= HEADER =================
+///////////////////////////////////////////////////////////////
+/// HEADER
+///////////////////////////////////////////////////////////////
+
 class _Header extends StatelessWidget {
+  final bool isTablet;
+  const _Header({required this.isTablet});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding:
+          EdgeInsets.symmetric(horizontal: isTablet ? 24 : 16, vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              const CircleAvatar(
-                radius: 24,
-                backgroundImage: AssetImage('assets/profile.png'),
+              CircleAvatar(
+                radius: isTablet ? 30 : 24,
+                backgroundImage: const AssetImage('assets/profile.png'),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'Hey, John',
                 style: TextStyle(
                   fontFamily: 'Mulish',
-                  fontSize: 18,
+                  fontSize: isTablet ? 22 : 18,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
-          Row(
-            children: const [
-              Icon(Icons.search, size: 24),
+          const Row(
+            children: [
+              Icon(Icons.search),
               SizedBox(width: 12),
-              Icon(Icons.notifications_none, size: 24),
+              Icon(Icons.notifications_none),
             ],
           ),
         ],
@@ -85,10 +104,18 @@ class _Header extends StatelessWidget {
   }
 }
 
-// ================= DOCTOR ACTIONS =================
+///////////////////////////////////////////////////////////////
+/// DOCTOR ACTIONS
+///////////////////////////////////////////////////////////////
+
 class _DoctorActionsSection extends StatelessWidget {
   final DashboardController controller;
-  const _DoctorActionsSection({required this.controller});
+  final bool isTablet;
+
+  const _DoctorActionsSection({
+    required this.controller,
+    required this.isTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,110 +124,187 @@ class _DoctorActionsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionTitle('Doctor & Quick Actions'),
-          const SizedBox(height: 20),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.doctorActions.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.05,
-            ),
-            itemBuilder: (context, index) {
-              final action = controller.doctorActions[index];
-              return GestureDetector(
-                onTap: () => controller.onDoctorActionTap(index),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      action['icon']!,
-                      width: 55,
-                      height: 55,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.local_hospital, size: 40),
-                    ),
-                    const SizedBox(height: 6),
-                    SizedBox(
-                      width: 90,
-                      child: Text(
-                        action['label']!,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          height: 1.2,
+          const SizedBox(height: 16),
+
+          // ── TABLET: horizontal two-column list ────────────
+          if (isTablet)
+            _buildTabletList()
+          // ── PHONE: 3-col icon grid ─────────────────────────
+          else
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.doctorActions.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.05,
+              ),
+              itemBuilder: (context, index) {
+                final action = controller.doctorActions[index];
+                return GestureDetector(
+                  onTap: () => controller.onDoctorActionTap(index),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        action['icon']!,
+                        width: 55,
+                        height: 55,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) =>
+                            const Icon(Icons.local_hospital, size: 40),
+                      ),
+                      const SizedBox(height: 6),
+                      SizedBox(
+                        width: 90,
+                        child: Text(
+                          action['label']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                    ],
+                  ),
+                );
+              },
+            ),
         ],
       ),
     );
   }
+
+  /// Two-column list layout for tablet
+  Widget _buildTabletList() {
+    final actions = controller.doctorActions;
+    // Split into two columns
+    final int half = (actions.length / 2).ceil();
+    final leftCol = actions.sublist(0, half);
+    final rightCol = actions.sublist(half);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left column
+        Expanded(child: _buildColumn(leftCol, 0)),
+        const SizedBox(width: 12),
+        // Vertical divider
+        Container(width: 1, color: const Color(0xFFF3F4F6)),
+        const SizedBox(width: 12),
+        // Right column
+        Expanded(child: _buildColumn(rightCol, half)),
+      ],
+    );
+  }
+
+  Widget _buildColumn(List<Map<String, String>> items, int offset) {
+    return Column(
+      children: List.generate(items.length, (i) {
+        final action = items[i];
+        final bool isLast = i == items.length - 1;
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: () => controller.onDoctorActionTap(offset + i),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          action['icon']!,
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, __, ___) => const Icon(
+                              Icons.local_hospital,
+                              size: 24,
+                              color: Color(0xFF0D9488)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        action['label']!,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios,
+                        size: 13, color: Color(0xFF9CA3AF)),
+                  ],
+                ),
+              ),
+            ),
+            if (!isLast)
+              const Divider(height: 1, color: Color(0xFFF3F4F6)),
+          ],
+        );
+      }),
+    );
+  }
 }
 
-// ================= AI + MEDICINE + FITNESS =================
+///////////////////////////////////////////////////////////////
+/// AI + MEDICINE + FITNESS
+///////////////////////////////////////////////////////////////
+
 class _AiMedicineFitnessSection extends StatelessWidget {
   final DashboardController controller;
-  const _AiMedicineFitnessSection({required this.controller});
+  final bool isTablet;
+
+  const _AiMedicineFitnessSection({
+    required this.controller,
+    required this.isTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: isTablet ? 24 : 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cancer AI Card
           Expanded(
             child: GestureDetector(
               onTap: controller.goToCancerAiScan,
               child: Container(
-                height: 170,
+                height: isTablet ? 210 : 170,
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+                decoration: _cardDecoration(),
                 child: Stack(
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Cancer Risk AI Scan',
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1F2937),
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Early detection saves lives. Check your\nrisk now.',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            height: 1.4,
-                            color: Color(0xFF6B7280),
-                          ),
+                          'Early detection saves lives.\nCheck your risk now.',
+                          style: TextStyle(fontSize: 12),
                         ),
                       ],
                     ),
@@ -209,10 +313,10 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                       right: 0,
                       child: Image.asset(
                         'assets/icons/cancer-cell 1.png',
-                        width: 60,
-                        height: 60,
+                        width: isTablet ? 80 : 60,
+                        height: isTablet ? 80 : 60,
                         errorBuilder: (_, __, ___) =>
-                            const SizedBox(width: 80, height: 80),
+                            const SizedBox(width: 60, height: 60),
                       ),
                     ),
                   ],
@@ -221,28 +325,15 @@ class _AiMedicineFitnessSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Medicine & Fitness Cards
           Expanded(
             child: Column(
               children: [
-                // ===== MEDICINES & LAB DISCOUNTS → /savings-offers =====
                 GestureDetector(
                   onTap: controller.goToSavingsOffers,
                   child: Container(
-                    height: 80,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
+                    height: isTablet ? 100 : 80,
+                    padding: const EdgeInsets.all(12),
+                    decoration: _cardDecoration(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -251,9 +342,7 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                             'Medicines &\nLab Discounts',
                             style: TextStyle(
                               fontFamily: 'Mulish',
-                              fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              height: 1.3,
                             ),
                           ),
                         ),
@@ -269,24 +358,12 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // ===== TRACK STEPS & FITNESS =====
                 GestureDetector(
                   onTap: controller.goToFitnessTracker,
                   child: Container(
-                    height: 80,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
+                    height: isTablet ? 100 : 80,
+                    padding: const EdgeInsets.all(12),
+                    decoration: _cardDecoration(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -294,11 +371,8 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                           child: Text(
                             'Track Steps\n& Fitness',
                             style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              height: 1.3,
-                            ),
+                                fontFamily: 'Mulish',
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
                         Image.asset(
@@ -319,9 +393,26 @@ class _AiMedicineFitnessSection extends StatelessWidget {
       ),
     );
   }
+
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(.05),
+          blurRadius: 10,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    );
+  }
 }
 
-// ================= PROMO BANNER =================
+///////////////////////////////////////////////////////////////
+/// PROMO BANNER
+///////////////////////////////////////////////////////////////
+
 class _PromoBanner extends StatelessWidget {
   const _PromoBanner();
 
@@ -335,7 +426,11 @@ class _PromoBanner extends StatelessWidget {
           'assets/Gemini_Generated_Image_rb2batrb2batrb2b 1.png',
           fit: BoxFit.contain,
           errorBuilder: (_, __, ___) => Container(
-            color: const Color(0xFFE5E7EB),
+            height: 160,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE5E7EB),
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: const Center(
               child: Icon(Icons.image, size: 50, color: Color(0xFF9CA3AF)),
             ),
@@ -346,12 +441,20 @@ class _PromoBanner extends StatelessWidget {
   }
 }
 
-// ================= SMART HEALTH TOOLS =================
+///////////////////////////////////////////////////////////////
+/// SMART HEALTH TOOLS
+///////////////////////////////////////////////////////////////
+
 class _SmartHealthToolsSection extends StatelessWidget {
   final DashboardController controller;
-  const _SmartHealthToolsSection({required this.controller});
+  final bool isTablet;
 
-  static const List<Color> _colors = [
+  const _SmartHealthToolsSection({
+    required this.controller,
+    required this.isTablet,
+  });
+
+  static const List<Color> colors = [
     Color(0xFFE6F5F3),
     Color(0xFFFFECEC),
     Color(0xFFFFF6E5),
@@ -366,45 +469,52 @@ class _SmartHealthToolsSection extends StatelessWidget {
           const _SectionTitle('Smart Health Tools'),
           const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(controller.smartTools.length, (index) {
               final tool = controller.smartTools[index];
-              return GestureDetector(
-                onTap: () => controller.onSmartToolTap(index),
-                child: Container(
-                  width: 103,
-                  height: 146,
-                  decoration: BoxDecoration(
-                    color: _colors[index],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
-                        child: Text(
-                          tool['title'] as String,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            height: 1.3,
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      right: index < controller.smartTools.length - 1
+                          ? 12
+                          : 0),
+                  child: GestureDetector(
+                    onTap: () => controller.onSmartToolTap(index),
+                    child: Container(
+                      height: isTablet ? 170 : 146,
+                      decoration: BoxDecoration(
+                        color: colors[index],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(8, 12, 8, 0),
+                            child: Text(
+                              tool['title'],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: isTablet ? 13 : 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Image.asset(
+                              tool['icon'],
+                              height: isTablet ? 90 : 70,
+                              width: isTablet ? 90 : 70,
+                              errorBuilder: (_, __, ___) => SizedBox(
+                                  height: isTablet ? 90 : 70,
+                                  width: isTablet ? 90 : 70),
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Image.asset(
-                          tool['icon'] as String,
-                          height: 70,
-                          width: 70,
-                          errorBuilder: (_, __, ___) =>
-                              const SizedBox(height: 70, width: 70),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               );
@@ -416,7 +526,10 @@ class _SmartHealthToolsSection extends StatelessWidget {
   }
 }
 
-// ================= REUSABLE =================
+///////////////////////////////////////////////////////////////
+/// REUSABLE
+///////////////////////////////////////////////////////////////
+
 class _WhiteCard extends StatelessWidget {
   final Widget child;
   const _WhiteCard({required this.child});
@@ -432,7 +545,7 @@ class _WhiteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -462,15 +575,23 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-// ================= BOTTOM NAV =================
+///////////////////////////////////////////////////////////////
+/// BOTTOM NAV
+///////////////////////////////////////////////////////////////
+
 class _BottomNav extends StatelessWidget {
   final DashboardController controller;
-  const _BottomNav({required this.controller});
+  final bool isTablet;
+
+  const _BottomNav({
+    required this.controller,
+    required this.isTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: isTablet ? 80 : 70,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
         gradient: const LinearGradient(
@@ -481,34 +602,36 @@ class _BottomNav extends StatelessWidget {
             color: Colors.black.withOpacity(.25),
             blurRadius: 20,
             offset: const Offset(0, 10),
-          )
+          ),
         ],
       ),
-      child: Obx(() => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _NavItem(
-                  icon: "assets/home.png",
-                  label: 'Home',
-                  isActive: controller.selectedNavIndex.value == 0,
-                  onTap: () => controller.selectNav(0)),
-              _NavItem(
-                  icon: "assets/stethoscope.png",
-                  label: 'Doctor',
-                  isActive: controller.selectedNavIndex.value == 1,
-                  onTap: () => controller.selectNav(1)),
-              _NavItem(
-                  icon: "assets/article.png",
-                  label: 'Policy',
-                  isActive: controller.selectedNavIndex.value == 2,
-                  onTap: () => controller.selectNav(2)),
-              _NavItem(
-                  icon: "assets/account_circle.png",
-                  label: 'My Profile',
-                  isActive: controller.selectedNavIndex.value == 3,
-                  onTap: () => controller.selectNav(3)),
-            ],
-          )),
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _NavItem(
+                icon: "assets/home.png",
+                label: 'Home',
+                isActive: controller.selectedNavIndex.value == 0,
+                onTap: () => controller.selectNav(0)),
+            _NavItem(
+                icon: "assets/stethoscope.png",
+                label: 'Doctor',
+                isActive: controller.selectedNavIndex.value == 1,
+                onTap: () => controller.selectNav(1)),
+            _NavItem(
+                icon: "assets/article.png",
+                label: 'Policy',
+                isActive: controller.selectedNavIndex.value == 2,
+                onTap: () => controller.selectNav(2)),
+            _NavItem(
+                icon: "assets/account_circle.png",
+                label: 'My Profile',
+                isActive: controller.selectedNavIndex.value == 3,
+                onTap: () => controller.selectNav(3)),
+          ],
+        ),
+      ),
     );
   }
 }
