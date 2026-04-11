@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CancerAssessmentController extends GetxController {
+class CancerskinAssessmentController extends GetxController {
   late String area;
   late String gender;
 
@@ -12,23 +12,30 @@ class CancerAssessmentController extends GetxController {
   final List<Map<String, dynamic>> questions = [
     {
       'question':
-          'Do you have a persistent cough that has lasted more than 3 weeks?',
+          'Do you have any dark or irregular patches on your skin that are growing?',
       'subtitle': 'Please answer honestly for accurate AI analysis.',
-      'options': ['Yes, Frequently', 'Occasionally', 'No, Never'],
+      'options': ['Yes, I have', 'No, Never', 'Not Sure'],
       'imagePath': 'assets/icons/Mask group copy 4.png',
     },
     {
       'question':
-          'Have you noticed any blood or rust-colored phlegm when you cough?',
+          'Have you noticed itching, bleeding, or crusting in any skin lesion?',
       'subtitle':
           'This is a critical symptom for analysis, Please answer carefully.',
-      'options': ['Yes, I have', 'No, never', 'Not sure'],
+      'options': ['Yes, Frequently', 'Occasionally', 'No, Never'],
       'imagePath': 'assets/icons/Mask group-1.png',
     },
     {
-      'question': 'Do you smoke or have a family history of lung Ailments?',
+      'question': 'Do you have a personal or family history of skin cancer?',
       'subtitle': 'Lifestyle and genetics play a major role in risk analysis.',
-      'options': ['Yes, I do', 'No, I don\'t', 'Used to, but quit'],
+      'options': ['Yes, I do', 'No, I don\'t', 'Not sure'],
+      'imagePath': 'assets/icons/Mask group-2.png',
+    },
+    {
+      'question':
+          'Have you experienced persistent redness, swelling, or lumps on your skin?',
+      'subtitle': 'Lifestyle and genetics play a major role in risk analysis.',
+      'options': ['Yes, Frequently', 'Occasionally', 'No, Never'],
       'imagePath': 'assets/icons/Mask group-2.png',
     },
   ];

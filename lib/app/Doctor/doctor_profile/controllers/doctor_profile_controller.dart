@@ -17,7 +17,7 @@ class DoctorProfileController extends GetxController {
     {
       'label': 'Clinic Details & Fees',
       'iconPath': 'assets/icons/home_health.png',
-      'route': '/doctor-clinic'
+      'route': '/doctor-edit-clinic'
     },
   ];
 

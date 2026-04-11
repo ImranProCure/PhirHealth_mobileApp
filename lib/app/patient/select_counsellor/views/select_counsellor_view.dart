@@ -12,6 +12,7 @@ class SelectCounsellorView extends GetView<SelectCounsellorController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
         title: const Text(
@@ -288,10 +289,9 @@ class SelectCounsellorView extends GetView<SelectCounsellorController> {
                       Text(
                         doctor["rating"].toString(),
                         style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          color: Color(0XFFA76D24)
-                        ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: Color(0XFFA76D24)),
                       ),
                     ],
                   ),
@@ -323,9 +323,7 @@ class SelectCounsellorView extends GetView<SelectCounsellorController> {
                       TextSpan(
                         text: " ₹ ${doctor["fee"]}",
                         style: const TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 20
-                        ),
+                            fontWeight: FontWeight.w800, fontSize: 20),
                       ),
                     ],
                   ),

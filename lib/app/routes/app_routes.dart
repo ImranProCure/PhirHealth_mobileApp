@@ -39,7 +39,7 @@ abstract class Routes {
   static const TRANSACTION_HISTORY = '/transaction-history';
   static const CANCER_RISK = '/cancer-risk';
   static const CANCER_RISK_AREA = '/cancer-risk-area';
-  static const CANCER_ASSESSMENT = '/cancer-assessment';
+  static const CANCER_LUNG_ASSESSMENT = '/cancer-lung-assessment';
   static const FACE_SCAN = '/face-scan';
   static const SCAN_REPORT = '/scan-report';
   static const EMERGENCY_CONTACTS = '/emergency-contacts';
@@ -57,6 +57,7 @@ abstract class Routes {
   static const LAB_TESTS = '/lab-tests';
   static const LAB_NEAR_YOU = '/labs-near-you';
   static const LAB_DETAILS = '/lab-details';
+  static const CANCER_THROAT_ASSESSMENT = '/cancer-throat-assessment';
 
   // Doctor
 
@@ -73,4 +74,11 @@ abstract class Routes {
   static const DOCTOR_TODAYS_SESSION = '/doctor-todays-session';
   static const DOCTOR_PATIENT_DETAIL = '/doctor-patient-detail';
   static const DOCTOR_CANCEL_SESSION = '/doctor-cancel-session';
+  static const FAMILY_MEMBERS = '/family-members';
+  static const ADD_FAMILY_MEMBER = '/add-family-member';
+  static const DOCTOR_EDIT_CLINIC = '/doctor-edit-clinic';
+  static const SCAN_SELECT_PROFILE = '/scan-select-profile';
+  static const PRE_SCAN_QUESTIONS = '/pre-scan-questions';
+  static const CANCER_GENERAL_ASSESSMENT = '/cancer-general-assessment';
+  static const CANCER_OTHER_ASSESSMENT = '/cancer-other-assessment';
 }

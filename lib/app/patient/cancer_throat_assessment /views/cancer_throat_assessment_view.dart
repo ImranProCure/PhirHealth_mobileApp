@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/cancer_assessment_controller.dart';
+import '../controllers/cancer_throat_assessment_controller.dart';
 
-class CancerAssessmentView extends GetView<CancerAssessmentController> {
-  const CancerAssessmentView({super.key});
+class CancerthroatAssessmentView
+    extends GetView<CancerthroatAssessmentController> {
+  const CancerthroatAssessmentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,6 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ===== HERO IMAGE =====
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       child: ClipRRect(
@@ -60,13 +60,11 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ===== QUESTION =====
                           Text(
                             q['question'] as String,
                             style: const TextStyle(
@@ -87,8 +85,6 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
                             ),
                           ),
                           const SizedBox(height: 24),
-
-                          // ===== OPTIONS =====
                           ...(q['options'] as List<String>).map((opt) {
                             final bool isSelected =
                                 controller.selectedAnswer.value == opt;
@@ -158,8 +154,6 @@ class CancerAssessmentView extends GetView<CancerAssessmentController> {
                 ),
               ),
             ),
-
-            // ===== BUTTONS =====
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: SizedBox(

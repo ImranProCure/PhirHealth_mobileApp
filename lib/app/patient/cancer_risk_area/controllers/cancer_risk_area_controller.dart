@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CancerRiskAreaController extends GetxController {
+  /// 🔹 State
   final RxString selectedGender = 'Male'.obs;
   final RxString selectedArea = ''.obs;
 
+  /// 🔹 Areas List (UI data)
   final List<Map<String, dynamic>> areas = [
     {
       'label': 'Oral & Throat',
@@ -38,16 +40,30 @@ class CancerRiskAreaController extends GetxController {
     },
   ];
 
-  // same for both genders
+  /// 🔥 Map-based routing (CORE LOGIC)
+  final Map<String, String> _areaRoutes = {
+    'Oral & Throat': '/cancer-throat-assessment',
+    'Lungs & Breathing': '/cancer-lung-assessment',
+    'Stomach & Digestion': '/cancer-stomach-assessment',
+    'Skin & External': '/cancer-skin-assessment',
+    'General Risk': '/cancer-general-assessment',
+    'Other Areas': '/cancer-other-assessment',
+  };
+
+  /// Getter for UI
   List<Map<String, dynamic>> get currentAreas => areas;
 
-  void selectGender(String g) {
-    selectedGender.value = g;
+  /// 🔹 Actions
+  void selectGender(String gender) {
+    selectedGender.value = gender;
     selectedArea.value = '';
   }
 
-  void selectArea(String area) => selectedArea.value = area;
+  void selectArea(String area) {
+    selectedArea.value = area;
+  }
 
+  /// 🔥 Navigation logic
   void goNext() {
     if (selectedArea.value.isEmpty) {
       Get.snackbar(
@@ -61,9 +77,28 @@ class CancerRiskAreaController extends GetxController {
       );
       return;
     }
-    Get.toNamed('/cancer-assessment', arguments: {
-      'area': selectedArea.value,
-      'gender': selectedGender.value,
-    });
+
+    final route = _areaRoutes[selectedArea.value];
+
+    /// 🧪 Debug (remove in production)
+    debugPrint("Selected Area: ${selectedArea.value}");
+    debugPrint("Route: $route");
+
+    if (route == null) {
+      Get.snackbar(
+        'Error',
+        'No route found for selected area',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    Get.toNamed(
+      route,
+      arguments: {
+        'area': selectedArea.value,
+        'gender': selectedGender.value,
+      },
+    );
   }
 }
