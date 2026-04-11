@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/routes/app_routes.dart';
+import 'package:sample/app/service/api/api_client/api_client.dart';
+import 'package:sample/app/service/db/db.dart';
 import '../../home/views/home_view.dart';
 import '../../home/bindings/home_binding.dart';
 
@@ -26,10 +29,7 @@ class _SplashViewState extends State<SplashView> {
       if (_navigated || !mounted) return;
       _navigated = true;
 
-      Get.off(
-        () => const HomeView(),
-        binding: HomeBinding(),
-      );
+      _initializeApp();
     });
   }
 
@@ -40,6 +40,25 @@ class _SplashViewState extends State<SplashView> {
       overlays: SystemUiOverlay.values,
     );
     super.dispose();
+  }
+
+  Future<void> _initializeApp() async {
+    final authStorage = AuthStorageService();
+    await authStorage.init();
+    final apiClient = ApiClient();
+    await apiClient.initializeToken();
+    final loginStatus = await authStorage.getLoginStatus();
+
+    if (!loginStatus) {
+      final user = await authStorage.getUserDetail();
+      final roles = user?['roles'] as List<dynamic>?;
+      Get.off(
+        () => const HomeView(),
+        binding: HomeBinding(),
+      );
+    } else {
+      Get.offAllNamed(Routes.DASHBOARD);
+    }
   }
 
   @override

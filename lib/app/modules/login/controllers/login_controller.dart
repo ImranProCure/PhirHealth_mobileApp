@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
 import 'package:sample/app/modules/verify_mobile/bindings/verify_mobile_binding.dart';
 import 'package:sample/app/modules/verify_mobile/views/verify_mobile_view.dart';
+import 'package:sample/app/service/api/api.dart';
+import 'package:sample/app/service/api/api_client/api_client.dart';
+import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/db/db.dart';
+import 'package:sample/app/service/toast_service/toast_service.dart';
 import '../../../controllers/role_controller.dart';
 import '../../../routes/app_routes.dart';
 
@@ -9,7 +15,10 @@ class LoginController extends GetxController {
   final RoleController _roleController = Get.find<RoleController>();
   final TextEditingController phoneController = TextEditingController();
   final RxBool isLoading = false.obs;
-
+  Api api = Api.instance;
+  ToastService toastService = ToastService.instance;
+  AuthStorageService authStorage = AuthStorageService();
+  ApiClient apiClient = ApiClient();
   // ===== GET OTP — same for all roles =====
   void getOTP() {
     final phone = phoneController.text.trim();
@@ -23,22 +32,7 @@ class LoginController extends GetxController {
       return;
     }
 
-    Get.snackbar('Success', 'OTP sent to +91$phone',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade100,
-        colorText: Colors.green.shade900,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12);
-
-    // All roles go through OTP — role passed in arguments
-    Get.to(
-      () => const VerifyMobileView(),
-      binding: VerifyMobileBinding(),
-      arguments: {
-        'phone': phone,
-        'role': _roleController.role,
-      },
-    );
+    _login();
   }
 
   // ===== SIGNUP — role based =====
@@ -76,5 +70,46 @@ class LoginController extends GetxController {
   void onClose() {
     phoneController.dispose();
     super.onClose();
+  }
+
+  Future<void> _login() async {
+    isLoading.value = true;
+    ApiResponse response = await api.commonApi.authenticationApi.login(
+        mobile: phoneController.text, country_code: "+91", flag: "login");
+    isLoading.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      if (messageData is Map<String, dynamic>) {
+        final otp = messageData['otp'];
+
+        if (otp != null && otp.isNotEmpty) {
+          showMessage(
+            'OTP sent to +91${phoneController.text}',
+          );
+
+          // All roles go through OTP — role passed in arguments
+          Get.to(
+            () => const VerifyMobileView(),
+            binding: VerifyMobileBinding(),
+            arguments: {
+              'phone': phoneController.text,
+              'role': _roleController.role,
+              'otp': otp,
+            },
+          );
+        }
+      } else {
+        showError(
+          messageData["message"],
+        );
+        // Get.offAllNamed(Routes.MAIN_SCREEN);
+      }
+    } else {
+      showError(
+        messageData["message"],
+      );
+    }
   }
 }

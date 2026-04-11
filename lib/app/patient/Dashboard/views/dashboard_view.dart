@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
+import 'package:sample/app/service/db/db.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
@@ -64,7 +66,8 @@ class DashboardView extends GetView<DashboardController> {
 
 class _Header extends StatelessWidget {
   final bool isTablet;
-  const _Header({required this.isTablet});
+  _Header({required this.isTablet});
+  final authStorage = AuthStorageService();
 
   @override
   Widget build(BuildContext context) {
@@ -74,23 +77,29 @@ class _Header extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: isTablet ? 30 : 24,
-                backgroundImage: const AssetImage('assets/profile.png'),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'Hey, John',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: isTablet ? 22 : 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
+          FutureBuilder(
+              future: authStorage.getUserDetail(),
+              builder: (context, snapshot) {
+                final fullName = snapshot.data?['full_name'] ?? '';
+                final image = snapshot.data?['user_image'] ?? '';
+                return Row(
+                  children: [
+                    CircleAvatar(
+                      radius: isTablet ? 30 : 24,
+                      backgroundImage: NetworkImage("${ApiConstants.baseUrl}$image"),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      fullName,
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: isTablet ? 22 : 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  ],
+                );
+              }),
           const Row(
             children: [
               Icon(Icons.search),
@@ -138,7 +147,7 @@ class _DoctorActionsSection extends StatelessWidget {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 20,
-                crossAxisSpacing: 12,
+                crossAxisSpacing: 10,
                 childAspectRatio: 1.05,
               ),
               itemBuilder: (context, index) {
@@ -157,7 +166,6 @@ class _DoctorActionsSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       SizedBox(
-                        width: 90,
                         child: Text(
                           action['label']!,
                           textAlign: TextAlign.center,
@@ -253,8 +261,7 @@ class _DoctorActionsSection extends StatelessWidget {
                 ),
               ),
             ),
-            if (!isLast)
-              const Divider(height: 1, color: Color(0xFFF3F4F6)),
+            if (!isLast) const Divider(height: 1, color: Color(0xFFF3F4F6)),
           ],
         );
       }),
@@ -474,9 +481,7 @@ class _SmartHealthToolsSection extends StatelessWidget {
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                      right: index < controller.smartTools.length - 1
-                          ? 12
-                          : 0),
+                      right: index < controller.smartTools.length - 1 ? 12 : 0),
                   child: GestureDetector(
                     onTap: () => controller.onSmartToolTap(index),
                     child: Container(
@@ -489,8 +494,7 @@ class _SmartHealthToolsSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(8, 12, 8, 0),
+                            padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
                             child: Text(
                               tool['title'],
                               textAlign: TextAlign.center,

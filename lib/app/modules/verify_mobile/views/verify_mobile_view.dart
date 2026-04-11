@@ -148,6 +148,7 @@ class _OtpInputRow extends GetView<VerifyMobileController> {
 }
 
 // Single OTP Box
+// Single OTP Field with Underline
 class _OtpBox extends GetView<VerifyMobileController> {
   final int index;
 
@@ -155,18 +156,9 @@ class _OtpBox extends GetView<VerifyMobileController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 70,
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-      ),
+    return SizedBox(
+      width: 50,
       child: TextField(
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
         controller: controller.otpControllers[index],
         focusNode: controller.otpFocusNodes[index],
         keyboardType: TextInputType.number,
@@ -174,13 +166,27 @@ class _OtpBox extends GetView<VerifyMobileController> {
         maxLength: 1,
         style: const TextStyle(
           fontFamily: 'Mulish',
-          fontSize: 32,
+          fontSize: 28,
           fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+        ],
         decoration: const InputDecoration(
-          border: InputBorder.none,
           counterText: '',
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFE5E7EB),
+              width: 2,
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFF0D9488),
+              width: 2,
+            ),
+          ),
         ),
         onChanged: (value) => controller.onOtpFieldChanged(value, index),
       ),
@@ -225,8 +231,6 @@ class _TimerAndResendRow extends GetView<VerifyMobileController> {
     );
   }
 }
-
-// Verify Button
 class _VerifyButton extends GetView<VerifyMobileController> {
   const _VerifyButton();
 
@@ -234,6 +238,7 @@ class _VerifyButton extends GetView<VerifyMobileController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final isEnabled = controller.isButtonEnabled.value;
+      final isLoading = controller.isLoading.value; // ← ADD
 
       return Container(
         width: double.infinity,
@@ -267,17 +272,29 @@ class _VerifyButton extends GetView<VerifyMobileController> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(28),
-            onTap: isEnabled ? controller.verifyOtp : null,
+            onTap: (isEnabled && !isLoading)
+                ? controller.verifyOtp
+                : null, // ← block tap while loading
             child: Center(
-              child: Text(
-                'Verify & Proceed',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: isEnabled ? Colors.white : const Color(0xFF9CA3AF),
-                ),
-              ),
+              child: isLoading // ← SWAP text for spinner
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2.5,
+                      ),
+                    )
+                  : Text(
+                      'Verify & Proceed',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color:
+                            isEnabled ? Colors.white : const Color(0xFF9CA3AF),
+                      ),
+                    ),
             ),
           ),
         ),
