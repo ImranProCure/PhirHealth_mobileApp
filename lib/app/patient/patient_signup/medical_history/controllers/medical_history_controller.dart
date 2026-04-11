@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
 import '../../../../routes/app_routes.dart';
 
 class MedicalHistoryController extends GetxController {
@@ -71,6 +72,36 @@ class MedicalHistoryController extends GetxController {
   }
 
   void goToNextStep() {
+    // Condition validation
+    if (selectedConditions.isEmpty) {
+      showError(
+        "Please select at least one medical condition",
+      );
+      return;
+    }
+
+    // Allergy validation
+    if (selectedAllergies.isEmpty) {
+      showError(
+        "Please select at least one allergy",
+      );
+      return;
+    }
+
+    // Optional text validation
+    if (pastProceduresController.text.trim().isEmpty) {
+      showError("Please enter past procedures");
+      return;
+    }
+
+    if (medicationsController.text.trim().isEmpty) {
+      showError(
+        "Please enter current medications",
+      );
+      return;
+    }
+
+    // If all valid
     Get.toNamed(Routes.PATIENT_LIFESTYLE);
   }
 

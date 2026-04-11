@@ -2,10 +2,20 @@ import 'package:get/get.dart';
 
 import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
 import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
+import 'package:sample/app/patient/Lifestyle_edit/bindings/lifestyle_edit_binding.dart';
+import 'package:sample/app/patient/Lifestyle_edit/views/lifestyle_edit_view.dart';
 import 'package:sample/app/patient/counsellor_coaches/bindings/counsellor_coaches_binding.dart';
 import 'package:sample/app/patient/counsellor_coaches/views/counsellor_coaches_view.dart';
 import 'package:sample/app/patient/counsellor_profile_details/bindings/counsellor_profile_details_binding.dart';
 import 'package:sample/app/patient/counsellor_profile_details/views/counsellor_profile_details_view.dart';
+import 'package:sample/app/patient/edit_profile/bindings/edit_profile_binding.dart';
+import 'package:sample/app/patient/edit_profile/views/edit_profile_view.dart';
+import 'package:sample/app/patient/family_wellbeing_edit/bindings%20/family_wellbeing_edit_binding.dart';
+import 'package:sample/app/patient/family_wellbeing_edit/views/family_edit_wellbeing_view.dart';
+import 'package:sample/app/patient/identity_vitals_edit/bindings/identity_vitals_edit_binding.dart';
+import 'package:sample/app/patient/identity_vitals_edit/views/identity_edit_vitals_view.dart';
+import 'package:sample/app/patient/medical_history_edit/bindings/edit_medical_history_binding.dart';
+import 'package:sample/app/patient/medical_history_edit/views/edit_medical_history_view.dart';
 import 'package:sample/app/patient/select_counsellor/bindings/select_counsellor_binding.dart';
 import 'package:sample/app/patient/select_counsellor/views/select_counsellor_view.dart';
 
@@ -380,6 +390,36 @@ class AppPages {
       name: '/my-profile',
       page: () => const MyProfileView(),
       binding: MyProfileBinding(),
+    ),
+
+    GetPage(
+      name: '/edit-profile',
+      page: () => const EditProfileSectionsView(),
+      binding: EditProfileBinding(),
+    ),
+
+    GetPage(
+      name: '/identity-vitals-edit',
+      page: () => const IdentityVitalsEditView(),
+      binding: IdentityVitalsEditBinding(),
+    ),
+
+    GetPage(
+      name: '/medical-history-edit',
+      page: () => const MedicalHistoryEditView(),
+      binding: MedicalHistoryEditBinding(),
+    ),
+
+    GetPage(
+      name: '/lifestyle-edit',
+      page: () => const LifestyleEditView(),
+      binding: LifestyleEditBinding(),
+    ),
+
+    GetPage(
+      name: '/family-wellbeing-edit',
+      page: () => const FamilyWellbeingEditView(),
+      binding: FamilyWellbeingEditBinding(),
     ),
 
     GetPage(

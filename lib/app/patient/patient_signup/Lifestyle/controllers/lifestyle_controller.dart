@@ -29,7 +29,32 @@ class LifestyleController extends GetxController {
   // ================= SLEEP =================
   final sleepIndex = 1.obs; // default 6–8 hr
 
+  // ================= ERROR FUNCTION =================
+  void showError(String message) {
+    Get.snackbar(
+      "Validation",
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  // ================= NEXT STEP =================
   void goToNextStep() {
+    if (selectedSmoking.value.isEmpty) {
+      showError("Please select smoking habit");
+      return;
+    }
+
+    if (selectedAlcohol.value.isEmpty) {
+      showError("Please select alcohol habit");
+      return;
+    }
+
+    if (selectedDiet.value.isEmpty) {
+      showError("Please select diet type");
+      return;
+    }
+
     Get.toNamed(Routes.PATIENT_FAMILY_WELLBEING);
   }
 }

@@ -10,6 +10,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
