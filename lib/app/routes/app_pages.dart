@@ -1,13 +1,33 @@
 import 'package:get/get.dart';
+import 'package:sample/app/Doctor/doctor_edit_clinic/bindings/doctor_edit_clinic_binding.dart';
+import 'package:sample/app/Doctor/doctor_edit_clinic/views/doctor_edit_clinic_view.dart';
+import 'package:sample/app/patient/cancer_general_assessment/bindings/cancer_general_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_general_assessment/views/cancer_general_assessment_view.dart';
+import 'package:sample/app/patient/cancer_other_assessment/bindings/cancer_other_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_other_assessment/views/cancer_other_assessment_view.dart';
+import 'package:sample/app/patient/cancer_skin_assessment/bindings/cancer_skin_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_skin_assessment/views/cancer_skin_assessment_view.dart';
+import 'package:sample/app/patient/cancer_stomach_assessment/bindings/cancer_stomach_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_stomach_assessment/views/cancer_stomach_assessment_view.dart';
+import 'package:sample/app/patient/cancer_throat_assessment%20/bindings/cancer_throat_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_throat_assessment%20/views/cancer_throat_assessment_view.dart';
+import 'package:sample/app/patient/pre_scan_questions/bindings/pre_scan_questions_binding.dart';
+import 'package:sample/app/patient/pre_scan_questions/views/pre_scan_questions_view.dart';
+import 'package:sample/app/patient/scan_select_profile/bindings/scan_select_profile_binding.dart';
+import 'package:sample/app/patient/scan_select_profile/views/scan_select_profile_view.dart';
 
 import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
 import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
+import 'package:sample/app/patient/add_family_member/bindings/add_family_members_bindings.dart';
+import 'package:sample/app/patient/add_family_member/views/add_family_members_view.dart';
 import 'package:sample/app/patient/Lifestyle_edit/bindings/lifestyle_edit_binding.dart';
 import 'package:sample/app/patient/Lifestyle_edit/views/lifestyle_edit_view.dart';
 import 'package:sample/app/patient/counsellor_coaches/bindings/counsellor_coaches_binding.dart';
 import 'package:sample/app/patient/counsellor_coaches/views/counsellor_coaches_view.dart';
 import 'package:sample/app/patient/counsellor_profile_details/bindings/counsellor_profile_details_binding.dart';
 import 'package:sample/app/patient/counsellor_profile_details/views/counsellor_profile_details_view.dart';
+import 'package:sample/app/patient/family_members/bindings/family_members_binding.dart';
+import 'package:sample/app/patient/family_members/views/family_members_view.dart';
 import 'package:sample/app/patient/edit_profile/bindings/edit_profile_binding.dart';
 import 'package:sample/app/patient/edit_profile/views/edit_profile_view.dart';
 import 'package:sample/app/patient/family_wellbeing_edit/bindings%20/family_wellbeing_edit_binding.dart';
@@ -106,8 +126,8 @@ import 'package:sample/app/patient/wallet/views/wallet_view.dart';
 import 'package:sample/app/patient/transaction_history/bindings/transaction_history_binding.dart';
 import 'package:sample/app/patient/transaction_history/views/transaction_history_view.dart';
 
-import 'package:sample/app/patient/cancer_assessment/bindings/cancer_assessment_binding.dart';
-import 'package:sample/app/patient/cancer_assessment/views/cancer_assessment_view.dart';
+import 'package:sample/app/patient/cancer_lung_assessment/bindings/cancer_lung_assessment_binding.dart';
+import 'package:sample/app/patient/cancer_lung_assessment/views/cancer_lung_assessment_view.dart';
 
 import 'package:sample/app/patient/cancer_risk/bindings/cancer_risk_binding.dart';
 import 'package:sample/app/patient/cancer_risk/views/cancer_risk_view.dart';
@@ -448,9 +468,9 @@ class AppPages {
         binding: CancerRiskAreaBinding()),
 
     GetPage(
-        name: '/cancer-assessment',
-        page: () => const CancerAssessmentView(),
-        binding: CancerAssessmentBinding()),
+        name: '/cancer-lung-assessment',
+        page: () => const CancerLungAssessmentView(),
+        binding: CancerLungAssessmentBinding()),
 
     GetPage(
         name: '/face-scan',
@@ -606,5 +626,48 @@ class AppPages {
         name: '/doctor-cancel-session',
         page: () => const DoctorCancelSessionView(),
         binding: DoctorCancelSessionBinding()),
+    GetPage(
+        name: '/family-members',
+        page: () => const FamilyMembersView(),
+        binding: FamilyMembersBinding()),
+    GetPage(
+        name: '/add-family-member',
+        page: () => const AddFamilyMemberView(),
+        binding: AddFamilyMemberBinding()),
+
+    GetPage(
+        name: '/doctor-edit-clinic',
+        page: () => const DoctorEditClinicView(),
+        binding: DoctorEditClinicBinding()),
+
+    GetPage(
+        name: '/scan-select-profile',
+        page: () => const ScanSelectProfileView(),
+        binding: ScanSelectProfileBinding()),
+    GetPage(
+        name: '/pre-scan-questions',
+        page: () => const PreScanQuestionsView(),
+        binding: PreScanQuestionsBinding()),
+
+    GetPage(
+        name: '/cancer-throat-assessment',
+        page: () => const CancerthroatAssessmentView(),
+        binding: CancerthroatAssessmentBinding()),
+    GetPage(
+        name: '/cancer-stomach-assessment',
+        page: () => const CancerstomachAssessmentView(),
+        binding: CancerstomachAssessmentBinding()),
+    GetPage(
+        name: '/cancer-skin-assessment',
+        page: () => const CancerskinAssessmentView(),
+        binding: CancerskinAssessmentBinding()),
+    GetPage(
+        name: '/cancer-general-assessment',
+        page: () => const CancergeneralAssessmentView(),
+        binding: CancergeneralAssessmentBinding()),
+    GetPage(
+        name: '/cancer-other-assessment',
+        page: () => const CancerotherAssessmentView(),
+        binding: CancerotherAssessmentBinding()),
   ];
 }

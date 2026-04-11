@@ -38,6 +38,13 @@ class MyProfileController extends GetxController {
         'iconColor': Color(0xFFFF6B35),
         'iconBg': Color(0xFFFFF0EB)
       },
+      {
+        'icon': Icons.group_outlined,
+        'label': 'My Family Members',
+        'route': '/family-members',
+        'iconColor': Color(0xFF0D9488),
+        'iconBg': Color(0xFFE0F2F1)
+      },
     ],
     [
       {
@@ -60,14 +67,12 @@ class MyProfileController extends GetxController {
       {
         'icon': Icons.help_outline,
         'label': 'Help & Support',
-        // 'route': '/help',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)
       },
       {
         'icon': Icons.shield_outlined,
         'label': 'Privacy Policy',
-        // 'route': '/privacy',
         'iconColor': Color(0xFF0D9488),
         'iconBg': Color(0xFFE0F2F1)
       },
@@ -82,9 +87,7 @@ class MyProfileController extends GetxController {
    Get.toNamed('/edit-profile');
   }
 
-  void openSettings() {
-    // Get.toNamed('/settings');
-  }
+  void openSettings() {}
 
   String maskMobile(String mobile) {
     if (mobile.length < 4) return mobile;
@@ -152,25 +155,22 @@ class MyProfileController extends GetxController {
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Log Out',
-          style: TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w700),
-        ),
-        content: const Text(
-          'Are you sure you want to log out?',
-          style: TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280)),
-        ),
+        title: const Text('Log Out',
+            style:
+                TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w700)),
+        content: const Text('Are you sure you want to log out?',
+            style: TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280))),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280)),
-            ),
+            child: const Text('Cancel',
+                style:
+                    TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280))),
           ),
           TextButton(
             onPressed: () async {
               Get.back();
+              Get.offAllNamed('/login');
               final authStorage = AuthStorageService();
               await authStorage.clearAll();
 
@@ -183,14 +183,11 @@ class MyProfileController extends GetxController {
                 binding: HomeBinding(),
               );
             },
-            child: const Text(
-              'Log Out',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                color: Color(0xFFEF4444),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            child: const Text('Log Out',
+                style: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFFEF4444),
+                    fontWeight: FontWeight.w700)),
           ),
         ],
       ),
