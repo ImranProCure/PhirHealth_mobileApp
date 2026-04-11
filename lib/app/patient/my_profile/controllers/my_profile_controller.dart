@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/modules/home/bindings/home_binding.dart';
+import 'package:sample/app/modules/home/views/home_view.dart';
+import 'package:sample/app/service/api/api_client/api_client.dart';
+import 'package:sample/app/service/db/db.dart';
 
 class MyProfileController extends GetxController {
   // ===== USER INFO =====
@@ -75,11 +79,73 @@ class MyProfileController extends GetxController {
   }
 
   void editProfile() {
-    // Get.toNamed('/edit-profile');
+   Get.toNamed('/edit-profile');
   }
 
   void openSettings() {
     // Get.toNamed('/settings');
+  }
+
+  String maskMobile(String mobile) {
+    if (mobile.length < 4) return mobile;
+    String last4 = mobile.substring(mobile.length - 4);
+    return "XXXXXX$last4";
+  }
+
+  String maskEmail(String email) {
+    if (!email.contains('@')) return email;
+
+    List<String> parts = email.split('@');
+    String name = parts[0];
+    String domain = parts[1];
+
+    if (name.length <= 2) {
+      return "${name[0]}***@$domain";
+    }
+
+    String first = name.substring(0, 2);
+    return "$first****@$domain";
+  }
+
+  String getBloodGroupFullName(String group) {
+    switch (group) {
+      case 'A Positive':
+        return 'A+';
+      case 'A Negative':
+        return 'A-';
+      case 'B Positive':
+        return 'B+';
+      case 'B Negative':
+        return 'B-';
+      case 'O Positive':
+        return 'O+';
+      case 'O Negative':
+        return 'O-';
+      default:
+        return group;
+    }
+  }
+
+  String calculateAge(String dob) {
+    if (dob == "") return "";
+
+    List<String> parts = dob.split('-');
+
+    int day = int.parse(parts[0]);
+    int month = int.parse(parts[1]);
+    int year = int.parse(parts[2]);
+
+    DateTime birthDate = DateTime(year, month, day);
+    DateTime today = DateTime.now();
+
+    int age = today.year - birthDate.year;
+
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+
+    return "${age.toString()}, ";
   }
 
   void logout() {
@@ -103,9 +169,19 @@ class MyProfileController extends GetxController {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Get.back();
-              Get.offAllNamed('/Dashboard');
+              final authStorage = AuthStorageService();
+              await authStorage.clearAll();
+
+              final apiClient = ApiClient();
+              apiClient.setBearerToken(null);
+              apiClient.clearCookies();
+
+              Get.off(
+                () => const HomeView(),
+                binding: HomeBinding(),
+              );
             },
             child: const Text(
               'Log Out',

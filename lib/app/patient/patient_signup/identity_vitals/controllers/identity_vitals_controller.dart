@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sample/app/common_function.dart';
 import '../../../../routes/app_routes.dart';
 
 enum Gender { male, female, other }
@@ -11,8 +12,11 @@ class IdentityVitalsController extends GetxController {
   // ---------------- TEXT INPUT ----------------
 
   final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final mobileController = TextEditingController();
   final dobController = TextEditingController();
-
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
   // ---------------- SELECTION STATES ----------------
 
   final gender = Gender.male.obs;
@@ -34,10 +38,39 @@ class IdentityVitalsController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
 
-  /// Pick image from gallery
-  Future<void> pickProfileImage() async {
+  Future<void> pickProfileImage(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text("Camera"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text("Gallery"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
+      source: source,
       imageQuality: 80,
     );
 
@@ -59,6 +92,23 @@ class IdentityVitalsController extends GetxController {
       initialDate: DateTime(now.year - 18),
       firstDate: DateTime(1900),
       lastDate: now,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF0D9488), // Header & selected date
+              onPrimary: Colors.white, // Text on header
+              onSurface: Colors.black, // Default text
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF0D9488), // Cancel & OK buttons
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
@@ -67,7 +117,6 @@ class IdentityVitalsController extends GetxController {
           "${pickedDate.year}";
     }
   }
-
   // ---------------- DERIVED VALUES (HELPERS) ----------------
 
   /// Convert inches → feet
@@ -84,8 +133,58 @@ class IdentityVitalsController extends GetxController {
   }
 
   // ---------------- NAVIGATION ----------------
-
   void goToNextStep() {
+    if (profileImage.value == null) {
+      showError("Please upload profile image");
+      return;
+    }
+
+    if (nameController.text.trim().isEmpty) {
+      showError("Please enter your name");
+      return;
+    }
+
+    if (emailController.text.trim().isEmpty) {
+      showError("Please enter your email");
+      return;
+    }
+
+    if (!GetUtils.isEmail(emailController.text.trim())) {
+      showError("Please enter valid email");
+      return;
+    }
+
+    if (mobileController.text.trim().isEmpty) {
+      showError("Please enter mobile number");
+      return;
+    }
+
+    if (mobileController.text.trim().length != 10) {
+      showError("Please enter valid mobile number");
+      return;
+    }
+
+    if (dobController.text.trim().isEmpty) {
+      showError("Please select date of birth");
+      return;
+    }
+
+    if (heightController.text.trim().isEmpty) {
+      showError("Please enter height");
+      return;
+    }
+
+    if (weightController.text.trim().isEmpty) {
+      showError("Please enter weight");
+      return;
+    }
+
+    if (bloodGroup.value.isEmpty) {
+      showError("Please select blood group");
+      return;
+    }
+
+    // All validations passed
     Get.toNamed(Routes.PATIENT_MEDICAL_HISTORY);
   }
 
@@ -95,6 +194,8 @@ class IdentityVitalsController extends GetxController {
   void onClose() {
     nameController.dispose();
     dobController.dispose();
+    heightController.dispose();
+    weightController.dispose();
     super.onClose();
   }
 }

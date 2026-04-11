@@ -21,7 +21,6 @@ class LoginView extends GetView<LoginController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-
                       // Header Image
                       Center(
                         child: Container(
@@ -35,9 +34,7 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 22),
-
                       // Welcome Text
                       const Text(
                         'Welcome to PHIRHealth',
@@ -173,57 +170,73 @@ class LoginView extends GetView<LoginController> {
                       const SizedBox(height: 30),
 
                       // Get OTP Button
-                      Container(
-                        height: 60,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF00786F), // #00786F
-                              Color(0xFF009689), // #009689
-                              Color(0xFF1447E6), // #1447E6
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(85),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF00786F).withOpacity(0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
+                      Obx(() {
+                        final isLoading = controller.isLoading.value;
+                        return Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF00786F),
+                                Color(0xFF009689),
+                                Color(0xFF1447E6),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(30),
-                            onTap: controller.getOTP,
-                            child: const Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Get OTP',
-                                    style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Icon(
-                                    Icons.arrow_forward,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                ],
+                            borderRadius: BorderRadius.circular(85),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF00786F).withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(30),
+                              onTap: isLoading
+                                  ? null
+                                  : controller
+                                      .getOTP, // ← blocks tap while loading
+                              child: Center(
+                                child: isLoading
+                                    ? const SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2.5,
+                                        ),
+                                      )
+                                    : const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Get OTP',
+                                            style: TextStyle(
+                                              fontFamily: 'Mulish',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                       const SizedBox(height: 10),
                       Center(
                         child: GestureDetector(

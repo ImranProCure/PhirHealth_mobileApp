@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
+import 'package:sample/app/service/db/db.dart';
 import '../controllers/my_profile_controller.dart';
 
 // ─────────────────────────────────────────────
@@ -94,8 +96,7 @@ class _TabletMyProfileView extends StatelessWidget {
                   // Large avatar
                   CircleAvatar(
                     radius: 52,
-                    backgroundImage:
-                        AssetImage(controller.profileImage),
+                    backgroundImage: AssetImage(controller.profileImage),
                     backgroundColor: const Color(0xFFE0F2F1),
                     onBackgroundImageError: (_, __) {},
                   ),
@@ -138,11 +139,10 @@ class _TabletMyProfileView extends StatelessWidget {
 
                   // Blood group badge
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: const Color(0xFF0D9488)),
+                      border: Border.all(color: const Color(0xFF0D9488)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
@@ -246,6 +246,7 @@ AppBar _buildAppBar(MyProfileController controller,
   return AppBar(
     backgroundColor: Colors.white,
     elevation: 0,
+    scrolledUnderElevation: 0.0,
     leading: IconButton(
       icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
       onPressed: () => Get.back(),
@@ -261,10 +262,10 @@ AppBar _buildAppBar(MyProfileController controller,
       ),
     ),
     actions: [
-      IconButton(
-        icon: const Icon(Icons.settings_outlined, color: Colors.black),
-        onPressed: controller.openSettings,
-      ),
+      // IconButton(
+      //   icon: const Icon(Icons.settings_outlined, color: Colors.black),
+      //   onPressed: controller.openSettings,
+      // ),
     ],
   );
 }
@@ -272,126 +273,145 @@ AppBar _buildAppBar(MyProfileController controller,
 // ── Profile Card (phone only) ─────────────────────────────
 class _ProfileCard extends StatelessWidget {
   final MyProfileController controller;
-  const _ProfileCard({required this.controller});
+  _ProfileCard({required this.controller});
+  final authStorage = AuthStorageService();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundImage: AssetImage(controller.profileImage),
-                backgroundColor: const Color(0xFFE0F2F1),
-                onBackgroundImageError: (_, __) {},
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.name,
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      controller.phirId,
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        Text(controller.phone,
-                            style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 12,
-                                color: Color(0xFF6B7280))),
-                        const Text('  |  ',
-                            style: TextStyle(
-                                fontSize: 12, color: Color(0xFF6B7280))),
-                        Text(controller.age,
-                            style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 12,
-                                color: Color(0xFF6B7280))),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: controller.editProfile,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: const Color(0xFF0D9488), width: 1.5),
-                  ),
-                  child: const Icon(Icons.edit_outlined,
-                      size: 16, color: Color(0xFF0D9488)),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Center(
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFF0D9488)),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: FutureBuilder(
+            future: authStorage.getUserDetail(),
+            builder: (context, snapshot) {
+              final fullName = snapshot.data?['full_name'] ?? '';
+              final image = snapshot.data?['user_image'] ?? '';
+              final mobile = snapshot.data?['mobile_no'] ?? '';
+              final email = snapshot.data?['email'] ?? '';
+              final dob = snapshot.data?['birth_date'] ?? '';
+              final gender = snapshot.data?['gender'] ?? '';
+              final bgroup = controller
+                  .getBloodGroupFullName(snapshot.data?['blood_group'] ?? '');
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.water_drop_outlined,
-                      size: 14, color: Color(0xFF0D9488)),
-                  const SizedBox(width: 6),
-                  Text(
-                    controller.bloodGroup,
-                    style: const TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF0D9488),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundImage:
+                            NetworkImage("${ApiConstants.baseUrl}$image"),
+                        backgroundColor: const Color(0xFFE0F2F1),
+                        onBackgroundImageError: (_, __) {},
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              fullName,
+                              style: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              controller.maskEmail(email),
+                              style: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 12,
+                                color: Color(0xFF6B7280),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Text(
+                                  "+91 ${controller.maskMobile(mobile)}",
+                                  style: const TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 12,
+                                    color: Color(0xFF6B7280),
+                                  ),
+                                ),
+                                const Text('  |  ',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF6B7280))),
+                                Text(
+                                    "${controller.calculateAge(dob).toString()}$gender",
+                                    style: const TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 12,
+                                        color: Color(0xFF6B7280))),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: controller.editProfile,
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: const Color(0xFF0D9488), width: 1.5),
+                          ),
+                          child: const Icon(Icons.edit_outlined,
+                              size: 16, color: Color(0xFF0D9488)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 7),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0D9488)),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.water_drop_outlined,
+                              size: 14, color: Color(0xFF0D9488)),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Blood Group: $bgroup",
+                            style: const TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF0D9488),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+              );
+            }));
   }
 }
 
@@ -399,8 +419,7 @@ class _ProfileCard extends StatelessWidget {
 class _MenuSection extends StatelessWidget {
   final MyProfileController controller;
   final List<Map<String, dynamic>> items;
-  const _MenuSection(
-      {required this.controller, required this.items});
+  const _MenuSection({required this.controller, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -423,8 +442,7 @@ class _MenuSection extends StatelessWidget {
           return Column(
             children: [
               _MenuItem(controller: controller, item: item),
-              if (!isLast)
-                const Divider(height: 1, color: Color(0xFFF3F4F6)),
+              if (!isLast) const Divider(height: 1, color: Color(0xFFF3F4F6)),
             ],
           );
         }),
@@ -508,8 +526,8 @@ class _LogoutButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, 52),
           side: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,

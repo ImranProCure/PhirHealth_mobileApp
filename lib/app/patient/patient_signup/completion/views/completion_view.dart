@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../controllers/completion_controller.dart';
 
@@ -11,6 +12,7 @@ class CompletionView extends GetView<CompletionController> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          scrolledUnderElevation: 0.0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () => Get.back(),
@@ -194,13 +196,46 @@ class CompletionView extends GetView<CompletionController> {
                             height: 60,
                             child: TextField(
                               controller: controller.mobileController,
-                              keyboardType: TextInputType.phone,
-                              decoration: _inputDecoration("+91 9876543210"),
+                              keyboardType: TextInputType.number,
+                              maxLength: 10,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              decoration: InputDecoration(
+                                hintText: "9876543210",
+
+                                prefixText: "+91 ",
+                                prefixStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+
+                                counterText: "", // hides 0/10 counter
+
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFE5E7EB)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                ),
+
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF0D9488)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    )
                   ],
                 ),
 
@@ -306,37 +341,51 @@ class CompletionView extends GetView<CompletionController> {
                 const SizedBox(height: 30),
 
                 // ================= COMPLETE BUTTON =================
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF00786F),
-                          Color(0xFF009689),
-                          Color(0xFF1447E6),
-                        ],
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: controller.completeProfile,
-                      child: const Text(
-                        'Complete Profile',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                Obx(() {
+                  final isLoading = controller.isLoading.value;
+                  return SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF00786F),
+                            Color(0xFF009689),
+                            Color(0xFF1447E6),
+                          ],
                         ),
                       ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : controller.otpSend, // ← blocks tap while loading
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : const Text(
+                                'Complete Profile',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
 
                 const SizedBox(height: 30),
               ],
@@ -353,6 +402,29 @@ class CompletionView extends GetView<CompletionController> {
     return TextField(
       controller: controller,
       decoration: _inputDecoration(hint),
+    );
+  }
+
+  InputDecoration _inputDecorationMobile() {
+    return const InputDecoration(
+      hintText: "9876543210",
+      prefixText: "+91 ",
+      prefixStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderSide: BorderSide(color: Color(0xFFE5E7EB)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderSide: BorderSide(color: Color(0xFF0D9488)),
+      ),
     );
   }
 

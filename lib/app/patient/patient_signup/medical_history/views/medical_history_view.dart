@@ -11,6 +11,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          scrolledUnderElevation: 0.0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () => Get.back(),
@@ -58,7 +59,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
 
                 // ================= CONDITIONS =================
                 const Text(
@@ -94,7 +95,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
 
                 // ================= ALLERGIES =================
                 const Text(
@@ -140,7 +141,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
 
                 // ================= PAST PROCEDURES =================
                 const Text(
@@ -170,7 +171,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                   hint: 'List any past procedures or hospital stays...',
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
 
                 // ================= MEDICATIONS =================
                 const Text(
