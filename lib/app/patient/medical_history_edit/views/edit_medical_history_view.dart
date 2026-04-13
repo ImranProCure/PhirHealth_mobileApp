@@ -5,213 +5,265 @@ import '../controllers/edit_medical_history_controller.dart';
 class MedicalHistoryEditView extends GetView<MedicalHistoryEditController> {
   const MedicalHistoryEditView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          scrolledUnderElevation: 0.0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Get.back(),
-          ),
-          title: const Text(
-            'Medical History',
-            style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
+  // ================= SKELETON =================
+  Widget _buildSkeleton() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 14),
+          // Section title
+          _skeletonBox(width: 200, height: 16),
+          const SizedBox(height: 16),
+          // Condition chips
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+              6,
+              (_) => _skeletonBox(
+                width: 90,
+                height: 40,
+                radius: 24,
+              ),
             ),
           ),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          bottom: true,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 14),
-
-                // ================= CONDITIONS =================
-                const Text(
-                  'Existing Medical Conditions',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                Obx(
-                  () => Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      ...controller.conditions.map(
-                        (item) => _chip(
-                          label: item,
-                          selected:
-                              controller.selectedConditions.contains(item),
-                          onTap: () => controller.toggleCondition(item),
-                        ),
-                      ),
-                      _chip(
-                        label: 'Add Other',
-                        isAdd: true,
-                        onTap: _showAddOtherCondition,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                // ================= ALLERGIES =================
-                const Text(
-                  'Allergies',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  'Do you have any known allergies?',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                Obx(
-                  () => Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      ...controller.allergies.map(
-                        (item) => _chip(
-                          label: item,
-                          selected: controller.selectedAllergies.contains(item),
-                          onTap: () => controller.toggleAllergy(item),
-                        ),
-                      ),
-                      _chip(
-                        label: 'Add Other',
-                        isAdd: true,
-                        onTap: _showAddOtherAllergy,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                // ================= PAST PROCEDURES =================
-                const Text(
-                  'Allergies',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  'Do you have any known allergies?',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                _textArea(
-                  controller: controller.pastProceduresController,
-                  hint: 'List any past procedures or hospital stays...',
-                ),
-
-                const SizedBox(height: 25),
-
-                // ================= MEDICATIONS =================
-                const Text(
-                  'Current Medications',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                _singleInput(
-                  controller: controller.medicationsController,
-                  hint: 'Name, dosage, and frequency',
-                ),
-
-                const SizedBox(height: 40),
-
-                // ================= BUTTON =================
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF00786F),
-                          Color(0xFF009689),
-                          Color(0xFF1447E6),
-                        ],
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: controller.goToNextStep,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Update',
-                            style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-              ],
+          const SizedBox(height: 25),
+          _skeletonBox(width: 100, height: 16),
+          const SizedBox(height: 10),
+          _skeletonBox(width: 220, height: 14),
+          const SizedBox(height: 20),
+          // Allergy chips
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+              4,
+              (_) => _skeletonBox(
+                width: 100,
+                height: 40,
+                radius: 24,
+              ),
             ),
           ),
-        ));
+          const SizedBox(height: 25),
+          _skeletonBox(width: 140, height: 16),
+          const SizedBox(height: 10),
+          _skeletonBox(width: 200, height: 14),
+          const SizedBox(height: 20),
+          // Text area
+          _skeletonBox(width: double.infinity, height: 120, radius: 12),
+          const SizedBox(height: 25),
+          _skeletonBox(width: 170, height: 16),
+          const SizedBox(height: 12),
+          // Single input
+          _skeletonBox(width: double.infinity, height: 56, radius: 12),
+          const SizedBox(height: 40),
+          // Button
+          _skeletonBox(width: double.infinity, height: 56, radius: 28),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
   }
+
+  Widget _skeletonBox({
+    required double width,
+    required double height,
+    double radius = 6,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+    );
+  }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      scrolledUnderElevation: 0.0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        onPressed: () => Get.back(),
+      ),
+      title: const Text(
+        'Medical History',
+        style: TextStyle(
+          fontFamily: 'Mulish',
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
+      ),
+      centerTitle: true,
+    ),
+    body: SafeArea(
+      bottom: true,
+      child: Obx(() {
+        if (controller.isLoading.value) {
+          return _ShimmerWrapper(child: _buildSkeleton());
+        }
+        // ---- your existing body exactly as before ----
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 14),
+              const Text(
+                'Existing Medical Conditions',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Obx(
+                () => Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    ...controller.conditions.map(
+                      (item) => _chip(
+                        label: item,
+                        selected: controller.selectedConditions.contains(item),
+                        onTap: () => controller.toggleCondition(item),
+                      ),
+                    ),
+                    _chip(
+                      label: 'Add Other',
+                      isAdd: true,
+                      onTap: _showAddOtherCondition,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              const Text(
+                'Allergies',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Do you have any known allergies?',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Obx(
+                () => Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    ...controller.allergies.map(
+                      (item) => _chip(
+                        label: item,
+                        selected: controller.selectedAllergies.contains(item),
+                        onTap: () => controller.toggleAllergy(item),
+                      ),
+                    ),
+                    _chip(
+                      label: 'Add Other',
+                      isAdd: true,
+                      onTap: _showAddOtherAllergy,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              const Text(
+                'Past Procedures',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Any past surgeries or hospital stays?',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _textArea(
+                controller: controller.pastProceduresController,
+                hint: 'List any past procedures or hospital stays...',
+              ),
+              const SizedBox(height: 25),
+              const Text(
+                'Current Medications',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _singleInput(
+                controller: controller.medicationsController,
+                hint: 'Name, dosage, and frequency',
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF00786F),
+                        Color(0xFF009689),
+                        Color(0xFF1447E6),
+                      ],
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: controller.goToNextStep,
+                    child: const Text(
+                      'Update',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      }),
+    ),
+  );
+}
 
   // ================= CHIP =================
   Widget _chip({
@@ -444,6 +496,69 @@ class MedicalHistoryEditView extends GetView<MedicalHistoryEditController> {
         ),
       ),
       isScrollControlled: true,
+    );
+  }
+}
+
+
+class _ShimmerWrapper extends StatefulWidget {
+  final Widget child;
+  const _ShimmerWrapper({required this.child});
+
+  @override
+  State<_ShimmerWrapper> createState() => _ShimmerWrapperState();
+}
+
+class _ShimmerWrapperState extends State<_ShimmerWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    _animation = Tween<double>(begin: -1.5, end: 1.5).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: const [
+                Color(0xFFEEEEEE),
+                Color(0xFFFFFFFF),
+                Color(0xFFEEEEEE),
+              ],
+              stops: [
+                (_animation.value - 0.3).clamp(0.0, 1.0),
+                _animation.value.clamp(0.0, 1.0),
+                (_animation.value + 0.3).clamp(0.0, 1.0),
+              ],
+              transform: GradientRotation(_animation.value),
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
     );
   }
 }

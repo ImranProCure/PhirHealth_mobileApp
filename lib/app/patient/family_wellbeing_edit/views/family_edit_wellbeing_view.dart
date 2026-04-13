@@ -5,31 +5,102 @@ import '../controllers/family_wellbeing_edit_controller.dart';
 class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
   const FamilyWellbeingEditView({super.key});
 
+  // ================= SKELETON =================
+  Widget _buildSkeleton() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 20),
+
+          // Family Medical History
+          _skBox(width: 200, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 280, height: 14),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+                4, (_) => _skBox(width: 110, height: 40, radius: 24)),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Mental Well-being
+          _skBox(width: 150, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 260, height: 14),
+          const SizedBox(height: 20),
+          _skBox(width: double.infinity, height: 110, radius: 20),
+
+          const SizedBox(height: 30),
+
+          // Common Symptoms
+          _skBox(width: 160, height: 16),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+                4, (_) => _skBox(width: 100, height: 40, radius: 24)),
+          ),
+
+          const SizedBox(height: 40),
+
+          // Button
+          _skBox(width: double.infinity, height: 56, radius: 28),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _skBox({
+    required double width,
+    required double height,
+    double radius = 6,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          scrolledUnderElevation: 0.0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Get.back(),
-          ),
-          title: const Text(
-            'Family & Well-being',
-            style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Get.back(),
         ),
-        body: SafeArea(
-          bottom: true,
-          child: SingleChildScrollView(
+        title: const Text(
+          'Family & Well-being',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        bottom: true,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return _ShimmerWrapper(child: _buildSkeleton());
+          }
+          return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,24 +108,16 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 20),
 
                 // ================= FAMILY MEDICAL HISTORY =================
-                const Text(
-                  'Family Medical History',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
+                const Text('Family Medical History',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-
                 const Text(
-                  'Have your immediate family members had any of these?',
-                  style: TextStyle(fontSize: 14),
-                ),
-
+                    'Have your immediate family members had any of these?',
+                    style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
-
                 Obx(() => Wrap(
                       spacing: 12,
                       runSpacing: 12,
@@ -71,25 +134,15 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 30),
 
                 // ================= MENTAL WELL-BEING =================
-                // ================= MENTAL WELL-BEING =================
-                const Text(
-                  'Mental Well-being',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
+                const Text('Mental Well-being',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-
-                const Text(
-                  'How would you rate your current stress levels?',
-                  style: TextStyle(fontSize: 14),
-                ),
-
+                const Text('How would you rate your current stress levels?',
+                    style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
-
                 Obx(() {
                   return Container(
                     padding: const EdgeInsets.all(20),
@@ -123,33 +176,24 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Low',
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF9CA3AF),
-                              ),
-                            ),
-                            Text(
-                              'Moderate',
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF9CA3AF),
-                              ),
-                            ),
-                            Text(
-                              'High',
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF9CA3AF),
-                              ),
-                            ),
+                            Text('Low',
+                                style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF9CA3AF))),
+                            Text('Moderate',
+                                style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF9CA3AF))),
+                            Text('High',
+                                style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF9CA3AF))),
                           ],
                         ),
                       ],
@@ -160,17 +204,12 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 30),
 
                 // ================= COMMON SYMPTOMS =================
-                const Text(
-                  'Common Symptoms',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
+                const Text('Common Symptoms',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 20),
-
                 Obx(() => Wrap(
                       spacing: 12,
                       runSpacing: 12,
@@ -185,7 +224,7 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
 
                 const SizedBox(height: 40),
 
-                // ================= NEXT BUTTON =================
+                // ================= BUTTON =================
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -209,15 +248,13 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Next Step',
-                            style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
+                          Text('Next Step',
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              )),
                           SizedBox(width: 8),
                           Icon(Icons.arrow_forward, color: Colors.white),
                         ],
@@ -229,8 +266,10 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 24),
               ],
             ),
-          ),
-        ));
+          );
+        }),
+      ),
+    );
   }
 
   // ================= REUSABLE CHIP =================
@@ -272,6 +311,68 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ShimmerWrapper extends StatefulWidget {
+  final Widget child;
+  const _ShimmerWrapper({required this.child});
+
+  @override
+  State<_ShimmerWrapper> createState() => _ShimmerWrapperState();
+}
+
+class _ShimmerWrapperState extends State<_ShimmerWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    _animation = Tween<double>(begin: -1.5, end: 1.5).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: const [
+                Color(0xFFEEEEEE),
+                Color(0xFFFFFFFF),
+                Color(0xFFEEEEEE),
+              ],
+              stops: [
+                (_animation.value - 0.3).clamp(0.0, 1.0),
+                _animation.value.clamp(0.0, 1.0),
+                (_animation.value + 0.3).clamp(0.0, 1.0),
+              ],
+              transform: GradientRotation(_animation.value),
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
     );
   }
 }

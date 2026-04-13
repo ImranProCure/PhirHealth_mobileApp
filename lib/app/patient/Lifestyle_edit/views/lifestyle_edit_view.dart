@@ -8,49 +8,48 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          scrolledUnderElevation: 0.0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Get.back(),
-          ),
-          title: const Text(
-            'Habits & Lifestyle',
-            style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Get.back(),
         ),
-        body: SafeArea(
-          bottom: true,
-          child: SingleChildScrollView(
+        title: const Text(
+          'Habits & Lifestyle',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        bottom: true,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return _ShimmerWrapper(child: _buildSkeleton());
+          }
+          return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 14),
-                // ================= SMOKING =================
-                const Text(
-                  'Smoking',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'What is your current smoking status?',
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 20),
 
+                // ================= SMOKING =================
+                const Text('Smoking',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 10),
+                const Text('What is your current smoking status?',
+                    style: TextStyle(fontSize: 14)),
+                const SizedBox(height: 20),
                 Obx(() => Wrap(
                       spacing: 12,
                       runSpacing: 12,
@@ -66,21 +65,15 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= ALCOHOL =================
-                const Text(
-                  'Alcohol',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                const Text('Alcohol',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text(
-                  'How often do you consume alcohol?',
-                  style: TextStyle(fontSize: 14),
-                ),
+                const Text('How often do you consume alcohol?',
+                    style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
-
                 Obx(() => Wrap(
                       spacing: 12,
                       runSpacing: 12,
@@ -96,21 +89,15 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= DIET =================
-                const Text(
-                  'Diet preference',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                const Text('Diet preference',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text(
-                  'Select your primary dietary habit',
-                  style: TextStyle(fontSize: 14),
-                ),
+                const Text('Select your primary dietary habit',
+                    style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 25),
-
                 Obx(() => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -146,21 +133,15 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= SLEEP =================
-                const Text(
-                  'Average Sleep',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                const Text('Average Sleep',
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text(
-                  'How many hours do you sleep per night?',
-                  style: TextStyle(fontSize: 14),
-                ),
+                const Text('How many hours do you sleep per night?',
+                    style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
-
                 Obx(() {
                   return Container(
                     width: double.infinity,
@@ -172,15 +153,13 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                     ),
                     child: Column(
                       children: [
-                        // ===== SLIDER =====
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: const Color(0xFF0D9488),
                             inactiveTrackColor: const Color(0xFFD1D5DB),
                             trackHeight: 4,
                             thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 14,
-                            ),
+                                enabledThumbRadius: 14),
                             thumbColor: const Color(0xFF0D9488),
                             overlayColor: const Color(0x330D9488),
                           ),
@@ -194,10 +173,7 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                             },
                           ),
                         ),
-
                         const SizedBox(height: 10),
-
-                        // ===== LABELS =====
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -234,21 +210,14 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Update',
-                            style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          // SizedBox(width: 8),
-                          // Icon(Icons.arrow_forward, color: Colors.white),
-                        ],
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -257,8 +226,10 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 24),
               ],
             ),
-          ),
-        ));
+          );
+        }),
+      ),
+    );
   }
 
   // ================= CHIP =================
@@ -299,6 +270,90 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // ================= SKELETON =================
+  Widget _buildSkeleton() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 14),
+
+          // Smoking
+          _skBox(width: 80, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 220, height: 14),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+                3, (_) => _skBox(width: 90, height: 40, radius: 24)),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Alcohol
+          _skBox(width: 80, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 240, height: 14),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(
+                3, (_) => _skBox(width: 100, height: 40, radius: 24)),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Diet
+          _skBox(width: 120, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 200, height: 14),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(
+              4,
+              (_) => _skBox(width: 78, height: 104, radius: 20),
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Sleep
+          _skBox(width: 120, height: 16),
+          const SizedBox(height: 10),
+          _skBox(width: 230, height: 14),
+          const SizedBox(height: 20),
+          _skBox(width: double.infinity, height: 110, radius: 24),
+
+          const SizedBox(height: 40),
+
+          // Button
+          _skBox(width: double.infinity, height: 56, radius: 28),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _skBox({
+    required double width,
+    required double height,
+    double radius = 6,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(radius),
       ),
     );
   }
@@ -374,5 +429,67 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
         ),
       );
     });
+  }
+}
+
+class _ShimmerWrapper extends StatefulWidget {
+  final Widget child;
+  const _ShimmerWrapper({required this.child});
+
+  @override
+  State<_ShimmerWrapper> createState() => _ShimmerWrapperState();
+}
+
+class _ShimmerWrapperState extends State<_ShimmerWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    _animation = Tween<double>(begin: -1.5, end: 1.5).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: const [
+                Color(0xFFEEEEEE),
+                Color(0xFFFFFFFF),
+                Color(0xFFEEEEEE),
+              ],
+              stops: [
+                (_animation.value - 0.3).clamp(0.0, 1.0),
+                _animation.value.clamp(0.0, 1.0),
+                (_animation.value + 0.3).clamp(0.0, 1.0),
+              ],
+              transform: GradientRotation(_animation.value),
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
+    );
   }
 }

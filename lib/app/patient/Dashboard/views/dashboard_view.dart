@@ -134,7 +134,7 @@ class _DoctorActionsSection extends StatelessWidget {
         children: [
           const _SectionTitle('Doctor & Quick Actions'),
           const SizedBox(height: 16),
-
+          
           // ── TABLET: horizontal two-column list ────────────
           if (isTablet)
             _buildTabletList()

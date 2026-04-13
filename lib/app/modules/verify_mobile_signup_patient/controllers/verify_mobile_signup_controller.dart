@@ -116,64 +116,6 @@ class VerifyMobileSignupController extends GetxController {
     });
   }
 
-  Future<void> verifyOtpApi() async {
-    isLoading.value = true;
-    ApiResponse response = await api.commonApi.authenticationApi
-        .verifyOtp(mobile: number.value, country_code: "+91", otp: otpValue);
-    final messageData = response.data['message'];
-
-    await authStorage.init();
-
-    if (messageData["status"] == "success") {
-      if (messageData is Map<String, dynamic>) {
-        final token = messageData['access_token'] as String?;
-        final user = messageData['user'] as Map<String, dynamic>?;
-
-        if (token != null && token.isNotEmpty) {
-          await authStorage.saveToken(token);
-          apiClient.setBearerToken(token);
-        }
-
-        if (user != null) {
-          await authStorage.saveUserDetail(user);
-          await authStorage.saveLoginStatus(true);
-          //final dashboardRoute = NavigationHelper.getDashboardRoute(roles);
-          showMessage(
-            'Mobile number verified successfully!',
-          );
-
-          // ===== ROLE-BASED NAVIGATION =====
-          final role = _roleController.role;
-          switch (role) {
-            case UserRole.doctor:
-              Get.offAllNamed(Routes.DOCTOR_DASHBOARD);
-              break;
-            case UserRole.patient:
-            default:
-              Get.offAllNamed(Routes.DASHBOARD);
-              break;
-          }
-          //Get.offAllNamed(dashboardRoute);
-        } else {
-          showError(
-            messageData["message"],
-          );
-          //Get.offAllNamed(Routes.MAIN_SCREEN);
-        }
-      } else {
-        showError(
-          messageData["message"],
-        );
-        // Get.offAllNamed(Routes.MAIN_SCREEN);
-      }
-    } else {
-      showError(
-        messageData["message"],
-      );
-    }
-    isLoading.value = false;
-  }
-
   void verifyOtp() {
     if (!isButtonEnabled.value) return;
     isLoading.value = true; // ← ADD THIS

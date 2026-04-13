@@ -32,6 +32,16 @@ class AuthenticationApi {
     return response;
   }
 
+  Future<ApiResponse> getProfileDetail() async {
+    // final queryParameters = {'batch_id': batchId};
+
+    return await _client.get(
+      ApiConstants.commonApiConstants.patientProfileView,
+      // queryParameters: queryParameters,
+      authenticated: true,
+    );
+  }
+
   Future<ApiResponse> patientSignup({
     Map<String, dynamic>? fields,
     required String filePath,
