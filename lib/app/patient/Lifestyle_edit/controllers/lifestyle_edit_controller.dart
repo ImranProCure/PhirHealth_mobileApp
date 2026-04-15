@@ -110,8 +110,8 @@ class LifestyleEditController extends GetxController {
       "mobile_no": cachedMobile.value,
       "smoking": selectedSmoking.value,
       "alcohol": selectedAlcohol.value,
-      "diet": selectedDiet.value,
-      "sleep": sleepMap[sleepIndex.value],
+      "diet_preference": selectedDiet.value,
+      "average_sleep": sleepMap[sleepIndex.value],
     };
 
     ApiResponse response = await api.commonApi.authenticationApi

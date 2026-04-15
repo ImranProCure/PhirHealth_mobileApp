@@ -13,8 +13,6 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-
-          // Family Medical History
           _skBox(width: 200, height: 16),
           const SizedBox(height: 10),
           _skBox(width: 280, height: 14),
@@ -25,19 +23,13 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
             children: List.generate(
                 4, (_) => _skBox(width: 110, height: 40, radius: 24)),
           ),
-
           const SizedBox(height: 30),
-
-          // Mental Well-being
           _skBox(width: 150, height: 16),
           const SizedBox(height: 10),
           _skBox(width: 260, height: 14),
           const SizedBox(height: 20),
           _skBox(width: double.infinity, height: 110, radius: 20),
-
           const SizedBox(height: 30),
-
-          // Common Symptoms
           _skBox(width: 160, height: 16),
           const SizedBox(height: 20),
           Wrap(
@@ -46,10 +38,7 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
             children: List.generate(
                 4, (_) => _skBox(width: 100, height: 40, radius: 24)),
           ),
-
           const SizedBox(height: 40),
-
-          // Button
           _skBox(width: double.infinity, height: 56, radius: 28),
           const SizedBox(height: 24),
         ],
@@ -108,40 +97,58 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 20),
 
                 // ================= FAMILY MEDICAL HISTORY =================
-                const Text('Family Medical History',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700)),
+                const Text(
+                  'Family Medical History',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 const Text(
-                    'Have your immediate family members had any of these?',
-                    style: TextStyle(fontSize: 14)),
+                  'Have your immediate family members had any of these?',
+                  style: TextStyle(fontSize: 14),
+                ),
                 const SizedBox(height: 20),
                 Obx(() => Wrap(
                       spacing: 12,
                       runSpacing: 12,
-                      children: controller.familyConditions.map((item) {
-                        return _chip(
-                          label: item,
-                          selected: controller.selectedFamilyConditions
-                              .contains(item),
-                          onTap: () => controller.toggleFamilyCondition(item),
-                        );
-                      }).toList(),
+                      children: [
+                        // existing family condition chips
+                        ...controller.familyConditions.map(
+                          (item) => _chip(
+                            label: item,
+                            selected: controller.selectedFamilyConditions
+                                .contains(item),
+                            onTap: () => controller.toggleFamilyCondition(item),
+                          ),
+                        ),
+                        // ---- Add Other chip ----
+                        _chip(
+                          label: 'Add Other',
+                          isAdd: true,
+                          onTap: _showAddOtherFamilyCondition,
+                        ),
+                      ],
                     )),
 
                 const SizedBox(height: 30),
 
                 // ================= MENTAL WELL-BEING =================
-                const Text('Mental Well-being',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700)),
+                const Text(
+                  'Mental Well-being',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 10),
-                const Text('How would you rate your current stress levels?',
-                    style: TextStyle(fontSize: 14)),
+                const Text(
+                  'How would you rate your current stress levels?',
+                  style: TextStyle(fontSize: 14),
+                ),
                 const SizedBox(height: 20),
                 Obx(() {
                   return Container(
@@ -204,24 +211,46 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                 const SizedBox(height: 30),
 
                 // ================= COMMON SYMPTOMS =================
-                const Text('Common Symptoms',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700)),
+                // ================= COMMON SYMPTOMS =================
+                const Text(
+                  'Common Symptoms',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 20),
-                Obx(() => Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: controller.symptoms.map((item) {
-                        return _chip(
-                          label: item,
-                          selected: controller.selectedSymptoms.contains(item),
-                          onTap: () => controller.toggleSymptom(item),
-                        );
-                      }).toList(),
-                    )),
-
+                Obx(() {
+                  if (controller.isSymptomsLoading.value) {
+                    return _ShimmerWrapper(
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: List.generate(4,
+                            (_) => _skBox(width: 100, height: 40, radius: 24)),
+                      ),
+                    );
+                  }
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      ...controller.symptoms.map((item) => _chip(
+                            label: item,
+                            selected:
+                                controller.selectedSymptoms.contains(item),
+                            onTap: () => controller.toggleSymptom(item),
+                          )),
+                      // ← NEW: "Add Other" chip, same as family conditions
+                      _chip(
+                        label: 'Add Other',
+                        isAdd: true,
+                        onTap: _showAddOtherSymptom,
+                      ),
+                    ],
+                  );
+                }),
                 const SizedBox(height: 40),
 
                 // ================= BUTTON =================
@@ -245,19 +274,14 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Next Step',
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              )),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, color: Colors.white),
-                        ],
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -272,16 +296,25 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
     );
   }
 
-  // ================= REUSABLE CHIP =================
+  void _showAddOtherSymptom() {
+    _bottomSheet(
+      title: 'Add Symptom',
+      controller: controller.otherSymptomController,
+      onAdd: controller.addOtherSymptom,
+    );
+  }
+
+  // ================= CHIP =================
   Widget _chip({
     required String label,
-    required bool selected,
+    bool selected = false,
+    bool isAdd = false,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
@@ -292,12 +325,33 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              selected ? Icons.check_circle : Icons.radio_button_unchecked,
-              size: 18,
-              color:
-                  selected ? const Color(0xFF0D9488) : const Color(0xFF9CA3AF),
-            ),
+            if (isAdd)
+              Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    width: 1.5,
+                  ),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add,
+                    size: 14,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ),
+              )
+            else
+              Icon(
+                selected ? Icons.check_circle : Icons.radio_button_unchecked,
+                size: 18,
+                color: selected
+                    ? const Color(0xFF0D9488)
+                    : const Color(0xFF9CA3AF),
+              ),
             const SizedBox(width: 8),
             Text(
               label,
@@ -313,8 +367,123 @@ class FamilyWellbeingEditView extends GetView<FamilyWellbeingEditController> {
       ),
     );
   }
+
+  // ================= SHOW BOTTOM SHEET =================
+  void _showAddOtherFamilyCondition() {
+    _bottomSheet(
+      title: 'Add Family Condition',
+      controller: controller.otherFamilyConditionController,
+      onAdd: controller.addOtherFamilyCondition,
+    );
+  }
+
+  void _bottomSheet({
+    required String title,
+    required TextEditingController controller,
+    required VoidCallback onAdd,
+  }) {
+    Get.bottomSheet(
+      Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Color(0xFFF9FAFB),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(24),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Enter here...',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF00786F),
+                        Color(0xFF009689),
+                        Color(0xFF1447E6),
+                      ],
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      if (controller.text.trim().isEmpty) {
+                        Get.snackbar(
+                          'Required',
+                          'Please enter a value',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                        return;
+                      }
+                      onAdd();
+                      Get.back();
+                    },
+                    child: const Text(
+                      'Add',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
 }
 
+// ================= SHIMMER =================
 class _ShimmerWrapper extends StatefulWidget {
   final Widget child;
   const _ShimmerWrapper({required this.child});

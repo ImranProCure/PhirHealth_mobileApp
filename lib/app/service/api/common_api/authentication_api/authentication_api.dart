@@ -32,6 +32,36 @@ class AuthenticationApi {
     return response;
   }
 
+  Future<ApiResponse> getMedicalSymptoms() async {
+    // final queryParameters = {'batch_id': batchId};
+
+    return await _client.get(
+      ApiConstants.commonApiConstants.getSymstom,
+      // queryParameters: queryParameters,
+      authenticated: true,
+    );
+  }
+
+  Future<ApiResponse> getAllergies() async {
+    // final queryParameters = {'batch_id': batchId};
+
+    return await _client.get(
+      ApiConstants.commonApiConstants.getAllergy,
+      // queryParameters: queryParameters,
+      authenticated: true,
+    );
+  }
+
+  Future<ApiResponse> getMedicalConditions() async {
+    // final queryParameters = {'batch_id': batchId};
+
+    return await _client.get(
+      ApiConstants.commonApiConstants.getexistingConditions,
+      // queryParameters: queryParameters,
+      authenticated: true,
+    );
+  }
+
   Future<ApiResponse> getProfileDetail() async {
     // final queryParameters = {'batch_id': batchId};
 
@@ -75,6 +105,39 @@ class AuthenticationApi {
       formData: formData,
       authenticated: false,
     );
+  }
+
+  Future<ApiResponse> createMedicalCondition({
+    required String name,
+  }) async {
+    final data = {"condition": name};
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.createConditions,
+      data: data,
+    );
+    return response;
+  }
+
+  Future<ApiResponse> createAllergy({
+    required String name,
+  }) async {
+    final data = {"allergy": name};
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.createAllergy,
+      data: data,
+    );
+    return response;
+  }
+
+  Future<ApiResponse> createMedicalSymptom({
+    required String name,
+  }) async {
+    final data = {"symptom": name};
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.createSymton,
+      data: data,
+    );
+    return response;
   }
 
   Future<ApiResponse> verifyOtp({

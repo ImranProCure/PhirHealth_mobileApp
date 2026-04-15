@@ -32,7 +32,7 @@ class IdentityVitalsEditController extends GetxController {
   final heightInInches = 69.obs;
   final weightKg = 72.5.obs;
   final bloodGroup = 'A+'.obs;
-  final bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-'];
+  final bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+'];
 
   // ---------------- PROFILE IMAGE ----------------
 
@@ -242,6 +242,7 @@ class IdentityVitalsEditController extends GetxController {
       'B-': 'B Negative',
       'O+': 'O Positive',
       'O-': 'O Negative',
+      'AB+': 'AB Positive',
     };
     return map[group] ?? group;
   }
@@ -255,6 +256,7 @@ class IdentityVitalsEditController extends GetxController {
       'B Negative': 'B-',
       'O Positive': 'O+',
       'O Negative': 'O-',
+      'AB Positive': 'AB+',
     };
     return map[fullName] ?? fullName;
   }
@@ -286,9 +288,16 @@ class IdentityVitalsEditController extends GetxController {
 
   Future<void> _basicEditApi() async {
     isLoading.value = true;
+    String fullName = nameController.text.trim();
+
+    List<String> parts = fullName.split(' ');
+    String firstName = parts.isNotEmpty ? parts.first : '';
+    String lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
     final data = {
       "full_name": nameController.text.trim(),
+      "first_name": firstName,
+      "last_name": lastName,
       "email": emailController.text.trim(),
       "mobile_no": mobileController.text.trim(),
       "date_of_birth": formatDob(dobController.text),

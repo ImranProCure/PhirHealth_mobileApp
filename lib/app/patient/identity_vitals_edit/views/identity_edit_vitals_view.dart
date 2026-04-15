@@ -351,7 +351,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Email Id',
+                      'Email Id (Cannot be edited)',
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -375,9 +375,11 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextField(
                       controller: controller.emailController,
+                      readOnly: true, // ✅ disable editing
+
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Colors.black,
+                        color: Colors.grey,
                       ),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -394,7 +396,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Mobile Number',
+                      'Mobile Number (Cannot be edited)',
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -421,19 +423,23 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                         const Text(
                           "+91",
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey),
                         ),
                         const SizedBox(width: 8),
                         const Text("|", style: TextStyle(color: Colors.grey)),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
+                            readOnly: true, // ✅ disable editing
                             keyboardType: TextInputType.number,
                             controller: controller.mobileController,
                             maxLength: 10,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly,
                             ],

@@ -1,29 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
-import 'package:sample/app/routes/app_routes.dart';
 import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 import 'package:sample/app/service/db/db.dart';
 
 class MedicalHistoryEditController extends GetxController {
   // ================= CONDITIONS =================
-  final conditions = <String>[
-    'Diabetes',
-    'Hypertension',
-    'Asthma',
-    'Thyroid',
-    'None',
-  ].obs;
+  final conditions = <String>[].obs; // Populated from API
 
   final selectedConditions = <String>[].obs;
 
   // ================= ALLERGIES =================
-  final allergies = <String>[
-    'Peanuts',
-    'Antibiotics',
-    'Dust',
-  ].obs;
+  final allergies = <String>[].obs; // Now populated from API
 
   Api api = Api.instance;
   final selectedAllergies = <String>[].obs;
@@ -35,6 +26,10 @@ class MedicalHistoryEditController extends GetxController {
   final otherAllergyController = TextEditingController();
 
   final RxBool isLoading = false.obs;
+  final RxBool isConditionsLoading = false.obs;
+  final RxBool isAllergiesLoading = false.obs;
+  final RxBool isAddingCondition = false.obs;
+  final RxBool isAddingAllergy = false.obs;
   final authStorage = AuthStorageService();
 
   final cachedEmail = ''.obs;
@@ -44,6 +39,8 @@ class MedicalHistoryEditController extends GetxController {
   void onInit() {
     super.onInit();
     _loadUserCache();
+    fetchConditionsApi();  // fetch conditions from API
+    fetchAllergiesApi();   // fetch allergies from API
     fetchProfileApi();
   }
 
@@ -51,6 +48,100 @@ class MedicalHistoryEditController extends GetxController {
     final user = await authStorage.getUserDetail();
     cachedEmail.value = user?['email']?.toString().trim() ?? '';
     cachedMobile.value = user?['mobile_no']?.toString().trim() ?? '';
+  }
+
+  // ================= FETCH CONDITIONS FROM API =================
+  Future<void> fetchConditionsApi() async {
+    isConditionsLoading.value = true;
+
+    ApiResponse response =
+        await api.commonApi.authenticationApi.getMedicalConditions();
+    isConditionsLoading.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      final List<dynamic> data = messageData["data"] as List<dynamic>;
+
+      final fetchedConditions =
+          data.map((e) => e['name'].toString()).toList();
+
+      conditions.assignAll(fetchedConditions);
+    } else {
+      showError(messageData["message"] ?? "Failed to fetch conditions");
+    }
+  }
+
+  // ================= FETCH ALLERGIES FROM API =================
+  Future<void> fetchAllergiesApi() async {
+    isAllergiesLoading.value = true;
+
+    ApiResponse response =
+        await api.commonApi.authenticationApi.getAllergies();
+    isAllergiesLoading.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      final List<dynamic> data = messageData["data"] as List<dynamic>;
+
+      final fetchedAllergies =
+          data.map((e) => e['name'].toString()).toList();
+
+      allergies.assignAll(fetchedAllergies);
+    } else {
+      showError(messageData["message"] ?? "Failed to fetch allergies");
+    }
+  }
+
+  // ================= CREATE NEW CONDITION =================
+  Future<void> _createConditionApi(String conditionName) async {
+    isAddingCondition.value = true;
+
+    ApiResponse response =
+        await api.commonApi.authenticationApi.createMedicalCondition(
+      name: conditionName,
+    );
+    isAddingCondition.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      if (!conditions.contains(conditionName)) {
+        conditions.add(conditionName);
+      }
+      if (!selectedConditions.contains(conditionName)) {
+        selectedConditions.add(conditionName);
+      }
+      otherConditionController.clear();
+    } else {
+      showError(messageData["message"] ?? "Failed to add condition");
+    }
+  }
+
+  // ================= CREATE NEW ALLERGY =================
+  Future<void> _createAllergyApi(String allergyName) async {
+    isAddingAllergy.value = true;
+
+    ApiResponse response =
+        await api.commonApi.authenticationApi.createAllergy(
+      name: allergyName,
+    );
+    isAddingAllergy.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      if (!allergies.contains(allergyName)) {
+        allergies.add(allergyName);
+      }
+      if (!selectedAllergies.contains(allergyName)) {
+        selectedAllergies.add(allergyName);
+      }
+      otherAllergyController.clear();
+    } else {
+      showError(messageData["message"] ?? "Failed to add allergy");
+    }
   }
 
   // ================= FETCH PROFILE =================
@@ -72,9 +163,8 @@ class MedicalHistoryEditController extends GetxController {
   }
 
   void loadMedicalHistory(Map<String, dynamic> data) {
-    // ---- Existing medical conditions → "existing_medical_conditions" (List) ----
-    final rawConditions =
-        data['existing_medical_conditions']; // note: plural with 's'
+    // ---- Existing medical conditions ----
+    final rawConditions = data['existing_medical_conditions'];
     if (rawConditions != null) {
       List<String> parsed = [];
 
@@ -85,13 +175,15 @@ class MedicalHistoryEditController extends GetxController {
       }
 
       for (final condition in parsed) {
+        // If condition from profile is not in fetched list, add it locally
         if (!conditions.contains(condition)) conditions.add(condition);
-        if (!selectedConditions.contains(condition))
+        if (!selectedConditions.contains(condition)) {
           selectedConditions.add(condition);
+        }
       }
     }
 
-    // ---- Allergy chips → "allergy" (List) ----
+    // ---- Allergy chips ----
     final rawAllergies = data['allergy'];
     if (rawAllergies != null) {
       List<String> parsed = [];
@@ -103,13 +195,15 @@ class MedicalHistoryEditController extends GetxController {
       }
 
       for (final allergy in parsed) {
+        // If allergy from profile is not in fetched list, add it locally
         if (!allergies.contains(allergy)) allergies.add(allergy);
-        if (!selectedAllergies.contains(allergy))
+        if (!selectedAllergies.contains(allergy)) {
           selectedAllergies.add(allergy);
+        }
       }
     }
 
-    // ---- Past procedures text field → "allergies" (String) ----
+    // ---- Past procedures ----
     final pastProcedures = data['allergies'] as String?;
     if (pastProcedures != null && pastProcedures.isNotEmpty) {
       pastProceduresController.text = pastProcedures;
@@ -144,8 +238,8 @@ class MedicalHistoryEditController extends GetxController {
     final data = {
       "email": email,
       "mobile_no": mobileNo,
-      "existing_medical_conditions": selectedConditions.toList(),
-      "allergy": selectedAllergies.toList(),
+      "existing_medical_condition": jsonEncode(selectedConditions.toList()),
+      "allergy": jsonEncode(selectedAllergies.toList()),
       "allergies": pastProceduresController.text.trim(),
       "current_medications": medicationsController.text.trim(),
     };
@@ -181,20 +275,19 @@ class MedicalHistoryEditController extends GetxController {
   }
 
   // ================= ADD OTHER =================
+
+  /// Calls the create API for a new condition, then adds it to the list
   void addOtherCondition() {
     final text = otherConditionController.text.trim();
     if (text.isEmpty) return;
-    if (!conditions.contains(text)) conditions.add(text);
-    if (!selectedConditions.contains(text)) selectedConditions.add(text);
-    otherConditionController.clear();
+    _createConditionApi(text);
   }
 
+  /// Calls the create API for a new allergy, then adds it to the list
   void addOtherAllergy() {
     final text = otherAllergyController.text.trim();
     if (text.isEmpty) return;
-    if (!allergies.contains(text)) allergies.add(text);
-    if (!selectedAllergies.contains(text)) selectedAllergies.add(text);
-    otherAllergyController.clear();
+    _createAllergyApi(text); // <-- API call instead of local-only add
   }
 
   // ================= VALIDATION =================
