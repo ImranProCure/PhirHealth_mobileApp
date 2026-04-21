@@ -47,9 +47,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                   ),
                 )),
           ),
-
           const SizedBox(height: 8),
-
           // ===== LIST =====
           Expanded(
             child: Obx(() {
