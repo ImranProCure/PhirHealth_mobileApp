@@ -33,4 +33,13 @@ class CommonApiConstants {
 
   final specialistList =
       "/api/method/vhealthcare.api.patient.doctor_consult.get_speciality.get_specialities_list";
+
+  final profileDoctorDetails =
+      "/api/method/vhealthcare.api.patient.doctor_consult.dr_profile_details.get_doctor_profile";
+
+  final submmitReview =
+      "/api/method/vhealthcare.api.patient.doctor_consult.add_review.add_patient_review";
+
+  final reviewListApi =
+      "/api/method/vhealthcare.api.patient.doctor_consult.review_list.get_review_list";
 }

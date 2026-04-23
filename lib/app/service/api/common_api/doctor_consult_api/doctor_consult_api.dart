@@ -13,20 +13,36 @@ class DoctorConsultApi {
     );
   }
 
+  Future<ApiResponse> getDoctorProfile(
+      {Map<String, String>? queryParams}) async {
+    return await _client.get(
+      ApiConstants.commonApiConstants.profileDoctorDetails,
+      queryParameters: queryParams,
+      authenticated: true,
+    );
+  }
+
   Future<ApiResponse> getSpecialities() async {
     return await _client.get(
       ApiConstants.commonApiConstants.specialistList,
       authenticated: true,
     );
   }
-  // Future<ApiResponse> createAllergy({
-  //   required String name,
-  // }) async {
-  //   final data = {"allergy": name};
-  //   final ApiResponse response = await _client.post(
-  //     ApiConstants.commonApiConstants.createAllergy,
-  //     data: data,
-  //   );
-  //   return response;
-  // }
+
+  Future<ApiResponse> getAllReviews({Map<String, dynamic>? queryParams}) async {
+    return await _client.get(
+      ApiConstants.commonApiConstants.reviewListApi,
+      queryParameters: queryParams,
+      authenticated: true,
+    );
+  }
+
+  Future<ApiResponse> submitReview(data) async {
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.submmitReview,
+      data: data,
+      authenticated: true,
+    );
+    return response;
+  }
 }

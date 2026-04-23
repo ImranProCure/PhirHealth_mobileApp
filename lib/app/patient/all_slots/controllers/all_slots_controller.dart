@@ -8,8 +8,8 @@ class AllSlotsController extends GetxController {
   final RxString screenTitle = "".obs;
 
   // ===== MONTH NAVIGATION =====
-  final RxString currentMonthLabel = "Feb, 2026".obs;
-  DateTime _currentMonth = DateTime(2026, 2);
+  final RxString currentMonthLabel = "".obs;
+  DateTime _currentMonth = DateTime.now();
 
   void nextMonth() {
     _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
@@ -25,18 +25,8 @@ class AllSlotsController extends GetxController {
 
   void _updateMonthLabel() {
     const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
     currentMonthLabel.value =
         "${months[_currentMonth.month - 1]}, ${_currentMonth.year}";
@@ -48,63 +38,70 @@ class AllSlotsController extends GetxController {
   final RxString selectedDateLabel = "".obs;
 
   final List<String> _dayNames = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun"
+    "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
   ];
   final List<String> _monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
-  void _generateDates() {
-    final List<Map<String, dynamic>> generated = [];
-    final int daysInMonth =
-        DateUtils.getDaysInMonth(_currentMonth.year, _currentMonth.month);
-    final now = DateTime.now();
+  // Raw available_slots passed from ProfileDetailsController via arguments
+  List<Map<String, dynamic>> _availableSlots = [];
 
-    for (int i = 1; i <= daysInMonth; i++) {
-      final date = DateTime(_currentMonth.year, _currentMonth.month, i);
-      final dayName = _dayNames[date.weekday - 1];
-      final slots = date.weekday == DateTime.sunday ? 0 : (i % 6) + 2;
-      generated.add({
-        "date": i.toString(),
-        "day": dayName,
-        "slots": slots,
-        "fullDate": date,
-        "isToday": date.day == now.day &&
-            date.month == now.month &&
-            date.year == now.year,
-      });
+  void _generateDates() {
+    // Filter cached slots to the current month being viewed
+    final filtered = _availableSlots.where((slot) {
+      final dateStr = slot["date"]?.toString() ?? '';
+      if (dateStr.isEmpty) return false;
+      final parts = dateStr.split('-');
+      if (parts.length < 2) return false;
+      return int.tryParse(parts[0]) == _currentMonth.year &&
+          int.tryParse(parts[1]) == _currentMonth.month;
+    }).toList();
+
+    if (filtered.isEmpty) {
+      selectedDateIndex.value = 0;
+      selectedSlot.value = '';
+      dates.clear();
+      _clearSessions();
+      selectedDateLabel.value = "No available dates";
+      return;
     }
+
+    final List<Map<String, dynamic>> generated = filtered.map((slot) {
+      final DateTime? fullDate =
+          DateTime.tryParse(slot["date"]?.toString() ?? '');
+      return {
+        "date": slot["day_number"].toString(),
+        "day": slot["day"].toString(),
+        "slots": (slot["slot_count"] as int?) ?? 0,
+        "rawSlots": List<String>.from(slot["slots"] ?? []),
+        "fullDate": fullDate,
+        "isToday": fullDate != null &&
+            fullDate.day == DateTime.now().day &&
+            fullDate.month == DateTime.now().month &&
+            fullDate.year == DateTime.now().year,
+      };
+    }).toList();
 
     selectedDateIndex.value = 0;
     selectedSlot.value = '';
     dates.assignAll(generated);
     _updateDateLabel(0);
-    _generateSlots(generated[0]["slots"] as int);
+    _distributeSlots(List<String>.from(generated[0]["rawSlots"]));
   }
 
   void _updateDateLabel(int index) {
     final item = dates[index];
-    final DateTime d = item["fullDate"] as DateTime;
+    final DateTime? d = item["fullDate"] as DateTime?;
+    if (d == null) {
+      selectedDateLabel.value = item["date"].toString();
+      return;
+    }
     final bool isToday = item["isToday"] as bool;
     final prefix = isToday ? "Today" : _dayNames[d.weekday - 1];
-    selectedDateLabel.value = "$prefix, ${d.day} ${_monthNames[d.month - 1]}";
+    selectedDateLabel.value =
+        "$prefix, ${d.day} ${_monthNames[d.month - 1]}";
   }
 
   // ===== SLOTS BY SESSION =====
@@ -122,67 +119,54 @@ class AllSlotsController extends GetxController {
     selectedDateIndex.value = index;
     selectedSlot.value = '';
     _updateDateLabel(index);
-    _generateSlots(dates[index]["slots"] as int);
+    final rawSlots =
+        List<String>.from(dates[index]["rawSlots"] as List? ?? []);
+    _distributeSlots(rawSlots);
   }
 
-  void _generateSlots(int totalSlots) {
+  void _clearSessions() {
     morningSlots.clear();
     afternoonSlots.clear();
     eveningSlots.clear();
     nightSlots.clear();
+  }
 
-    if (totalSlots == 0) return;
+  /// Distributes the raw slot strings from the API into morning/afternoon/evening/night
+  /// buckets based on the parsed hour of each time string.
+  void _distributeSlots(List<String> rawSlots) {
+    _clearSessions();
 
-    if (tabType == 0) {
-      // Clinic Visit
-      final morningTimes = ["10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM"];
-      final afternoonTimes = ["02:00 PM", "03:00 PM", "03:30 PM", "04:00 PM"];
-      final eveningTimes = ["05:00 PM", "05:30 PM", "06:00 PM"];
-      final nightTimes = ["07:00 PM", "07:30 PM"];
+    for (final timeStr in rawSlots) {
+      final hour = _parseHour(timeStr);
+      if (hour == null) continue;
 
-      int remaining = totalSlots;
-      final mCount = remaining >= 3 ? 3 : remaining;
-      morningSlots.assignAll(morningTimes.take(mCount).toList());
-      remaining -= mCount;
+      if (hour >= 0 && hour < 12) {
+        morningSlots.add(timeStr); // 12 AM – 11:59 AM
+      } else if (hour >= 12 && hour < 17) {
+        afternoonSlots.add(timeStr); // 12 PM – 4:59 PM
+      } else if (hour >= 17 && hour < 20) {
+        eveningSlots.add(timeStr); // 5 PM – 7:59 PM
+      } else {
+        nightSlots.add(timeStr); // 8 PM – 11:59 PM
+      }
+    }
+  }
 
-      if (remaining > 0) {
-        final aCount = remaining >= 2 ? 2 : remaining;
-        afternoonSlots.assignAll(afternoonTimes.take(aCount).toList());
-        remaining -= aCount;
-      }
-      if (remaining > 0) {
-        final eCount = remaining >= 2 ? 2 : remaining;
-        eveningSlots.assignAll(eveningTimes.take(eCount).toList());
-        remaining -= eCount;
-      }
-      if (remaining > 0) {
-        nightSlots.assignAll(nightTimes.take(remaining).toList());
-      }
-    } else {
-      // Video Consult
-      final morningTimes = ["08:00 AM", "09:00 AM", "09:30 AM", "10:00 AM"];
-      final afternoonTimes = ["12:00 PM", "01:00 PM", "02:00 PM"];
-      final eveningTimes = ["05:00 PM", "06:00 PM"];
-      final nightTimes = ["07:00 PM", "08:00 PM"];
-
-      int remaining = totalSlots;
-      final mCount = remaining >= 2 ? 2 : remaining;
-      morningSlots.assignAll(morningTimes.take(mCount).toList());
-      remaining -= mCount;
-
-      if (remaining > 0) {
-        final aCount = remaining >= 2 ? 2 : remaining;
-        afternoonSlots.assignAll(afternoonTimes.take(aCount).toList());
-        remaining -= aCount;
-      }
-      if (remaining > 0) {
-        final eCount = remaining >= 1 ? 1 : remaining;
-        eveningSlots.assignAll(eveningTimes.take(eCount).toList());
-        remaining -= eCount;
-      }
-      if (remaining > 0) {
-        nightSlots.assignAll(nightTimes.take(remaining).toList());
-      }
+  /// Parses "10:30 AM" / "2:00 PM" → 24-hour integer (0-23), or null on failure.
+  int? _parseHour(String timeStr) {
+    try {
+      final parts = timeStr.trim().split(' ');
+      if (parts.length < 2) return null;
+      final timeParts = parts[0].split(':');
+      if (timeParts.isEmpty) return null;
+      int hour = int.parse(timeParts[0]);
+      final isPM = parts[1].toUpperCase() == 'PM';
+      final isAM = parts[1].toUpperCase() == 'AM';
+      if (isPM && hour != 12) hour += 12;
+      if (isAM && hour == 12) hour = 0;
+      return hour;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -202,9 +186,9 @@ class AllSlotsController extends GetxController {
     }
     if (type == 1) {
       Get.toNamed('/booking-confirmation', arguments: {
-        'date': Get.arguments?['date'] ?? '',
-        'slot': Get.arguments?['slot'] ?? '',
-        'tabType': Get.arguments?['tabType'] ?? 0,
+        'date': selectedDateLabel.value,
+        'slot': selectedSlot.value,
+        'tabType': tabType,
         'patientName': 'Rahul Sharma',
       });
     } else {
@@ -223,6 +207,21 @@ class AllSlotsController extends GetxController {
     type = Get.arguments?['type'] ?? 0;
     screenTitle.value =
         tabType == 0 ? "Clinic Visit Slots" : "Video Consult Slots";
+
+    // Receive pre-fetched available_slots from ProfileDetailsController
+    final rawSlots =
+        Get.arguments?['availableSlots'] as List<Map<String, dynamic>>?;
+    if (rawSlots != null && rawSlots.isNotEmpty) {
+      _availableSlots = rawSlots;
+      // Set current month from first slot date
+      final firstDate =
+          DateTime.tryParse(rawSlots[0]['date']?.toString() ?? '');
+      if (firstDate != null) {
+        _currentMonth = DateTime(firstDate.year, firstDate.month);
+      }
+    }
+
+    _updateMonthLabel();
     _generateDates();
   }
 }

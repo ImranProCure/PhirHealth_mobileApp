@@ -1,12 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
+import 'package:sample/app/routes/app_routes.dart';
+import 'package:sample/app/service/api/api.dart';
+import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/db/db.dart';
 
 class ProfileDetailsController extends GetxController {
+  Api api = Api.instance;
+
+  // ===== LOADING =====
+  final RxBool isLoading = false.obs;
+
+  // ===== DOCTOR PROFILE DATA =====
+  final RxString doctorName = ''.obs;
+  final RxString doctorDegree = ''.obs;
+  final RxString doctorSpecialty = ''.obs;
+  final RxString doctorExperience = ''.obs;
+  final RxDouble doctorRating = 0.0.obs;
+  final RxInt reviewCount = 0.obs;
+  final RxInt fees = 0.obs;
+  final RxInt reviewStatus = 0.obs;
+  final RxInt total = 0.obs;
+  final RxString doctorImage = ''.obs;
+  final RxString clinicName = ''.obs;
+  final RxString address = ''.obs;
+  final RxInt waitTime = 0.obs;
+  final RxDouble latitude = 0.0.obs;
+  final RxDouble longitude = 0.0.obs;
+
+  final RxList<Map<String, dynamic>> reviews = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> allReviews = <Map<String, dynamic>>[].obs;
+  final RxList<String> services = <String>[].obs;
+  final RxList<String> specializations = <String>[].obs;
+  final RxList<String> clinicPhotos = <String>[].obs;
+
+  // ===== PAGINATION =====
+  final RxBool isLoadingMoreReviews = false.obs;
+  final RxBool hasMoreReviews = true.obs;
+  int _reviewPage = 1;
+  static const int _reviewPageSize = 10;
+
+  Future<void> fetchAllReview({bool loadMore = false}) async {
+    if (loadMore) {
+      if (isLoadingMoreReviews.value || !hasMoreReviews.value) return;
+      isLoadingMoreReviews.value = true;
+    } else {
+      // Fresh load — reset pagination
+      _reviewPage = 1;
+      hasMoreReviews.value = true;
+      allReviews.clear();
+      isLoading.value = true;
+    }
+
+    final Map<String, dynamic> body = {
+      'practitioner': 'HLC-PRAC-2026-00002',
+      'page': _reviewPage,
+    };
+
+    try {
+      ApiResponse response =
+          await api.commonApi.doctorConsultApi.getAllReviews(queryParams: body);
+
+      final messageData = response.data['message'];
+
+      if (messageData['status'] == true) {
+        final authStorage = AuthStorageService();
+        final userData = await authStorage.getUserDetail();
+        final String fullName = userData?['full_name']?.toString() ?? '';
+
+        final rawReviews =
+            messageData['data']["reviews"] as List<dynamic>? ?? [];
+         total.value = messageData['data']["pagination"]["total"];
+
+        final mapped = rawReviews
+            .map((r) => {
+                  'reviewer_name': fullName == r['reviewer_name']?.toString()
+                      ? 'You'
+                      : r['reviewer_name']?.toString() ?? '',
+                  'initials': r['initials']?.toString() ?? '',
+                  'rating': (r['rating'] as num?)?.toDouble() ?? 0.0,
+                  'review_text': r['review_text']?.toString() ?? '',
+                  'relative_date': r['relative_date']?.toString() ?? '',
+                })
+            .toList();
+
+        allReviews.addAll(mapped);
+
+        // If fewer results than page size returned, no more pages
+        if (rawReviews.length < _reviewPageSize) {
+          hasMoreReviews.value = false;
+        } else {
+          _reviewPage++;
+        }
+      } else {
+        showError(messageData['message'] ?? 'Failed to fetch reviews');
+      }
+    } catch (e) {
+      showError('Something went wrong. Please try again.');
+    } finally {
+      isLoading.value = false;
+      isLoadingMoreReviews.value = false;
+    }
+  }
+
   // ===== TAB =====
   final selectedTab = 0.obs;
 
   void changeTab(int index) {
     selectedTab.value = index;
+    // Re-populate dates/slots from cached available_slots when tab changes
+    _populateDatesFromSlots();
   }
 
   void viewAllSlots() {
@@ -14,9 +118,37 @@ class ProfileDetailsController extends GetxController {
         arguments: {'tabType': selectedTab.value, 'type': 0});
   }
 
+  void goToPatientDetails() {
+    if (selectedSlot.value.isEmpty) {
+      Get.snackbar(
+        "Select a Slot",
+        "Please select a time slot to continue",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: const Color(0xFFF3F4F6),
+        colorText: Colors.black,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+      return;
+    }
+
+    Get.toNamed('/booking-confirmation', arguments: {
+      'date': dates[selectedDateIndex.value]["fullDate"],
+      'slot': selectedSlot.value,
+      'tabType': selectedTab.value,
+      'patientName': 'Rahul Sharma',
+    });
+
+    // Get.toNamed(Routes.PATIENT_DETAILS, arguments: {
+    //   'tabType': tabType,
+    //   'slot': selectedSlot.value,
+    //   'date': selectedDateLabel.value,
+    // });
+  }
+
   // ===== MONTH NAVIGATION =====
-  final RxString currentMonthLabel = "Feb, 2026".obs;
-  DateTime _currentMonth = DateTime(2026, 2);
+  final RxString currentMonthLabel = ''.obs;
+  DateTime _currentMonth = DateTime.now();
 
   void nextMonth() {
     _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
@@ -53,51 +185,116 @@ class ProfileDetailsController extends GetxController {
   final selectedDateIndex = 0.obs;
   final RxList<Map<String, dynamic>> dates = <Map<String, dynamic>>[].obs;
 
-  final List<String> _dayNames = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun"
-  ];
+  // Raw available_slots from API — cached so we can re-use on tab switch
+  List<Map<String, dynamic>> _availableSlots = [];
 
-  void _generateDates() {
-    final List<Map<String, dynamic>> generated = [];
-    final int daysInMonth =
-        DateUtils.getDaysInMonth(_currentMonth.year, _currentMonth.month);
+  /// Builds the date list from the API's available_slots array.
+  void _populateDatesFromSlots() {
+    if (_availableSlots.isEmpty) return;
 
-    for (int i = 1; i <= daysInMonth; i++) {
-      final date = DateTime(_currentMonth.year, _currentMonth.month, i);
-      final dayName = _dayNames[date.weekday - 1];
-      final slots = date.weekday == DateTime.sunday ? 0 : (i % 6) + 2;
-      generated.add({
-        "date": i.toString(),
-        "day": dayName,
-        "slots": slots,
-      });
-    }
+    final List<Map<String, dynamic>> generated = _availableSlots.map((slot) {
+      return {
+        "date": slot["day_number"].toString(),
+        "day": slot["day"].toString(),
+        "slots": (slot["slot_count"] as int?) ?? 0,
+        "rawSlots": List<String>.from(slot["slots"] ?? []),
+        "fullDate": slot["date"].toString(), // "2026-04-22"
+      };
+    }).toList();
 
     selectedDateIndex.value = 0;
     selectedSlot.value = '';
-    timeSlots.assignAll(_defaultSlots);
     dates.assignAll(generated);
+
+    if (generated.isNotEmpty) {
+      _loadTimeSlotsForIndex(0);
+    }
+  }
+
+  // Add this method to ProfileDetailsController
+  Future<void> submitReview({
+    required int rating,
+    required String reviewText,
+  }) async {
+    // Get doctor id from arguments (same as fetchDoctorProfile)
+    final args = Get.arguments;
+    final String doctorId = args?['id']?.toString() ?? '';
+
+    final Map<String, dynamic> body = {
+      "practitioner": "HLC-PRAC-2026-00002",
+      "rating": rating,
+      "review_text": reviewText
+    };
+
+    try {
+      ApiResponse response = await api.commonApi.doctorConsultApi
+          .submitReview(body); // 👈 add this endpoint in your API layer
+
+      final messageData = response.data['message'];
+
+      if (messageData["status"] == true) {
+        // ✅ Instantly prepend the new review to the list
+        reviews.insert(0, {
+          'reviewer_name': 'You',
+          'initials': doctorName.value.isNotEmpty
+              ? doctorName.value.trim()[0].toUpperCase()
+              : 'U',
+          'rating': rating.toDouble(),
+          'review_text': reviewText,
+          'relative_date': 'Just now',
+        });
+
+        // ✅ Update review count
+        reviewCount.value = reviewCount.value + 1;
+      } else {
+        showError(messageData["message"] ?? "Failed to submit review");
+      }
+    } catch (e) {
+      showError("Something went wrong. Please try again.");
+    }
+  }
+
+  /// Fallback: generates dummy dates for the current month when no API data.
+  void _generateDates() {
+    if (_availableSlots.isNotEmpty) {
+      // Filter slots to current month
+      final filtered = _availableSlots.where((slot) {
+        final dateStr = slot["date"]?.toString() ?? '';
+        if (dateStr.isEmpty) return false;
+        final parts = dateStr.split('-');
+        if (parts.length < 2) return false;
+        return int.tryParse(parts[0]) == _currentMonth.year &&
+            int.tryParse(parts[1]) == _currentMonth.month;
+      }).toList();
+
+      if (filtered.isNotEmpty) {
+        final List<Map<String, dynamic>> generated = filtered.map((slot) {
+          return {
+            "date": slot["day_number"].toString(),
+            "day": slot["day"].toString(),
+            "slots": (slot["slot_count"] as int?) ?? 0,
+            "rawSlots": List<String>.from(slot["slots"] ?? []),
+            "fullDate": slot["date"].toString(),
+          };
+        }).toList();
+
+        selectedDateIndex.value = 0;
+        selectedSlot.value = '';
+        dates.assignAll(generated);
+        if (generated.isNotEmpty) _loadTimeSlotsForIndex(0);
+        return;
+      }
+    }
+
+    // No data for this month — show empty
+    selectedDateIndex.value = 0;
+    selectedSlot.value = '';
+    dates.clear();
+    timeSlots.clear();
   }
 
   // ===== TIME SLOTS =====
-  final List<String> _defaultSlots = [
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-  ];
-
-  final RxList<String> timeSlots = <String>[
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-  ].obs;
-
+  final RxList<String> timeSlots = <String>[].obs;
   final selectedSlot = ''.obs;
 
   void selectSlot(String time) {
@@ -107,59 +304,119 @@ class ProfileDetailsController extends GetxController {
   void selectDate(int index) {
     selectedDateIndex.value = index;
     selectedSlot.value = '';
+    _loadTimeSlotsForIndex(index);
+  }
 
+  void _loadTimeSlotsForIndex(int index) {
+    if (index >= dates.length) return;
     final item = dates[index];
-    final int slots = item["slots"] as int;
+    final rawSlots = item["rawSlots"];
 
-    if (slots == 0) {
-      timeSlots.clear();
+    if (rawSlots is List && rawSlots.isNotEmpty) {
+      // Show only first 6 slots in the preview card; all slots in AllSlotsView
+      final preview = rawSlots.map((e) => e.toString()).toList();
+      timeSlots.assignAll(preview);
     } else {
-      final List<String> generated = [];
-      const startMinutes = 9 * 60;
-      const interval = 30;
-
-      for (int i = 0; i < slots && i < 8; i++) {
-        final totalMinutes = startMinutes + (i * interval);
-        final hour = totalMinutes ~/ 60;
-        final minute = totalMinutes % 60;
-        final isPM = hour >= 12;
-        final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-        generated.add(
-          "${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} ${isPM ? 'PM' : 'AM'}",
-        );
-      }
-      timeSlots.assignAll(generated);
+      timeSlots.clear();
     }
   }
 
-  // ===== BOOK APPOINTMENT =====
-  void bookAppointment() {
-    if (selectedSlot.value.isEmpty) {
-      Get.snackbar(
-        "Select a Slot",
-        "Please select a time slot to book appointment",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: const Color(0xFFF3F4F6),
-        colorText: Colors.black,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12,
-      );
-      return;
+  // ===== FETCH DOCTOR PROFILE FROM API =====
+  Future<void> fetchDoctorProfile() async {
+    isLoading.value = true;
+
+    // Get doctor id passed from SelectDoctorController via Get.arguments
+    final args = Get.arguments;
+    final String doctorId = args?['id']?.toString() ?? '';
+    final Map<String, String> params = {
+      'practitioner': "HLC-PRAC-2026-00002",
+    };
+    ApiResponse response = await api.commonApi.doctorConsultApi
+        .getDoctorProfile(queryParams: params);
+    isLoading.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      final data = messageData["data"] as Map<String, dynamic>;
+      _mapDoctorProfile(data);
+    } else {
+      showError(messageData["message"] ?? "Failed to fetch doctor profile");
     }
-    Get.snackbar(
-      "Appointment Booked!",
-      "Confirmed for ${dates[selectedDateIndex.value]["date"]} at ${selectedSlot.value}",
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: const Color(0xFF0D9488),
-      colorText: Colors.white,
-      margin: const EdgeInsets.all(16),
-      borderRadius: 12,
-    );
+  }
+
+  Future<void> _mapDoctorProfile(Map<String, dynamic> data) async {
+    doctorName.value = data['name']?.toString() ?? '';
+    doctorDegree.value = data['degree']?.toString() ?? '';
+    doctorSpecialty.value = data['specialty']?.toString() ?? '';
+    doctorExperience.value = data['experience']?.toString() ?? '';
+    doctorRating.value = (data['rating'] as num?)?.toDouble() ?? 0.0;
+    reviewCount.value = (data['review_count'] as int?) ?? 0;
+    fees.value = (data['fees'] as int?) ?? 0;
+    reviewStatus.value = (data['review_status'] as int?) ?? 0;
+    doctorImage.value = data['image']?.toString() ?? '';
+    clinicName.value = data['clinic_name']?.toString() ?? '';
+    waitTime.value = (data['wait_time'] as int?) ?? 0;
+    latitude.value = (data['latitude'] as num?)?.toDouble() ?? 0.0;
+    longitude.value = (data['longitude'] as num?)?.toDouble() ?? 0.0;
+
+    // Address
+    final addr = data['address'] as Map<String, dynamic>?;
+    if (addr != null) {
+      final parts = [
+        addr['address_line1']?.toString() ?? '',
+        addr['address_line2']?.toString() ?? '',
+        addr['city']?.toString() ?? '',
+      ].where((s) => s.isNotEmpty).toList();
+      address.value = parts.join(', ');
+    }
+    final authStorage = AuthStorageService();
+    final datas = await authStorage.getUserDetail();
+    final String fullName = datas?['full_name']?.toString() ?? '';
+
+    // Reviews
+    final rawReviews = data['reviews'] as List<dynamic>? ?? [];
+    reviews.assignAll(rawReviews
+        .map((r) => {
+              'reviewer_name': fullName == r['reviewer_name']?.toString()
+                  ? "You"
+                  : r['reviewer_name']?.toString() ?? '',
+              'initials': r['initials']?.toString() ?? '',
+              'rating': (r['rating'] as num?)?.toDouble() ?? 0.0,
+              'review_text': r['review_text']?.toString() ?? '',
+              'relative_date': r['relative_date']?.toString() ?? '',
+            })
+        .toList());
+
+    // Services & specializations
+    services.assignAll(
+        (data['services'] as List<dynamic>? ?? []).map((e) => e.toString()));
+    specializations.assignAll((data['specializations'] as List<dynamic>? ?? [])
+        .map((e) => e.toString()));
+    clinicPhotos.assignAll((data['clinic_photos'] as List<dynamic>? ?? [])
+        .map((e) => e.toString()));
+
+    // Available slots
+    _availableSlots = (data['available_slots'] as List<dynamic>? ?? [])
+        .map((e) => e as Map<String, dynamic>)
+        .toList();
+
+    // Set current month from first available slot date
+    if (_availableSlots.isNotEmpty) {
+      final firstDate =
+          DateTime.tryParse(_availableSlots[0]['date']?.toString() ?? '');
+      if (firstDate != null) {
+        _currentMonth = DateTime(firstDate.year, firstDate.month);
+      }
+    }
+
+    _updateMonthLabel();
+    _populateDatesFromSlots();
   }
 
   @override
   void onInit() {
     super.onInit();
-    _generateDates();
+    fetchDoctorProfile();
   }
 }

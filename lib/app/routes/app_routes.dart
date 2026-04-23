@@ -57,6 +57,7 @@ abstract class Routes {
   static const LAB_TESTS = '/lab-tests';
   static const LAB_NEAR_YOU = '/labs-near-you';
   static const LAB_DETAILS = '/lab-details';
+  static const ALL_REVIEW = '/all-reviews';
   static const CANCER_THROAT_ASSESSMENT = '/cancer-throat-assessment';
 
   // Doctor

@@ -13,6 +13,7 @@ import 'package:sample/app/patient/cancer_throat_assessment%20/bindings/cancer_t
 import 'package:sample/app/patient/cancer_throat_assessment%20/views/cancer_throat_assessment_view.dart';
 import 'package:sample/app/patient/pre_scan_questions/bindings/pre_scan_questions_binding.dart';
 import 'package:sample/app/patient/pre_scan_questions/views/pre_scan_questions_view.dart';
+import 'package:sample/app/patient/profile_details/views/all_review.dart';
 import 'package:sample/app/patient/scan_select_profile/bindings/scan_select_profile_binding.dart';
 import 'package:sample/app/patient/scan_select_profile/views/scan_select_profile_view.dart';
 
@@ -416,6 +417,11 @@ class AppPages {
       name: '/edit-profile',
       page: () => const EditProfileSectionsView(),
       binding: EditProfileBinding(),
+    ),
+
+    GetPage(
+      name: '/all-reviews',
+      page: () => const AllReviewsView(),
     ),
 
     GetPage(
