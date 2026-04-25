@@ -4,7 +4,7 @@ enum UserRole {
   patient,
   doctor,
   partner,
-  counsellor,
+  coach,
   corporate,
 }
 
@@ -19,4 +19,7 @@ class RoleController extends GetxController {
 
   bool get isPatient => role == UserRole.patient;
   bool get isDoctor => role == UserRole.doctor;
+  bool get ispartner => role == UserRole.partner;
+  bool get iscorporate => role == UserRole.corporate;
+  bool get iscoach => role == UserRole.coach;
 }

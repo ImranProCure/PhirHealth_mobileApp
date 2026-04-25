@@ -86,7 +86,8 @@ class _Header extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: isTablet ? 30 : 24,
-                      backgroundImage: NetworkImage("${ApiConstants.baseUrl}$image"),
+                      backgroundImage:
+                          NetworkImage("${ApiConstants.baseUrl}$image"),
                     ),
                     const SizedBox(width: 12),
                     Text(
@@ -148,7 +149,7 @@ class _DoctorActionsSection extends StatelessWidget {
                 crossAxisCount: 3,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 10,
-                childAspectRatio: 1.05,
+                childAspectRatio: 0.9,
               ),
               itemBuilder: (context, index) {
                 final action = controller.doctorActions[index];

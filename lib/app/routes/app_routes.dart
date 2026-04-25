@@ -82,4 +82,27 @@ abstract class Routes {
   static const PRE_SCAN_QUESTIONS = '/pre-scan-questions';
   static const CANCER_GENERAL_ASSESSMENT = '/cancer-general-assessment';
   static const CANCER_OTHER_ASSESSMENT = '/cancer-other-assessment';
+  static const SELECT_FACILITY_TYPE = '/select-facility-type';
+  static const BASIC_INFO = '/basic-info';
+  static const CAPABILITIES = '/capabilities';
+  static const OPERATION_TECH = '/operation-tech';
+  static const VERIFICATION_DETAILS = '/verification-details';
+  static const PHARMACY_REGISTRATION = '/pharmacy-registration';
+  static const INVENTORY_OFFERINGS = '/inventory-offerings';
+  static const LOGISTICS_INTEGRATION = '/logistics-integration';
+  static const LEGAL_COMPLIANCE = '/legal-compliance';
+  static const BASIC_INFORMATION = '/basic-information';
+  static const HOSPITAL_LEGAL_COMPLIANCE = '/hospital-legal-compliance';
+  static const CLINICAL_CAPACITY = '/clinical-capacity';
+  static const RESOURCE_ALLOCATION = '/resource-allocation';
+  static const CORPORATE_STEP1 = '/corporate-step1';
+  static const CORPORATE_STEP2 = '/corporate-step2';
+  static const CORPORATE_STEP3 = '/corporate-step3';
+  static const CORPORATE_STEP4 = '/corporate-step4';
+  static const COACH_STEP1 = '/coach-step1';
+  static const COACH_STEP2 = '/coach-step2';
+  static const COACH_STEP3 = '/coach-step3';
+  static const COACH_STEP4 = '/coach-step4';
+  static const COACH_STEP5 = '/coach-step5';
+  static const COACH_STEP6 = '/coach-step6';
 }

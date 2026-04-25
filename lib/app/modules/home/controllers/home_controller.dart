@@ -37,7 +37,7 @@ class HomeController extends GetxController {
       "icon": Icons.chat_bubble_outline,
       "title": "Coaches / Counsellors",
       "subtitle": "Guide your clients towards wellness.",
-      "role": UserRole.counsellor,
+      "role": UserRole.coach,
     },
     {
       "icon": Icons.business_center_outlined,
@@ -51,14 +51,20 @@ class HomeController extends GetxController {
   /// ROLE SELECTION HANDLER
   /// =========================
   void onRoleSelected(UserRole role) {
-    /// 1️⃣ Store selected role globally
+    /// 1️⃣ Store role
     _roleController.selectRole(role);
 
-    /// 2️⃣ Navigate to common Login Screen
-    Get.to(
-      () => const LoginView(),
-      binding: LoginBinding(),
-      transition: Transition.rightToLeft,
-    );
+    /// 2️⃣ Handle flow
+    if (role == UserRole.partner) {
+      /// 👉 Collaborator flow
+      Get.toNamed('/select-facility-type');
+    } else {
+      /// 👉 Normal flow (patient, doctor, etc.)
+      Get.to(
+        () => const LoginView(),
+        binding: LoginBinding(),
+        transition: Transition.rightToLeft,
+      );
+    }
   }
 }

@@ -1,6 +1,60 @@
 import 'package:get/get.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/bindings/doctor_edit_clinic_binding.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/views/doctor_edit_clinic_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step1/bindings/coach_step1_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step1/views/coach_step1_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step2/bindings/coach_step2_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step2/views/coach_step2_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step3/bindings/coach_step3_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step3/views/coach_step3_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step4/bindings/coach_step4_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step4/views/coach_step4_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step5/bindings/coach_step5_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step5/views/coach_step5_view.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step6/bindings/coach_step6_binding.dart';
+import 'package:sample/app/coaches/coaches_registration/coach_step6/views/coach_step6_view.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step1/bindings/corporate_step1_binding.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step1/views/corporate_step1_view.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step2/bindings/corporate_step2_binding.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step2/views/corporate_step2_view.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step3/bindings/corporate_step3_binding.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step3/views/corporate_step3_view.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step4/bindings/corporate_step4_binding.dart';
+import 'package:sample/app/corporate/corporate_registration/corporate_step4/views/corporate_step4_view.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/bindings/clinic_expertise_binding.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/views/clinic_expertise_view.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_legal_compliance/bindings/clinic_legal_compliance_binding.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_legal_compliance/views/clinic_legal_compliance_view.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_registration/bindings/clinic_registration_binding.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_registration/views/clinic_registration_view.dart';
+import 'package:sample/app/partner/clinic_onboarding/operations_appointments/bindings/operations_appointments_binding.dart';
+import 'package:sample/app/partner/clinic_onboarding/operations_appointments/views/operations_appointments_view.dart';
+import 'package:sample/app/partner/hospital_onboarding/basic_information/bindings/basic_information_binding.dart';
+import 'package:sample/app/partner/hospital_onboarding/basic_information/views/basic_information_view.dart';
+import 'package:sample/app/partner/hospital_onboarding/clinical_capacity/bindings/clinical_capacity_binding.dart';
+import 'package:sample/app/partner/hospital_onboarding/clinical_capacity/views/clinical_capacity_view.dart';
+import 'package:sample/app/partner/hospital_onboarding/hospital_legal_compliance/bindings/hospital_legal_compliance_binding.dart';
+import 'package:sample/app/partner/hospital_onboarding/hospital_legal_compliance/views/hospital_legal_compliance_view.dart';
+import 'package:sample/app/partner/hospital_onboarding/resource_allocation/bindings/resource_allocation_binding.dart';
+import 'package:sample/app/partner/hospital_onboarding/resource_allocation/views/resource_allocation_view.dart';
+import 'package:sample/app/partner/lab_onboarding/basic_info/bindings/basic_info_binding.dart';
+import 'package:sample/app/partner/lab_onboarding/basic_info/views/basic_info_view.dart';
+import 'package:sample/app/partner/lab_onboarding/capabilities/bindings/capabilities_binding.dart';
+import 'package:sample/app/partner/lab_onboarding/capabilities/views/capabilities_view.dart';
+import 'package:sample/app/partner/lab_onboarding/operation_tech/bindings/operation_tech_binding.dart';
+import 'package:sample/app/partner/lab_onboarding/operation_tech/views/operation_tech_view.dart';
+import 'package:sample/app/partner/lab_onboarding/verification_details/bindings/verification_details_binding.dart';
+import 'package:sample/app/partner/lab_onboarding/verification_details/views/verification_details_view.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/inventory_offerings%20/bindings/inventory_offerings_binding.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/inventory_offerings%20/views/inventory_offerings_view.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/legal_compliance/bindings/legal_compliance_binding.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/legal_compliance/views/legal_compliance_view.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/logistics_integration/bindings/logistics_integration_binding.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/logistics_integration/views/logistics_integration_view.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/bindings/pharmacy_registration_binding.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/views/pharmacy_registration_view.dart';
+import 'package:sample/app/partner/select_facility_type/bindings/select_facility_type_binding.dart';
+import 'package:sample/app/partner/select_facility_type/views/select_facility_type_view.dart';
 import 'package:sample/app/patient/cancer_general_assessment/bindings/cancer_general_assessment_binding.dart';
 import 'package:sample/app/patient/cancer_general_assessment/views/cancer_general_assessment_view.dart';
 import 'package:sample/app/patient/cancer_other_assessment/bindings/cancer_other_assessment_binding.dart';
@@ -675,5 +729,113 @@ class AppPages {
         name: '/cancer-other-assessment',
         page: () => const CancerotherAssessmentView(),
         binding: CancerotherAssessmentBinding()),
+    GetPage(
+        name: '/select-facility-type',
+        page: () => const SelectFacilityTypeView(),
+        binding: SelectFacilityTypeBinding()),
+    GetPage(
+        name: '/basic-info',
+        page: () => const BasicInfoView(),
+        binding: BasicInfoBinding()),
+    GetPage(
+        name: '/capabilities',
+        page: () => const CapabilitiesView(),
+        binding: CapabilitiesBinding()),
+    GetPage(
+        name: '/operation-tech',
+        page: () => const OperationTechView(),
+        binding: OperationTechBinding()),
+    GetPage(
+        name: '/verification-details',
+        page: () => const VerificationDetailsView(),
+        binding: VerificationDetailsBinding()),
+    GetPage(
+        name: '/pharmacy-registration',
+        page: () => const PharmacyRegistrationView(),
+        binding: PharmacyRegistrationBinding()),
+    GetPage(
+        name: '/inventory-offerings',
+        page: () => const InventoryOfferingsView(),
+        binding: InventoryOfferingsBinding()),
+    GetPage(
+        name: '/logistics-integration',
+        page: () => const LogisticsIntegrationView(),
+        binding: LogisticsIntegrationBinding()),
+    GetPage(
+        name: '/legal-compliance',
+        page: () => const LegalComplianceView(),
+        binding: LegalComplianceBinding()),
+    GetPage(
+        name: '/basic-information',
+        page: () => const BasicInformationView(),
+        binding: BasicInformationBinding()),
+    GetPage(
+        name: '/clinical-capacity',
+        page: () => const ClinicalCapacityView(),
+        binding: ClinicalCapacityBinding()),
+    GetPage(
+        name: '/resource-allocation',
+        page: () => const ResourceAllocationView(),
+        binding: ResourceAllocationBinding()),
+    GetPage(
+        name: '/hospital-legal-compliance',
+        page: () => const HospitalLegalComplianceView(),
+        binding: HospitalLegalComplianceBinding()),
+    GetPage(
+        name: '/clinic-registration',
+        page: () => const ClinicRegistrationView(),
+        binding: ClinicRegistrationBinding()),
+    GetPage(
+        name: '/clinic-expertise',
+        page: () => const ClinicExpertiseView(),
+        binding: ClinicExpertiseBinding()),
+    GetPage(
+        name: '/operation-appointment',
+        page: () => const OperationsAppointmentsView(),
+        binding: OperationsAppointmentsBinding()),
+    GetPage(
+        name: '/clinic-legal-compliance',
+        page: () => const ClinicLegalComplianceView(),
+        binding: ClinicLegalComplianceBinding()),
+    GetPage(
+        name: '/corporate-step1',
+        page: () => const CorporateStep1View(),
+        binding: CorporateStep1Binding()),
+    GetPage(
+        name: '/corporate-step2',
+        page: () => const CorporateStep2View(),
+        binding: CorporateStep2Binding()),
+    GetPage(
+        name: '/corporate-step3',
+        page: () => const CorporateStep3View(),
+        binding: CorporateStep3Binding()),
+    GetPage(
+        name: '/corporate-step4',
+        page: () => const CorporateStep4View(),
+        binding: CorporateStep4Binding()),
+    GetPage(
+        name: '/coach-step1',
+        page: () => const CoachStep1View(),
+        binding: CoachStep1Binding()),
+    GetPage(
+        name: '/coach-step2',
+        page: () => const CoachStep2View(),
+        binding: CoachStep2Binding()),
+    GetPage(
+        name: '/coach-step3',
+        page: () => const CoachStep3View(),
+        binding: CoachStep3Binding()),
+    GetPage(
+        name: '/coach-step4',
+        page: () => const CoachStep4View(),
+        binding: CoachStep4Binding()),
+    GetPage(
+        name: '/coach-step5',
+        page: () => const CoachStep5View(),
+        binding: CoachStep5Binding()),
+    GetPage(
+        name: '/coach-step6',
+        page: () => const CoachStep6View(),
+        binding: CoachStep6Binding()),
   ];
 }
