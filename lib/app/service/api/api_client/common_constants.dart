@@ -42,4 +42,10 @@ class CommonApiConstants {
 
   final reviewListApi =
       "/api/method/vhealthcare.api.patient.doctor_consult.review_list.get_review_list";
+
+  final relationListApi =
+      "/api/method/vhealthcare.api.patient.doctor_consult.get_patient_relation.get_patient_relations";
+
+  final relationAddApi =
+      "/api/method/vhealthcare.api.patient.doctor_consult.patient_details.add_member_patient";
 }

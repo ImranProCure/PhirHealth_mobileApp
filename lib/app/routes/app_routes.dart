@@ -20,10 +20,11 @@ abstract class Routes {
   //Counsellor
   static const COUNSELLOR_COACHES = '/counsellor-consult';
   static const SELECT_COUNSELLOR = '/counsellor-select';
-  static const COUNSELLOR_PROFILE_DETAILS = '/counsellor-profile';
+  static const COUNSELLOR_PROFILE_DETAILS = '/counsellor-profile'; 
 
   //Doctor Consult
   static const DOCTOR_CONSULT = '/doctor-consult';
+  static const SHORTS_REELS = '/shorts-reels';
   static const SELECT_DOCTOR = '/select-doctor';
   static const PROFILE_DETAILS = '/profile-details';
   static const ALL_SLOTS = '/all-slots';

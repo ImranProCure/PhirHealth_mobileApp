@@ -135,7 +135,7 @@ class _DoctorActionsSection extends StatelessWidget {
         children: [
           const _SectionTitle('Doctor & Quick Actions'),
           const SizedBox(height: 16),
-          
+
           // ── TABLET: horizontal two-column list ────────────
           if (isTablet)
             _buildTabletList()
@@ -611,7 +611,8 @@ class _BottomNav extends StatelessWidget {
         ],
       ),
       child: Obx(
-        () => Row(
+        () => // _BottomNav — add Health Shorts as index 4
+            Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _NavItem(
@@ -631,9 +632,14 @@ class _BottomNav extends StatelessWidget {
                 onTap: () => controller.selectNav(2)),
             _NavItem(
                 icon: "assets/account_circle.png",
-                label: 'My Profile',
+                label: 'Shorts',
                 isActive: controller.selectedNavIndex.value == 3,
                 onTap: () => controller.selectNav(3)),
+            _NavItem(
+                icon: "assets/account_circle.png",
+                label: 'My Profile',
+                isActive: controller.selectedNavIndex.value == 4,
+                onTap: () => controller.selectNav(4)),
           ],
         ),
       ),

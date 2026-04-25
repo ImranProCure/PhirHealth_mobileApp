@@ -55,6 +55,7 @@ import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/bin
 import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/views/pharmacy_registration_view.dart';
 import 'package:sample/app/partner/select_facility_type/bindings/select_facility_type_binding.dart';
 import 'package:sample/app/partner/select_facility_type/views/select_facility_type_view.dart';
+import 'package:sample/app/patient/Dashboard/views/health_shorts.dart';
 import 'package:sample/app/patient/cancer_general_assessment/bindings/cancer_general_assessment_binding.dart';
 import 'package:sample/app/patient/cancer_general_assessment/views/cancer_general_assessment_view.dart';
 import 'package:sample/app/patient/cancer_other_assessment/bindings/cancer_other_assessment_binding.dart';
@@ -305,6 +306,12 @@ class AppPages {
     GetPage(
       name: Routes.DASHBOARD,
       page: () => const DashboardView(),
+      binding: DashboardBinding(),
+    ),
+
+    GetPage(
+      name: Routes.SHORTS_REELS,
+      page: () => const HealthShortsPage(),
       binding: DashboardBinding(),
     ),
 

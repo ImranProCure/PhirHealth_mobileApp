@@ -62,7 +62,8 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          "${controller.selectedDate} ${controller.selectedSlot}",
+                          "${controller.selectedDate} | ${controller.selectedSlot}",
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 18,
@@ -251,57 +252,6 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
       ),
       alignment: Alignment.center,
       child: const Icon(Icons.person, size: 40, color: Color(0xFF3730A3)),
-    );
-  }
-
-  // ===== APPOINTMENT TIME CARD =====
-  Widget _appointmentTimeCard() {
-    return _card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Icon(Icons.access_time_outlined,
-                  size: 16, color: Color(0xFF6B7280)),
-              SizedBox(width: 6),
-              Text(
-                "Appointment time",
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "${controller.selectedDate} ${controller.selectedSlot}",
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: const [
-              Icon(Icons.hourglass_bottom_outlined,
-                  size: 14, color: Color(0xFF6B7280)),
-              SizedBox(width: 6),
-              Text(
-                "in 2 hours and 53 minutes",
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 12,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 
@@ -720,7 +670,10 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Get.back(),
+                  onTap: () {
+                    Get.back();
+                    Get.back();
+                  },
                   child: const Text(
                     "CHANGE",
                     style: TextStyle(

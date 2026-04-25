@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
+import 'package:sample/app/service/api/api.dart';
+import 'package:sample/app/service/api/api_client/api_response.dart';
 
 class PatientDetailsController extends GetxController {
+  Api api = Api.instance;
+
   // ===== PATIENT SELECTION =====
-  final RxInt selectedPatientIndex = 0.obs; // default: Myself (index 0)
+  final RxInt selectedPatientIndex = 0.obs;
 
-  final RxList<Map<String, dynamic>> patients = <Map<String, dynamic>>[
-    {"relation": "Myself", "name": "Rahul"},
-    {"relation": "Father", "name": "Rakesh"},
-  ].obs;
-
-  void selectPatient(int index) {
-    selectedPatientIndex.value = index;
-  }
+  final RxList<Map<String, dynamic>> patients = <Map<String, dynamic>>[].obs;
+  final RxBool isPatientLoading = false.obs;
+  final RxBool isAddingMember = false.obs;
 
   // ===== RELATIONS =====
   final List<String> relations = [
-    'Father', 'Mother', 'Son', 'Daughter',
-    'Wife', 'Husband', 'Brother', 'Sister',
-    'Grandfather', 'Grandmother', 'Other',
+    'Father',
+    'Mother',
+    'Spouse',
+    'Siblings',
+    'Family',
+    'Other',
   ];
 
   final List<String> genders = ['Male', 'Female', 'Other'];
 
-  final List<String> symptoms = [
-    'Fever', 'Stomach Pain', 'Loose Motion', 'Cold/Cough', 'Headache',
-  ];
+  final RxList<String> symptoms = <String>[].obs;
+  final RxBool isSymptomsLoading = false.obs;
 
   // ===== BOTTOM SHEET FORM FIELDS =====
   final sheetNameController = TextEditingController();
@@ -37,6 +39,83 @@ class PatientDetailsController extends GetxController {
   final RxString sheetSelectedGender = 'Male'.obs;
   final RxList<String> sheetSelectedSymptoms = <String>[].obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    fetchPatientRelationsApi();
+    fetchSymptomsApi(); // ← ADD THIS
+  }
+
+// ================= FETCH SYMPTOMS FROM API =================
+  Future<void> fetchSymptomsApi() async {
+    isSymptomsLoading.value = true;
+    ApiResponse response =
+        await api.commonApi.authenticationApi.getMedicalSymptoms();
+    isSymptomsLoading.value = false;
+
+    final messageData = response.data['message'];
+    if (messageData["status"] == true) {
+      final List<dynamic> data = messageData["data"] as List<dynamic>;
+      symptoms.assignAll(data.map((e) => e['name'].toString()));
+    } else {
+      showError(messageData["message"] ?? "Failed to fetch symptoms");
+    }
+  }
+
+  void showAddMemberSheet(BuildContext context) {
+    resetSheetForm();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => PatientFormBottomSheet(controller: this), // ← public now
+    );
+  }
+
+// ================= FETCH PATIENT RELATIONS FROM API =================
+  Future<void> fetchPatientRelationsApi({bool resetSelection = true}) async {
+    // ← ADD param
+    isPatientLoading.value = true;
+
+    ApiResponse response =
+        await api.commonApi.doctorConsultApi.getPatientRelations();
+    isPatientLoading.value = false;
+
+    final messageData = response.data['message'];
+
+    if (messageData["status"] == true) {
+      final List<dynamic> relations =
+          messageData["data"]["relations"] as List<dynamic>;
+
+      final fetchedPatients = relations.map(_mapPatient).toList();
+      patients.assignAll(fetchedPatients);
+
+      // ← Only auto-select on first load, NOT after adding a member
+      if (resetSelection) {
+        final myselfIndex =
+            patients.indexWhere((p) => p['relation'] == 'Myself');
+        selectedPatientIndex.value = myselfIndex >= 0 ? myselfIndex : 0;
+      }
+    } else {
+      showError(messageData["message"] ?? "Failed to fetch patient relations");
+    }
+  }
+
+  Map<String, dynamic> _mapPatient(dynamic e) => {
+        "patient_id": e['patient_id']?.toString() ?? '',
+        "relation": e['relation']?.toString() ?? '',
+        "name": e['patient_name']?.toString() ?? '',
+        "mobile": e['mobile']?.toString() ?? '',
+        "email": e['email']?.toString() ?? '',
+        "gender": e['gender']?.toString() ?? '',
+      };
+
+  // ===== PATIENT SELECTION =====
+  void selectPatient(int index) {
+    selectedPatientIndex.value = index;
+  }
+
+  // ===== SYMPTOM TOGGLE =====
   void toggleSheetSymptom(String symptom) {
     if (sheetSelectedSymptoms.contains(symptom)) {
       sheetSelectedSymptoms.remove(symptom);
@@ -45,6 +124,7 @@ class PatientDetailsController extends GetxController {
     }
   }
 
+  // ===== RESET FORM =====
   void resetSheetForm() {
     sheetNameController.clear();
     sheetAgeController.clear();
@@ -55,41 +135,60 @@ class PatientDetailsController extends GetxController {
     sheetSelectedSymptoms.clear();
   }
 
-  void addPatientFromSheet() {
+  // ================= ADD MEMBER — POST API =================
+  Future<void> addPatientFromSheet() async {
     final name = sheetNameController.text.trim();
-    if (name.isNotEmpty) {
-      patients.add({
-        "relation": sheetSelectedRelation.value,
-        "name": name,
-        "age": sheetAgeController.text.trim(),
-        "gender": sheetSelectedGender.value,
-        "phone": sheetPhoneController.text.trim(),
-        "symptoms": List<String>.from(sheetSelectedSymptoms),
-        "allergies": sheetAllergiesController.text.trim(),
-      });
-      selectedPatientIndex.value = patients.length - 1;
-      Get.back();
-    }
-  }
+    final phone = sheetPhoneController.text.trim();
 
-  void showAddMemberSheet(BuildContext context) {
-    resetSheetForm();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _PatientFormBottomSheet(controller: this),
-    );
+    if (name.isEmpty) {
+      showError("Please enter the patient's name");
+      return;
+    }
+    if (phone.isEmpty || phone.length < 10) {
+      showError("Please enter a valid 10-digit mobile number");
+      return;
+    }
+
+    isAddingMember.value = true;
+
+    final Map<String, dynamic> body = {
+      "patient_name": name,
+      "gender": sheetSelectedGender.value,
+      "mobile": phone,
+      "relation": sheetSelectedRelation.value,
+      "age": sheetAgeController.text.trim(),
+      "allergies": sheetAllergiesController.text.trim(),
+      "common_symptoms": sheetSelectedSymptoms.toList(),
+    };
+
+    ApiResponse response =
+        await api.commonApi.doctorConsultApi.addPatientRelation(body);
+    isAddingMember.value = false;
+
+    final messageData = response.data['message'];
+
+  if (messageData["status"] == true) {
+  Get.back();
+  await fetchPatientRelationsApi(resetSelection: false); // ← CHANGED
+} else {
+  showError(messageData["message"] ?? "Failed to add member");
+}
   }
 
   // ===== NEXT STEP =====
   void goToNext() {
+    if (patients.isEmpty) {
+      showError("No patient selected");
+      return;
+    }
+    final selected = patients[selectedPatientIndex.value];
     Get.toNamed('/booking-confirmation', arguments: {
       'date': Get.arguments?['date'] ?? '',
       'slot': Get.arguments?['slot'] ?? '',
       'tabType': Get.arguments?['tabType'] ?? 0,
       'data': Get.arguments?['data'] ?? 0,
-      'patientName': patients[selectedPatientIndex.value]['name'] ?? '',
+      'patientName': selected['name'] ?? '',
+      'patientId': selected['patient_id'] ?? '',
     });
   }
 
@@ -106,9 +205,9 @@ class PatientDetailsController extends GetxController {
 // ===================================================
 // BOTTOM SHEET — Full Patient Info Form
 // ===================================================
-class _PatientFormBottomSheet extends StatelessWidget {
+class PatientFormBottomSheet extends StatelessWidget {
   final PatientDetailsController controller;
-  const _PatientFormBottomSheet({required this.controller});
+  const PatientFormBottomSheet({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +304,6 @@ class _PatientFormBottomSheet extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   // Relation
                   _label("Relation"),
                   const SizedBox(height: 10),
@@ -329,9 +427,10 @@ class _PatientFormBottomSheet extends StatelessWidget {
                                           ))
                                       .toList(),
                                   onChanged: (val) {
-                                    if (val != null)
+                                    if (val != null) {
                                       controller.sheetSelectedGender.value =
                                           val;
+                                    }
                                   },
                                 )),
                           ],
@@ -390,70 +489,84 @@ class _PatientFormBottomSheet extends StatelessWidget {
                   // Symptoms
                   _label("Common Symptoms"),
                   const SizedBox(height: 10),
-                  Obx(() => Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: controller.symptoms.map((s) {
-                          final isSel =
-                              controller.sheetSelectedSymptoms.contains(s);
-                          return GestureDetector(
-                            onTap: () => controller.toggleSheetSymptom(s),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 150),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
+                  // In PatientFormBottomSheet build(), replace the symptoms Obx block:
+                  Obx(() {
+                    if (controller.isSymptomsLoading.value) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF0D9488),
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      );
+                    }
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: controller.symptoms.map((s) {
+                        final isSel =
+                            controller.sheetSelectedSymptoms.contains(s);
+                        return GestureDetector(
+                          onTap: () => controller.toggleSheetSymptom(s),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: isSel
+                                  ? const Color(0xFF0D9488).withOpacity(0.08)
+                                  : const Color(0xFFF9FAFB),
+                              border: Border.all(
                                 color: isSel
-                                    ? const Color(0xFF0D9488).withOpacity(0.08)
-                                    : const Color(0xFFF9FAFB),
-                                border: Border.all(
-                                  color: isSel
-                                      ? const Color(0xFF0D9488)
-                                      : const Color(0xFFE5E7EB),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    width: 16,
-                                    height: 16,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: isSel
-                                          ? const Color(0xFF0D9488)
-                                          : Colors.transparent,
-                                      border: Border.all(
-                                        color: isSel
-                                            ? const Color(0xFF0D9488)
-                                            : const Color(0xFFD1D5DB),
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    child: isSel
-                                        ? const Icon(Icons.check,
-                                            size: 10, color: Colors.white)
-                                        : null,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    s,
-                                    style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: isSel
-                                          ? const Color(0xFF0D9488)
-                                          : Colors.black87,
-                                    ),
-                                  ),
-                                ],
+                                    ? const Color(0xFF0D9488)
+                                    : const Color(0xFFE5E7EB),
                               ),
                             ),
-                          );
-                        }).toList(),
-                      )),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isSel
+                                        ? const Color(0xFF0D9488)
+                                        : Colors.transparent,
+                                    border: Border.all(
+                                      color: isSel
+                                          ? const Color(0xFF0D9488)
+                                          : const Color(0xFFD1D5DB),
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: isSel
+                                      ? const Icon(Icons.check,
+                                          size: 10, color: Colors.white)
+                                      : null,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  s,
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: isSel
+                                        ? const Color(0xFF0D9488)
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }),
 
                   const SizedBox(height: 20),
 
@@ -535,15 +648,25 @@ class _PatientFormBottomSheet extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            child: const Text(
-                              "Add Member",
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
+                            // ---- Loading indicator while posting ----
+                            child: Obx(() => controller.isAddingMember.value
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Text(
+                                    "Add Member",
+                                    style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  )),
                           ),
                         ),
                       ),

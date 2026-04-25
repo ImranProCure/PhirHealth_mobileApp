@@ -22,7 +22,14 @@ class DoctorConsultApi {
     );
   }
 
-  Future<ApiResponse> getSpecialities() async {
+  Future<ApiResponse> getPatientRelations() async {
+    return await _client.get(
+      ApiConstants.commonApiConstants.relationListApi,
+      authenticated: true,
+    );
+  }
+
+   Future<ApiResponse> getSpecialities() async {
     return await _client.get(
       ApiConstants.commonApiConstants.specialistList,
       authenticated: true,
@@ -35,6 +42,15 @@ class DoctorConsultApi {
       queryParameters: queryParams,
       authenticated: true,
     );
+  }
+
+   Future<ApiResponse> addPatientRelation(data) async {
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.relationAddApi,
+      data: data,
+      authenticated: true,
+    );
+    return response;
   }
 
   Future<ApiResponse> submitReview(data) async {

@@ -26,6 +26,11 @@ dev_dependencies:
   shared_preferences: ^2.5.3
   intl: ^0.19.0
   webview_flutter: ^4.4.2
+  video_player: ^2.8.3
+  chewie: ^1.7.4
+  youtube_player_flutter: ^8.1.2
+  flutter_inappwebview: ^6.1.5 
+
 
 
 
