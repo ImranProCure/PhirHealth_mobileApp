@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/patient_details_controller.dart';
-import 'package:flutter/services.dart';
 
 class PatientDetailsView extends GetView<PatientDetailsController> {
   const PatientDetailsView({super.key});
@@ -39,259 +38,79 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
-              child: Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    )
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // ===== WHO IS PATIENT =====
-                    const Text(
-                      "Who is the patient?",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Patient cards — horizontal scroll for dynamic members
-                    Obx(() => SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              ...List.generate(
-                                controller.patients.length,
-                                (i) => _patientCard(
-                                  relation: controller.patients[i]["relation"],
-                                  name: controller.patients[i]["name"],
-                                  isSelected:
-                                      controller.selectedPatientIndex.value ==
-                                          i,
-                                  onTap: () => controller.selectPatient(i),
-                                ),
-                              ),
-                              _addMemberCard(),
-                            ],
-                          ),
-                        )),
-
-                    const SizedBox(height: 24),
-
-                    // ===== ADD NEW MEMBER FORM =====
-                    const Text(
-                      "Add new member",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    _fieldLabel("Full Name"),
-                    const SizedBox(height: 8),
-                    _inputField(
-                      ctrl: controller.nameController,
-                      hint: "Rahul Verma",
-                    ),
-                    const SizedBox(height: 14),
-
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _fieldLabel("Age"),
-                              const SizedBox(height: 8),
-                              TextField(
-                                controller: controller.ageController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(3),
-                                ],
-                                style: const TextStyle(
-                                    fontFamily: 'Mulish', fontSize: 14),
-                                decoration: InputDecoration(
-                                  hintText: "28",
-                                  hintStyle: const TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 14,
-                                    color: Color(0xFF9CA3AF),
-                                  ),
-                                  suffixText: "Yrs",
-                                  suffixStyle: const TextStyle(
-                                    fontFamily: 'Mulish',
-                                    fontSize: 14,
-                                    color: Color(0xFF6B7280),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 14),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                        color: Color(0xFFE5E7EB)),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                        color: Color(0xFFE5E7EB)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                        color: Color(0xFF0D9488), width: 1.5),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _fieldLabel("Gender"),
-                              const SizedBox(height: 8),
-                              Obx(() => DropdownButtonFormField<String>(
-                                    value: controller.selectedGender.value,
-                                    style: const TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 14, vertical: 14),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                            color: Color(0xFFE5E7EB)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                            color: Color(0xFFE5E7EB)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                            color: Color(0xFF0D9488),
-                                            width: 1.5),
-                                      ),
-                                    ),
-                                    items: controller.genders
-                                        .map((g) => DropdownMenuItem(
-                                              value: g,
-                                              child: Text(g,
-                                                  style: const TextStyle(
-                                                      fontFamily: 'Mulish')),
-                                            ))
-                                        .toList(),
-                                    onChanged: (val) {
-                                      if (val != null)
-                                        controller.selectedGender.value = val;
-                                    },
-                                  )),
-                            ],
-                          ),
+              child: Column(
+                children: [
+                  // ===== WHO IS PATIENT — GRID =====
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Who is the patient?",
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          "Only one member can be selected at a time",
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 12,
+                            color: Color(0xFF9CA3AF),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
 
-                    _fieldLabel("Mobile Number"),
-                    const SizedBox(height: 8),
-                    _mobileField(),
-                    const SizedBox(height: 24),
-
-                    // ===== COMMON SYMPTOMS =====
-                    const Text(
-                      "Common Symptoms",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                        // ---- Grid of patient cards ----
+                        Obx(() {
+                          final itemCount = controller.patients.length + 1; // +1 for Add card
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.85,
+                            ),
+                            itemCount: itemCount,
+                            itemBuilder: (context, i) {
+                              // Last cell = Add Member card
+                              if (i == controller.patients.length) {
+                                return _addMemberCard(context);
+                              }
+                              final patient = controller.patients[i];
+                              return _patientCard(
+                                relation: patient["relation"] ?? "",
+                                name: patient["name"] ?? "",
+                                isSelected:
+                                    controller.selectedPatientIndex.value == i,
+                                onTap: () => controller.selectPatient(i),
+                              );
+                            },
+                          );
+                        }),
+                      ],
                     ),
-                    const SizedBox(height: 14),
-
-                    Obx(() => Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: controller.symptoms
-                              .map((s) => _symptomChip(s))
-                              .toList(),
-                        )),
-
-                    const SizedBox(height: 24),
-
-                    // ===== ALLERGIES =====
-                    const Text(
-                      "Allergies",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: controller.allergiesController,
-                      maxLines: 4,
-                      style:
-                          const TextStyle(fontFamily: 'Mulish', fontSize: 13),
-                      decoration: InputDecoration(
-                        hintText:
-                            "List any past procedures or hospital stays...",
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 13,
-                          color: Color(0xFF9CA3AF),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.all(14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFE5E7EB)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFE5E7EB)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Color(0xFF0D9488), width: 1.5),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -351,43 +170,91 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 100,
-        height: 122,
-        margin: const EdgeInsets.only(right: 10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected
+              ? const Color(0xFF0D9488).withOpacity(0.07)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color:
-                isSelected ? const Color(0xFF0D9488) : const Color(0xFFE5E7EB),
-            width: 1,
+            color: isSelected
+                ? const Color(0xFF0D9488)
+                : const Color(0xFFE5E7EB),
+            width: isSelected ? 1.5 : 1,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Icon(
-              Icons.account_circle_outlined,
-              size: 38,
-              color: isSelected ? const Color(0xFF0D9488) : Colors.black45,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              relation,
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: isSelected ? const Color(0xFF0D9488) : Colors.black,
+            // Selected tick badge
+            if (isSelected)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF0D9488),
+                  ),
+                  child: const Icon(Icons.check, size: 11, color: Colors.white),
+                ),
               ),
-            ),
-            Text(
-              name,
-              style: const TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 12,
-                color: Color(0xFF6B7280),
+
+            // Card content
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isSelected
+                            ? const Color(0xFF0D9488).withOpacity(0.12)
+                            : const Color(0xFFF3F4F6),
+                      ),
+                      child: Icon(
+                        Icons.account_circle_outlined,
+                        size: 28,
+                        color: isSelected
+                            ? const Color(0xFF0D9488)
+                            : const Color(0xFF9CA3AF),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      relation,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: isSelected
+                            ? const Color(0xFF0D9488)
+                            : Colors.black87,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 11,
+                        color: Color(0xFF6B7280),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -397,270 +264,59 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
   }
 
   // ===== ADD MEMBER CARD =====
-  Widget _addMemberCard() {
+  Widget _addMemberCard(BuildContext context) {
     return GestureDetector(
-      onTap: controller.showAddMemberDialog,
+      onTap: () => controller.showAddMemberSheet(context),
       child: Container(
-        width: 100,
-        height: 122,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE5E7EB)),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFF0D9488).withOpacity(0.4),
+            width: 1.5,
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color(0xFF0D9488),
-                  width: 1.5,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFF0D9488).withOpacity(0.09),
+                  border: Border.all(
+                    color: const Color(0xFF0D9488),
+                    width: 1.5,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.add,
+                  size: 20,
+                  color: Color(0xFF0D9488),
                 ),
               ),
-              child: const Icon(
-                Icons.add,
-                size: 20,
-                color: Color(0xFF0D9488),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "Add",
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF0D9488),
-              ),
-            ),
-            const Text(
-              "Member",
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 12,
-                color: Color(0xFF0D9488),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ===== FIELD LABEL =====
-  Widget _fieldLabel(String label) {
-    return Text(
-      label,
-      style: const TextStyle(
-        fontFamily: 'Mulish',
-        fontSize: 13,
-        color: Color(0xFF374151),
-      ),
-    );
-  }
-
-  // ===== INPUT FIELD =====
-  Widget _inputField({
-    required TextEditingController ctrl,
-    required String hint,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextField(
-      controller: ctrl,
-      keyboardType: keyboardType,
-      style: const TextStyle(fontFamily: 'Mulish', fontSize: 14),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(
-          fontFamily: 'Mulish',
-          fontSize: 14,
-          color: Color(0xFF9CA3AF),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF0D9488), width: 1.5),
-        ),
-      ),
-    );
-  }
-
-  // ===== GENDER DROPDOWN =====
-  Widget _genderDropdown() {
-    return DropdownButtonFormField<String>(
-      value: controller.selectedGender.value,
-      style: const TextStyle(
-        fontFamily: 'Mulish',
-        fontSize: 14,
-        color: Colors.black,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF0D9488), width: 1.5),
-        ),
-      ),
-      items: controller.genders
-          .map((g) => DropdownMenuItem(
-                value: g,
-                child: Text(g, style: const TextStyle(fontFamily: 'Mulish')),
-              ))
-          .toList(),
-      onChanged: (val) {
-        if (val != null) controller.selectedGender.value = val;
-      },
-    );
-  }
-
-  // ===== MOBILE FIELD =====
-  Widget _mobileField() {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: const Row(
-            children: [
-              Text("🇮🇳", style: TextStyle(fontSize: 16)),
-              SizedBox(width: 6),
-              Text(
-                "+91",
+              const SizedBox(height: 8),
+              const Text(
+                "Add",
                 style: TextStyle(
                   fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF0D9488),
+                ),
+              ),
+              const Text(
+                "Member",
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 11,
+                  color: Color(0xFF0D9488),
                 ),
               ),
             ],
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextField(
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-            ],
-            controller: controller.phoneController,
-            keyboardType: TextInputType.phone,
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-            decoration: InputDecoration(
-              hintText: "9876543210",
-              hintStyle: const TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                color: Color(0xFF9CA3AF),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide:
-                    const BorderSide(color: Color(0xFF0D9488), width: 1.5),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ===== SYMPTOM CHIP — clean no grey =====
-  Widget _symptomChip(String symptom) {
-    final isSelected = controller.selectedSymptoms.contains(symptom);
-    return GestureDetector(
-      onTap: () => controller.toggleSymptom(symptom),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: isSelected
-              ? const Color(0xFF0D9488).withOpacity(0.08)
-              : Colors.white,
-          border: Border.all(
-            color:
-                isSelected ? const Color(0xFF0D9488) : const Color(0xFFD1D5DB),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Clean circle — no grey fill
-            Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color:
-                    isSelected ? const Color(0xFF0D9488) : Colors.transparent,
-                border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF0D9488)
-                      : const Color(0xFFD1D5DB),
-                  width: 1.5,
-                ),
-              ),
-              child: isSelected
-                  ? const Icon(Icons.check, size: 12, color: Colors.white)
-                  : null,
-            ),
-            const SizedBox(width: 7),
-            Text(
-              symptom,
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? const Color(0xFF0D9488) : Colors.black87,
-              ),
-            ),
-          ],
         ),
       ),
     );

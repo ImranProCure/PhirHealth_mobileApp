@@ -31,6 +31,7 @@ class ProfileDetailsController extends GetxController {
 
   final RxList<Map<String, dynamic>> reviews = <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> allReviews = <Map<String, dynamic>>[].obs;
+  final RxMap doctorData = {}.obs;
   final RxList<String> services = <String>[].obs;
   final RxList<String> specializations = <String>[].obs;
   final RxList<String> clinicPhotos = <String>[].obs;
@@ -71,7 +72,7 @@ class ProfileDetailsController extends GetxController {
 
         final rawReviews =
             messageData['data']["reviews"] as List<dynamic>? ?? [];
-         total.value = messageData['data']["pagination"]["total"];
+        total.value = messageData['data']["pagination"]["total"];
 
         final mapped = rawReviews
             .map((r) => {
@@ -118,7 +119,7 @@ class ProfileDetailsController extends GetxController {
         arguments: {'tabType': selectedTab.value, 'type': 0});
   }
 
-  void goToPatientDetails() {
+  Future<void> goToPatientDetails() async {
     if (selectedSlot.value.isEmpty) {
       Get.snackbar(
         "Select a Slot",
@@ -132,18 +133,25 @@ class ProfileDetailsController extends GetxController {
       return;
     }
 
-    Get.toNamed('/booking-confirmation', arguments: {
-      'date': dates[selectedDateIndex.value]["fullDate"],
-      'slot': selectedSlot.value,
-      'tabType': selectedTab.value,
-      'patientName': 'Rahul Sharma',
-    });
+    final authStorage = AuthStorageService();
+    final userData = await authStorage.getUserDetail();
+    final String fullName = userData?['full_name']?.toString() ?? '';
 
-    // Get.toNamed(Routes.PATIENT_DETAILS, arguments: {
-    //   'tabType': tabType,
+    // Get.toNamed('/booking-confirmation', arguments: {
+    //   'date': dates[selectedDateIndex.value]["fullDate"],
     //   'slot': selectedSlot.value,
-    //   'date': selectedDateLabel.value,
+    //   'tabType': selectedTab.value,
+    //   'patientName': fullName,
+    //   'data': doctorData,
     // });
+
+    Get.toNamed(Routes.PATIENT_DETAILS, arguments: {
+      'tabType': selectedTab.value,
+      'slot': selectedSlot.value,
+      'date': dates[selectedDateIndex.value]["fullDate"],
+      'patientName': fullName,
+      'data': doctorData,
+    });
   }
 
   // ===== MONTH NAVIGATION =====
@@ -346,15 +354,16 @@ class ProfileDetailsController extends GetxController {
   }
 
   Future<void> _mapDoctorProfile(Map<String, dynamic> data) async {
+    doctorData.value = data;
     doctorName.value = data['name']?.toString() ?? '';
     doctorDegree.value = data['degree']?.toString() ?? '';
     doctorSpecialty.value = data['specialty']?.toString() ?? '';
     doctorExperience.value = data['experience']?.toString() ?? '';
     doctorRating.value = (data['rating'] as num?)?.toDouble() ?? 0.0;
     reviewCount.value = (data['review_count'] as int?) ?? 0;
+    doctorImage.value = data['image']?.toString() ?? '';
     fees.value = (data['fees'] as int?) ?? 0;
     reviewStatus.value = (data['review_status'] as int?) ?? 0;
-    doctorImage.value = data['image']?.toString() ?? '';
     clinicName.value = data['clinic_name']?.toString() ?? '';
     waitTime.value = (data['wait_time'] as int?) ?? 0;
     latitude.value = (data['latitude'] as num?)?.toDouble() ?? 0.0;

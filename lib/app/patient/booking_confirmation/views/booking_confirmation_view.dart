@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
 import '../controllers/booking_confirmation_controller.dart';
 
 class BookingConfirmationView extends GetView<BookingConfirmationController> {
@@ -10,6 +11,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -100,7 +102,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                                 size: 16, color: Color(0xFF0D9488)),
                             const SizedBox(width: 6),
                             Text(
-                              controller.slotTypeLabel,
+                              controller.clinicName.value,
                               style: const TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 14,
@@ -112,13 +114,13 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                         ),
                         const SizedBox(height: 12),
                         Row(
-                          children: const [
+                          children: [
                             Icon(Icons.location_on_outlined,
                                 size: 16, color: Color(0xFF6B7280)),
                             SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                "Rasoma Square, AB Rd, Vijay Nagar, Indore",
+                                controller.address.value,
                                 style: TextStyle(
                                   fontFamily: 'Mulish',
                                   fontSize: 13,
@@ -151,75 +153,104 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
     );
   }
 
-  // ===== DOCTOR CARD =====
+  // ================= DOCTOR CARD =================
   Widget _doctorCard() {
-    return _card(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  "assets/icons/freepik__female-doctor-in-white-coat-stethoscope-holding-cl__89801 1.png",
-                  height: 72,
-                  width: 72,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "Dr. Jyoti Wadhwani",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      "General Physician",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      "MBBS, MD - General Medicine",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 11,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.favorite_border,
-                  color: Colors.black45, size: 20),
-            ],
-          ),
-          const SizedBox(height: 14),
-          const Divider(color: Color(0xFFE5E7EB)),
-          const SizedBox(height: 10),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _InfoItem(Icons.work_outline, "15 Years Exp."),
-              _VDivider(),
-              _InfoItem(Icons.thumb_up_alt_outlined, "100%"),
-              _VDivider(),
-              _InfoItem(Icons.chat_bubble_outline, "5 Review"),
-            ],
-          ),
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          )
         ],
       ),
+      child: Obx(() => Column(
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: controller.doctorImage.value.isNotEmpty
+                        ? Image.network(
+                            ApiConstants.baseUrl + controller.doctorImage.value,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                _doctorImageFallback(),
+                          )
+                        : _doctorImageFallback(),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.doctorName.value,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          controller.doctorSpecialty.value,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 13,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          controller.doctorDegree.value,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 12,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //const Icon(Icons.favorite_border, color: Colors.black54),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _InfoItem(Icons.work_outline,
+                      "${controller.doctorExperience.value} Years Exp."),
+                  const _VerticalDivider(),
+                  _InfoItem(Icons.star,
+                      "${controller.doctorRating.value.toStringAsFixed(1)}"),
+                  const _VerticalDivider(),
+                  _InfoItem(Icons.chat_bubble_outline,
+                      "${controller.reviewCount.value} Review"),
+                ],
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _doctorImageFallback() {
+    return Container(
+      height: 80,
+      width: 80,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE0E7FF),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      alignment: Alignment.center,
+      child: const Icon(Icons.person, size: 40, color: Color(0xFF3730A3)),
     );
   }
 
@@ -328,7 +359,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            controller.slotTypeLabel,
+            "Payment Options",
             style: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 14,
@@ -360,7 +391,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "Pay Online",
                                   style: TextStyle(
@@ -371,7 +402,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                                 ),
                                 SizedBox(height: 2),
                                 Text(
-                                  "₹500",
+                                  "₹${controller.fees.value.toString()}",
                                   style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
@@ -409,7 +440,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "Wallet",
                                   style: TextStyle(
@@ -420,7 +451,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                                 ),
                                 SizedBox(height: 2),
                                 Text(
-                                  "₹500",
+                                  "₹${controller.fees.value.toString()}",
                                   style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
@@ -488,7 +519,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
           // Consultation fee
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 "Consultation Fee",
                 style: TextStyle(
@@ -498,7 +529,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 ),
               ),
               Text(
-                "₹500",
+                "₹${controller.fees.value.toString()}",
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 13,
@@ -510,76 +541,76 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
           const SizedBox(height: 10),
 
           // Services fee
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: const [
-                  Text(
-                    "Services Fee & Tax",
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                  SizedBox(width: 4),
-                  Icon(Icons.info_outline, size: 14, color: Color(0xFF9CA3AF)),
-                ],
-              ),
-              Row(
-                children: const [
-                  Text(
-                    "₹69 ",
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      color: Color(0xFF9CA3AF),
-                      decoration: TextDecoration.lineThrough,
-                    ),
-                  ),
-                  Text(
-                    "FREE",
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0D9488),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Row(
+          //       children: const [
+          //         Text(
+          //           "Services Fee & Tax",
+          //           style: TextStyle(
+          //             fontFamily: 'Mulish',
+          //             fontSize: 13,
+          //             color: Color(0xFF6B7280),
+          //           ),
+          //         ),
+          //         SizedBox(width: 4),
+          //         Icon(Icons.info_outline, size: 14, color: Color(0xFF9CA3AF)),
+          //       ],
+          //     ),
+          //     Row(
+          //       children: const [
+          //         Text(
+          //           "₹69 ",
+          //           style: TextStyle(
+          //             fontFamily: 'Mulish',
+          //             fontSize: 13,
+          //             color: Color(0xFF9CA3AF),
+          //             decoration: TextDecoration.lineThrough,
+          //           ),
+          //         ),
+          //         Text(
+          //           "FREE",
+          //           style: TextStyle(
+          //             fontFamily: 'Mulish',
+          //             fontSize: 13,
+          //             fontWeight: FontWeight.w700,
+          //             color: Color(0xFF0D9488),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 6),
 
-          const Text(
-            "We care for you & provide a free booking",
-            style: TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 11,
-              color: Color(0xFF0D9488),
-            ),
-          ),
+          // const Text(
+          //   "We care for you & provide a free booking",
+          //   style: TextStyle(
+          //     fontFamily: 'Mulish',
+          //     fontSize: 11,
+          //     color: Color(0xFF0D9488),
+          //   ),
+          // ),
 
-          const SizedBox(height: 12),
-          const Divider(color: Color(0xFFE5E7EB)),
-          const SizedBox(height: 12),
+          // const SizedBox(height: 12),
+          // const Divider(color: Color(0xFFE5E7EB)),
+          // const SizedBox(height: 12),
 
           // Total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                controller.appointmentType,
+                "Total",
                 style: const TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const Text(
-                "₹500",
+              Text(
+                "₹${controller.fees.value.toString()}",
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 14,
@@ -589,32 +620,32 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
             ],
           ),
 
-          const SizedBox(height: 12),
+          // const SizedBox(height: 12),
 
           // Saved amount
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE0F2F1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: const [
-                Text("🎉", style: TextStyle(fontSize: 14)),
-                SizedBox(width: 8),
-                Text(
-                  "You have saved ₹49 on this appointment",
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 12,
-                    color: Color(0xFF0D9488),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   width: double.infinity,
+          //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          //   decoration: BoxDecoration(
+          //     color: const Color(0xFFE0F2F1),
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   child: Row(
+          //     children: const [
+          //       Text("🎉", style: TextStyle(fontSize: 14)),
+          //       SizedBox(width: 8),
+          //       Text(
+          //         "You have saved ₹49 on this appointment",
+          //         style: TextStyle(
+          //           fontFamily: 'Mulish',
+          //           fontSize: 12,
+          //           color: Color(0xFF0D9488),
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -715,9 +746,9 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
-                      "₹500",
+                      "₹${controller.fees.value.toString()}",
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 18,
@@ -840,5 +871,14 @@ class _VDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(height: 20, width: 1, color: const Color(0xFFE5E7EB));
+  }
+}
+
+class _VerticalDivider extends StatelessWidget {
+  const _VerticalDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 22, width: 1, color: const Color(0xFFE5E7EB));
   }
 }
