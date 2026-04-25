@@ -623,17 +623,17 @@ class _BottomNav extends StatelessWidget {
             _NavItem(
                 icon: "assets/stethoscope.png",
                 label: 'Doctor',
-                isActive: controller.selectedNavIndex.value == 1,
+                isActive: false,
                 onTap: () => controller.selectNav(1)),
+            // _NavItem(
+            //     icon: "assets/article.png",
+            //     label: 'Policy',
+            //     isActive: controller.selectedNavIndex.value == 2,
+            //     onTap: () => controller.selectNav(2)),
             _NavItem(
-                icon: "assets/article.png",
-                label: 'Policy',
-                isActive: controller.selectedNavIndex.value == 2,
-                onTap: () => controller.selectNav(2)),
-            _NavItem(
-                icon: "assets/account_circle.png",
+                icon: "assets/duo.png",
                 label: 'Shorts',
-                isActive: controller.selectedNavIndex.value == 3,
+                isActive: false,
                 onTap: () => controller.selectNav(3)),
             _NavItem(
                 icon: "assets/account_circle.png",

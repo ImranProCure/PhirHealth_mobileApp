@@ -8,6 +8,7 @@
         android:label="PHIR Health"
         android:name="${applicationName}"
         android:hardwareAccelerated="true"
+         android:usesCleartextTraffic="true"
         android:icon="@mipmap/newlogo">
         <activity
             android:name=".MainActivity"

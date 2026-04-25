@@ -12,11 +12,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   get: ^4.7.3
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
   image_picker: ^1.0.7
   file_picker: ^10.3.10
   url_launcher: ^6.2.5
@@ -26,14 +21,16 @@ dev_dependencies:
   shared_preferences: ^2.5.3
   intl: ^0.19.0
   webview_flutter: ^4.4.2
-  video_player: ^2.8.3
-  chewie: ^1.7.4
-  youtube_player_flutter: ^8.1.2
-  flutter_inappwebview: ^6.1.5 
+  youtube_player_flutter: ^9.1.1
+  visibility_detector: ^0.4.0+2
+    # ← replaces youtube_player_flutter entirely
 
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
 
-
-
+# NO dependency_overrides needed at all
 
 flutter:
   uses-material-design: true
@@ -41,7 +38,6 @@ flutter:
   assets:
     - assets/
     - assets/icons/
-    
 
   fonts:
     - family: Mulish

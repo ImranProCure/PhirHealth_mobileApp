@@ -1,12 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample/app/controllers/role_controller.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 
-void main() {
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+//  if (defaultTargetPlatform == TargetPlatform.android) {
+//     InAppWebViewPlatform.instance = AndroidInAppWebViewPlatform();
+//   } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+//     InAppWebViewPlatform.instance = IOSInAppWebViewPlatform();
+//   }
+  await InAppWebViewController.setWebContentsDebuggingEnabled(true);
 
   Get.put(RoleController());
   runApp(const MyApp());

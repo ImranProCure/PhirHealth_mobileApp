@@ -1,23 +1,13 @@
-// ─── utils/youtube_utils.dart ─────────────────────────────────────────────
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-class YouTubeUtils {
-  /// Extracts video ID from any YouTube URL format:
-  /// https://www.youtube.com/watch?v=gHvX2tmr3jc
-  /// https://youtu.be/gHvX2tmr3jc
-  /// https://www.youtube.com/shorts/gHvX2tmr3jc
-  static String? extractId(String url) {
-    return YoutubePlayer.convertUrlToId(url);
-  }
-}
 
 // ─── models/reel_model.dart ───────────────────────────────────────────────
 class ReelModel {
   final String id;
-  final String youtubeUrl;       // full YouTube URL
+  final String youtubeUrl;
   final String doctorName;
   final String specialty;
   final String hospital;
@@ -29,8 +19,28 @@ class ReelModel {
   final int shareCount;
   final bool isVerified;
 
-  // Derived
-  String get videoId => YoutubePlayer.convertUrlToId(youtubeUrl) ?? '';
+  // Extract video ID from any YouTube URL
+// ─── Fix 1: videoId getter in ReelModel ───────────────────────────────────
+  String get videoId {
+    final uri = Uri.tryParse(youtubeUrl);
+    if (uri == null) return '';
+
+    if (uri.queryParameters.containsKey('v')) {
+      return uri.queryParameters['v']!;
+    }
+    if (uri.host == 'youtu.be') {
+      return uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
+    }
+
+    // Shorts — filter empty segments, ignore ?si= params automatically via URI parsing
+    final segments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
+    if (segments.contains('shorts')) {
+      final idx = segments.indexOf('shorts');
+      if (idx + 1 < segments.length) return segments[idx + 1];
+    }
+
+    return '';
+  }
 
   ReelModel({
     required this.id,
@@ -49,7 +59,6 @@ class ReelModel {
 }
 
 // ─── controllers/shorts_controller.dart ──────────────────────────────────
-
 class ShortsController extends GetxController {
   final RxList<ReelModel> reels = <ReelModel>[].obs;
   final RxInt currentIndex = 0.obs;
@@ -63,11 +72,10 @@ class ShortsController extends GetxController {
   }
 
   void loadReels() {
-    // Paste any YouTube URL directly — playlists, shorts, regular watch URLs
-    reels.assignAll([
+    final reels = [
       ReelModel(
         id: '1',
-        youtubeUrl: 'https://www.youtube.com/watch?v=gHvX2tmr3jc&list=PLfTK-B0vyWwbSWxnLWX-YkBkCJX6sKdFK&index=11',
+        youtubeUrl: 'https://www.youtube.com/shorts/DjZcaVnGrv8',
         doctorName: 'Dr. Priya Sharma',
         specialty: 'Cardiologist',
         hospital: 'AIIMS Delhi',
@@ -81,19 +89,174 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '2',
-        youtubeUrl: 'https://www.youtube.com/watch?v=ANOTHER_ID',
+        youtubeUrl: 'https://www.youtube.com/shorts/nMI2uzr4LN4',
         doctorName: 'Dr. Rahul Mehta',
         specialty: 'Neurologist',
-        hospital: 'Fortis Mumbai',
-        topic: 'Migraine vs Headache',
-        description: 'These two are often confused. Here\'s how to tell them apart.',
+        hospital: 'Fortis Hospital, Mumbai',
+        topic: 'Migraine vs Headache — Know the Difference',
+        description:
+            'These two are often confused. Here\'s how to tell them apart quickly.',
         tag: 'Neurology',
         likeCount: 9200,
         commentCount: 521,
         shareCount: 1800,
         isVerified: true,
       ),
-    ]);
+      ReelModel(
+        id: '3',
+        youtubeUrl: 'https://www.youtube.com/shorts/QFag6y19tTs',
+        doctorName: 'Dr. Sneha Iyer',
+        specialty: 'Dermatologist',
+        hospital: 'Apollo Hospitals, Chennai',
+        topic: 'Why Is Your Skin So Dry?',
+        description: 'Common mistakes that damage your skin barrier every day.',
+        tag: 'Dermatology',
+        likeCount: 15300,
+        commentCount: 1102,
+        shareCount: 3400,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '4',
+        youtubeUrl: 'https://youtube.com/shorts/HnmdbLk1Kdk',
+        doctorName: 'Dr. Arjun Kapoor',
+        specialty: 'Orthopedic Surgeon',
+        hospital: 'Medanta, Gurugram',
+        topic: 'Fix Your Posture in 60 Seconds',
+        description: 'Simple daily exercises to prevent chronic back pain.',
+        tag: 'Orthopedics',
+        likeCount: 21000,
+        commentCount: 1430,
+        shareCount: 5200,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '5',
+        youtubeUrl: 'https://www.youtube.com/shorts/8zNMakm5-y4',
+        doctorName: 'Dr. Meera Nair',
+        specialty: 'Endocrinologist',
+        hospital: 'Kokilaben Hospital, Mumbai',
+        topic: 'Signs Your Thyroid Is Struggling',
+        description: 'Fatigue, weight gain, hair fall — could all be thyroid.',
+        tag: 'Endocrinology',
+        likeCount: 18700,
+        commentCount: 964,
+        shareCount: 4100,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '6',
+        youtubeUrl: 'https://www.youtube.com/shorts/HxibPFa7nJc',
+        doctorName: 'Dr. Vikram Bose',
+        specialty: 'Pulmonologist',
+        hospital: 'PGIMER, Chandigarh',
+        topic: 'How Smoking Destroys Your Lungs',
+        description:
+            'A visual breakdown of what happens inside your lungs with every cigarette.',
+        tag: 'Pulmonology',
+        likeCount: 33200,
+        commentCount: 2810,
+        shareCount: 9800,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '7',
+        youtubeUrl: 'https://www.youtube.com/shorts/IJWlJeeAHuo',
+        doctorName: 'Dr. Ananya Roy',
+        specialty: 'Psychiatrist',
+        hospital: 'NIMHANS, Bengaluru',
+        topic: 'Is It Anxiety or Just Stress?',
+        description: 'Understanding the difference can change how you cope.',
+        tag: 'Mental Health',
+        likeCount: 27500,
+        commentCount: 3200,
+        shareCount: 7600,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '8',
+        youtubeUrl: 'https://youtube.com/shorts/U2NU8ifBK8A',
+        doctorName: 'Dr. Suresh Pillai',
+        specialty: 'Gastroenterologist',
+        hospital: 'CMC Vellore',
+        topic: 'Why You Feel Bloated After Every Meal',
+        description:
+            'Your gut is trying to tell you something. Here\'s how to listen.',
+        tag: 'Gastroenterology',
+        likeCount: 14100,
+        commentCount: 870,
+        shareCount: 2900,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '9',
+        youtubeUrl: 'https://www.youtube.com/shorts/KHAm6TBu2OQ',
+        doctorName: 'Dr. Ritu Agarwal',
+        specialty: 'Gynecologist',
+        hospital: 'Manipal Hospital, Delhi',
+        topic: 'PCOS — What Every Woman Should Know',
+        description:
+            'One of the most common yet misunderstood conditions in women.',
+        tag: 'Gynecology',
+        likeCount: 41000,
+        commentCount: 4500,
+        shareCount: 12300,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '10',
+        youtubeUrl: 'https://www.youtube.com/shorts/54gEzerxIIg',
+        doctorName: 'Dr. Karan Malhotra',
+        specialty: 'Diabetologist',
+        hospital: 'Max Hospital, New Delhi',
+        topic: 'Pre-Diabetes: The Silent Warning',
+        description:
+            'Millions have it and don\'t know. Catch it before it turns into Type 2.',
+        tag: 'Diabetes',
+        likeCount: 19800,
+        commentCount: 1340,
+        shareCount: 5600,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '11',
+        youtubeUrl: 'https://www.youtube.com/shorts/MGqBCV2jenk',
+        doctorName: 'Dr. Divya Menon',
+        specialty: 'Ophthalmologist',
+        hospital: 'Sankara Nethralaya, Chennai',
+        topic: 'Screen Time Is Damaging Your Eyes',
+        description: 'The 20-20-20 rule and other tips to protect your vision.',
+        tag: 'Ophthalmology',
+        likeCount: 22600,
+        commentCount: 1780,
+        shareCount: 6400,
+        isVerified: true,
+      ),
+      ReelModel(
+        id: '12',
+        youtubeUrl: 'https://www.youtube.com/shorts/LpNz-1yyRms',
+        doctorName: 'Dr. Aditya Sharma',
+        specialty: 'Nephrologist',
+        hospital: 'SGPGI, Lucknow',
+        topic: 'Your Kidneys Are Sending You Signals',
+        description:
+            'Swollen feet, foamy urine — don\'t ignore these kidney warning signs.',
+        tag: 'Nephrology',
+        likeCount: 16400,
+        commentCount: 990,
+        shareCount: 3800,
+        isVerified: true,
+      ),
+    ];
+
+    // Sanity check — remove in production
+    for (final r in reels) {
+      assert(r.videoId.isNotEmpty,
+          'Bad videoId for reel ${r.id}: ${r.youtubeUrl}');
+      debugPrint('Reel ${r.id} → videoId: "${r.videoId}"');
+    }
+
+    this.reels.assignAll(reels);
   }
 
   void toggleLike(String id) =>
@@ -110,9 +273,6 @@ class ShortsController extends GetxController {
 }
 
 // ─── pages/health_shorts_page.dart ───────────────────────────────────────
-
-
-
 class HealthShortsPage extends StatefulWidget {
   const HealthShortsPage({super.key});
 
@@ -123,45 +283,65 @@ class HealthShortsPage extends StatefulWidget {
 class _HealthShortsPageState extends State<HealthShortsPage> {
   final ShortsController controller = Get.put(ShortsController());
   final PageController _pageController = PageController();
-
-  // One YoutubePlayerController per reel
   final Map<int, YoutubePlayerController> _ytControllers = {};
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.reels.isNotEmpty) _initYT(0);
+      if (controller.reels.isNotEmpty) {
+        _prepareController(0);
+        _prepareController(1);
+      }
     });
   }
 
-  void _initYT(int index) {
+  void _prepareController(int index) {
+    if (index < 0 || index >= controller.reels.length) return;
     if (_ytControllers.containsKey(index)) return;
-    final reel = controller.reels[index];
 
     _ytControllers[index] = YoutubePlayerController(
-      initialVideoId: reel.videoId,
-      flags: YoutubePlayerFlags(
-        autoPlay: index == controller.currentIndex.value,
+      initialVideoId: controller.reels[index].videoId,
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
         mute: false,
         loop: true,
-        forceHD: false,
-        enableCaption: false,
-        hideControls: true,       // hide YouTube controls — use your own UI
+        hideControls: true,
         hideThumbnail: true,
+        disableDragSeek: true,
+        useHybridComposition: true,
       ),
     );
   }
 
-  void _onPageChanged(int index) {
-    // Pause old
-    _ytControllers[controller.currentIndex.value]?.pause();
-    controller.currentIndex.value = index;
-    // Init + play new
-    _initYT(index);
-    _ytControllers[index]?.play();
-    // Preload next
-    if (index + 1 < controller.reels.length) _initYT(index + 1);
+  void _onVisibilityChanged(int index, double visibleFraction) {
+    if (!mounted) return;
+
+    if (visibleFraction >= 0.8) {
+      // ── This reel is now fully visible ──
+      _prepareController(index);
+      _prepareController(index + 1); // pre-init next
+
+      if (_currentPage != index) {
+        // Pause the old one
+        _ytControllers[_currentPage]?.pause();
+        _ytControllers[_currentPage]?.seekTo(Duration.zero);
+        _currentPage = index;
+        controller.currentIndex.value = index;
+      }
+
+      // Play after short delay to let WebView settle
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (!mounted) return;
+        _ytControllers[index]?.play();
+      });
+    } else if (visibleFraction < 0.2) {
+      // ── This reel scrolled away ──
+      _ytControllers[index]?.pause();
+      _ytControllers[index]?.seekTo(Duration.zero);
+    }
   }
 
   @override
@@ -173,9 +353,6 @@ class _HealthShortsPageState extends State<HealthShortsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Lock to portrait for reels feel
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
@@ -186,65 +363,69 @@ class _HealthShortsPageState extends State<HealthShortsPage> {
         }
         return Stack(
           children: [
-            // ── Vertical reel feed ──
             PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
               itemCount: controller.reels.length,
-              onPageChanged: _onPageChanged,
               itemBuilder: (context, index) {
-                _initYT(index); // ensure initialized
+                _prepareController(index);
                 return _ReelItem(
+                  key: ValueKey('reel_$index'),
+                  index: index,
                   reel: controller.reels[index],
                   ytController: _ytControllers[index],
                   shortsController: controller,
+                  onVisibilityChanged: _onVisibilityChanged,
                 );
               },
             ),
 
             // ── Top bar ──
-            SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Health Shorts',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            shadows: [Shadow(blurRadius: 8)])),
-                    IconButton(
-                      icon: const Icon(Icons.search, color: Colors.white),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // SafeArea(
+            //   child: Padding(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         const Text(
+            //           'Health Shorts',
+            //           style: TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 20,
+            //             fontWeight: FontWeight.bold,
+            //             shadows: [Shadow(blurRadius: 8)],
+            //           ),
+            //         ),
+            //         // IconButton(
+            //         //   icon: const Icon(Icons.search, color: Colors.white),
+            //         //   onPressed: () {},
+            //         // ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
-            // ── Dot scroll indicator ──
-            Positioned(
-              right: 6,
-              top: MediaQuery.of(context).size.height * 0.35,
-              child: Obx(() => Column(
-                    children: List.generate(controller.reels.length, (i) {
-                      final active = i == controller.currentIndex.value;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        margin: const EdgeInsets.symmetric(vertical: 3),
-                        width: 3,
-                        height: active ? 20 : 6,
-                        decoration: BoxDecoration(
-                          color: active ? Colors.white : Colors.white38,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      );
-                    }),
-                  )),
-            ),
+            // ── Dot indicator ──
+            // Positioned(
+            //   right: 6,
+            //   top: MediaQuery.of(context).size.height * 0.35,
+            //   child: Obx(() => Column(
+            //         children: List.generate(controller.reels.length, (i) {
+            //           final active = i == controller.currentIndex.value;
+            //           return AnimatedContainer(
+            //             duration: const Duration(milliseconds: 250),
+            //             margin: const EdgeInsets.symmetric(vertical: 3),
+            //             width: 3,
+            //             height: active ? 20 : 6,
+            //             decoration: BoxDecoration(
+            //               color: active ? Colors.white : Colors.white38,
+            //               borderRadius: BorderRadius.circular(2),
+            //             ),
+            //           );
+            //         }),
+            //       )),
+            // ),
           ],
         );
       }),
@@ -253,222 +434,227 @@ class _HealthShortsPageState extends State<HealthShortsPage> {
 }
 
 // ─── widgets/_reel_item.dart ──────────────────────────────────────────────
-class _ReelItem extends StatelessWidget {
+class _ReelItem extends StatefulWidget {
+  final int index;
   final ReelModel reel;
   final YoutubePlayerController? ytController;
   final ShortsController shortsController;
+  final void Function(int index, double visibleFraction) onVisibilityChanged;
 
   const _ReelItem({
+    super.key,
+    required this.index,
     required this.reel,
     required this.shortsController,
+    required this.onVisibilityChanged,
     this.ytController,
   });
 
   @override
+  State<_ReelItem> createState() => _ReelItemState();
+}
+
+class _ReelItemState extends State<_ReelItem> {
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        // ── YouTube Player ──
-        if (ytController != null)
-          YoutubePlayerBuilder(
-            player: YoutubePlayer(
-              controller: ytController!,
-              showVideoProgressIndicator: false,
-            ),
-            builder: (context, player) {
-              return SizedBox(
+    return VisibilityDetector(
+      key: Key('reel_visibility_${widget.index}'),
+      onVisibilityChanged: (info) =>
+          widget.onVisibilityChanged(widget.index, info.visibleFraction),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // ── YouTube Player ──
+          if (widget.ytController != null)
+            YoutubePlayerBuilder(
+              player: YoutubePlayer(
+                controller: widget.ytController!,
+                showVideoProgressIndicator: false,
+              ),
+              builder: (context, player) => SizedBox(
                 width: size.width,
                 height: size.height,
                 child: FittedBox(
-                  fit: BoxFit.cover,       // crop to fill like a reel
+                  fit: BoxFit.cover,
                   clipBehavior: Clip.hardEdge,
                   child: SizedBox(
                     width: size.width,
-                    height: size.width * 9 / 16, // 16:9 → cropped to fill
+                    height: size.width * (16 / 9),
                     child: player,
                   ),
                 ),
-              );
-            },
-          )
-        else
-          // Fallback thumbnail while player initializes
-          Container(
-            color: Colors.black,
-            child: Image.network(
-              'https://img.youtube.com/vi/${reel.videoId}/maxresdefault.jpg',
+              ),
+            )
+          else
+            Image.network(
+              'https://img.youtube.com/vi/${widget.reel.videoId}/maxresdefault.jpg',
               fit: BoxFit.cover,
               width: size.width,
               height: size.height,
+              errorBuilder: (_, __, ___) => Container(color: Colors.black),
+            ),
+
+          // ── Gradient scrim ──
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black87],
+                stops: [0.4, 1.0],
+              ),
             ),
           ),
 
-        // ── Dark gradient scrim ──
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.transparent, Colors.black87],
-              stops: [0.4, 1.0],
-            ),
-          ),
-        ),
-
-        // ── Bottom info overlay ──
-        Positioned(
-          left: 0,
-          right: 60,
-          bottom: 0,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Tag chip
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(reel.tag,
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 11)),
-                ),
-                const SizedBox(height: 10),
-                Text(reel.topic,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-                const SizedBox(height: 6),
-                Text(reel.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
-                        fontSize: 12)),
-                const SizedBox(height: 14),
-                // Doctor row
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.white24,
-                      child: Icon(Icons.person,
-                          color: Colors.white, size: 18),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            Flexible(
-                              child: Text(reel.doctorName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13)),
-                            ),
-                            if (reel.isVerified) ...[
-                              const SizedBox(width: 4),
-                              const Icon(Icons.verified,
-                                  color: Colors.lightBlueAccent,
-                                  size: 14),
-                            ]
-                          ]),
-                          Text('${reel.specialty} · ${reel.hospital}',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),
-                                  fontSize: 11)),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.white54),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                      ),
-                      child: const Text('Follow',
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 12)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // ── Right action buttons ──
-        Positioned(
-          right: 8,
-          bottom: 100,
-          child: Obx(() => Column(
+          // ── Bottom info ──
+          Positioned(
+            left: 0,
+            right: 60,
+            bottom: 0,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  _ActionButton(
-                    icon: shortsController.isLiked(reel.id)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    label: shortsController.formatCount(reel.likeCount +
-                        (shortsController.isLiked(reel.id) ? 1 : 0)),
-                    color: shortsController.isLiked(reel.id)
-                        ? Colors.redAccent
-                        : Colors.white,
-                    onTap: () => shortsController.toggleLike(reel.id),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(widget.reel.tag,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 11)),
                   ),
-                  const SizedBox(height: 20),
-                  _ActionButton(
-                    icon: Icons.comment_outlined,
-                    label: shortsController.formatCount(reel.commentCount),
-                    onTap: () => _showComments(context),
-                  ),
-                  const SizedBox(height: 20),
-                  _ActionButton(
-                    icon: Icons.share_outlined,
-                    label: shortsController.formatCount(reel.shareCount),
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 20),
-                  _ActionButton(
-                    icon: shortsController.isSaved(reel.id)
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    label: 'Save',
-                    color: shortsController.isSaved(reel.id)
-                        ? Colors.amberAccent
-                        : Colors.white,
-                    onTap: () => shortsController.toggleSave(reel.id),
-                  ),
-                  const SizedBox(height: 20),
-                  // Tap to open full YouTube
-                  _ActionButton(
-                    icon: Icons.open_in_new,
-                    label: 'YouTube',
-                    onTap: () {
-                      // launch(reel.youtubeUrl) with url_launcher
-                    },
+                  const SizedBox(height: 10),
+                  Text(widget.reel.topic,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 6),
+                  Text(widget.reel.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.85), fontSize: 12)),
+                  const SizedBox(height: 14),
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.white24,
+                        child:
+                            Icon(Icons.person, color: Colors.white, size: 18),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              Flexible(
+                                child: Text(widget.reel.doctorName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13)),
+                              ),
+                              if (widget.reel.isVerified) ...[
+                                const SizedBox(width: 4),
+                                const Icon(Icons.verified,
+                                    color: Colors.lightBlueAccent, size: 14),
+                              ]
+                            ]),
+                            Text(
+                                '${widget.reel.specialty} · ${widget.reel.hospital}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.white54),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 6),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
+                        child: const Text('Follow',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 12)),
+                      ),
+                    ],
                   ),
                 ],
-              )),
-        ),
-      ],
+              ),
+            ),
+          ),
+
+          // ── Right action buttons ──
+          Positioned(
+            right: 8,
+            bottom: 100,
+            child: Obx(() => Column(
+                  children: [
+                    _ActionButton(
+                      icon: widget.shortsController.isLiked(widget.reel.id)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      label: widget.shortsController.formatCount(
+                          widget.reel.likeCount +
+                              (widget.shortsController.isLiked(widget.reel.id)
+                                  ? 1
+                                  : 0)),
+                      color: widget.shortsController.isLiked(widget.reel.id)
+                          ? Colors.redAccent
+                          : Colors.white,
+                      onTap: () =>
+                          widget.shortsController.toggleLike(widget.reel.id),
+                    ),
+                    const SizedBox(height: 20),
+                    _ActionButton(
+                      icon: Icons.comment_outlined,
+                      label: widget.shortsController
+                          .formatCount(widget.reel.commentCount),
+                      onTap: () => _showComments(context),
+                    ),
+                    const SizedBox(height: 20),
+                    _ActionButton(
+                      icon: Icons.share_outlined,
+                      label: widget.shortsController
+                          .formatCount(widget.reel.shareCount),
+                      onTap: () {},
+                    ),
+                    const SizedBox(height: 20),
+                    _ActionButton(
+                      icon: widget.shortsController.isSaved(widget.reel.id)
+                          ? Icons.bookmark
+                          : Icons.bookmark_border,
+                      label: 'Save',
+                      color: widget.shortsController.isSaved(widget.reel.id)
+                          ? Colors.amberAccent
+                          : Colors.white,
+                      onTap: () =>
+                          widget.shortsController.toggleSave(widget.reel.id),
+                    ),
+                  ],
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -505,13 +691,11 @@ class _ReelItem extends StatelessWidget {
                     leading: CircleAvatar(
                       backgroundColor: Colors.white24,
                       child: Text(['A', 'R', 'S'][i],
-                          style:
-                              const TextStyle(color: Colors.white)),
+                          style: const TextStyle(color: Colors.white)),
                     ),
-                    title: Text(
-                        ['Aryan K.', 'Riya M.', 'Suresh P.'][i],
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 13)),
+                    title: Text(['Aryan K.', 'Riya M.', 'Suresh P.'][i],
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13)),
                     subtitle: Text(
                       [
                         'Very informative, thank you doctor!',
@@ -519,8 +703,7 @@ class _ReelItem extends StatelessWidget {
                         'Sharing this with my family.',
                       ][i],
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                          fontSize: 12),
+                          color: Colors.white.withOpacity(0.7), fontSize: 12),
                     ),
                   ),
                 ),
