@@ -15,16 +15,13 @@ class VerifyMobileSignupView extends GetView<VerifyMobileSignupController> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
 
-                    // Heading
                     const Text(
                       'Verify Mobile Number',
                       style: TextStyle(
@@ -35,60 +32,69 @@ class VerifyMobileSignupView extends GetView<VerifyMobileSignupController> {
                         height: 1.0,
                       ),
                     ),
-
                     const SizedBox(height: 16),
 
-                    // Subtitle with phone number
-                    Obx(
-                      () => RichText(
-                        text: TextSpan(
-                          text: 'Please enter the 4-digit code sent to\n',
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF6B7280),
-                            height: 1.5,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: controller.mobileNumber.value,
-                              style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
+                    // Subtitle with phone number + edit icon
+                    Obx(() => RichText(
+                          text: TextSpan(
+                            text: 'Please enter the 4-digit code sent to\n',
+                            style: const TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF6B7280),
+                              height: 1.5,
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                            children: [
+                              TextSpan(
+                                text: controller.mobileNumber.value,
+                                style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed('/identity-vitals-edit'),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: Image.asset(
+                                      'assets/icons/draft_orders.png',
+                                      width: 16,
+                                      height: 16,
+                                      color: const Color(0xFF0D9488),
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.edit_outlined,
+                                        size: 16,
+                                        color: Color(0xFF0D9488),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
 
                     const SizedBox(height: 40),
-
-                    // OTP Input Boxes
                     const _OtpInputRow(),
-
                     const SizedBox(height: 32),
-
-                    // Timer & Resend
                     const _TimerAndResendRow(),
-
                     const SizedBox(height: 40),
                   ],
                 ),
               ),
             ),
-
-            // Verify Button - Fixed at bottom
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
                 children: [
                   const _VerifyButton(),
                   const SizedBox(height: 16),
-                  // Terms text
                   RichText(
                     textAlign: TextAlign.center,
                     text: const TextSpan(
@@ -131,7 +137,6 @@ class VerifyMobileSignupView extends GetView<VerifyMobileSignupController> {
   }
 }
 
-// OTP Input Row Widget
 class _OtpInputRow extends GetView<VerifyMobileSignupController> {
   const _OtpInputRow();
 
@@ -147,11 +152,8 @@ class _OtpInputRow extends GetView<VerifyMobileSignupController> {
   }
 }
 
-// Single OTP Box
-// Single OTP Field with Underline
 class _OtpBox extends GetView<VerifyMobileSignupController> {
   final int index;
-
   const _OtpBox({required this.index});
 
   @override
@@ -170,22 +172,14 @@ class _OtpBox extends GetView<VerifyMobileSignupController> {
           fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: const InputDecoration(
           counterText: '',
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFFE5E7EB),
-              width: 2,
-            ),
+            borderSide: BorderSide(color: Color(0xFFE5E7EB), width: 2),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF0D9488),
-              width: 2,
-            ),
+            borderSide: BorderSide(color: Color(0xFF0D9488), width: 2),
           ),
         ),
         onChanged: (value) => controller.onOtpFieldChanged(value, index),
@@ -194,7 +188,6 @@ class _OtpBox extends GetView<VerifyMobileSignupController> {
   }
 }
 
-// Timer and Resend Row
 class _TimerAndResendRow extends GetView<VerifyMobileSignupController> {
   const _TimerAndResendRow();
 
@@ -239,7 +232,7 @@ class _VerifyButton extends GetView<VerifyMobileSignupController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final isEnabled = controller.isButtonEnabled.value;
-      final isLoading = controller.isLoading.value; // ← ADD
+      final isLoading = controller.isLoading.value;
 
       return Container(
         width: double.infinity,
@@ -273,11 +266,9 @@ class _VerifyButton extends GetView<VerifyMobileSignupController> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(28),
-            onTap: (isEnabled && !isLoading)
-                ? controller.verifyOtp
-                : null, // ← block tap while loading
+            onTap: (isEnabled && !isLoading) ? controller.verifyOtp : null,
             child: Center(
-              child: isLoading // ← SWAP text for spinner
+              child: isLoading
                   ? const SizedBox(
                       width: 24,
                       height: 24,

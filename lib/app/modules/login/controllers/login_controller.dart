@@ -49,9 +49,14 @@ class LoginController extends GetxController {
       case UserRole.doctor:
         Get.toNamed(Routes.DOCTOR_REGISTRATION);
         break;
-      case UserRole.partner:
-      case UserRole.counsellor:
       case UserRole.corporate:
+        Get.toNamed(Routes.CORPORATE_STEP1);
+        break;
+      case UserRole.coach:
+        Get.toNamed(Routes.COACH_STEP1);
+        break;
+      case UserRole.partner:
+      case UserRole.coach:
         _showError('Signup flow not implemented yet for this role');
         break;
     }
