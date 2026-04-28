@@ -12,37 +12,52 @@ class HomeController extends GetxController {
   final RoleController _roleController = Get.find<RoleController>();
 
   /// =========================
+  /// LANGUAGE TOGGLE — ONLY ADDITION
+  /// =========================
+  final RxBool isHindi = false.obs;
+
+  void toggleLanguage() {
+    isHindi.value = !isHindi.value;
+    if (isHindi.value) {
+      Get.updateLocale(const Locale('hi', 'IN'));
+    } else {
+      Get.updateLocale(const Locale('en', 'US'));
+    }
+  }
+
+  /// =========================
   /// ROLE LIST FOR UI
+  /// title/subtitle → titleKey/subtitleKey (translation keys)
   /// =========================
   final List<Map<String, dynamic>> roleItems = const [
     {
       "icon": Icons.person_outline,
-      "title": "Customer / Patient",
-      "subtitle": "Access your health records and appointments.",
+      "titleKey": "role_patient_title",
+      "subtitleKey": "role_patient_subtitle",
       "role": UserRole.patient,
     },
     {
       "icon": Icons.local_hospital_outlined,
-      "title": "Doctor",
-      "subtitle": "Manage your patients and consultations.",
+      "titleKey": "role_doctor_title",
+      "subtitleKey": "role_doctor_subtitle",
       "role": UserRole.doctor,
     },
     {
       "icon": Icons.handshake_outlined,
-      "title": "Collaboration / Partners",
-      "subtitle": "Connect and grow with our health network.",
+      "titleKey": "role_partner_title",
+      "subtitleKey": "role_partner_subtitle",
       "role": UserRole.partner,
     },
     {
       "icon": Icons.chat_bubble_outline,
-      "title": "Coaches / Counsellors",
-      "subtitle": "Guide your clients towards wellness.",
+      "titleKey": "role_coach_title",
+      "subtitleKey": "role_coach_subtitle",
       "role": UserRole.coach,
     },
     {
       "icon": Icons.business_center_outlined,
-      "title": "Corporates",
-      "subtitle": "Solutions for employee health and insurance.",
+      "titleKey": "role_corporate_title",
+      "subtitleKey": "role_corporate_subtitle",
       "role": UserRole.corporate,
     },
   ];

@@ -16,8 +16,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () => Get.back(),
           ),
-          title: const Text(
-            'Step 4 of 6 : Lifestyle',
+          title: Text(
+            'patient_step4_title'.tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 16,
@@ -37,9 +37,9 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                 const SizedBox(height: 20),
 
                 // ================= TITLE =================x
-                const Center(
+                Center(
                   child: Text(
-                    'Family & Well-being',
+                    'patient_step4_heading'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 20,

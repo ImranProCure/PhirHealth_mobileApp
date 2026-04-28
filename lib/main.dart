@@ -3,6 +3,7 @@ import 'package:sample/app/controllers/role_controller.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/modules/translations/app_translations.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'PHIR Health',
           theme: ThemeData(scaffoldBackgroundColor: const Color(0xFFF5F5F5)),
+
+          // ✅ Localization
+          translations: AppTranslations(),
+          locale: const Locale('en', 'US'),
+          fallbackLocale: const Locale('en', 'US'),
 
           // ✅ App start point (Splash se)
           initialRoute: Routes.SPLASH,

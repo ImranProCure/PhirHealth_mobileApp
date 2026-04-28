@@ -72,8 +72,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Step 4 of 6 : Lifestyle',
+        title: Text(
+          'patient_step4_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -100,9 +100,9 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                 const SizedBox(height: 20),
 
                 // ================= TITLE =================
-                const Center(
+                Center(
                   child: Text(
-                    'Family & Well-being',
+                    'patient_step4_heading'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 20,
@@ -127,8 +127,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                 const SizedBox(height: 30),
 
                 // ================= FAMILY MEDICAL HISTORY =================
-                const Text(
-                  'Family Medical History',
+                Text(
+                  'patient_step4_family_history'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -136,8 +136,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Have your immediate family members had any of these?',
+                Text(
+                  'patient_step4_family_history_q'.tr,
                   style: TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 20),
@@ -155,7 +155,7 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                             )),
                         // ---- Add Other chip ----
                         _chip(
-                          label: 'Add Other',
+                          label: 'add_other'.tr,
                           isAdd: true,
                           onTap: _showAddOtherFamilyCondition,
                         ),
@@ -165,8 +165,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                 const SizedBox(height: 30),
 
                 // ================= MENTAL WELL-BEING =================
-                const Text(
-                  'Mental Well-being',
+                Text(
+                  'patient_step4_mental'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -174,8 +174,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'How would you rate your current stress levels?',
+                Text(
+                  'patient_step4_mental_q'.tr,
                   style: TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 20),
@@ -210,22 +210,22 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Low',
+                            Text('patient_step4_stress_low'.tr,
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xFF9CA3AF))),
-                            Text('Moderate',
+                            Text('patient_step4_stress_moderate'.tr,
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xFF9CA3AF))),
-                            Text('High',
+                            Text('patient_step4_stress_high'.tr,
                                 style: TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
@@ -241,8 +241,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                 const SizedBox(height: 30),
 
                 // ================= COMMON SYMPTOMS =================
-                const Text(
-                  'Common Symptoms',
+                Text(
+                  'patient_step4_symptoms'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -263,7 +263,7 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                             )),
                         // ---- Add Other chip ----
                         _chip(
-                          label: 'Add Other',
+                          label: 'add_other'.tr,
                           isAdd: true,
                           onTap: _showAddOtherSymptom,
                         ),
@@ -293,11 +293,11 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Next Step',
+                            'next_button'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 16,
@@ -372,8 +372,8 @@ class FamilyWellbeingView extends GetView<FamilyWellbeingController> {
                   ),
                 ),
                 child: const Center(
-                  child: Icon(Icons.add, size: 14,
-                      color: Color.fromARGB(255, 0, 0, 0)),
+                  child: Icon(Icons.add,
+                      size: 14, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
               )
             else

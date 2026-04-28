@@ -17,8 +17,8 @@ class CompletionView extends GetView<CompletionController> {
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () => Get.back(),
           ),
-          title: const Text(
-            'Step 6 of 6 : Final Setup & Permissions',
+          title: Text(
+            'patient_step6_title'.tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 16,
@@ -37,9 +37,9 @@ class CompletionView extends GetView<CompletionController> {
               children: [
                 const SizedBox(height: 20),
 
-                const Center(
+                Center(
                   child: Text(
-                    'Completion',
+                    'patient_step6_heading'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 20,
@@ -82,9 +82,9 @@ class CompletionView extends GetView<CompletionController> {
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        'Secure & Private',
+                        'patient_step6_secure_title'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 16,
@@ -94,7 +94,7 @@ class CompletionView extends GetView<CompletionController> {
                       ),
                       SizedBox(height: 6),
                       Text(
-                        'Your information is protected with hospital-grade encryption.',
+                        'patient_step6_secure_subtitle'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
@@ -108,8 +108,8 @@ class CompletionView extends GetView<CompletionController> {
                 const SizedBox(height: 30),
 
                 // ================= EMERGENCY CONTACT =================
-                const Text(
-                  'Emergency Contact',
+                Text(
+                  'patient_step6_emergency'.tr,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -118,8 +118,8 @@ class CompletionView extends GetView<CompletionController> {
 
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Contact Name',
+                Text(
+                  'patient_step6_contact_name'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -130,7 +130,7 @@ class CompletionView extends GetView<CompletionController> {
 
                 _inputField(
                   controller: controller.contactNameController,
-                  hint: 'Full Legal name',
+                  hint: 'patient_step6_contact_name_hint'.tr,
                 ),
 
                 const SizedBox(height: 16),
@@ -142,8 +142,8 @@ class CompletionView extends GetView<CompletionController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Relationship",
+                          Text(
+                            "patient_step6_relationship".tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -154,7 +154,8 @@ class CompletionView extends GetView<CompletionController> {
                           SizedBox(
                             height: 60,
                             child: DropdownButtonFormField<String>(
-                              decoration: _inputDecoration("Spouse"),
+                              decoration: _inputDecoration(
+                                  "patient_step6_relationship_hint".tr),
                               value:
                                   controller.selectedRelationship.value.isEmpty
                                       ? null
@@ -183,8 +184,8 @@ class CompletionView extends GetView<CompletionController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Mobile Number",
+                          Text(
+                            "mobile_number".tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -274,7 +275,7 @@ class CompletionView extends GetView<CompletionController> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            'I authorize PHIR health to share my critical medical profile in case of emergency.',
+                            'patient_step6_authorize'.tr,
                             style: const TextStyle(fontSize: 13),
                           ),
                         ),
@@ -293,8 +294,8 @@ class CompletionView extends GetView<CompletionController> {
                 // ================= PERMISSIONS =================
                 const SizedBox(height: 30),
 
-                const Text(
-                  'App Permissions',
+                Text(
+                  'patient_step6_permissions'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -307,24 +308,24 @@ class CompletionView extends GetView<CompletionController> {
                 Obx(() => Column(
                       children: [
                         _permissionCard(
-                          title: 'Medical Data Processing',
-                          subtitle: 'Allow AI analysis of your records',
+                          title: 'patient_step6_perm_medical'.tr,
+                          subtitle: 'patient_step6_perm_medical_sub'.tr,
                           value: controller.allowMedicalProcessing.value,
                           onChanged: (val) =>
                               controller.allowMedicalProcessing.value = val,
                         ),
                         const SizedBox(height: 16),
                         _permissionCard(
-                          title: 'Share with Doctors & Labs',
-                          subtitle: 'Sync with your healthcare providers',
+                          title: 'patient_step6_perm_doctors'.tr,
+                          subtitle: 'patient_step6_perm_doctors_sub'.tr,
                           value: controller.shareWithDoctors.value,
                           onChanged: (val) =>
                               controller.shareWithDoctors.value = val,
                         ),
                         const SizedBox(height: 16),
                         _permissionCard(
-                          title: 'Enable Health Reminders',
-                          subtitle: 'Push notifications for meds & tasks',
+                          title: 'patient_step6_perm_reminders'.tr,
+                          subtitle: 'patient_step6_perm_reminders_sub'.tr,
                           value: controller.enableReminders.value,
                           onChanged: (val) =>
                               controller.enableReminders.value = val,
@@ -374,8 +375,8 @@ class CompletionView extends GetView<CompletionController> {
                                   strokeWidth: 2.5,
                                 ),
                               )
-                            : const Text(
-                                'Complete Profile',
+                            : Text(
+                                'patient_step6_complete'.tr,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -564,7 +565,7 @@ class CompletionView extends GetView<CompletionController> {
 
             Expanded(
               child: RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 14,
@@ -572,24 +573,23 @@ class CompletionView extends GetView<CompletionController> {
                   ),
                   children: [
                     TextSpan(
-                      text: 'I have read and agree to the ',
+                      text: 'patient_step6_terms_prefix'.tr,
                     ),
                     TextSpan(
-                      text: 'Terms of Service',
+                      text: 'patient_step6_terms'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    TextSpan(text: ' and '),
+                    TextSpan(text: ' patient_step6_terms_and '.tr),
                     TextSpan(
-                      text: 'Privacy Policy',
+                      text: 'patient_step6_privacy'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     TextSpan(
-                      text:
-                          '. I understand how my health data is stored and managed.',
+                      text: 'patient_step6_terms_suffix'.tr,
                     ),
                   ],
                 ),

@@ -16,8 +16,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             onPressed: () => Get.back(),
           ),
-          title: const Text(
-            'Step 2 of 6 : Basic Profile',
+          title: Text(
+            'patient_step2_title'.tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 16,
@@ -36,9 +36,9 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
               children: [
                 const SizedBox(height: 14),
 
-                const Center(
+                Center(
                   child: Text(
-                    'Medical History',
+                    'patient_step2_heading'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 20,
@@ -62,8 +62,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                 const SizedBox(height: 25),
 
                 // ================= CONDITIONS =================
-                const Text(
-                  'Existing Medical Conditions',
+                Text(
+                  'patient_step2_conditions'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -87,7 +87,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                         ),
                       ),
                       _chip(
-                        label: 'Add Other',
+                        label: 'add_other'.tr,
                         isAdd: true,
                         onTap: _showAddOtherCondition,
                       ),
@@ -98,8 +98,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                 const SizedBox(height: 25),
 
                 // ================= ALLERGIES =================
-                const Text(
-                  'Allergies',
+                Text(
+                  'patient_step2_allergies'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -109,8 +109,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  'Do you have any known allergies?',
+                Text(
+                  'patient_step2_allergies_q'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 14,
@@ -133,7 +133,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                         ),
                       ),
                       _chip(
-                        label: 'Add Other',
+                        label: 'add_other'.tr,
                         isAdd: true,
                         onTap: _showAddOtherAllergy,
                       ),
@@ -144,8 +144,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                 const SizedBox(height: 25),
 
                 // ================= PAST PROCEDURES =================
-                const Text(
-                  'Allergies',
+                Text(
+                  'patient_step2_allergies'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -155,8 +155,8 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  'Do you have any known allergies?',
+                Text(
+                  'patient_step2_allergies_q'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 14,
@@ -168,14 +168,14 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 _textArea(
                   controller: controller.pastProceduresController,
-                  hint: 'List any past procedures or hospital stays...',
+                  hint: 'patient_step2_past_procedures'.tr,
                 ),
 
                 const SizedBox(height: 25),
 
                 // ================= MEDICATIONS =================
-                const Text(
-                  'Current Medications',
+                Text(
+                  'patient_step2_medications'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -187,7 +187,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 _singleInput(
                   controller: controller.medicationsController,
-                  hint: 'Name, dosage, and frequency',
+                  hint: 'patient_step2_medications_hint'.tr,
                 ),
 
                 const SizedBox(height: 40),
@@ -213,11 +213,11 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Next Step',
+                            'next_button'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 16,

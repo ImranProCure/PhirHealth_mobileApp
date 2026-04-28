@@ -36,9 +36,9 @@ class LoginView extends GetView<LoginController> {
                       ),
                       const SizedBox(height: 22),
                       // Welcome Text
-                      const Text(
-                        'Welcome to PHIRHealth',
-                        style: TextStyle(
+                      Text(
+                        'login_welcome'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 28,
                           fontWeight: FontWeight.w700,
@@ -51,9 +51,9 @@ class LoginView extends GetView<LoginController> {
                       const SizedBox(height: 10),
 
                       // Subtitle
-                      const Text(
-                        'Your gateway to holistic wellness\nand primary care',
-                        style: TextStyle(
+                      Text(
+                        'login_subtitle'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -66,9 +66,9 @@ class LoginView extends GetView<LoginController> {
                       const SizedBox(height: 30),
 
                       // Mobile Number Label
-                      const Text(
-                        'Mobile Number',
-                        style: TextStyle(
+                      Text(
+                        'login_mobile_label'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -97,22 +97,11 @@ class LoginView extends GetView<LoginController> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
-                              child: Row(
+                              child: const Row(
                                 children: [
-                                  // Indian Flag
-                                  Container(
-                                    width: 24,
-                                    height: 16,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                    child: const Text(
-                                      '🇮🇳',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
+                                  Text('🇮🇳', style: TextStyle(fontSize: 16)),
+                                  SizedBox(width: 8),
+                                  Text(
                                     '+91',
                                     style: TextStyle(
                                       fontFamily: 'Mulish',
@@ -147,14 +136,14 @@ class LoginView extends GetView<LoginController> {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black,
                                 ),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
+                                  contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                   ),
                                   counterText: '',
-                                  hintText: '9876543210',
-                                  hintStyle: TextStyle(
+                                  hintText: 'login_mobile_hint'.tr,
+                                  hintStyle: const TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
@@ -197,10 +186,7 @@ class LoginView extends GetView<LoginController> {
                             color: Colors.transparent,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(30),
-                              onTap: isLoading
-                                  ? null
-                                  : controller
-                                      .getOTP, // ← blocks tap while loading
+                              onTap: isLoading ? null : controller.getOTP,
                               child: Center(
                                 child: isLoading
                                     ? const SizedBox(
@@ -211,21 +197,21 @@ class LoginView extends GetView<LoginController> {
                                           strokeWidth: 2.5,
                                         ),
                                       )
-                                    : const Row(
+                                    : Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Get OTP',
-                                            style: TextStyle(
+                                            'login_get_otp'.tr,
+                                            style: const TextStyle(
                                               fontFamily: 'Mulish',
                                               fontSize: 18,
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white,
                                             ),
                                           ),
-                                          SizedBox(width: 8),
-                                          Icon(
+                                          const SizedBox(width: 8),
+                                          const Icon(
                                             Icons.arrow_forward,
                                             color: Colors.white,
                                             size: 20,
@@ -237,14 +223,16 @@ class LoginView extends GetView<LoginController> {
                           ),
                         );
                       }),
+
                       const SizedBox(height: 10),
+
                       Center(
                         child: GestureDetector(
                           onTap: controller.goToSignup,
                           child: RichText(
-                            text: const TextSpan(
-                              text: "Don't have an account? ",
-                              style: TextStyle(
+                            text: TextSpan(
+                              text: 'login_no_account'.tr,
+                              style: const TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -252,8 +240,8 @@ class LoginView extends GetView<LoginController> {
                               ),
                               children: [
                                 TextSpan(
-                                  text: 'Sign up',
-                                  style: TextStyle(
+                                  text: 'login_signup'.tr,
+                                  style: const TextStyle(
                                     fontFamily: 'Mulish',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
@@ -280,9 +268,9 @@ class LoginView extends GetView<LoginController> {
               child: Center(
                 child: RichText(
                   textAlign: TextAlign.center,
-                  text: const TextSpan(
-                    text: 'By continuing, you agree to PHIR Health\'s\n',
-                    style: TextStyle(
+                  text: TextSpan(
+                    text: 'login_terms_prefix'.tr,
+                    style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -292,8 +280,8 @@ class LoginView extends GetView<LoginController> {
                     ),
                     children: [
                       TextSpan(
-                        text: 'Terms of Services',
-                        style: TextStyle(
+                        text: 'login_terms'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -302,8 +290,8 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                       TextSpan(
-                        text: ' & ',
-                        style: TextStyle(
+                        text: 'login_and'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -311,8 +299,8 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                       TextSpan(
-                        text: 'Privacy Policy',
-                        style: TextStyle(
+                        text: 'login_privacy'.tr,
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,

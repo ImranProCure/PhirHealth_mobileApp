@@ -25,9 +25,9 @@ class VerifyMobileView extends GetView<VerifyMobileController> {
                     const SizedBox(height: 20),
 
                     // Heading
-                    const Text(
-                      'Verify Mobile Number',
-                      style: TextStyle(
+                    Text(
+                      'verify_title'.tr,
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 32,
                         fontWeight: FontWeight.w700,
@@ -41,7 +41,7 @@ class VerifyMobileView extends GetView<VerifyMobileController> {
                     // Subtitle with phone number + edit icon
                     Obx(() => RichText(
                           text: TextSpan(
-                            text: 'Please enter the 4-digit code sent to\n',
+                            text: 'verify_subtitle'.tr,
                             style: const TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 16,
@@ -108,9 +108,9 @@ class VerifyMobileView extends GetView<VerifyMobileController> {
                   const SizedBox(height: 16),
                   RichText(
                     textAlign: TextAlign.center,
-                    text: const TextSpan(
-                      text: 'By continuing, you agree to PHIR Health\'s\n',
-                      style: TextStyle(
+                    text: TextSpan(
+                      text: 'verify_terms_prefix'.tr,
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -119,17 +119,17 @@ class VerifyMobileView extends GetView<VerifyMobileController> {
                       ),
                       children: [
                         TextSpan(
-                          text: 'Terms of Services',
-                          style: TextStyle(
+                          text: 'verify_terms'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0D9488),
                             decoration: TextDecoration.underline,
                           ),
                         ),
-                        TextSpan(text: ' & '),
+                        TextSpan(text: 'verify_and'.tr),
                         TextSpan(
-                          text: 'Privacy Policy',
-                          style: TextStyle(
+                          text: 'verify_privacy'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0D9488),
                             decoration: TextDecoration.underline,
@@ -209,9 +209,9 @@ class _TimerAndResendRow extends GetView<VerifyMobileController> {
         if (controller.canResend.value) {
           return TextButton(
             onPressed: controller.resendOtp,
-            child: const Text(
-              'Resend code',
-              style: TextStyle(
+            child: Text(
+              'verify_resend'.tr,
+              style: const TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -222,7 +222,7 @@ class _TimerAndResendRow extends GetView<VerifyMobileController> {
           );
         } else {
           return Text(
-            'Resend code ${controller.formattedTime}',
+            '${'verify_resend'.tr} ${controller.formattedTime}',
             style: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 16,
@@ -289,7 +289,7 @@ class _VerifyButton extends GetView<VerifyMobileController> {
                       ),
                     )
                   : Text(
-                      'Verify & Proceed',
+                      'verify_btn'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 18,

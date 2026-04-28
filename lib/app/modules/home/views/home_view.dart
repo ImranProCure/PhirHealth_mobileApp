@@ -1,6 +1,9 @@
+// lib/app/modules/home/views/home_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
+import '../../../common widgets/lang_toggle.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -17,34 +20,39 @@ class HomeView extends GetView<HomeController> {
             children: [
               const SizedBox(height: 30),
 
-              // Header Section
-              const SizedBox(
-                height: 40,
-                child: Text(
-                  "Select Your Role",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    fontFamily: 'Mulish',
-                    height: 1.25,
+              // ── Title + Toggle same row ──
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'select_role_title'.tr,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        fontFamily: 'Mulish',
+                        height: 1.25,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  const LangToggle(),
+                ],
               ),
+
               const SizedBox(height: 5),
-              const SizedBox(
-                height: 23,
-                child: Text(
-                  "Choose how you want to continue",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF6B7280),
-                    fontFamily: 'Mulish',
-                  ),
+              Text(
+                'select_role_subtitle'.tr,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF6B7280),
+                  fontFamily: 'Mulish',
                 ),
               ),
               const SizedBox(height: 30),
+
               // Role Cards List
               Expanded(
                 child: ListView.builder(
@@ -59,16 +67,14 @@ class HomeView extends GetView<HomeController> {
                       ),
                       child: _buildRoleCard(
                         icon: item['icon'],
-                        title: item['title'],
-                        subtitle: item['subtitle'],
+                        title: (item['titleKey'] as String).tr,
+                        subtitle: (item['subtitleKey'] as String).tr,
                         onTap: () => controller.onRoleSelected(item['role']),
                       ),
                     );
                   },
                 ),
               ),
-
-            
             ],
           ),
         ),
@@ -84,7 +90,7 @@ class HomeView extends GetView<HomeController> {
   }) {
     return Container(
       width: 370,
-      height: 110,
+      constraints: const BoxConstraints(minHeight: 110),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -111,7 +117,6 @@ class HomeView extends GetView<HomeController> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon Container
                 Container(
                   width: 56,
                   height: 56,
@@ -121,10 +126,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   child: Icon(icon, color: const Color(0xFF0D9488), size: 28),
                 ),
-
                 const SizedBox(width: 5),
-
-                // Text Section
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 11),
@@ -159,12 +161,10 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                 ),
-
-                // Arrow Icon
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios,
                   size: 21,
-                  color: const Color(0xFF9CA3AF),
+                  color: Color(0xFF9CA3AF),
                 ),
               ],
             ),
