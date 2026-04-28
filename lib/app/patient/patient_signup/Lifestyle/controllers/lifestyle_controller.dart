@@ -3,16 +3,24 @@ import '../../../../routes/app_routes.dart';
 
 class LifestyleController extends GetxController {
   // ================= SMOKING =================
-  final smokingOptions = ['Never', 'Former', 'Current'].obs;
-  final selectedSmoking = 'Never'.obs;
+  final smokingOptions = [
+    'patient_step3_smoking_never'.tr,
+    'patient_step3_smoking_former'.tr,
+    'patient_step3_smoking_current'.tr
+  ].obs;
+  final selectedSmoking = 'patient_step3_smoking_never'.tr.obs;
 
   void selectSmoking(String value) {
     selectedSmoking.value = value;
   }
 
   // ================= ALCOHOL =================
-  final alcoholOptions = ['Never', 'Occasional', 'Frequent'].obs;
-  final selectedAlcohol = 'Never'.obs;
+  final alcoholOptions = [
+    'patient_step3_alcohol_never'.tr,
+    'patient_step3_alcohol_occasional'.tr,
+    'patient_step3_alcohol_frequent'.tr
+  ].obs;
+  final selectedAlcohol = 'patient_step3_alcohol_never'.tr.obs;
 
   void selectAlcohol(String value) {
     selectedAlcohol.value = value;

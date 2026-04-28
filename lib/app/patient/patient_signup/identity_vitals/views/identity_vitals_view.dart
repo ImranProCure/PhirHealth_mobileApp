@@ -17,8 +17,8 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Step 1 of 6 : Basic Profile',
+        title: Text(
+          'patient_step1_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -37,8 +37,8 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 const SizedBox(height: 14),
 
                 // Title
-                const Text(
-                  'Identity & Vitals',
+                Text(
+                  'patient_step1_heading'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 20,
@@ -129,8 +129,8 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
 
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Upload Photo',
+                Text(
+                  'patient_step1_upload_photo'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 24,
@@ -140,8 +140,8 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
 
                 const SizedBox(height: 4),
 
-                const Text(
-                  'Add a face to your medical profile',
+                Text(
+                  'patient_step1_upload_subtitle'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -152,10 +152,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 const SizedBox(height: 30),
 
                 // ================= FULL NAME =================
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Full Name',
+                    'patient_step1_full_name'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
@@ -183,9 +183,9 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                       fontSize: 16,
                       color: Colors.black,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter your name',
+                      hintText: 'patient_step1_full_name_hint'.tr,
                       hintStyle: TextStyle(
                         fontFamily: 'Mulish',
                         fontWeight: FontWeight.w400,
@@ -196,10 +196,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
                 const SizedBox(height: 16),
 
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Email Id',
+                    'patient_step1_email'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
@@ -227,9 +227,9 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                       fontSize: 16,
                       color: Colors.black,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter your email id',
+                      hintText: 'patient_step1_email_hint'.tr,
                       hintStyle: TextStyle(
                         fontFamily: 'Mulish',
                         fontWeight: FontWeight.w400,
@@ -239,10 +239,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Mobile Number',
+                    'patient_step1_mobile'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
@@ -285,10 +285,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             counterText: "",
                             border: InputBorder.none,
-                            hintText: "Enter mobile number",
+                            hintText: "patient_step1_mobile_hint".tr,
                             hintStyle: TextStyle(
                               fontFamily: 'Mulish',
                               fontWeight: FontWeight.w400,
@@ -303,10 +303,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 const SizedBox(height: 16),
 
                 // ================= DATE OF BIRTH =================
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Date of Birth',
+                    'patient_step1_dob'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
@@ -338,9 +338,9 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                             fontSize: 18,
                             color: Colors.black,
                           ),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'MM / DD / YYYY',
+                            hintText: 'patient_step1_dob_hint'.tr,
                             hintStyle: TextStyle(
                               fontFamily: 'Mulish',
                               fontWeight: FontWeight.w400,
@@ -362,10 +362,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
                 const SizedBox(height: 16),
 
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Gender',
+                    'patient_step1_gender'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 16,
@@ -380,19 +380,19 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                   () => Row(
                     children: [
                       _genderPill(
-                        label: 'Male',
+                        label: 'patient_step1_gender_male'.tr,
                         icon: 'assets/icons/male.png',
                         value: Gender.male,
                       ),
                       const SizedBox(width: 10),
                       _genderPill(
-                        label: 'Female',
+                        label: 'patient_step1_gender_female'.tr,
                         icon: 'assets/icons/female.png',
                         value: Gender.female,
                       ),
                       const SizedBox(width: 10),
                       _genderPill(
-                        label: 'Other',
+                        label: 'patient_step1_gender_other'.tr,
                         icon: 'assets/icons/account_box.png',
                         value: Gender.other,
                       ),
@@ -402,10 +402,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
 
                 const SizedBox(height: 16),
 
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Height',
+                    'patient_step1_height'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 16,
@@ -434,78 +434,85 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
-                          child: Image.asset('assets/icons/measuring_tape.png',
-                              width: 22,
-                              height: 22,
-                              color: const Color(0xFF0D9488)),
+                          child: Image.asset(
+                            'assets/icons/measuring_tape.png',
+                            width: 22,
+                            height: 22,
+                            color: const Color(0xFF0D9488),
+                          ),
                         ),
                       ),
+
                       const SizedBox(width: 12),
-                      const Text('Height',
-                          style: TextStyle(
+
+                      /// ✅ FIX: text ko flexible banaya
+                      Expanded(
+                        child: Text(
+                          'patient_step1_height'.tr,
+                          style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF374151),
-                          )),
-                      const Spacer(),
-                      SizedBox(
-                        width: 80,
-                        height: 40,
-                        child: TextField(
-                          controller: controller.heightController,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF0D9488),
                           ),
-                          decoration: InputDecoration(
-                            hintText: "5'9\"",
-                            hintStyle: const TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+
+                      const SizedBox(width: 8),
+
+                      /// ✅ FIX: TextField flexible kiya (fixed width hata diya)
+                      Flexible(
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: controller.heightController,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
                               fontFamily: 'Mulish',
-                              fontSize: 14,
-                              color: Color(0xFF9CA3AF),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF0D9488),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 10),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFE5E7EB)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF0D9488)),
+                            decoration: InputDecoration(
+                              hintText: "5'9\"",
+                              hintStyle: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 14,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 10,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Color(0xFFE5E7EB)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Color(0xFF0D9488)),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      const Text('ft',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 14,
-                            color: Color(0xFF6B7280),
-                          )),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 16),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Weight',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
+                      const SizedBox(width: 6),
+
+                      /// unit
+                      Text(
+                        'patient_step1_height_unit'.tr,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 14,
+                          color: Color(0xFF6B7280),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -534,7 +541,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Text('Weight',
+                      Text('patient_step1_weight'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 15,
@@ -579,7 +586,7 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text('kg',
+                      Text('patient_step1_weight_unit'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 14,
@@ -590,10 +597,10 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                 ),
                 const SizedBox(height: 16),
 
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Blood Group',
+                    'patient_step1_blood_group'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 16,
@@ -690,11 +697,11 @@ class IdentityVitalsView extends GetView<IdentityVitalsController> {
                         ),
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Next Step',
+                            'next_button'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 16,

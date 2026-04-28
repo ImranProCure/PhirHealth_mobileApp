@@ -16,8 +16,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Step 5 of 6 : Additional Health Details',
+        title: Text(
+          'patient_step5_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -35,9 +35,9 @@ class WomensHealthView extends GetView<WomensHealthController> {
             children: [
               const SizedBox(height: 20),
 
-              const Center(
+              Center(
                 child: Text(
-                  'Women’s Health Metrics',
+                  'patient_step5_heading'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 20,
@@ -61,8 +61,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
               const SizedBox(height: 30),
 
               /// MENSTRUAL
-              const Text(
-                'Menstrual Cycle',
+              Text(
+                'patient_step5_menstrual'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,
@@ -72,15 +72,15 @@ class WomensHealthView extends GetView<WomensHealthController> {
 
               const SizedBox(height: 10),
 
-              const Text(
-                'Tracking helps provide better clinical insights.',
+              Text(
+                'patient_step5_menstrual_q'.tr,
                 style: TextStyle(fontSize: 14),
               ),
 
               const SizedBox(height: 20),
 
-              const Text(
-                'Last Menstrual Period Date',
+              Text(
+                'patient_step5_last_period'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 14,
@@ -97,8 +97,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
               const SizedBox(height: 30),
 
               /// PREGNANCY STATUS
-              const Text(
-                'Pregnancy Status',
+              Text(
+                'patient_step5_pregnancy'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,
@@ -108,8 +108,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
 
               const SizedBox(height: 10),
 
-              const Text(
-                'Are you currently pregnant?',
+              Text(
+                'patient_step5_pregnancy_q'.tr,
                 style: TextStyle(fontSize: 14),
               ),
 
@@ -118,13 +118,13 @@ class WomensHealthView extends GetView<WomensHealthController> {
               Obx(() => Row(
                     children: [
                       _chip(
-                        label: "Yes",
+                        label: "patient_step5_pregnancy_yes".tr,
                         selected: controller.isPregnant.value,
                         onTap: () => controller.setPregnancy(true),
                       ),
                       const SizedBox(width: 12),
                       _chip(
-                        label: "No",
+                        label: "patient_step5_pregnancy_no".tr,
                         selected: !controller.isPregnant.value,
                         onTap: () => controller.setPregnancy(false),
                       ),
@@ -143,8 +143,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Expected Delivery Date',
+                    Text(
+                      'patient_step5_delivery_date'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -162,8 +162,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
               const SizedBox(height: 30),
 
               /// HISTORY
-              const Text(
-                'Gynaecological History - OPTIONAL',
+              Text(
+                'patient_step5_gyno_history'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,
@@ -173,8 +173,8 @@ class WomensHealthView extends GetView<WomensHealthController> {
 
               const SizedBox(height: 10),
 
-              const Text(
-                'Any previous surgeries, conditions, or relevant details?',
+              Text(
+                'patient_step5_gyno_history_q'.tr,
                 style: TextStyle(fontSize: 14),
               ),
 
@@ -182,7 +182,7 @@ class WomensHealthView extends GetView<WomensHealthController> {
 
               _textArea(
                 controller: controller.historyController,
-                hint: 'E.g., Endometriosis, PCOS, Previous Surgeries...',
+                hint: 'patient_step5_gyno_hint'.tr,
               ),
 
               const SizedBox(height: 50),
@@ -208,11 +208,11 @@ class WomensHealthView extends GetView<WomensHealthController> {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: controller.goToNextStep,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Next Step',
+                          'add_other'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 16,
