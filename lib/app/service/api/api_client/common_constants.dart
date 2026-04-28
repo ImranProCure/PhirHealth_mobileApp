@@ -48,4 +48,10 @@ class CommonApiConstants {
 
   final relationAddApi =
       "/api/method/vhealthcare.api.patient.doctor_consult.patient_details.add_member_patient";
+
+  final walletBalance =
+      "/api/method/vhealthcare.api.patient.doctor_consult.get_wallet_balance.get_wallet_balance";
+
+  final bookAppointment =
+      "/api/method/vhealthcare.api.patient.doctor_consult.book_appointment.book_appointment";
 }

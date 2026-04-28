@@ -27,7 +27,7 @@ class ProfileDetailsController extends GetxController {
   final RxString address = ''.obs;
   final RxInt waitTime = 0.obs;
   final RxDouble latitude = 0.0.obs;
-  final RxDouble longitude = 0.0.obs;
+  final RxDouble longitude = 0.0.obs; 
 
   final RxList<Map<String, dynamic>> reviews = <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> allReviews = <Map<String, dynamic>>[].obs;

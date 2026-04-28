@@ -167,15 +167,14 @@ class PatientDetailsController extends GetxController {
 
     final messageData = response.data['message'];
 
-  if (messageData["status"] == true) {
-  Get.back();
-  await fetchPatientRelationsApi(resetSelection: false); // ← CHANGED
-} else {
-  showError(messageData["message"] ?? "Failed to add member");
-}
+    if (messageData["status"] == true) {
+      Get.back();
+      await fetchPatientRelationsApi(resetSelection: false); // ← CHANGED
+    } else {
+      showError(messageData["message"] ?? "Failed to add member");
+    }
   }
 
-  // ===== NEXT STEP =====
   void goToNext() {
     if (patients.isEmpty) {
       showError("No patient selected");
@@ -186,9 +185,13 @@ class PatientDetailsController extends GetxController {
       'date': Get.arguments?['date'] ?? '',
       'slot': Get.arguments?['slot'] ?? '',
       'tabType': Get.arguments?['tabType'] ?? 0,
-      'data': Get.arguments?['data'] ?? 0,
+      'data': Get.arguments?['data'] ?? {},
       'patientName': selected['name'] ?? '',
       'patientId': selected['patient_id'] ?? '',
+      'patientGender': selected['gender'] ?? '', // ← ADD
+      'patientAge': selected['age'] ?? '', // ← ADD
+      'patientMobile': selected['mobile'] ?? '', // ← ADD
+      "age": selected['age']?.toString() ?? '', // ← ADD
     });
   }
 
@@ -602,9 +605,7 @@ class PatientFormBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
                   // Buttons
                   Row(
                     children: [
