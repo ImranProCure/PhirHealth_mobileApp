@@ -610,38 +610,36 @@ class _BottomNav extends StatelessWidget {
           ),
         ],
       ),
-      child: Obx(
-        () => // _BottomNav — add Health Shorts as index 4
-            Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _NavItem(
-                icon: "assets/home.png",
-                label: 'Home',
-                isActive: controller.selectedNavIndex.value == 0,
-                onTap: () => controller.selectNav(0)),
-            _NavItem(
-                icon: "assets/stethoscope.png",
-                label: 'Doctor',
-                isActive: false,
-                onTap: () => controller.selectNav(1)),
-            // _NavItem(
-            //     icon: "assets/article.png",
-            //     label: 'Policy',
-            //     isActive: controller.selectedNavIndex.value == 2,
-            //     onTap: () => controller.selectNav(2)),
-            _NavItem(
-                icon: "assets/duo.png",
-                label: 'Shorts',
-                isActive: false,
-                onTap: () => controller.selectNav(3)),
-            _NavItem(
-                icon: "assets/account_circle.png",
-                label: 'My Profile',
-                isActive: controller.selectedNavIndex.value == 4,
-                onTap: () => controller.selectNav(4)),
-          ],
-        ),
+      child: // _BottomNav — add Health Shorts as index 4
+          Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _NavItem(
+              icon: "assets/home.png",
+              label: 'Home',
+              isActive: true,
+              onTap: () => controller.selectNav(0)),
+          _NavItem(
+              icon: "assets/calendar_check.png",
+              label: 'Appointment',
+              isActive: true,
+              onTap: () => controller.selectNav(1)),
+          // _NavItem(
+          //     icon: "assets/article.png",
+          //     label: 'Policy',
+          //     isActive: controller.selectedNavIndex.value == 2,
+          //     onTap: () => controller.selectNav(2)),
+          _NavItem(
+              icon: "assets/duo.png",
+              label: 'Shorts',
+              isActive: true,
+              onTap: () => controller.selectNav(3)),
+          _NavItem(
+              icon: "assets/account_circle.png",
+              label: 'My Profile',
+              isActive: true,
+              onTap: () => controller.selectNav(4)),
+        ],
       ),
     );
   }

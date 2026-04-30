@@ -188,10 +188,6 @@ class PatientDetailsController extends GetxController {
       'data': Get.arguments?['data'] ?? {},
       'patientName': selected['name'] ?? '',
       'patientId': selected['patient_id'] ?? '',
-      'patientGender': selected['gender'] ?? '', // ← ADD
-      'patientAge': selected['age'] ?? '', // ← ADD
-      'patientMobile': selected['mobile'] ?? '', // ← ADD
-      "age": selected['age']?.toString() ?? '', // ← ADD
     });
   }
 

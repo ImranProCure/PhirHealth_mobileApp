@@ -522,7 +522,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 // ---- Pay Online ----
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => controller.selectPayment('PayOnline'),
+                    onTap: () => controller.selectPayment('Online'),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 14),
@@ -530,7 +530,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: controller.selectedPayment.value == 'PayOnline'
+                          color: controller.selectedPayment.value == 'Online'
                               ? const Color(0xFF0D9488)
                               : const Color(0xFFE5E7EB),
                         ),
@@ -561,7 +561,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                             ],
                           ),
                           _radioCircle(
-                              controller.selectedPayment.value == 'PayOnline'),
+                              controller.selectedPayment.value == 'Online'),
                         ],
                       ),
                     ),
@@ -979,51 +979,64 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 const SizedBox(width: 16),
                 // Confirm button
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+                  child: Obx(() {
+                    final isEnabled =
+                        controller.selectedPayment.value.isNotEmpty;
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: isEnabled
+                            ? const LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+                              )
+                            : const LinearGradient(
+                                colors: [Color(0xFFD1D5DB), Color(0xFFD1D5DB)],
+                              ),
                       ),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: controller.confirmBooking,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                      child: ElevatedButton(
+                        onPressed: isEnabled ? controller.confirmBooking : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          disabledBackgroundColor: Colors.transparent,
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              controller.tabType == 0
+                                  ? Icons.add_box_outlined
+                                  : Icons.videocam_outlined,
+                              color: isEnabled
+                                  ? Colors.white
+                                  : const Color(0xFF9CA3AF),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              controller.tabType == 0
+                                  ? "Confirm Clinic Visit"
+                                  : "Confirm Video Visit",
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: isEnabled
+                                    ? Colors.white
+                                    : const Color(0xFF9CA3AF),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            controller.tabType == 0
-                                ? Icons.add_box_outlined
-                                : Icons.videocam_outlined,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            controller.tabType == 0
-                                ? "Confirm Clinic Visit"
-                                : "Confirm Video Visit",
-                            style: const TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                    );
+                  }),
                 ),
               ],
             ),

@@ -248,17 +248,17 @@ class ApiClient {
 
       _setCookiesFromResponse(response);
 
-      if (debugLoggingEnabled) {
-        _log(
-          method: 'POST',
-          path: path,
-          statusCode: statusCode,
-          query: queryParameters,
-          requestBody: data,
-          data: body,
-          isError: !isActuallySuccess,
-        );
-      }
+      // if (debugLoggingEnabled) {
+      //   _log(
+      //     method: 'POST',
+      //     path: path,
+      //     statusCode: statusCode,
+      //     query: queryParameters,
+      //     requestBody: data,
+      //     data: body,
+      //     isError: !isActuallySuccess,
+      //   );
+      // }
 
       return ApiResponse(
         status: isActuallySuccess,

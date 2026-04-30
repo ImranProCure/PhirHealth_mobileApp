@@ -69,25 +69,25 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           ),
         ],
       ),
-      floatingActionButton: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-          ),
-          boxShadow: [
-            BoxShadow(
-                color: const Color(0xFF00897B).withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4))
-          ],
-        ),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
-      ),
+      //   floatingActionButton: Container(
+      //     width: 56,
+      //     height: 56,
+      //     decoration: BoxDecoration(
+      //       shape: BoxShape.circle,
+      //       gradient: const LinearGradient(
+      //         begin: Alignment.topLeft,
+      //         end: Alignment.bottomRight,
+      //         colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+      //       ),
+      //       boxShadow: [
+      //         BoxShadow(
+      //             color: const Color(0xFF00897B).withOpacity(0.3),
+      //             blurRadius: 12,
+      //             offset: const Offset(0, 4))
+      //       ],
+      //     ),
+      //     child: const Icon(Icons.add, color: Colors.white, size: 28),
+      //   ),
     );
   }
 
