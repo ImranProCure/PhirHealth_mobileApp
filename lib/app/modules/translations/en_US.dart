@@ -40,6 +40,7 @@ const Map<String, String> enUS = {
 
   // ── Step 1 : Basic Profile (Identity & Vitals) ─────
   'patient_step1_title': 'Step 1 of 6 : Basic Profile',
+  'patient_step1_edit': 'Basic Profile Details',
   'patient_step1_heading': 'Identity & Vitals',
   'patient_step1_upload_photo': 'Upload Photo',
   'patient_step1_upload_subtitle': 'Add a face to your medical profile',
@@ -51,10 +52,8 @@ const Map<String, String> enUS = {
   'patient_step1_mobile': 'Mobile Number',
   'patient_step1_mobile_cannot': 'Mobile Number (Cannot be edited)',
   'patient_step1_mobile_hint': 'Enter your number',
-  'patient_step1_mobile_hint2': 'Enter mobile number',
   'patient_step1_dob': 'Date of Birth',
   'patient_step1_dob_hint': 'MM/DD/YYYY',
-  'patient_step1_dob_hint2': 'MM / DD / YYYY',
   'patient_step1_gender': 'Gender',
   'patient_step1_gender_male': 'Male',
   'patient_step1_gender_female': 'Female',
@@ -72,7 +71,8 @@ const Map<String, String> enUS = {
   'patient_step2_conditions': 'Existing Medical Conditions',
   'patient_step2_allergies': 'Allergies',
   'patient_step2_allergies_q': 'Do you have any known allergies?',
-  'patient_step2_past_procedures':
+  'patient_step2_past_procedures_title': 'Past Procedures',
+  'patient_step2_past_procedures_subtitle':
       'List any past procedures or hospital stays...',
   'patient_step2_medications': 'Current Medications',
   'patient_step2_medications_hint': 'Name, dosage, and frequency',
@@ -166,6 +166,52 @@ const Map<String, String> enUS = {
   'patient_step6_terms_suffix':
       '. I understand how my health data is stored and managed.',
   'patient_step6_complete': 'Complete Profile',
+
+  // Edit sections
+  'patient_edit_title': 'Edit Profile',
+
+  // Menu sections
+  'patient_menu_title': 'My Profile',
+  'patient_menu_wallet': 'My Wallet',
+  'patient_menu_records': 'Medical Records',
+  'patient_menu_emergency': 'Emergency Contacts',
+  'patient_menu_reminders': 'Reminders',
+  'patient_menu_language': 'App Language',
+  'patient_menu_language_val': 'English',
+  'patient_menu_help': 'Help & Support',
+
+  // Logout dialog
+  'patient_logout_title': 'Log Out',
+  'patient_logout_msg': 'Are you sure you want to log out?',
+  'patient_logout_cancel': 'Cancel',
+
+  // Section titles
+  'patient_dash_doctor_actions': 'Doctor & Quick Actions',
+  'patient_dash_smart_tools': 'Smart Health Tools',
+
+  // Doctor actions
+  'patient_dash_action_consult': 'Doctor\nConsult',
+  'patient_dash_action_scan': 'Face Scan /\nHealth Vitals',
+  'patient_dash_action_locator': 'Network\nLocator',
+  'patient_dash_action_counsellor': 'Counsellor\nand Coaches',
+  'patient_dash_action_lab': 'Lab Tests\n(Diagnostics)',
+  'patient_dash_action_insurance': 'Insurance &\nProtection',
+
+  // AI + Medicine + Fitness cards
+  'patient_dash_cancer_title': 'Cancer Risk AI Scan',
+  'patient_dash_cancer_sub':
+      'Early detection saves lives.\nCheck your risk now.',
+  'patient_dash_medicine': 'Medicines &\nLab Discounts',
+  'patient_dash_fitness': 'Track Steps\n& Fitness',
+
+  // Smart tools
+  'patient_dash_bmi': 'Check\nYour BMI',
+  'patient_dash_diet': 'Diet &\nNutrition',
+  'patient_dash_reminder': 'Medicine\nReminder',
+
+  // Bottom nav
+  'patient_nav_home': 'Home',
+  'patient_nav_shorts': 'Shorts',
 
   // ── Common ─────────────────────────────────────────
   'or': 'OR',

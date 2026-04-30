@@ -4,6 +4,7 @@ import 'package:sample/app/controllers/role_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'app/modules/translations/app_translations.dart';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ Future<void> main() async {
 //   } else if (defaultTargetPlatform == TargetPlatform.iOS) {
 //     InAppWebViewPlatform.instance = IOSInAppWebViewPlatform();
 //   }
-  await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (Platform.isAndroid) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+  // await InAppWebViewController.setWebContentsDebuggingEnabled(true);
 
   Get.put(RoleController());
   runApp(const MyApp());

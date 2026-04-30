@@ -155,8 +155,8 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Basic Profiles Details',
+        title: Text(
+          'patient_step1_edit'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -281,8 +281,8 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
 
                   const SizedBox(height: 20),
 
-                  const Text(
-                    'Upload Photo',
+                  Text(
+                    'patient_step1_upload_photo'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 24,
@@ -292,8 +292,8 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
 
                   const SizedBox(height: 4),
 
-                  const Text(
-                    'Add a face to your medical profile',
+                  Text(
+                    'patient_step1_upload_subtitle'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 16,
@@ -304,10 +304,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   const SizedBox(height: 30),
 
                   // ================= FULL NAME =================
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Full Name',
+                      'patient_step1_full_name'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -335,9 +335,9 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                         fontSize: 16,
                         color: Colors.black,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Enter your name',
+                        hintText: 'patient_step1_full_name_hint'.tr,
                         hintStyle: TextStyle(
                           fontFamily: 'Mulish',
                           fontWeight: FontWeight.w400,
@@ -348,10 +348,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   ),
                   const SizedBox(height: 16),
 
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Email Id (Cannot be edited)',
+                      'patient_step1_email_cannot'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -381,9 +381,9 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                         fontSize: 16,
                         color: Colors.grey,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Enter your email id',
+                        hintText: 'patient_step1_email_hint'.tr,
                         hintStyle: TextStyle(
                           fontFamily: 'Mulish',
                           fontWeight: FontWeight.w400,
@@ -393,10 +393,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Mobile Number (Cannot be edited)',
+                      'patient_step1_mobile_cannot'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -461,10 +461,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   const SizedBox(height: 16),
 
                   // ================= DATE OF BIRTH =================
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Date of Birth',
+                      'patient_step1_dob'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -520,10 +520,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   ),
                   const SizedBox(height: 16),
 
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Gender',
+                      'patient_step1_gender'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
@@ -538,19 +538,19 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                     () => Row(
                       children: [
                         _genderPill(
-                          label: 'Male',
+                          label: 'patient_step1_gender_male'.tr,
                           icon: 'assets/icons/male.png',
                           value: Gender.male,
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 9),
                         _genderPill(
-                          label: 'Female',
+                          label: 'patient_step1_gender_female'.tr,
                           icon: 'assets/icons/female.png',
                           value: Gender.female,
                         ),
                         const SizedBox(width: 10),
                         _genderPill(
-                          label: 'Other',
+                          label: 'patient_step1_gender_other'.tr,
                           icon: 'assets/icons/account_box.png',
                           value: Gender.other,
                         ),
@@ -560,10 +560,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
 
                   const SizedBox(height: 16),
 
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Height',
+                      'patient_step1_height'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
@@ -600,7 +600,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Text('Height',
+                        Text('patient_step1_height'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 15,
@@ -644,7 +644,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text('ft',
+                        Text('patient_step1_height_unit'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -655,10 +655,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   ),
 
                   const SizedBox(height: 16),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Weight',
+                      'patient_step1_weight'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
@@ -693,7 +693,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Text('Weight',
+                        Text('patient_step1_weight'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 15,
@@ -738,7 +738,7 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text('kg',
+                        Text('patient_step1_weight_unit'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -749,10 +749,10 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                   ),
                   const SizedBox(height: 16),
 
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Blood Group',
+                      'patient_step1_blood_group'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
@@ -849,11 +849,11 @@ class IdentityVitalsEditView extends GetView<IdentityVitalsEditController> {
                           ),
                         ),
                         onPressed: controller.goToNextStep,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Update',
+                              'patient_step1_update'.tr,
                               style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 16,

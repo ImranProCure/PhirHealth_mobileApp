@@ -12,23 +12,26 @@ class DashboardController extends GetxController {
 
   // ===== DOCTOR ACTIONS =====
   final List<Map<String, String>> doctorActions = [
-    {'icon': 'assets/icons/stethoscope1.png', 'label': 'Doctor\nConsult'},
     {
-      'icon': 'assets/icons/ar_on_you.png',
-      'label': 'Face Scan /\nHealth Vitals'
+      'icon': 'assets/icons/stethoscope1.png',
+      'label': 'patient_dash_action_consult'
     },
-    {'icon': 'assets/icons/health_cross.png', 'label': 'Network\nLocator'},
+    {'icon': 'assets/icons/ar_on_you.png', 'label': 'patient_dash_action_scan'},
+    {
+      'icon': 'assets/icons/health_cross.png',
+      'label': 'patient_dash_action_locator'
+    },
     {
       'icon': 'assets/icons/health_and_safety.png',
-      'label': 'Counsellor\nand Coaches'
+      'label': 'patient_dash_action_counsellor'
     },
     {
       'icon': 'assets/icons/lab_research.png',
-      'label': 'Lab Tests\n(Diagnostics)'
+      'label': 'patient_dash_action_lab'
     },
     {
       'icon': 'assets/icons/supervisor_account.png',
-      'label': 'Insurance &\nProtection'
+      'label': 'patient_dash_action_insurance'
     },
   ];
 
@@ -43,17 +46,17 @@ class DashboardController extends GetxController {
   // ===== SMART HEALTH TOOLS =====
   final List<Map<String, dynamic>> smartTools = [
     {
-      'title': 'Check\nYour BMI',
+      'title': 'patient_dash_bmi',
       'icon': 'assets/icons/bmi 1.png',
       'route': '/bmi'
     },
     {
-      'title': 'Diet &\nNutrition',
+      'title': 'patient_dash_diet',
       'icon': 'assets/icons/salad 1.png',
       'route': '/ai-nutritionist'
     },
     {
-      'title': 'Medicine\nReminder',
+      'title': 'patient_dash_reminder',
       'icon': 'assets/icons/time 1.png',
       'route': '/add-medicine'
     },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/db/db.dart';
+import '../../../common widgets/lang_toggle.dart'; // ← apna actual path daalo
 import '../controllers/my_profile_controller.dart';
 
 // ─────────────────────────────────────────────
@@ -25,7 +26,7 @@ class MyProfileView extends GetView<MyProfileController> {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PHONE LAYOUT  (original — untouched)
+//  PHONE LAYOUT
 // ═══════════════════════════════════════════════════════════
 class _PhoneMyProfileView extends StatelessWidget {
   final MyProfileController controller;
@@ -45,15 +46,24 @@ class _PhoneMyProfileView extends StatelessWidget {
                 children: [
                   _ProfileCard(controller: controller),
                   const SizedBox(height: 16),
-                  ...List.generate(controller.menuSections.length, (i) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _MenuSection(
-                          controller: controller,
-                          items: controller.menuSections[i]),
+                  // CHANGED: Obx wrap — locale change hone pe menu labels retranslate hon
+                  Obx(() {
+                    // isHindiGlobal read karna zaroori hai taaki Obx rebuild trigger ho
+                    isHindiGlobal.value;
+                    return Column(
+                      children: [
+                        ...List.generate(controller.menuSections.length, (i) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: _MenuSection(
+                                controller: controller,
+                                items: controller.menuSections[i]),
+                          );
+                        }),
+                        const SizedBox(height: 8),
+                      ],
                     );
                   }),
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
@@ -84,7 +94,6 @@ class _TabletMyProfileView extends StatelessWidget {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── LEFT: Profile card + logout + version ────────
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.36,
             child: Container(
@@ -93,7 +102,6 @@ class _TabletMyProfileView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Large avatar
                   CircleAvatar(
                     radius: 52,
                     backgroundImage: AssetImage(controller.profileImage),
@@ -101,8 +109,6 @@ class _TabletMyProfileView extends StatelessWidget {
                     onBackgroundImageError: (_, __) {},
                   ),
                   const SizedBox(height: 16),
-
-                  // Name
                   Text(
                     controller.name,
                     textAlign: TextAlign.center,
@@ -114,8 +120,6 @@ class _TabletMyProfileView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-
-                  // PHIR ID
                   Text(
                     controller.phirId,
                     style: const TextStyle(
@@ -125,8 +129,6 @@ class _TabletMyProfileView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-
-                  // Phone | Age
                   Text(
                     '${controller.phone}  |  ${controller.age}',
                     style: const TextStyle(
@@ -136,8 +138,6 @@ class _TabletMyProfileView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  // Blood group badge
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -164,8 +164,6 @@ class _TabletMyProfileView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Edit profile button
                   OutlinedButton.icon(
                     onPressed: controller.editProfile,
                     icon: const Icon(Icons.edit_outlined,
@@ -187,10 +185,7 @@ class _TabletMyProfileView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                   ),
-
                   const Spacer(),
-
-                  // Logout + version at bottom
                   _LogoutButton(controller: controller),
                   const Padding(
                     padding: EdgeInsets.only(bottom: 24, top: 10),
@@ -200,15 +195,12 @@ class _TabletMyProfileView extends StatelessWidget {
               ),
             ),
           ),
-
-          // ── RIGHT: Menu sections ──────────────────────────
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Section label
                   const Text(
                     'Account Settings',
                     style: TextStyle(
@@ -253,7 +245,7 @@ AppBar _buildAppBar(MyProfileController controller,
     ),
     centerTitle: true,
     title: Text(
-      'My Profile',
+      'patient_menu_title'.tr,
       style: TextStyle(
         fontFamily: 'Mulish',
         fontSize: fontSize,
@@ -261,16 +253,11 @@ AppBar _buildAppBar(MyProfileController controller,
         color: Colors.black,
       ),
     ),
-    actions: [
-      // IconButton(
-      //   icon: const Icon(Icons.settings_outlined, color: Colors.black),
-      //   onPressed: controller.openSettings,
-      // ),
-    ],
+    actions: const [],
   );
 }
 
-// ── Profile Card (phone only) ─────────────────────────────
+// ── Profile Card ──────────────────────────────────────────
 class _ProfileCard extends StatelessWidget {
   final MyProfileController controller;
   _ProfileCard({required this.controller});
@@ -354,8 +341,7 @@ class _ProfileCard extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Color(0xFF6B7280))),
-                                Text(
-                                    "${controller.calculateAge(dob).toString()}$gender",
+                                Text("${controller.calculateAge(dob)}$gender",
                                     style: const TextStyle(
                                         fontFamily: 'Mulish',
                                         fontSize: 12,
@@ -397,7 +383,7 @@ class _ProfileCard extends StatelessWidget {
                               size: 14, color: Color(0xFF0D9488)),
                           const SizedBox(width: 6),
                           Text(
-                            "Blood Group: $bgroup",
+                            '${'patient_step1_blood_group'.tr}: $bgroup',
                             style: const TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 13,
@@ -459,7 +445,9 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? trailing = item['trailing'] as String?;
+    // CHANGED: 'trailing' hata ke 'isLangItem' flag se detect karo
+    final bool isLangItem = item['isLangItem'] == true;
+
     return GestureDetector(
       onTap: () => controller.onMenuTap(item['route'] as String),
       child: Padding(
@@ -491,17 +479,18 @@ class _MenuItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (trailing != null)
+            // CHANGED: Language item — Obx se reactive, baaki items mein trailing nahi
+            if (isLangItem)
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: Text(
-                  trailing,
-                  style: const TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 13,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
+                child: Obx(() => Text(
+                      isHindiGlobal.value ? 'हिंदी' : 'English',
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 13,
+                        color: Color(0xFF9CA3AF),
+                      ),
+                    )),
               ),
             const Icon(Icons.arrow_forward_ios,
                 size: 14, color: Color(0xFF9CA3AF)),
@@ -529,14 +518,14 @@ class _LogoutButton extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.logout, color: Color(0xFFEF4444), size: 18),
-            SizedBox(width: 8),
+            const Icon(Icons.logout, color: Color(0xFFEF4444), size: 18),
+            const SizedBox(width: 8),
             Text(
-              'Log Out',
-              style: TextStyle(
+              'patient_logout_title'.tr,
+              style: const TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 15,
                 fontWeight: FontWeight.w700,

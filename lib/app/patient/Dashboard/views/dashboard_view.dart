@@ -133,7 +133,7 @@ class _DoctorActionsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle('Doctor & Quick Actions'),
+          _SectionTitle('patient_dash_doctor_actions'.tr),
           const SizedBox(height: 16),
 
           // ── TABLET: horizontal two-column list ────────────
@@ -168,7 +168,7 @@ class _DoctorActionsSection extends StatelessWidget {
                       const SizedBox(height: 6),
                       SizedBox(
                         child: Text(
-                          action['label']!,
+                          action['label']!.tr,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontFamily: 'Mulish',
@@ -247,7 +247,7 @@ class _DoctorActionsSection extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        action['label']!,
+                        action['label']!.tr,
                         style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 13,
@@ -298,11 +298,11 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                 decoration: _cardDecoration(),
                 child: Stack(
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Cancer Risk AI Scan',
+                          'patient_dash_cancer_title'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 14,
@@ -311,7 +311,7 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Early detection saves lives.\nCheck your risk now.',
+                          'patient_dash_cancer_sub'.tr,
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
@@ -345,9 +345,9 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Medicines &\nLab Discounts',
+                            'patient_dash_medicine'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontWeight: FontWeight.w700,
@@ -375,9 +375,9 @@ class _AiMedicineFitnessSection extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Track Steps\n& Fitness',
+                            'patient_dash_fitness'.tr,
                             style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontWeight: FontWeight.w700),
@@ -474,7 +474,7 @@ class _SmartHealthToolsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle('Smart Health Tools'),
+          _SectionTitle('patient_dash_smart_tools'.tr),
           const SizedBox(height: 16),
           Row(
             children: List.generate(controller.smartTools.length, (index) {
@@ -497,7 +497,7 @@ class _SmartHealthToolsSection extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
                             child: Text(
-                              tool['title'],
+                              (tool['title'] as String).tr,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Mulish',
