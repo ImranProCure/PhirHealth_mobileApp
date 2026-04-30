@@ -40,6 +40,7 @@ const Map<String, String> hiIN = {
 
   // ── Step 1 : Basic Profile (Identity & Vitals) ─────
   'patient_step1_title': 'चरण 1 / 6 : बुनियादी प्रोफ़ाइल',
+  'patient_step1_edit': 'बुनियादी प्रोफ़ाइल विवरण',
   'patient_step1_heading': 'पहचान और स्वास्थ्य विवरण',
   'patient_step1_upload_photo': 'फ़ोटो अपलोड करें',
   'patient_step1_upload_subtitle': 'अपनी मेडिकल प्रोफ़ाइल में फ़ोटो जोड़ें',
@@ -51,10 +52,8 @@ const Map<String, String> hiIN = {
   'patient_step1_mobile': 'मोबाइल नंबर',
   'patient_step1_mobile_cannot': 'मोबाइल नंबर (संपादित नहीं किया जा सकता)',
   'patient_step1_mobile_hint': 'अपना नंबर दर्ज करें',
-  'patient_step1_mobile_hint2': 'मोबाइल नंबर दर्ज करें',
   'patient_step1_dob': 'जन्म तिथि',
   'patient_step1_dob_hint': 'MM/DD/YYYY',
-  'patient_step1_dob_hint2': 'MM / DD / YYYY',
   'patient_step1_gender': 'लिंग',
   'patient_step1_gender_male': 'पुरुष',
   'patient_step1_gender_female': 'महिला',
@@ -72,7 +71,9 @@ const Map<String, String> hiIN = {
   'patient_step2_conditions': 'मौजूदा चिकित्सीय स्थितियां',
   'patient_step2_allergies': 'एलर्जी',
   'patient_step2_allergies_q': 'क्या आपको कोई ज्ञात एलर्जी है?',
-  'patient_step2_past_procedures': 'पिछली प्रक्रियाएं या अस्पताल में भर्ती...',
+  'patient_step2_past_procedures_title': 'पिछली प्रक्रियाएं',
+  'patient_step2_past_procedures_subtitle':
+      'पिछली प्रक्रियाएं या अस्पताल में भर्ती...',
   'patient_step2_medications': 'वर्तमान दवाएं',
   'patient_step2_medications_hint': 'नाम, खुराक और आवृत्ति',
 
@@ -166,6 +167,53 @@ const Map<String, String> hiIN = {
   'patient_step6_terms_suffix':
       'से। मैं समझता/समझती हूँ कि मेरा स्वास्थ्य डेटा कैसे संग्रहीत और प्रबंधित किया जाता है।',
   'patient_step6_complete': 'प्रोफ़ाइल पूर्ण करें',
+
+  // Edit sections
+  'patient_edit_title': 'प्रोफ़ाइल संपादित करें',
+
+  // Menu sections
+  'patient_menu_title': 'मेरी प्रोफ़ाइल',
+  'patient_menu_wallet': 'मेरा वॉलेट',
+  'patient_menu_records': 'मेडिकल रिकॉर्ड',
+  'patient_menu_emergency': 'आपातकालीन संपर्क',
+  'patient_menu_reminders': 'रिमाइंडर',
+  'patient_menu_language': 'ऐप भाषा',
+  'patient_menu_language_val': 'हिंदी',
+  'patient_menu_help': 'सहायता और समर्थन',
+  'patient_menu_privacy': 'गोपनीयता नीति',
+
+  // Logout dialog
+  'patient_logout_title': 'लॉग आउट',
+  'patient_logout_msg': 'क्या आप वाकई लॉग आउट करना चाहते हैं?',
+  'patient_logout_cancel': 'रद्द करें',
+
+  // Section titles
+  'patient_dash_doctor_actions': 'डॉक्टर और त्वरित सेवाएं',
+  'patient_dash_smart_tools': 'स्मार्ट स्वास्थ्य टूल्स',
+
+  // Doctor actions
+  'patient_dash_action_consult': 'डॉक्टर\nपरामर्श',
+  'patient_dash_action_scan': 'फेस स्कैन /\nस्वास्थ्य जांच',
+  'patient_dash_action_locator': 'नेटवर्क\nखोजें',
+  'patient_dash_action_counsellor': 'काउंसलर\nऔर कोच',
+  'patient_dash_action_lab': 'लैब टेस्ट\n(डायग्नोस्टिक्स)',
+  'patient_dash_action_insurance': 'बीमा और\nसुरक्षा',
+
+  // AI + Medicine + Fitness cards
+  'patient_dash_cancer_title': 'कैंसर जोखिम AI स्कैन',
+  'patient_dash_cancer_sub':
+      'जल्दी पहचान जान बचाती है।\nअभी अपना जोखिम जांचें।',
+  'patient_dash_medicine': 'दवाएं और\nलैब छूट',
+  'patient_dash_fitness': 'कदम और\nफिटनेस ट्रैक करें',
+
+  // Smart tools
+  'patient_dash_bmi': 'अपना\nBMI जांचें',
+  'patient_dash_diet': 'आहार और\nपोषण',
+  'patient_dash_reminder': 'दवा\nरिमाइंडर',
+
+  // Bottom nav
+  'patient_nav_home': 'होम',
+  'patient_nav_shorts': 'शॉर्ट्स',
 
   // ── Common ─────────────────────────────────────────
   'or': 'या',

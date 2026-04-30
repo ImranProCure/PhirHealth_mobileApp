@@ -15,76 +15,74 @@ class MyProfileController extends GetxController {
   final String profileImage = 'assets/profile.png';
 
   // ===== MENU SECTIONS =====
-  final List<List<Map<String, dynamic>>> menuSections = [
-    [
-      {
-        'icon': Icons.account_balance_wallet_outlined,
-        'label': 'My Wallet',
-        'route': '/wallet',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-      {
-        'icon': Icons.assignment_outlined,
-        'label': 'Medical Records',
-        'route': '/medical-records',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-      {
-        'icon': Icons.emergency_outlined,
-        'label': 'Emergency Contacts',
-        'route': '/emergency-contacts',
-        'iconColor': Color(0xFFFF6B35),
-        'iconBg': Color(0xFFFFF0EB)
-      },
-      {
-        'icon': Icons.group_outlined,
-        'label': 'My Family Members',
-        'route': '/family-members',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-    ],
-    [
-      {
-        'icon': Icons.notifications_outlined,
-        'label': 'Reminders',
-        'route': '/medicine-reminder',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-      {
-        'icon': Icons.language_outlined,
-        'label': 'App Language',
-        'route': '/app-language',
-        'trailing': 'English',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-    ],
-    [
-      {
-        'icon': Icons.help_outline,
-        'label': 'Help & Support',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-      {
-        'icon': Icons.shield_outlined,
-        'label': 'Privacy Policy',
-        'iconColor': Color(0xFF0D9488),
-        'iconBg': Color(0xFFE0F2F1)
-      },
-    ],
-  ];
+  // CHANGED: final list → getter
+  // Pehle compile time pe ek baar .tr call hota tha — locale change pe rebuild nahi hota tha
+  // Ab har baar getter call hoga toh fresh .tr milega current locale se
+  List<List<Map<String, dynamic>>> get menuSections => [
+        [
+          {
+            'icon': Icons.account_balance_wallet_outlined,
+            'label': 'patient_menu_wallet'.tr,
+            'route': '/wallet',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+          {
+            'icon': Icons.assignment_outlined,
+            'label': 'patient_menu_records'.tr,
+            'route': '/medical-records',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+          {
+            'icon': Icons.emergency_outlined,
+            'label': 'patient_menu_emergency'.tr,
+            'route': '/emergency-contacts',
+            'iconColor': const Color(0xFFFF6B35),
+            'iconBg': const Color(0xFFFFF0EB),
+          },
+        ],
+        [
+          {
+            'icon': Icons.notifications_outlined,
+            'label': 'patient_menu_reminders'.tr,
+            'route': '/medicine-reminder',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+          {
+            'icon': Icons.language_outlined,
+            'label': 'patient_menu_language'.tr,
+            'route': '/app-language',
+            'isLangItem': true,
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+        ],
+        [
+          {
+            'icon': Icons.help_outline,
+            'label': 'patient_menu_help'.tr,
+            'route': '/help',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+          {
+            'icon': Icons.shield_outlined,
+            'label': 'login_privacy'.tr,
+            'route': '/privacy',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+        ],
+      ];
 
   void onMenuTap(String route) {
     Get.toNamed(route);
   }
 
   void editProfile() {
-   Get.toNamed('/edit-profile');
+    Get.toNamed('/edit-profile');
   }
 
   void openSettings() {}
@@ -155,15 +153,15 @@ class MyProfileController extends GetxController {
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Log Out',
+        title: Text('patient_logout_title'.tr,
             style:
                 TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to log out?',
+        content: Text('patient_logout_msg'.tr,
             style: TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280))),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel',
+            child: Text('patient_logout_cancel'.tr,
                 style:
                     TextStyle(fontFamily: 'Mulish', color: Color(0xFF6B7280))),
           ),
@@ -183,7 +181,7 @@ class MyProfileController extends GetxController {
                 binding: HomeBinding(),
               );
             },
-            child: const Text('Log Out',
+            child: Text('patient_logout_title'.tr,
                 style: TextStyle(
                     fontFamily: 'Mulish',
                     color: Color(0xFFEF4444),

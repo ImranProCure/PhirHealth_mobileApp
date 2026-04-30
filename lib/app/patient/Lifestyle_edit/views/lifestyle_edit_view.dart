@@ -16,8 +16,8 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Habits & Lifestyle',
+        title: Text(
+          'patient_step3_heading'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -41,13 +41,13 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 14),
 
                 // ================= SMOKING =================
-                const Text('Smoking',
+                Text('patient_step3_smoking'.tr,
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text('What is your current smoking status?',
+                Text('patient_step3_smoking_q'.tr,
                     style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
                 Obx(() => Wrap(
@@ -65,13 +65,13 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= ALCOHOL =================
-                const Text('Alcohol',
+                Text('patient_step3_alcohol'.tr,
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text('How often do you consume alcohol?',
+                Text('patient_step3_alcohol_q'.tr,
                     style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
                 Obx(() => Wrap(
@@ -89,39 +89,38 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= DIET =================
-                const Text('Diet preference',
+                Text('patient_step3_diet'.tr,
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text('Select your primary dietary habit',
-                    style: TextStyle(fontSize: 14)),
+                Text('patient_step3_diet_q'.tr, style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 25),
                 Obx(() => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _dietCard(
-                          label: 'Vegetarian',
+                          label: 'patient_step3_diet_veg'.tr,
                           icon: 'assets/icons/broccoli 1.png',
                           selected:
                               controller.selectedDiet.value == 'Vegetarian',
                           onTap: () => controller.selectDiet('Vegetarian'),
                         ),
                         _dietCard(
-                          label: 'Non-Veg',
+                          label: 'patient_step3_diet_nonveg'.tr,
                           icon: 'assets/icons/chicken-leg 1.png',
                           selected: controller.selectedDiet.value == 'Non-Veg',
                           onTap: () => controller.selectDiet('Non-Veg'),
                         ),
                         _dietCard(
-                          label: 'Vegan',
+                          label: 'patient_step3_diet_vegan'.tr,
                           icon: 'assets/icons/salad (1) 1.png',
                           selected: controller.selectedDiet.value == 'Vegan',
                           onTap: () => controller.selectDiet('Vegan'),
                         ),
                         _dietCard(
-                          label: 'Eggitarian',
+                          label: 'patient_step3_diet_egg'.tr,
                           icon: 'assets/icons/eggs 1.png',
                           selected:
                               controller.selectedDiet.value == 'Eggitarian',
@@ -133,13 +132,13 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                 const SizedBox(height: 30),
 
                 // ================= SLEEP =================
-                const Text('Average Sleep',
+                Text('patient_step3_sleep'.tr,
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 16,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
-                const Text('How many hours do you sleep per night?',
+                Text('patient_step3_sleep_q'.tr,
                     style: TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
                 Obx(() {
@@ -177,9 +176,9 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _sleepLabel('2 hrs', 0),
-                            _sleepLabel('6-8 hrs', 1),
-                            _sleepLabel('8+ hrs', 2),
+                            _sleepLabel('patient_step3_sleep_low'.tr, 0),
+                            _sleepLabel('patient_step3_sleep_mid'.tr, 1),
+                            _sleepLabel('patient_step3_sleep_high'.tr, 2),
                           ],
                         ),
                       ],
@@ -210,8 +209,8 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                         shadowColor: Colors.transparent,
                       ),
                       onPressed: controller.goToNextStep,
-                      child: const Text(
-                        'Update',
+                      child: Text(
+                        'patient_step1_update'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 16,

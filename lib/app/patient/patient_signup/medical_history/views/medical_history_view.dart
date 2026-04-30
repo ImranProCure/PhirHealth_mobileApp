@@ -145,7 +145,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 // ================= PAST PROCEDURES =================
                 Text(
-                  'patient_step2_allergies'.tr,
+                  'patient_step2_past_procedures_title'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -156,7 +156,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
                 const SizedBox(height: 10),
 
                 Text(
-                  'patient_step2_allergies_q'.tr,
+                  'patient_step2_past_procedures_subtitle'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 14,
@@ -168,7 +168,7 @@ class MedicalHistoryView extends GetView<MedicalHistoryController> {
 
                 _textArea(
                   controller: controller.pastProceduresController,
-                  hint: 'patient_step2_past_procedures'.tr,
+                  hint: 'patient_step2_medications_hint'.tr,
                 ),
 
                 const SizedBox(height: 25),

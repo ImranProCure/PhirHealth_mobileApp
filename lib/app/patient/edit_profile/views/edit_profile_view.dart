@@ -18,8 +18,8 @@ class EditProfileSectionsView extends GetView<EditProfileController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          'Edit Profile',
+        title: Text(
+          'patient_edit_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
