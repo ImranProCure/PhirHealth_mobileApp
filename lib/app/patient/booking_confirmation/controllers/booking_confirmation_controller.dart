@@ -29,9 +29,10 @@ class BookingConfirmationController extends GetxController {
   late String selectedSlot;
   late int tabType;
   late String patientName;
+  late String patientId;
 
   // ===== PAYMENT METHOD =====
-  final RxString selectedPayment = 'Wallet'.obs;
+  final RxString selectedPayment = ''.obs;
 
   void selectPayment(String method) {
     selectedPayment.value = method;
@@ -159,7 +160,6 @@ class BookingConfirmationController extends GetxController {
 
   // // ===== CONFIRM =====
   // void confirmBooking() {
-  //   Get.toNamed('/appointment-confirmed');
   // }
 
   Future<void> fetchWalletBalanceApi() async {
@@ -187,6 +187,7 @@ class BookingConfirmationController extends GetxController {
     selectedSlot = Get.arguments?['slot'] ?? '03:00 PM';
     tabType = Get.arguments?['tabType'] ?? 0;
     patientName = Get.arguments?['patientName'] ?? '';
+    patientId = Get.arguments?['patientId'] ?? '';
     doctorData.value = Get.arguments?['data'] ?? {};
 
     doctorName.value = doctorData.value['name']?.toString() ?? '';
@@ -250,11 +251,7 @@ class BookingConfirmationController extends GetxController {
             appointmentType, // "In-Clinic Appointment" | "Video Consultation"
         fees: fees.value,
         modeOfPayment: selectedPayment.value, // "Wallet" | "PayOnline"
-        patientName: patientName,
-        gender: doctorData.value['patient_gender']?.toString() ?? '',
-        age: doctorData.value['patient_age']?.toString() ?? '',
-        mobile: doctorData.value['patient_mobile']?.toString() ?? '',
-        mail: doctorData.value['patient_email']?.toString() ?? '',
+        patientId: patientId,
         reports: reports.map((r) => r.imageFile).toList(),
         reportData: reports
             .map((r) => {

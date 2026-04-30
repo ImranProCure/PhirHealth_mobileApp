@@ -5,7 +5,7 @@ class DashboardController extends GetxController {
 
   void selectNav(int index) {
     selectedNavIndex.value = index;
-    if (index == 1) Get.toNamed('/doctor-consult');
+    if (index == 1) Get.toNamed('/doctor-visits');
     if (index == 3) Get.toNamed('/shorts-reels');
     if (index == 4) Get.toNamed('/my-profile');
   }

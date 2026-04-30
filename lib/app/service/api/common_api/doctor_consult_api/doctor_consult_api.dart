@@ -40,11 +40,7 @@ class DoctorConsultApi {
     required String appointmentType,
     required int fees,
     required String modeOfPayment,
-    required String patientName,
-    required String gender,
-    required String age,
-    required String mobile,
-    required String mail,
+    required String patientId,
     required List<File> reports,
     required List<Map<String, String>> reportData,
   }) async {
@@ -56,11 +52,7 @@ class DoctorConsultApi {
       'appointment_type': appointmentType,
       'fees': fees.toString(),
       'mode_of_payment': modeOfPayment,
-      'patient_name': patientName,
-      'gender': gender,
-      'age': age,
-      'mobile': mobile,
-      'mail': mail,
+      'patient_id ': patientId,
 
       // reports[] — each file as multipart
       'reports': [
@@ -76,9 +68,10 @@ class DoctorConsultApi {
     });
 
     return await _client.post(
-      ApiConstants.commonApiConstants.bookAppointment, // your endpoint constant
-      data: formData,
-    );
+        ApiConstants
+            .commonApiConstants.bookAppointment, // your endpoint constant
+        data: formData,
+        authenticated: true);
   }
 
   Future<ApiResponse> getPatientRelations() async {
