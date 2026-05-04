@@ -48,12 +48,12 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Icon(Icons.access_time_outlined,
                                 size: 16, color: Color(0xFF6B7280)),
                             SizedBox(width: 6),
                             Text(
-                              "Appointment time",
+                              "patient_book_appt_time".tr,
                               style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 13,
@@ -240,12 +240,12 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 ),
               ),
               const SizedBox(width: 10),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Attach Reports",
+                      "patient_book_attach".tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -254,7 +254,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                       ),
                     ),
                     Text(
-                      "Optional · Share with doctor before visit",
+                      "patient_book_attach_sub".tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 11,
@@ -272,8 +272,8 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                   color: const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
-                  "Optional",
+                child: Text(
+                  "patient_book_optional".tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 10,
@@ -323,8 +323,8 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    "Add File",
+                  Text(
+                    "patient_book_add_file".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 13,
@@ -425,13 +425,13 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _InfoItem(Icons.work_outline,
-                      "${controller.doctorExperience.value} Years Exp."),
+                      "${controller.doctorExperience.value} ${'patient_prof_exp'.tr}"),
                   const _VerticalDivider(),
                   _InfoItem(Icons.star,
                       "${controller.doctorRating.value.toStringAsFixed(1)}"),
                   const _VerticalDivider(),
                   _InfoItem(Icons.chat_bubble_outline,
-                      "${controller.reviewCount.value} Review"),
+                      "${controller.reviewCount.value} ${'patient_prof_review'.tr}"),
                 ],
               ),
             ],
@@ -504,8 +504,8 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Payment Options",
+          Text(
+            "patient_book_payment".tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 14,
@@ -1021,8 +1021,8 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                             const SizedBox(width: 8),
                             Text(
                               controller.tabType == 0
-                                  ? "Confirm Clinic Visit"
-                                  : "Confirm Video Visit",
+                                  ? "patient_book_confirm_clinic".tr
+                                  : "patient_book_confirm_video".tr,
                               style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 15,

@@ -119,8 +119,8 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          "Patient Details",
+        title: Text(
+          "patient_details_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -165,8 +165,8 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Who is the patient?",
+                          Text(
+                            "patient_details_who".tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 16,
@@ -174,8 +174,8 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            "Only one member can be selected at a time",
+                          Text(
+                            "patient_details_one_member".tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 12,
@@ -245,11 +245,11 @@ class PatientDetailsView extends GetView<PatientDetailsController> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Next Step",
+                        "next_button".tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 16,

@@ -27,7 +27,7 @@ class ProfileDetailsController extends GetxController {
   final RxString address = ''.obs;
   final RxInt waitTime = 0.obs;
   final RxDouble latitude = 0.0.obs;
-  final RxDouble longitude = 0.0.obs; 
+  final RxDouble longitude = 0.0.obs;
 
   final RxList<Map<String, dynamic>> reviews = <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> allReviews = <Map<String, dynamic>>[].obs;
@@ -122,8 +122,8 @@ class ProfileDetailsController extends GetxController {
   Future<void> goToPatientDetails() async {
     if (selectedSlot.value.isEmpty) {
       Get.snackbar(
-        "Select a Slot",
-        "Please select a time slot to continue",
+        "patient_prof_select_slot".tr,
+        "patient_prof_select_slot_msg".tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: const Color(0xFFF3F4F6),
         colorText: Colors.black,

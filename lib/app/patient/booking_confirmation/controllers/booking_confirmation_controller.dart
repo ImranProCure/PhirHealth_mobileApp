@@ -66,14 +66,17 @@ class BookingConfirmationController extends GetxController {
   ];
   Api api = Api.instance;
 
-  String get appointmentType =>
-      tabType == 0 ? 'In-Clinic Appointment' : 'Video Consultation';
+  String get appointmentType => tabType == 0
+      ? 'patient_book_clinic_type'.tr
+      : 'patient_book_video_type'.tr;
 
-  String get appBarTitle =>
-      tabType == 0 ? 'Book In-Clinic Appointment' : 'Book Video Consultation';
+  String get appBarTitle => tabType == 0
+      ? 'patient_book_clinic_title'.tr
+      : 'patient_book_video_title'.tr;
 
-  String get slotTypeLabel =>
-      tabType == 0 ? 'Clinic Visit Slots' : 'Video Consult Slots';
+  String get slotTypeLabel => tabType == 0
+      ? 'patient_book_clinic_slots'.tr
+      : 'patient_book_video_slots'.tr;
 
   // ================= PICK & ADD REPORT =================
   Future<void> pickAndAddReport() async {

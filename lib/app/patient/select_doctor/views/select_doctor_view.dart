@@ -16,8 +16,8 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
-        title: const Text(
-          "Select a Doctor",
+        title: Text(
+          "patient_select_doc_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -41,7 +41,7 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                   onSubmitted: (_) => controller.onSearchSubmitted(),
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: "Search doctor or specialty",
+                    hintText: "patient_select_doc_search".tr,
                     hintStyle: const TextStyle(
                       fontFamily: 'Mulish',
                       color: Color(0xFF9CA3AF),
@@ -61,8 +61,8 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                 const SizedBox(height: 24),
 
                 // ================= SPECIALTIES TITLE =================
-                const Text(
-                  "Specialties",
+                Text(
+                  "patient_select_doc_specialties".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
 
@@ -163,11 +163,11 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                   }
 
                   if (controller.doctors.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 48),
                         child: Text(
-                          "No doctors found",
+                          "patient_select_doc_no_doctors".tr,
                           style: TextStyle(
                             color: Color(0xFF6B7280),
                             fontSize: 14,
@@ -207,11 +207,11 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                       controller.doctors.isEmpty) {
                     return const SizedBox.shrink();
                   }
-                  return const Padding(
+                  return Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Text(
-                        "No more doctors",
+                        "patient_select_doc_no_more".tr,
                         style: TextStyle(
                           color: Color(0xFF9CA3AF),
                           fontSize: 13,
@@ -462,7 +462,9 @@ class SelectDoctorView extends GetView<SelectDoctorController> {
                         horizontal: 22, vertical: 10),
                   ),
                   child: Text(
-                    doctor["available"] ? "Book Now" : "Slots Full",
+                    doctor["available"]
+                        ? "patient_select_doc_book".tr
+                        : "Slots Full",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 13,

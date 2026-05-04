@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../common widgets/lang_toggle.dart'; // ← apna actual path confirm karo
+import '../../../common widgets/lang_toggle.dart';
 
 class AppLanguageController extends GetxController {
   final RxString selectedLanguage = 'English'.obs;
@@ -43,16 +43,16 @@ class AppLanguageController extends GetxController {
     // FIX 4: pehle back, phir thodi der baad snackbar
     Get.back();
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      Get.snackbar(
-        'Language Updated',
-        'App language set to ${selectedLanguage.value}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: const Color(0xFF0D9488),
-        colorText: Colors.white,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12,
-      );
-    });
+    // Future.delayed(const Duration(milliseconds: 300), () {
+    //   Get.snackbar(
+    //     'Language Updated',
+    //     'App language set to ${selectedLanguage.value}',
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     backgroundColor: const Color(0xFF0D9488),
+    //     colorText: Colors.white,
+    //     margin: const EdgeInsets.all(16),
+    //     borderRadius: 12,
+    //   );
+    // });
   }
 }

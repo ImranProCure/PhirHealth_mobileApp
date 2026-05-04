@@ -616,12 +616,12 @@ class _BottomNav extends StatelessWidget {
         children: [
           _NavItem(
               icon: "assets/home.png",
-              label: 'Home',
+              label: 'patient_nav_home'.tr,
               isActive: true,
               onTap: () => controller.selectNav(0)),
           _NavItem(
               icon: "assets/calendar_check.png",
-              label: 'Appointment',
+              label: 'patient_nav_appointment'.tr,
               isActive: true,
               onTap: () => controller.selectNav(1)),
           // _NavItem(
@@ -631,12 +631,12 @@ class _BottomNav extends StatelessWidget {
           //     onTap: () => controller.selectNav(2)),
           _NavItem(
               icon: "assets/duo.png",
-              label: 'Shorts',
+              label: 'patient_nav_shorts'.tr,
               isActive: true,
               onTap: () => controller.selectNav(3)),
           _NavItem(
               icon: "assets/account_circle.png",
-              label: 'My Profile',
+              label: 'patient_menu_title'.tr,
               isActive: true,
               onTap: () => controller.selectNav(4)),
         ],

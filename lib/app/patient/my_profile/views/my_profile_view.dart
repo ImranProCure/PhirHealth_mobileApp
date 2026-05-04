@@ -479,7 +479,6 @@ class _MenuItem extends StatelessWidget {
                 ),
               ),
             ),
-            // CHANGED: Language item — Obx se reactive, baaki items mein trailing nahi
             if (isLangItem)
               Padding(
                 padding: const EdgeInsets.only(right: 8),

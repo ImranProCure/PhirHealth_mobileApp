@@ -8,7 +8,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -17,8 +17,8 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          "Doctor Consult",
+        title: Text(
+          "patient_doc_consult_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -57,8 +57,8 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
             const SizedBox(height: 24),
 
             // ================= TITLE =================
-            const Text(
-              "Doctor Consultation",
+            Text(
+              "patient_doc_consult_heading".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 26,
@@ -68,8 +68,8 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
 
             const SizedBox(height: 4),
 
-            const Text(
-              "Connect with certified medical professionals for expert advice and diagnosis.",
+            Text(
+              "patient_doc_consult_sub".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
@@ -81,7 +81,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
 
             // ================= PRIMARY BUTTON =================
             _gradientButton(
-              text: "Book a Consultation",
+              text: "patient_doc_consult_book".tr,
               imagePath: "assets/icons/stethoscope.png",
               onTap: controller.bookConsultation,
             ),
@@ -90,7 +90,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
 
             // ================= OUTLINE BUTTON 1 =================
             _outlineButton(
-              text: "View Consultation History",
+              text: "patient_doc_consult_history".tr,
               onTap: controller.viewHistory,
             ),
 
@@ -98,7 +98,7 @@ class DoctorConsultView extends GetView<DoctorConsultController> {
 
             // ================= OUTLINE BUTTON 2 =================
             _outlineButton(
-              text: "Upload Medical Reports",
+              text: "patient_doc_consult_upload".tr,
               onTap: controller.uploadReports,
             ),
           ],

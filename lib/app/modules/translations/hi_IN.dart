@@ -214,6 +214,83 @@ const Map<String, String> hiIN = {
   // Bottom nav
   'patient_nav_home': 'होम',
   'patient_nav_shorts': 'शॉर्ट्स',
+  'patient_nav_appointment': 'अपॉइंटमेंट',
+
+  // ── Doctor Consult
+
+  'patient_doc_consult_title': 'डॉक्टर परामर्श',
+  'patient_doc_consult_heading': 'डॉक्टर परामर्श',
+  'patient_doc_consult_sub':
+      'विशेषज्ञ सलाह और निदान के लिए प्रमाणित चिकित्सा पेशेवरों से जुड़ें।',
+  'patient_doc_consult_book': 'परामर्श बुक करें',
+  'patient_doc_consult_history': 'परामर्श इतिहास देखें',
+  'patient_doc_consult_upload': 'मेडिकल रिपोर्ट अपलोड करें',
+
+  // ── Select Doctor
+
+  'patient_select_doc_title': 'डॉक्टर चुनें',
+  'patient_select_doc_search': 'डॉक्टर या विशेषज्ञता खोजें',
+  'patient_select_doc_specialties': 'विशेषज्ञताएं',
+  'patient_select_doc_no_doctors': 'कोई डॉक्टर नहीं मिला',
+  'patient_select_doc_no_more': 'और डॉक्टर नहीं हैं',
+  'patient_select_doc_book': 'अभी बुक करें',
+
+  // ── Profile Details ──
+
+  'patient_prof_title': 'प्रोफ़ाइल विवरण',
+  'patient_prof_tab_clinic': 'क्लिनिक विज़िट',
+  'patient_prof_tab_video': 'वीडियो परामर्श',
+  'patient_prof_appointment': 'क्लिनिक अपॉइंटमेंट',
+  'patient_prof_address_na': 'पता उपलब्ध नहीं',
+  'patient_prof_wait': 'नोट: अधिकतम ',
+  'patient_prof_wait_mins': ' मिनट',
+  'patient_prof_wait_suffix': ' प्रतीक्षा',
+  'patient_prof_no_dates': 'इस महीने कोई उपलब्ध तारीख नहीं',
+  'patient_prof_no_slots': 'इस दिन कोई स्लॉट उपलब्ध नहीं',
+  'patient_prof_slots_full': 'भरा हुआ',
+  'patient_prof_recommended': 'के लिए अत्यधिक अनुशंसित',
+  'patient_prof_friendliness': 'डॉक्टर की मित्रता',
+  'patient_prof_friendliness_sub':
+      '100% मरीज़ डॉक्टर को मिलनसार और सहज पाते हैं',
+  'patient_prof_stories': 'मरीज़ों की कहानियां',
+  'patient_prof_view_all': 'सभी देखें',
+  'patient_prof_no_reviews': 'अभी तक कोई समीक्षा नहीं।',
+  'patient_prof_reviewed': 'पहले से समीक्षा की गई',
+  'patient_prof_share_story': 'अपनी कहानी साझा करें',
+  'patient_prof_clinic_details': 'क्लिनिक विवरण',
+  'patient_prof_no_photos': 'कोई क्लिनिक फ़ोटो उपलब्ध नहीं।',
+  'patient_prof_get_direction': 'दिशा प्राप्त करें',
+  'patient_prof_services': 'सेवाएं और प्रक्रियाएं',
+  'patient_prof_no_services': 'कोई सेवा सूचीबद्ध नहीं।',
+  'patient_prof_specializations': 'विशेषज्ञताएं',
+  'patient_prof_no_specializations': 'कोई विशेषज्ञता सूचीबद्ध नहीं।',
+  'patient_prof_exp': 'वर्ष अनुभव',
+  'patient_prof_review': 'समीक्षा',
+  'patient_prof_services_sub':
+      'निम्नलिखित सेवाएं और प्रक्रियाएं प्रदान करते हैं।',
+  'patient_prof_specializations_sub': 'निम्नलिखित विशेषज्ञताएं रखते हैं',
+  'patient_prof_select_slot': 'स्लॉट चुनें',
+  'patient_prof_select_slot_msg': 'जारी रखने के लिए कृपया एक समय स्लॉट चुनें',
+
+  'patient_details_title': 'मरीज़ का विवरण',
+  'patient_details_who': 'मरीज़ कौन है?',
+  'patient_details_one_member': 'एक समय में केवल एक सदस्य चुना जा सकता है।',
+
+  'patient_book_clinic_title': 'क्लिनिक अपॉइंटमेंट बुक करें',
+  'patient_book_video_title': 'वीडियो परामर्श बुक करें',
+  'patient_book_clinic_type': 'क्लिनिक अपॉइंटमेंट',
+  'patient_book_video_type': 'वीडियो परामर्श',
+  'patient_book_clinic_slots': 'क्लिनिक विज़िट स्लॉट',
+  'patient_book_video_slots': 'वीडियो परामर्श स्लॉट',
+  'patient_book_appt_time': 'अपॉइंटमेंट समय',
+  'patient_book_attach': 'रिपोर्ट संलग्न करें',
+  'patient_book_attach_sub':
+      'वैकल्पिक · विज़िट से पहले डॉक्टर के साथ साझा करें',
+  'patient_book_optional': 'वैकल्पिक',
+  'patient_book_add_file': 'फ़ाइल जोड़ें',
+  'patient_book_payment': 'भुगतान विकल्प',
+  'patient_book_confirm_clinic': 'क्लिनिक विज़िट की पुष्टि करें',
+  'patient_book_confirm_video': 'वीडियो विज़िट की पुष्टि करें',
 
   // ── Common ─────────────────────────────────────────
   'or': 'या',
