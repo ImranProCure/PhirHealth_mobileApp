@@ -30,7 +30,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       ),
       body: Column(
         children: [
-          // ===== FILTER TABS — white card =====
+          // ===== FILTER TABS =====
           Container(
             color: Colors.white,
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -48,46 +48,241 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                 )),
           ),
           const SizedBox(height: 8),
-          // ===== LIST =====
+
+          // ===== LIST / STATES =====
           Expanded(
             child: Obx(() {
-              final visits = controller.filteredVisits;
-              if (visits.isEmpty) {
-                return const Center(
-                  child: Text("No visits found",
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 14,
-                          color: Color(0xFF6B7280))),
+              // ── Loading (first fetch) ──
+              if (controller.isLoading.value) {
+                return _ShimmerWrapper(child: _buildSkeleton());
+              }
+
+              // ── Error ──
+              if (controller.errorMessage.value.isNotEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.wifi_off_outlined,
+                            size: 48, color: Color(0xFF9CA3AF)),
+                        const SizedBox(height: 12),
+                        Text(
+                          controller.errorMessage.value,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 14,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextButton.icon(
+                          onPressed: controller.refreshVisits,
+                          icon: const Icon(Icons.refresh,
+                              color: Color(0xFF0D9488)),
+                          label: const Text(
+                            "Retry",
+                            style: TextStyle(
+                              fontFamily: 'Mulish',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF0D9488),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               }
-              return ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-                children: _buildTimeline(visits),
+
+              final visits = controller.filteredVisits;
+
+              // ── Empty ──
+              if (visits.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.event_busy_outlined,
+                          size: 48, color: Color(0xFF9CA3AF)),
+                      const SizedBox(height: 12),
+                      Text(
+                        "No ${controller.selectedFilter.value == 'All' ? '' : controller.selectedFilter.value + ' '}visits found",
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 14,
+                          color: Color(0xFF6B7280),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // ── List ──
+              return RefreshIndicator(
+                color: const Color(0xFF0D9488),
+                onRefresh: controller.refreshVisits,
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+                  children: _buildTimeline(visits),
+                ),
               );
             }),
           ),
         ],
       ),
-      //   floatingActionButton: Container(
-      //     width: 56,
-      //     height: 56,
-      //     decoration: BoxDecoration(
-      //       shape: BoxShape.circle,
-      //       gradient: const LinearGradient(
-      //         begin: Alignment.topLeft,
-      //         end: Alignment.bottomRight,
-      //         colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-      //       ),
-      //       boxShadow: [
-      //         BoxShadow(
-      //             color: const Color(0xFF00897B).withOpacity(0.3),
-      //             blurRadius: 12,
-      //             offset: const Offset(0, 4))
-      //       ],
-      //     ),
-      //     child: const Icon(Icons.add, color: Colors.white, size: 28),
-      //   ),
+    );
+  }
+
+  // ===== SKELETON =====
+  Widget _buildSkeleton() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+      children: [
+        // Month header skeleton
+        _skeletonMonthHeader(),
+        const SizedBox(height: 8),
+
+        // Visit card skeletons
+        _skeletonVisitRow(showButton: false),
+        _skeletonVisitRow(showButton: true),
+        _skeletonVisitRow(showButton: false),
+
+        const SizedBox(height: 12),
+
+        // Second month header skeleton
+        _skeletonMonthHeader(),
+        const SizedBox(height: 8),
+
+        _skeletonVisitRow(showButton: false),
+        _skeletonVisitRow(showButton: true),
+
+        // Bottom dot
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Row(
+            children: [
+              const SizedBox(width: 22),
+              _skBox(width: 10, height: 10, radius: 5),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _skeletonMonthHeader() {
+    return Row(
+      children: [
+        const SizedBox(width: 22),
+        _skBox(width: 10, height: 10, radius: 5),
+        const SizedBox(width: 20),
+        _skBox(width: 100, height: 14, radius: 6),
+      ],
+    );
+  }
+
+  Widget _skeletonVisitRow({bool showButton = false}) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // LEFT: dashed line + date circle skeleton
+          SizedBox(
+            width: 54,
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Positioned.fill(
+                  child: CustomPaint(painter: _DashedLinePainter()),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: _skBox(width: 54, height: 54, radius: 27),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          // Card skeleton
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: _skeletonCard(showButton: showButton),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _skeletonCard({bool showButton = false}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Doctor name + status badge row
+          Row(
+            children: [
+              Expanded(child: _skBox(width: double.infinity, height: 14, radius: 6)),
+              const SizedBox(width: 12),
+              _skBox(width: 80, height: 24, radius: 12),
+            ],
+          ),
+          const SizedBox(height: 8),
+
+          // Specialty
+          _skBox(width: 120, height: 12, radius: 6),
+          const SizedBox(height: 10),
+
+          // Time | Type row
+          Row(
+            children: [
+              _skBox(width: 14, height: 14, radius: 3),
+              const SizedBox(width: 6),
+              _skBox(width: 140, height: 12, radius: 6),
+            ],
+          ),
+
+          // Optional button skeleton
+          if (showButton) ...[
+            const SizedBox(height: 14),
+            _skBox(width: double.infinity, height: 46, radius: 30),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _skBox({
+    required double width,
+    required double height,
+    double radius = 6,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(radius),
+      ),
     );
   }
 
@@ -99,11 +294,9 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
     for (int i = 0; i < visits.length; i++) {
       final visit = visits[i];
       final month = visit['month'] as String;
-      final isLastVisit = i == visits.length - 1;
 
       // Month header
       if (month != lastMonth) {
-        // Gap before new month (except first)
         if (lastMonth != null) widgets.add(const SizedBox(height: 4));
 
         widgets.add(
@@ -133,23 +326,21 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
         lastMonth = month;
       }
 
-      // Visit row: date circle ON line | card
+      // Visit row
       widgets.add(
         IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // LEFT: dashed line with date circle centered on it
+              // LEFT: dashed line + date circle
               SizedBox(
                 width: 54,
                 child: Stack(
                   alignment: Alignment.topCenter,
                   children: [
-                    // Full dashed line
                     Positioned.fill(
                       child: CustomPaint(painter: _DashedLinePainter()),
                     ),
-                    // Date circle ON top of line
                     Padding(
                       padding: const EdgeInsets.only(top: 14),
                       child: Container(
@@ -358,49 +549,36 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
               ),
             ),
 
-            // Book Again — only if flagged
             if (showBookAgain) ...[
               const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () => controller.bookAgain(visit),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.replay_outlined,
-                        size: 16, color: Color(0xFF0D9488)),
-                    SizedBox(width: 6),
-                    Text("Book Again",
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF0D9488))),
-                  ],
-                ),
-              ),
+              _bookAgainButton(visit),
             ],
           ],
 
           if (isCancelled) ...[
             const SizedBox(height: 12),
-            GestureDetector(
-              onTap: () => controller.bookAgain(visit),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.replay_outlined,
-                      size: 16, color: Color(0xFF0D9488)),
-                  SizedBox(width: 6),
-                  Text("Book Again",
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF0D9488))),
-                ],
-              ),
-            ),
+            _bookAgainButton(visit),
           ],
+        ],
+      ),
+    );
+  }
+
+  // ===== BOOK AGAIN BUTTON =====
+  Widget _bookAgainButton(Map<String, dynamic> visit) {
+    return GestureDetector(
+      onTap: () => controller.bookAgain(visit),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.replay_outlined, size: 16, color: Color(0xFF0D9488)),
+          SizedBox(width: 6),
+          Text("Book Again",
+              style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0D9488))),
         ],
       ),
     );
@@ -410,32 +588,35 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
   Widget _statusBadge(String status) {
     final isCompleted = status == 'Completed';
     final isCancelled = status == 'Cancelled';
+
+    Color bgColor;
+    Color fgColor;
+    IconData icon;
+
+    if (isCompleted) {
+      bgColor = const Color(0xFFE0F2F1);
+      fgColor = const Color(0xFF0D9488);
+      icon = Icons.check_circle_outline;
+    } else if (isCancelled) {
+      bgColor = const Color(0xFFFEE2E2);
+      fgColor = const Color(0xFFEF4444);
+      icon = Icons.cancel_outlined;
+    } else {
+      bgColor = const Color(0xFFEFF6FF);
+      fgColor = const Color(0xFF3B82F6);
+      icon = Icons.schedule;
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isCompleted
-            ? const Color(0xFFE0F2F1)
-            : isCancelled
-                ? const Color(0xFFFEE2E2)
-                : const Color(0xFFFFF3CD),
+        color: bgColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isCompleted
-                ? Icons.check_circle_outline
-                : isCancelled
-                    ? Icons.cancel_outlined
-                    : Icons.schedule,
-            size: 13,
-            color: isCompleted
-                ? const Color(0xFF0D9488)
-                : isCancelled
-                    ? const Color(0xFFEF4444)
-                    : const Color(0xFFD97706),
-          ),
+          Icon(icon, size: 13, color: fgColor),
           const SizedBox(width: 4),
           Text(
             status,
@@ -443,11 +624,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
               fontFamily: 'Mulish',
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: isCompleted
-                  ? const Color(0xFF0D9488)
-                  : isCancelled
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFFD97706),
+              color: fgColor,
             ),
           ),
         ],
@@ -479,4 +656,67 @@ class _DashedLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_DashedLinePainter old) => false;
+}
+
+// ===== SHIMMER WRAPPER (from LifestyleEditView) =====
+class _ShimmerWrapper extends StatefulWidget {
+  final Widget child;
+  const _ShimmerWrapper({required this.child});
+
+  @override
+  State<_ShimmerWrapper> createState() => _ShimmerWrapperState();
+}
+
+class _ShimmerWrapperState extends State<_ShimmerWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    _animation = Tween<double>(begin: -1.5, end: 1.5).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: const [
+                Color(0xFFEEEEEE),
+                Color(0xFFFFFFFF),
+                Color(0xFFEEEEEE),
+              ],
+              stops: [
+                (_animation.value - 0.3).clamp(0.0, 1.0),
+                _animation.value.clamp(0.0, 1.0),
+                (_animation.value + 0.3).clamp(0.0, 1.0),
+              ],
+              transform: GradientRotation(_animation.value),
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
+    );
+  }
 }

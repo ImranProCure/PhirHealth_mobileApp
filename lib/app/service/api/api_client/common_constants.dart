@@ -54,4 +54,8 @@ class CommonApiConstants {
 
   final bookAppointment =
       "/api/method/vhealthcare.api.patient.doctor_consult.book_appointment.book_appointment";
+
+  //Doctor Visit
+  final doctorVisitApi =
+      "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visits.get_my_doctor_visits";
 }

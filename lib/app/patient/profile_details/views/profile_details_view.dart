@@ -1325,6 +1325,7 @@ class _VerticalDivider extends StatelessWidget {
 }
 
 // ================= SKELETON =================
+
 Widget _buildSkeleton() {
   return SingleChildScrollView(
     padding: const EdgeInsets.all(16),
