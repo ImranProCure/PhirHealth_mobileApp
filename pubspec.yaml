@@ -30,6 +30,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
+  flutter_launcher_icons: ^0.13.1
+
 # NO dependency_overrides needed at all
 
 flutter:
@@ -48,3 +50,11 @@ flutter:
           weight: 600
         - asset: assets/fonts/Mulish-Bold.ttf
           weight: 700
+
+
+flutter_icons:
+  
+  ios: true
+  image_path: "assets/logo.png"
+  remove_alpha_ios: true
+  background_color: "#FFFFFF"

@@ -25,8 +25,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          "Profile Details",
+        title: Text(
+          "patient_prof_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -64,11 +64,11 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Next Step",
+                  "next_button".tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -187,13 +187,13 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _InfoItem(Icons.work_outline,
-                      "${controller.doctorExperience.value} Years Exp."),
+                      "${controller.doctorExperience.value} ${'patient_prof_exp'.tr}"),
                   const _VerticalDivider(),
                   _InfoItem(Icons.star,
                       "${controller.doctorRating.value.toStringAsFixed(1)}"),
                   const _VerticalDivider(),
                   _InfoItem(Icons.chat_bubble_outline,
-                      "${controller.reviewCount.value} Review"),
+                      "${controller.reviewCount.value} ${'patient_prof_review'.tr}"),
                 ],
               ),
             ],
@@ -235,9 +235,10 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           // TABS
           Obx(() => Row(
                 children: [
-                  _tab("Clinic Visit", Icons.local_hospital_outlined, 0),
+                  _tab("patient_prof_tab_clinic".tr,
+                      Icons.local_hospital_outlined, 0),
                   const SizedBox(width: 10),
-                  _tab("Video Consult", Icons.videocam_outlined, 1),
+                  _tab("patient_prof_tab_video".tr, Icons.videocam_outlined, 1),
                 ],
               )),
 
@@ -246,8 +247,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           Obx(() => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "In-Clinic Appointment",
+                  Text(
+                    "patient_prof_appointment".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 15,
@@ -277,7 +278,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
               Icons.location_on_outlined,
               controller.address.value.isNotEmpty
                   ? controller.address.value
-                  : "Address not available")),
+                  : "patient_prof_address_na".tr)),
           const SizedBox(height: 12),
 
           Obx(() => Container(
@@ -292,16 +293,16 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                     const Icon(Icons.hourglass_bottom_outlined,
                         size: 16, color: Colors.black54),
                     const SizedBox(width: 8),
-                    const Text("Note: Max ",
+                    Text("patient_prof_wait".tr,
                         style: TextStyle(fontFamily: 'Mulish', fontSize: 13)),
                     Text(
-                      "${controller.waitTime.value} mins",
+                      "${controller.waitTime.value} ${'patient_prof_wait_mins'.tr}",
                       style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 13,
                           fontWeight: FontWeight.w700),
                     ),
-                    const Text(" wait",
+                    Text("patient_prof_wait_suffix".tr,
                         style: TextStyle(fontFamily: 'Mulish', fontSize: 13)),
                   ],
                 ),
@@ -345,11 +346,11 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           // DATE SLIDER
           Obx(() {
             if (controller.dates.isEmpty) {
-              return const Padding(
+              return Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Center(
                   child: Text(
-                    "No available dates this month",
+                    "patient_prof_no_dates".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       color: Color(0xFF6B7280),
@@ -468,11 +469,11 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
 
           // TIME SLOTS
           Obx(() => controller.timeSlots.isEmpty
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Center(
                     child: Text(
-                      "No slots available for this day",
+                      "patient_prof_no_slots".tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         color: Color(0xFF6B7280),
@@ -528,8 +529,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Highly Recommended for",
+          Text(
+            "patient_prof_recommended".tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 15,
@@ -540,12 +541,12 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Doctor Friendliness",
+                      "patient_prof_friendliness".tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 14,
@@ -554,7 +555,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      "100% patients find the doctor friendly and approachable",
+                      "patient_prof_friendliness_sub".tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
@@ -575,8 +576,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Patient Stories",
+              Text(
+                "patient_prof_stories".tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 14,
@@ -588,8 +589,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                       onTap: () {
                         Get.toNamed('/all-reviews');
                       },
-                      child: const Text(
-                        "View All",
+                      child: Text(
+                        "patient_prof_view_all".tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
@@ -602,8 +603,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           ),
 
           const SizedBox(height: 4),
-          const Text(
-            "100% patients find the doctor friendly and approachable",
+          Text(
+            "patient_prof_friendliness_sub".tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 12,
@@ -616,8 +617,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           // ---- Dynamic reviews from API ----
           Obx(() {
             if (controller.reviews.isEmpty) {
-              return const Text(
-                "No reviews yet.",
+              return Text(
+                "patient_prof_no_reviews".tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 13,
@@ -669,8 +670,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                   ),
                   child: Text(
                     controller.reviewStatus.value == 1
-                        ? "Already Reviewed"
-                        : "Share Your Story",
+                        ? "patient_prof_reviewed".tr
+                        : "patient_prof_share_story".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       color: controller.reviewStatus.value == 1
@@ -862,8 +863,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Clinic Details",
+            Text(
+              "patient_prof_clinic_details".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 15,
@@ -874,8 +875,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
 
             // ===== HORIZONTAL IMAGE LIST =====
             photos.isEmpty
-                ? const Text(
-                    "No clinic photos available.",
+                ? Text(
+                    "patient_prof_no_photos".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 13,
@@ -935,8 +936,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Get Direction",
+                        Text(
+                          "patient_prof_get_direction".tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             color: Color(0xFF0D9488),
@@ -1008,8 +1009,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Services and Procedures",
+              Text(
+                "patient_prof_services".tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 15,
@@ -1018,7 +1019,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
               ),
               const SizedBox(height: 6),
               Text(
-                "${controller.doctorName.value} following services and procedures.",
+                "${controller.doctorName.value} ${'patient_prof_services_sub'.tr}",
                 style: const TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 12,
@@ -1028,8 +1029,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
               ),
               const SizedBox(height: 14),
               if (controller.services.isEmpty)
-                const Text(
-                  "No services listed.",
+                Text(
+                  "patient_prof_no_services".tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 13,
@@ -1101,8 +1102,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Specializations",
+                Text(
+                  "patient_prof_specializations".tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 15,
@@ -1111,7 +1112,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "${controller.doctorName.value} following Specializations",
+                  "${controller.doctorName.value} ${'patient_prof_specializations_sub'.tr}",
                   style: const TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 12,
@@ -1121,8 +1122,8 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                 ),
                 const SizedBox(height: 14),
                 if (controller.specializations.isEmpty)
-                  const Text(
-                    "No specializations listed.",
+                  Text(
+                    "patient_prof_no_specializations".tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 13,

@@ -27,33 +27,43 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ===== EMERGENCY CARD =====
-            _emergencyCard(),
-            const SizedBox(height: 24),
-
-            // ===== TRUSTED CONTACTS =====
-            const Text(
-              'My Trusted Contacts',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
+      // CHANGED: Spacer() hataaya, Column ko SingleChildScrollView mein wrap kiya
+      // aur _addNewContact() ko body ke bahar bottom mein fix kiya
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _emergencyCard(),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'My Trusted Contacts',
+                    style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Obx(() => Column(
+                        children: controller.contacts
+                            .map((c) => _contactTile(c))
+                            .toList(),
+                      )),
+                ],
               ),
             ),
-            const SizedBox(height: 12),
-
-            ...controller.contacts.map((c) => _contactTile(c)),
-            Spacer(),
-            // ===== ADD NEW CONTACT =====
-            _addNewContact(),
-          ],
-        ),
+          ),
+          // CHANGED: Add button ab scroll se bahar — hamesha screen ke bottom pe fixed
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            child: _addNewContact(),
+          ),
+        ],
       ),
     );
   }
@@ -236,45 +246,95 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
   Widget _addNewContact() {
     return GestureDetector(
       onTap: controller.addNewContact,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: const Color(0xFF0D9488),
-            width: 1.5,
-            style: BorderStyle.solid,
-          ),
+      child: CustomPaint(
+        painter: _DashedBorderPainter(
+          color: const Color(0xFF0D9488),
+          borderRadius: 14,
+          dashWidth: 6,
+          dashSpace: 4,
+          strokeWidth: 1.5,
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0D9488).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0D9488).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.person_add_outlined,
+                  color: Color(0xFF0D9488),
+                  size: 24,
+                ),
               ),
-              child: const Icon(
-                Icons.person_add_outlined,
-                color: Color(0xFF0D9488),
-                size: 24,
+              const SizedBox(width: 12),
+              const Text(
+                'Add New Contact',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            const Text(
-              'Add New Contact',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final double borderRadius;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
+
+  _DashedBorderPainter({
+    required this.color,
+    required this.borderRadius,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    final RRect rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Radius.circular(borderRadius),
+    );
+
+    final Path path = Path()..addRRect(rrect);
+    for (final metric in path.computeMetrics()) {
+      double distance = 0;
+      while (distance < metric.length) {
+        final double end = (distance + dashWidth).clamp(0, metric.length);
+        canvas.drawPath(metric.extractPath(distance, end), paint);
+        distance += dashWidth + dashSpace;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedBorderPainter oldDelegate) =>
+      oldDelegate.color != color ||
+      oldDelegate.dashWidth != dashWidth ||
+      oldDelegate.dashSpace != dashSpace;
 }

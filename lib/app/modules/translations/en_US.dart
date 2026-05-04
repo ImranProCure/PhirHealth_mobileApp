@@ -212,6 +212,81 @@ const Map<String, String> enUS = {
   // Bottom nav
   'patient_nav_home': 'Home',
   'patient_nav_shorts': 'Shorts',
+  'patient_nav_appointment': 'Appointment',
+
+  // ── Doctor Consult
+
+  'patient_doc_consult_title': 'Doctor Consult',
+  'patient_doc_consult_heading': 'Doctor Consultation',
+  'patient_doc_consult_sub':
+      'Connect with certified medical professionals for expert advice and diagnosis.',
+  'patient_doc_consult_book': 'Book a Consultation',
+  'patient_doc_consult_history': 'View Consultation History',
+  'patient_doc_consult_upload': 'Upload Medical Reports',
+
+  // ── Select Doctor
+
+  'patient_select_doc_title': 'Select a Doctor',
+  'patient_select_doc_search': 'Search doctor or specialty',
+  'patient_select_doc_specialties': 'Specialties',
+  'patient_select_doc_no_doctors': 'No doctors found',
+  'patient_select_doc_no_more': 'No more doctors',
+  'patient_select_doc_book': 'Book Now',
+
+  // ── Profile Details ──
+
+  'patient_prof_title': 'Profile Details',
+  'patient_prof_tab_clinic': 'Clinic Visit',
+  'patient_prof_tab_video': 'Video Consult',
+  'patient_prof_appointment': 'In-Clinic Appointment',
+  'patient_prof_address_na': 'Address not available',
+  'patient_prof_wait': 'Note: Max ',
+  'patient_prof_wait_mins': ' mins',
+  'patient_prof_wait_suffix': ' wait',
+  'patient_prof_no_dates': 'No available dates this month',
+  'patient_prof_no_slots': 'No slots available for this day',
+  'patient_prof_slots_full': 'Full',
+  'patient_prof_recommended': 'Highly Recommended for',
+  'patient_prof_friendliness': 'Doctor Friendliness',
+  'patient_prof_friendliness_sub':
+      '100% patients find the doctor friendly and approachable',
+  'patient_prof_stories': 'Patient Stories',
+  'patient_prof_view_all': 'View All',
+  'patient_prof_no_reviews': 'No reviews yet.',
+  'patient_prof_reviewed': 'Already Reviewed',
+  'patient_prof_share_story': 'Share Your Story',
+  'patient_prof_clinic_details': 'Clinic Details',
+  'patient_prof_no_photos': 'No clinic photos available.',
+  'patient_prof_get_direction': 'Get Direction',
+  'patient_prof_services': 'Services and Procedures',
+  'patient_prof_no_services': 'No services listed.',
+  'patient_prof_specializations': 'Specializations',
+  'patient_prof_no_specializations': 'No specializations listed.',
+  'patient_prof_exp': 'Years Exp.',
+  'patient_prof_review': 'Review',
+  'patient_prof_services_sub': 'following services and procedures.',
+  'patient_prof_specializations_sub': 'following Specializations',
+  'patient_prof_select_slot': 'Select a Slot',
+  'patient_prof_select_slot_msg': 'Please select a time slot to continue',
+
+  'patient_details_title': 'Patient Details',
+  'patient_details_who': 'Who is the patient?',
+  'patient_details_one_member': 'Only one member can be selected at a time.',
+
+  'patient_book_clinic_title': 'Book In-Clinic Appointment',
+  'patient_book_video_title': 'Book Video Consultation',
+  'patient_book_clinic_type': 'In-Clinic Appointment',
+  'patient_book_video_type': 'Video Consultation',
+  'patient_book_clinic_slots': 'Clinic Visit Slots',
+  'patient_book_video_slots': 'Video Consult Slots',
+  'patient_book_appt_time': 'Appointment time',
+  'patient_book_attach': 'Attach Reports',
+  'patient_book_attach_sub': 'Optional · Share with doctor before visit',
+  'patient_book_optional': 'Optional',
+  'patient_book_add_file': 'Add File',
+  'patient_book_payment': 'Payment Options',
+  'patient_book_confirm_clinic': 'Confirm Clinic Visit',
+  'patient_book_confirm_video': 'Confirm Video Visit',
 
   // ── Common ─────────────────────────────────────────
   'or': 'OR',
