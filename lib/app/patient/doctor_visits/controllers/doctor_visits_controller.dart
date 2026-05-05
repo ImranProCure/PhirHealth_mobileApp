@@ -22,14 +22,11 @@ class DoctorVisitsController extends GetxController {
   }
 
   // ===== VISITS DATA =====
-  final RxList<Map<String, dynamic>> allVisits =
-      <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> allVisits = <Map<String, dynamic>>[].obs;
 
   List<Map<String, dynamic>> get filteredVisits {
     if (selectedFilter.value == 'All') return allVisits;
-    return allVisits
-        .where((v) => v['status'] == selectedFilter.value)
-        .toList();
+    return allVisits.where((v) => v['status'] == selectedFilter.value).toList();
   }
 
   // Group helpers (used by view)
@@ -65,8 +62,7 @@ class DoctorVisitsController extends GetxController {
       final messageData = response.data['message'];
 
       if (messageData['status'] == true) {
-        final List<dynamic> rawVisits =
-            messageData['data'] as List<dynamic>;
+        final List<dynamic> rawVisits = messageData['data'] as List<dynamic>;
 
         final mapped = rawVisits
             .map((d) => _mapAppointmentToVisit(d as Map<String, dynamic>))
@@ -74,8 +70,7 @@ class DoctorVisitsController extends GetxController {
 
         allVisits.assignAll(mapped);
       } else {
-        errorMessage.value =
-            messageData['message'] ?? 'Failed to fetch visits';
+        errorMessage.value = messageData['message'] ?? 'Failed to fetch visits';
         showError(errorMessage.value);
       }
     } catch (e) {
@@ -128,6 +123,7 @@ class DoctorVisitsController extends GetxController {
       'status': status,
       'note': d['notes'] ?? '',
       'show_book_again': status == 'Completed' || status == 'Cancelled',
+      'user_roles': d["user_roles"] ?? '',
     };
   }
 

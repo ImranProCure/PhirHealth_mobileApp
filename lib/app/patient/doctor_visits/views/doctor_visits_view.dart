@@ -241,7 +241,8 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           // Doctor name + status badge row
           Row(
             children: [
-              Expanded(child: _skBox(width: double.infinity, height: 14, radius: 6)),
+              Expanded(
+                  child: _skBox(width: double.infinity, height: 14, radius: 6)),
               const SizedBox(width: 12),
               _skBox(width: 80, height: 24, radius: 12),
             ],
@@ -464,7 +465,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
     final bool showBookAgain = visit['show_book_again'] == true;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -479,6 +480,24 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Doctor + status badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: visit['user_roles'] == "Doctor"
+                  ? Color(0XFF0D9488)
+                  : Color(0XFF81C784),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              visit['user_roles'],
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
           Row(
             children: [
               Expanded(
@@ -548,7 +567,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                 ],
               ),
             ),
-
             if (showBookAgain) ...[
               const SizedBox(height: 12),
               _bookAgainButton(visit),
