@@ -61,7 +61,7 @@ class CounsellorProfileDetailsController extends GetxController {
 
     try {
       ApiResponse response =
-          await api.commonApi.doctorConsultApi.getAllReviews(queryParams: body);
+          await api.commonApi.counsallerConsultApi.getAllReviews(queryParams: body);
 
       final messageData = response.data['message'];
 
@@ -151,6 +151,7 @@ class CounsellorProfileDetailsController extends GetxController {
       'date': dates[selectedDateIndex.value]["fullDate"],
       'patientName': fullName,
       'data': doctorData,
+      'type': "counsellor",
     });
   }
 
@@ -235,7 +236,7 @@ class CounsellorProfileDetailsController extends GetxController {
     };
 
     try {
-      ApiResponse response = await api.commonApi.doctorConsultApi
+      ApiResponse response = await api.commonApi.counsallerConsultApi
           .submitReview(body); // 👈 add this endpoint in your API layer
 
       final messageData = response.data['message'];
@@ -339,7 +340,7 @@ class CounsellorProfileDetailsController extends GetxController {
     final Map<String, String> params = {
       'practitioner': "HLC-PRAC-2026-00002",
     };
-    ApiResponse response = await api.commonApi.doctorConsultApi
+    ApiResponse response = await api.commonApi.counsallerConsultApi
         .getDoctorProfile(queryParams: params);
     isLoading.value = false;
 

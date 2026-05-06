@@ -5,12 +5,12 @@ import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 
-class DoctorConsultApi {
+class CounsallerConsultApi {
   final ApiClient _client = ApiClient();
 
-  Future<ApiResponse> getDoctors({Map<String, String>? queryParams}) async {
+  Future<ApiResponse> getCounsaller({Map<String, String>? queryParams}) async {
     return await _client.get(
-      ApiConstants.commonApiConstants.doctorList,
+      ApiConstants.commonApiConstants.counsallerList,
       queryParameters: queryParams,
       authenticated: true,
     );
@@ -19,7 +19,7 @@ class DoctorConsultApi {
   Future<ApiResponse> getDoctorProfile(
       {Map<String, String>? queryParams}) async {
     return await _client.get(
-      ApiConstants.commonApiConstants.profileDoctorDetails,
+      ApiConstants.commonApiConstants.profileCounsallerDetails,
       queryParameters: queryParams,
       authenticated: true,
     );
@@ -41,7 +41,6 @@ class DoctorConsultApi {
     required int fees,
     required String modeOfPayment,
     required String patientId,
-    required String type,
     required List<File> reports,
     required List<Map<String, String>> reportData,
   }) async {
@@ -68,19 +67,11 @@ class DoctorConsultApi {
       'report_data': reportData.map((e) => jsonEncode(e)).toList(),
     });
 
-    if (type == "counsellor") {
-      return await _client.post(
-          ApiConstants.commonApiConstants
-              .bookCounsallerAppointment, // your endpoint constant
-          data: formData,
-          authenticated: true);
-    } else {
-      return await _client.post(
-          ApiConstants
-              .commonApiConstants.bookAppointment, // your endpoint constant
-          data: formData,
-          authenticated: true);
-    }
+    return await _client.post(
+        ApiConstants
+            .commonApiConstants.bookAppointment, // your endpoint constant
+        data: formData,
+        authenticated: true);
   }
 
   Future<ApiResponse> getPatientRelations() async {
@@ -90,16 +81,16 @@ class DoctorConsultApi {
     );
   }
 
-  Future<ApiResponse> getSpecialities() async {
+  Future<ApiResponse> getCounsallerSpecialities() async {
     return await _client.get(
-      ApiConstants.commonApiConstants.specialistList,
+      ApiConstants.commonApiConstants.specialistCousallerList,
       authenticated: true,
     );
   }
 
   Future<ApiResponse> getAllReviews({Map<String, dynamic>? queryParams}) async {
     return await _client.get(
-      ApiConstants.commonApiConstants.reviewListApi,
+      ApiConstants.commonApiConstants.reviewListCounsallerApi,
       queryParameters: queryParams,
       authenticated: true,
     );
@@ -116,7 +107,7 @@ class DoctorConsultApi {
 
   Future<ApiResponse> submitReview(data) async {
     final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.submmitReview,
+      ApiConstants.commonApiConstants.submitCounsallerReview,
       data: data,
       authenticated: true,
     );

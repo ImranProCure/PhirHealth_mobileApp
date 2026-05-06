@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/doctor_visits_controller.dart';
 
 class DoctorVisitsView extends GetView<DoctorVisitsController> {
@@ -52,12 +54,10 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           // ===== LIST / STATES =====
           Expanded(
             child: Obx(() {
-              // ── Loading (first fetch) ──
               if (controller.isLoading.value) {
                 return _ShimmerWrapper(child: _buildSkeleton());
               }
 
-              // ── Error ──
               if (controller.errorMessage.value.isNotEmpty) {
                 return Center(
                   child: Padding(
@@ -99,7 +99,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
 
               final visits = controller.filteredVisits;
 
-              // ── Empty ──
               if (visits.isEmpty) {
                 return Center(
                   child: Column(
@@ -109,7 +108,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                           size: 48, color: Color(0xFF9CA3AF)),
                       const SizedBox(height: 12),
                       Text(
-                        "No ${controller.selectedFilter.value == 'All' ? '' : controller.selectedFilter.value + ' '}visits found",
+                        "No ${controller.selectedFilter.value == 'All' ? '' : '${controller.selectedFilter.value} '}visits found",
                         style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
@@ -121,7 +120,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                 );
               }
 
-              // ── List ──
               return RefreshIndicator(
                 color: const Color(0xFF0D9488),
                 onRefresh: controller.refreshVisits,
@@ -142,25 +140,16 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
       children: [
-        // Month header skeleton
         _skeletonMonthHeader(),
         const SizedBox(height: 8),
-
-        // Visit card skeletons
         _skeletonVisitRow(showButton: false),
         _skeletonVisitRow(showButton: true),
         _skeletonVisitRow(showButton: false),
-
         const SizedBox(height: 12),
-
-        // Second month header skeleton
         _skeletonMonthHeader(),
         const SizedBox(height: 8),
-
         _skeletonVisitRow(showButton: false),
         _skeletonVisitRow(showButton: true),
-
-        // Bottom dot
         Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Row(
@@ -190,7 +179,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // LEFT: dashed line + date circle skeleton
           SizedBox(
             width: 54,
             child: Stack(
@@ -206,10 +194,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
               ],
             ),
           ),
-
           const SizedBox(width: 10),
-
-          // Card skeleton
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -238,7 +223,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Doctor name + status badge row
           Row(
             children: [
               Expanded(
@@ -248,12 +232,8 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
             ],
           ),
           const SizedBox(height: 8),
-
-          // Specialty
           _skBox(width: 120, height: 12, radius: 6),
           const SizedBox(height: 10),
-
-          // Time | Type row
           Row(
             children: [
               _skBox(width: 14, height: 14, radius: 3),
@@ -261,8 +241,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
               _skBox(width: 140, height: 12, radius: 6),
             ],
           ),
-
-          // Optional button skeleton
           if (showButton) ...[
             const SizedBox(height: 14),
             _skBox(width: double.infinity, height: 46, radius: 30),
@@ -296,10 +274,8 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       final visit = visits[i];
       final month = visit['month'] as String;
 
-      // Month header
       if (month != lastMonth) {
         if (lastMonth != null) widgets.add(const SizedBox(height: 4));
-
         widgets.add(
           Row(
             children: [
@@ -327,13 +303,11 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
         lastMonth = month;
       }
 
-      // Visit row
       widgets.add(
         IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // LEFT: dashed line + date circle
               SizedBox(
                 width: 54,
                 child: Stack(
@@ -384,10 +358,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                   ],
                 ),
               ),
-
               const SizedBox(width: 10),
-
-              // Card
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -400,7 +371,6 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       );
     }
 
-    // Bottom dot
     widgets.add(
       Padding(
         padding: const EdgeInsets.only(top: 4),
@@ -460,9 +430,12 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
 
   // ===== VISIT CARD =====
   Widget _visitCard(Map<String, dynamic> visit) {
-    final isCompleted = visit['status'] == 'Completed';
-    final isCancelled = visit['status'] == 'Cancelled';
+    final status = visit['status'] as String;
+    final isCompleted = status == 'Completed';
+    final isCancelled = status == 'Cancelled';
     final bool showBookAgain = visit['show_book_again'] == true;
+    final bool showJoinButton = visit['show_join_button'] == true;
+    final userRole = visit['user_roles'] as String? ?? '';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -479,69 +452,93 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Doctor + status badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: visit['user_roles'] == "Doctor"
-                  ? Color(0XFF0D9488)
-                  : Color(0XFF81C784),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              visit['user_roles'],
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          // ── Row: role badge + status badge ──
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Text(visit['doctor'],
+              if (userRole.isNotEmpty)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: userRole == 'Doctor'
+                        ? const Color(0xFF0D9488)
+                        : const Color(0xFF81C784),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    userRole,
                     style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700)),
-              ),
-              _statusBadge(visit['status']),
+                      fontFamily: 'Mulish',
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              _statusBadge(status),
             ],
           ),
-          const SizedBox(height: 3),
-          Text(visit['specialty'],
-              style: const TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 12,
-                  color: Color(0xFF6B7280))),
           const SizedBox(height: 8),
+
+          // ── Doctor name ──
+          Text(
+            visit['doctor'],
+            style: const TextStyle(
+              fontFamily: 'Mulish',
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 3),
+
+          // ── Specialty ──
+          Text(
+            visit['specialty'],
+            style: const TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 12,
+                color: Color(0xFF6B7280)),
+          ),
+          const SizedBox(height: 8),
+
+          // ── Time | Type ──
           Row(
             children: [
               const Icon(Icons.access_time_outlined,
                   size: 14, color: Color(0xFF6B7280)),
               const SizedBox(width: 6),
-              Text("${visit['time']} | ${visit['type']}",
-                  style: const TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 12,
-                      color: Color(0xFF6B7280))),
-            ],
-          ),
-
-          // Note
-          if (visit['note'] != null && visit['note'].toString().isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(visit['note'],
+              Text(
+                "${visit['time']} | ${visit['type']}",
                 style: const TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 12,
-                    color: Color(0xFF374151),
-                    fontStyle: FontStyle.italic)),
+                    color: Color(0xFF6B7280)),
+              ),
+            ],
+          ),
+
+          // ── Note ──
+          if (visit['note'] != null &&
+              visit['note'].toString().isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              visit['note'],
+              style: const TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 12,
+                  color: Color(0xFF374151),
+                  fontStyle: FontStyle.italic),
+            ),
           ],
 
-          // View More Details button
+          // ── Join Video Call button (Upcoming video appointments) ──
+          if (showJoinButton) ...[
+            const SizedBox(height: 14),
+            _JoinButton(visit: visit, controller: controller),
+          ],
+
+          // ── View More Details (Completed) ──
           if (isCompleted) ...[
             const SizedBox(height: 14),
             OutlinedButton(
@@ -558,12 +555,14 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                   Icon(Icons.assignment_outlined,
                       size: 18, color: Color(0xFF0D9488)),
                   SizedBox(width: 8),
-                  Text("View More Details",
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF0D9488))),
+                  Text(
+                    "View More Details",
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF0D9488)),
+                  ),
                 ],
               ),
             ),
@@ -573,6 +572,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
             ],
           ],
 
+          // ── Book Again (Cancelled) ──
           if (isCancelled) ...[
             const SizedBox(height: 12),
             _bookAgainButton(visit),
@@ -591,12 +591,14 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
         children: [
           Icon(Icons.replay_outlined, size: 16, color: Color(0xFF0D9488)),
           SizedBox(width: 6),
-          Text("Book Again",
-              style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0D9488))),
+          Text(
+            "Book Again",
+            style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF0D9488)),
+          ),
         ],
       ),
     );
@@ -651,6 +653,114 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
   }
 }
 
+// ===== JOIN BUTTON (stateful — ticks every second) =====
+class _JoinButton extends StatefulWidget {
+  final Map<String, dynamic> visit;
+  final DoctorVisitsController controller;
+
+  const _JoinButton({required this.visit, required this.controller});
+
+  @override
+  State<_JoinButton> createState() => _JoinButtonState();
+}
+
+class _JoinButtonState extends State<_JoinButton> {
+  late Timer _timer;
+  bool _isEnabled = false;
+  String _countdownLabel = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _update();
+    // Refresh every second so the countdown stays live
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _update());
+  }
+
+  void _update() {
+    final enabled = widget.controller.isJoinEnabled(widget.visit);
+    final label = widget.controller.joinCountdownLabel(widget.visit);
+    if (mounted) {
+      setState(() {
+        _isEnabled = enabled;
+        _countdownLabel = label;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  Future<void> _launchMeetingLink() async {
+    final link = widget.visit['meeting_link'] as String? ?? '';
+    if (link.isEmpty) return;
+    final uri = Uri.parse(link);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Join button
+        AnimatedOpacity(
+          opacity: _isEnabled ? 1.0 : 0.5,
+          duration: const Duration(milliseconds: 300),
+          child: ElevatedButton.icon(
+            onPressed: _isEnabled ? _launchMeetingLink : null,
+            icon: const Icon(Icons.videocam_outlined,
+                size: 18, color: Colors.white),
+            label: const Text(
+              "Join Video Call",
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 46),
+              backgroundColor: const Color(0xFF0D9488),
+              disabledBackgroundColor: const Color(0xFF9CA3AF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              elevation: 0,
+            ),
+          ),
+        ),
+
+        // Countdown label shown only when button is disabled
+        if (!_isEnabled && _countdownLabel.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.lock_clock_outlined,
+                  size: 13, color: Color(0xFF9CA3AF)),
+              const SizedBox(width: 4),
+              Text(
+                _countdownLabel,
+                style: const TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 11,
+                  color: Color(0xFF9CA3AF),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 // ===== DASHED LINE PAINTER =====
 class _DashedLinePainter extends CustomPainter {
   @override
@@ -676,7 +786,7 @@ class _DashedLinePainter extends CustomPainter {
   bool shouldRepaint(_DashedLinePainter old) => false;
 }
 
-// ===== SHIMMER WRAPPER (from LifestyleEditView) =====
+// ===== SHIMMER WRAPPER =====
 class _ShimmerWrapper extends StatefulWidget {
   final Widget child;
   const _ShimmerWrapper({required this.child});

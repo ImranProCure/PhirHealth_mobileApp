@@ -55,6 +55,25 @@ class CommonApiConstants {
   final bookAppointment =
       "/api/method/vhealthcare.api.patient.doctor_consult.book_appointment.book_appointment";
 
+  // Counsaller Consult
+  final counsallerList =
+      "/api/method/vhealthcare.api.patient.counsellors.get_counsellor.get_counsellors_list";
+
+  final specialistCousallerList =
+      "/api/method/vhealthcare.api.patient.counsellors.get_speciality.get_specialities_list";
+
+  final reviewListCounsallerApi =
+      "/api/method/vhealthcare.api.patient.counsellors.review_list.get_review_list";
+
+  final submitCounsallerReview =
+      "/api/method/vhealthcare.api.patient.counsellors.add_review.add_patient_review";
+
+  final profileCounsallerDetails =
+      "/api/method/vhealthcare.api.patient.counsellors.dr_profile_details.get_doctor_profile";
+
+  final bookCounsallerAppointment =
+      "/api/method/vhealthcare.api.patient.counsellors.book_appointment.book_appointment";
+
   //Doctor Visit
   final doctorVisitApi =
       "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visits.get_my_doctor_visits";

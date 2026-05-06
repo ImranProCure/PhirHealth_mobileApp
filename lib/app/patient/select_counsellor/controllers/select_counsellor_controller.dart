@@ -52,7 +52,7 @@ class SelectCounsellorController extends GetxController {
     isSpecialitiesLoading.value = true;
 
     ApiResponse response =
-        await api.commonApi.doctorConsultApi.getSpecialities();
+        await api.commonApi.counsallerConsultApi.getCounsallerSpecialities();
     isSpecialitiesLoading.value = false;
 
     final messageData = response.data['message'];
@@ -75,8 +75,8 @@ class SelectCounsellorController extends GetxController {
 
     final Map<String, String> queryParams = _buildQueryParams(page: 1);
 
-    ApiResponse response = await api.commonApi.doctorConsultApi
-        .getDoctors(queryParams: queryParams);
+    ApiResponse response = await api.commonApi.counsallerConsultApi
+        .getCounsaller(queryParams: queryParams);
     isDoctorsLoading.value = false;
 
     final messageData = response.data['message'];

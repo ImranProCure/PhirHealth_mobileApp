@@ -151,6 +151,7 @@ class ProfileDetailsController extends GetxController {
       'date': dates[selectedDateIndex.value]["fullDate"],
       'patientName': fullName,
       'data': doctorData,
+      'type': "doctor",
     });
   }
 
