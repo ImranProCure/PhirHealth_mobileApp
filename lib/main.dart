@@ -9,11 +9,17 @@ import 'app/routes/app_routes.dart';
 import 'app/modules/translations/app_translations.dart';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
 
-Future<void> main() async {
+import 'app/controllers/role_controller.dart';
+import 'app/modules/translations/app_translations.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Platform.isAndroid) {
@@ -53,10 +59,10 @@ class MyApp extends StatelessWidget {
         locale: const Locale('en', 'US'),
         fallbackLocale: const Locale('en', 'US'),
 
-        // ✅ App start point (Splash se)
+        // ✅ App start point
         initialRoute: Routes.SPLASH,
 
-        // ✅ All app routes in one place
+        // ✅ All app routes
         getPages: AppPages.routes,
       ),
     );

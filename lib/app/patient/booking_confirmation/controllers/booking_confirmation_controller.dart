@@ -48,6 +48,8 @@ class BookingConfirmationController extends GetxController {
   final RxString doctorImage = ''.obs;
   final RxString clinicName = ''.obs;
   final RxString address = ''.obs;
+  final RxString type = ''.obs;
+  final RxString id = ''.obs;
   final RxMap doctorData = {}.obs;
 
   final RxDouble walletBalance = 0.0.obs;
@@ -140,6 +142,7 @@ class BookingConfirmationController extends GetxController {
       source: source,
       imageQuality: 85,
     );
+    
     if (picked == null) return;
 
     final result = await Get.dialog<Map<String, String>>(
@@ -192,6 +195,8 @@ class BookingConfirmationController extends GetxController {
     patientName = Get.arguments?['patientName'] ?? '';
     patientId = Get.arguments?['patientId'] ?? '';
     doctorData.value = Get.arguments?['data'] ?? {};
+    type.value = Get.arguments?['type'] ?? {};
+    id.value = Get.arguments?['id'] ?? {};
 
     doctorName.value = doctorData.value['name']?.toString() ?? '';
     doctorDegree.value = doctorData.value['degree']?.toString() ?? '';
@@ -242,27 +247,28 @@ class BookingConfirmationController extends GetxController {
         endTime =
             '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}:00';
       }
-
+      
+      var id = Get.arguments?['id'] ?? '';
       // ── Call API ────────────────────────────────────────────────────────
-      final ApiResponse response =
-          await api.commonApi.doctorConsultApi.bookAppointment(
-        practitioner: "HLC-PRAC-2026-00002",
-        appointmentDate: selectedDate, // "2026-04-27"
-        startTime: startTime, // "07:30:00"
-        endTime: endTime, // "08:00:00"
-        appointmentType:
-            appointmentType, // "In-Clinic Appointment" | "Video Consultation"
-        fees: fees.value,
-        modeOfPayment: selectedPayment.value, // "Wallet" | "PayOnline"
-        patientId: patientId,
-        reports: reports.map((r) => r.imageFile).toList(),
-        reportData: reports
-            .map((r) => {
-                  'reportType': r.reportType,
-                  'subject': r.subject,
-                })
-            .toList(),
-      );
+      final ApiResponse response = await api.commonApi.doctorConsultApi
+          .bookAppointment(
+              practitioner: id,
+              appointmentDate: selectedDate, // "2026-04-27"
+              startTime: startTime, // "07:30:00"
+              endTime: endTime, // "08:00:00"
+              appointmentType:
+                  appointmentType, // "In-Clinic Appointment" | "Video Consultation"
+              fees: fees.value,
+              modeOfPayment: selectedPayment.value, // "Wallet" | "PayOnline"
+              patientId: patientId,
+              reports: reports.map((r) => r.imageFile).toList(),
+              reportData: reports
+                  .map((r) => {
+                        'reportType': r.reportType,
+                        'subject': r.subject,
+                      })
+                  .toList(),
+              type: type.value);
 
       final messageData = response.data['message'];
       if (messageData['status'] == true) {

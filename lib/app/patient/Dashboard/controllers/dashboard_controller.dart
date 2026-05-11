@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
 
 class DashboardController extends GetxController {
   final RxInt selectedNavIndex = 0.obs;
@@ -6,8 +8,35 @@ class DashboardController extends GetxController {
   void selectNav(int index) {
     selectedNavIndex.value = index;
     if (index == 1) Get.toNamed('/doctor-visits');
-    if (index == 3) Get.toNamed('/shorts-reels');
+    if (index == 3) showMessage("Coming soon");
+    //Get.toNamed('/shorts-reels');
     if (index == 4) Get.toNamed('/my-profile');
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getFcmToken();
+  }
+
+  Future<void> getFcmToken() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission for iOS
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      String? token = await messaging.getToken();
+
+      print("FCM Token: $token");
+    } else {
+      print("Notification permission denied");
+    }
   }
 
   // ===== DOCTOR ACTIONS =====
@@ -37,10 +66,13 @@ class DashboardController extends GetxController {
 
   void onDoctorActionTap(int index) {
     if (index == 0) Get.toNamed('/doctor-consult');
-    if (index == 1) Get.toNamed('/scan-select-profile');
-    if (index == 2) Get.toNamed('/find-hospital');
+    if (index == 1) showMessage("Coming soon");
+    //Get.toNamed('/scan-select-profile');
+    if (index == 2) showMessage("Coming soon");
+    //Get.toNamed('/find-hospital');
     if (index == 3) Get.toNamed('/counsellor-consult');
-    if (index == 4) Get.toNamed('/lab-tests');
+    if (index == 4) showMessage("Coming soon");
+    //Get.toNamed('/lab-tests');
   }
 
   // ===== SMART HEALTH TOOLS =====
@@ -64,11 +96,18 @@ class DashboardController extends GetxController {
 
   void onSmartToolTap(int index) {
     final route = smartTools[index]['route'] as String;
-    Get.toNamed(route);
+    if (smartTools[index]['title'] == "patient_dash_diet") {
+      showMessage("Coming soon");
+    } else {
+      Get.toNamed(route);
+    }
   }
 
   // ===== AI + MEDICINE + FITNESS =====
-  void goToSavingsOffers() => Get.toNamed('/savings-offers');
-  void goToFitnessTracker() => Get.toNamed('/fitness-tracker');
-  void goToCancerAiScan() => Get.toNamed('/cancer-ai-scan');
+  void goToSavingsOffers() => showMessage("Coming soon");
+  //Get.toNamed('/savings-offers');
+  void goToFitnessTracker() => showMessage("Coming soon");
+  //Get.toNamed('/fitness-tracker');
+  void goToCancerAiScan() => showMessage("Coming soon");
+  //Get.toNamed('/cancer-ai-scan');
 }

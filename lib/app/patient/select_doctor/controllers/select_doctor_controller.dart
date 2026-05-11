@@ -178,7 +178,9 @@ class SelectDoctorController extends GetxController {
 
   // ================= BOOK DOCTOR =================
   void bookDoctor(doctor) {
-    Get.toNamed(Routes.PROFILE_DETAILS, arguments: doctor);
+    Get.toNamed(Routes.PROFILE_DETAILS, arguments: {
+      'id': doctor["id"],
+    });
   }
 
   // ================= CLEANUP =================

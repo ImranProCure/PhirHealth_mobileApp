@@ -17,6 +17,7 @@ void showMessage(String message) {
   Get.snackbar(
     "Success",
     message,
+    duration: Duration(seconds: 1),
     snackPosition: SnackPosition.TOP,
     backgroundColor: Colors.green.shade100,
     colorText: Colors.green.shade900,
