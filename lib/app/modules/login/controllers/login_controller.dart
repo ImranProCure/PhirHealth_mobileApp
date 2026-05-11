@@ -79,8 +79,15 @@ class LoginController extends GetxController {
 
   Future<void> _login() async {
     isLoading.value = true;
+    String role = 'patient'; // default
+    if (_roleController.role == UserRole.doctor) {
+      role = 'doctor';
+    }
     ApiResponse response = await api.commonApi.authenticationApi.login(
-        mobile: phoneController.text, country_code: "+91", flag: "login");
+        mobile: phoneController.text,
+        country_code: "+91",
+        flag: "login",
+        role: role);
     isLoading.value = false;
 
     final messageData = response.data['message'];

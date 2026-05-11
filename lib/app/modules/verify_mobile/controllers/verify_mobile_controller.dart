@@ -96,8 +96,12 @@ class VerifyMobileController extends GetxController {
 
   Future<void> _resendApi() async {
     isLoading.value = true;
-    ApiResponse response = await api.commonApi.authenticationApi
-        .resendOtp(flag: "login", mobile: number.value, country_code: "+91");
+    ApiResponse response = await api.commonApi.authenticationApi.resendOtp(
+      flag: "login",
+      mobile: number.value,
+      country_code: "+91",
+      role: 'patient',
+    );
     isLoading.value = false;
 
     final messageData = response.data['message'];

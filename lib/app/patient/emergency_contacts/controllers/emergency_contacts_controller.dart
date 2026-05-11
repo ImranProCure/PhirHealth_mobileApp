@@ -1,34 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sample/app/service/api/common_api/emergency_contact_api/emergency_contact_api.dart';
 
 class EmergencyContactsController extends GetxController {
-  final RxList<Map<String, dynamic>> contacts = <Map<String, dynamic>>[
-    {
-      'name': 'Kamlesh Singh',
-      'relation': 'Son',
-      'phone': '98765 32140',
-      'iconBg': 0xFFEFF6FF,
-      'iconColor': 0xFF3B82F6,
-      'icon': Icons.group_outlined,
-    },
-    {
-      'name': 'Dr. Smith',
-      'relation': 'Cardiologist',
-      'phone': '98765 32140',
-      'iconBg': 0xFFF5F3FF,
-      'iconColor': 0xFF8B5CF6,
-      'icon': Icons.medical_services_outlined,
-    },
-    {
-      'name': 'Kamlesh Singh',
-      'relation': 'Spouse',
-      'phone': '98765 32140',
-      'iconBg': 0xFFFFF7ED,
-      'iconColor': 0xFFF97316,
-      'icon': Icons.face_outlined,
-    },
-  ].obs;
+  // ─────────────────────────────────────────────
+  // CHANGE 1: Static hardcoded list hata di
+  // Ab empty list hai — data API se aayega
+  // ─────────────────────────────────────────────
+  final RxList<Map<String, dynamic>> contacts = <Map<String, dynamic>>[].obs;
+  final RxBool isLoading = false.obs;
+
+  final EmergencyContactApi _api = EmergencyContactApi();
+
+  // ─────────────────────────────────────────────
+  // CHANGE 2: onInit add kiya
+  // Screen open hote hi GET call hogi automatically
+  // ─────────────────────────────────────────────
+  @override
+  void onInit() {
+    super.onInit();
+    fetchContacts();
+  }
+
+  // ─────────────────────────────────────────────
+  // CHANGE 3: fetchContacts() naya function
+  // GET API call — response se contacts list fill hoti hai
+  // ─────────────────────────────────────────────
+  Future<void> fetchContacts() async {
+    isLoading.value = true;
+    final response = await _api.getEmergencyContacts();
+    isLoading.value = false;
+
+    if (response.status) {
+      final data = response.data['message']['data'] as List;
+      contacts.value = data
+          .map((e) => {
+                'name': e['contact_name'],
+                'relation': e['relation'],
+                'phone': e['phone_number'],
+                'iconBg': 0xFFEFF6FF,
+                'iconColor': 0xFF3B82F6,
+                'icon': Icons.person_outline,
+              })
+          .toList();
+    } else {
+      // Sirf error pe snackbar — success pe kuch nahi
+      Get.snackbar(
+        'Error',
+        response.message ?? 'Failed to fetch contacts',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xFFEF4444),
+        colorText: Colors.white,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+    }
+  }
 
   void callAmbulance() async {
     final Uri uri = Uri(scheme: 'tel', path: '108');
@@ -65,7 +93,6 @@ class EmergencyContactsController extends GetxController {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Handle bar
               Center(
                 child: Container(
                   width: 40,
@@ -77,8 +104,6 @@ class EmergencyContactsController extends GetxController {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Title
               const Text(
                 'Add Emergency Contact',
                 style: TextStyle(
@@ -89,8 +114,6 @@ class EmergencyContactsController extends GetxController {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Name field
               _buildField(
                 controller: nameController,
                 label: 'Full Name',
@@ -100,8 +123,6 @@ class EmergencyContactsController extends GetxController {
                     (v == null || v.trim().isEmpty) ? 'Name required' : null,
               ),
               const SizedBox(height: 14),
-
-              // Relation dropdown
               _buildDropdown(
                 controller: relationController,
                 label: 'Relation',
@@ -119,31 +140,41 @@ class EmergencyContactsController extends GetxController {
                     : null,
               ),
               const SizedBox(height: 14),
-
-              // Phone field
+              // ─────────────────────────────────────────────
+              // CHANGE 4: maxLength: 10 add kiya phone field mein
+              // User 10 se zyada digits type nahi kar sakta
+              // ─────────────────────────────────────────────
               _buildField(
                 controller: phoneController,
                 label: 'Phone Number',
-                hint: 'e.g. 98765 32140',
+                hint: 'e.g. 9876543210',
                 icon: Icons.phone_outlined,
                 keyboardType: TextInputType.phone,
+                maxLength: 10,
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'Phone required';
-                  if (v.replaceAll(' ', '').length < 10) {
-                    return 'Enter valid phone number';
+                  // CHANGE 5: < 10 ki jagah != 10 — exactly 10 digits chahiye
+                  if (v.replaceAll(' ', '').length != 10) {
+                    return 'Enter valid 10 digit number';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 24),
-
-              // Save button
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState!.validate()) {
+                      // Sheet band karo pehle — smooth UX
+                      Get.back();
+
+                      // ─────────────────────────────────────────────
+                      // CHANGE 6: Optimistic update
+                      // POST ka wait nahi — pehle locally list mein add karo
+                      // Taaki user ko instant feedback mile
+                      // ─────────────────────────────────────────────
                       contacts.add({
                         'name': nameController.text.trim(),
                         'relation': relationController.text.trim(),
@@ -152,18 +183,38 @@ class EmergencyContactsController extends GetxController {
                         'iconColor': 0xFF0D9488,
                         'icon': Icons.person_outline,
                       });
-                      Get.back();
-                      Future.delayed(const Duration(milliseconds: 300), () {
+
+                      // Ab POST API call karo background mein
+                      final response = await _api.addEmergencyContact(
+                        contactName: nameController.text.trim(),
+                        relation: relationController.text.trim(),
+                        phoneNumber:
+                            phoneController.text.trim().replaceAll(' ', ''),
+                      );
+
+                      if (response.status) {
+                        // ─────────────────────────────────────────────
+                        // CHANGE 7: Success toast/snackbar hata diya
+                        // Sirf fresh data fetch karo API se
+                        // ─────────────────────────────────────────────
+                        fetchContacts();
+                      } else {
+                        // ─────────────────────────────────────────────
+                        // CHANGE 8: Agar POST fail ho
+                        // Locally jo add kiya tha usse wapas hata do
+                        // Aur error dikhao
+                        // ─────────────────────────────────────────────
+                        contacts.removeLast();
                         Get.snackbar(
-                          'Contact Added',
-                          '${nameController.text.trim()} added successfully',
+                          'Error',
+                          response.message ?? 'Failed to add contact',
                           snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: const Color(0xFF0D9488),
+                          backgroundColor: const Color(0xFFEF4444),
                           colorText: Colors.white,
                           margin: const EdgeInsets.all(16),
                           borderRadius: 12,
                         );
-                      });
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -283,6 +334,8 @@ class EmergencyContactsController extends GetxController {
     required String hint,
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
+    // CHANGE 9: maxLength parameter add kiya
+    int? maxLength,
     String? Function(String?)? validator,
   }) {
     return Column(
@@ -301,10 +354,13 @@ class EmergencyContactsController extends GetxController {
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          maxLength: maxLength, // CHANGE 9: yahan pass kiya
           validator: validator,
           style: const TextStyle(fontFamily: 'Mulish', fontSize: 14),
           decoration: InputDecoration(
             hintText: hint,
+            // CHANGE 10: counter hide kiya taaki "0/10" UI mein na dikhe
+            counterText: '',
             hintStyle: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 14,

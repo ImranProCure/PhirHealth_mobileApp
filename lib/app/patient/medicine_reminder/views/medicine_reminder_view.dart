@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import '../controllers/medicine_reminder_controller.dart';
 
 class MedicineReminderView extends GetView<MedicineReminderController> {
@@ -17,14 +18,27 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          'My Meds',
-          style: TextStyle(
-            fontFamily: 'Mulish',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
+        title: Column(
+          children: [
+            const Text(
+              'My Meds',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            ),
+            Text(
+              controller.monthYear,
+              style: const TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF6B7280),
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -40,14 +54,30 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
             // ===== DATE STRIP =====
             _dateStrip(),
             const SizedBox(height: 16),
-
             // ===== MEDICINE LIST =====
             Expanded(
-              child: Obx(() => ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: controller.medicines.length,
-                    itemBuilder: (context, i) => _medCard(i),
-                  )),
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return _buildShimmer();
+                }
+                if (controller.medicines.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No medicines for this date',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 14,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: controller.medicines.length,
+                  itemBuilder: (context, i) => _medCard(i),
+                );
+              }),
             ),
           ],
         ),
@@ -61,67 +91,209 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
     );
   }
 
-  // ===== DATE STRIP =====
-  Widget _dateStrip() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Obx(() => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(controller.dates.length, (i) {
-              final d = controller.dates[i];
-              final bool isSelected = controller.selectedDateIndex.value == i;
-              return GestureDetector(
-                onTap: () => controller.selectDate(i),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 56,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFF0D9488) : Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isSelected
-                          ? const Color(0xFF0D9488)
-                          : const Color(0xFFE5E7EB),
-                      width: 1.5,
+  // ===== SHIMMER =====
+  Widget _buildShimmer() {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: 3,
+      itemBuilder: (context, i) => Shimmer.fromColors(
+        baseColor: const Color(0xFFE5E7EB),
+        highlightColor: const Color(0xFFF9FAFB),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // Image placeholder
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        d['date'] as String,
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: isSelected ? Colors.white : Colors.black,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Time placeholder
+                        Container(
+                          width: 80,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        d['day'] as String,
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: isSelected ? Colors.white : Colors.black,
+                        const SizedBox(height: 8),
+                        // Name placeholder
+                        Container(
+                          width: 150,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 6),
+                        // Detail placeholder
+                        Container(
+                          width: 200,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                ],
+              ),
+              const SizedBox(height: 14),
+              // Button placeholders
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Container(
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ===== DATE STRIP =====
+  Widget _dateStrip() {
+    final scrollController = ScrollController(
+      initialScrollOffset: _initialScrollOffset(),
+    );
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+      child: Obx(() => SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: List.generate(controller.dates.length, (i) {
+                final d = controller.dates[i];
+                final bool isSelected = controller.selectedDateIndex.value == i;
+                final bool isToday = d['isToday'] as bool;
+
+                return GestureDetector(
+                  onTap: () => controller.selectDate(i),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 52,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected ? const Color(0xFF0D9488) : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF0D9488)
+                            : isToday
+                                ? const Color(0xFF0D9488)
+                                : const Color(0xFFE5E7EB),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          d['date'] as String,
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: isSelected
+                                ? Colors.white
+                                : isToday
+                                    ? const Color(0xFF0D9488)
+                                    : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          d['day'] as String,
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: isSelected
+                                ? Colors.white
+                                : isToday
+                                    ? const Color(0xFF0D9488)
+                                    : const Color(0xFF6B7280),
+                          ),
+                        ),
+                        if (isToday) ...[
+                          const SizedBox(height: 4),
+                          Container(
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected
+                                  ? Colors.white
+                                  : const Color(0xFF0D9488),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
           )),
     );
+  }
+
+  double _initialScrollOffset() {
+    final todayIndex = controller.dates.indexWhere((d) => d['isToday'] == true);
+    if (todayIndex <= 0) return 0;
+    final offset = (todayIndex * 60.0) - 140;
+    return offset < 0 ? 0 : offset;
   }
 
   // ===== MED CARD =====
   Widget _medCard(int i) {
     final med = controller.medicines[i];
     final String status = med['status'] as String;
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -139,11 +311,9 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ===== ROW 1: image + time + status =====
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Medicine image
               Image.asset(
                 med['imagePath'] as String,
                 width: 44,
@@ -155,8 +325,6 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
                 ),
               ),
               const SizedBox(width: 12),
-
-              // Time + name + detail
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,8 +367,6 @@ class MedicineReminderView extends GetView<MedicineReminderController> {
               ),
             ],
           ),
-
-          // ===== TAKE + SNOOZE (only pending) =====
           if (status == 'pending') ...[
             const SizedBox(height: 14),
             Row(

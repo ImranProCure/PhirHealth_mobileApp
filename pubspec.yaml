@@ -23,6 +23,12 @@ dependencies:
   webview_flutter: ^4.4.2
   youtube_player_flutter: ^9.1.1
   visibility_detector: ^0.4.0+2
+  shimmer: ^3.0.0
+  flutter_local_notifications: ^18.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  timezone: ^0.9.4
+  # flutter_timezone: ^3.0.0
     # ← replaces youtube_player_flutter entirely
 
 dev_dependencies:
@@ -31,6 +37,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   flutter_launcher_icons: ^0.13.1
+  build_runner: ^2.4.8
+  hive_generator: ^2.0.1
 
 # NO dependency_overrides needed at all
 

@@ -60,7 +60,6 @@ class RegistrationView extends GetView<RegistrationController> {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                // OUTER WHITE RING
                 Container(
                   width: 130,
                   height: 130,
@@ -69,7 +68,6 @@ class RegistrationView extends GetView<RegistrationController> {
                     color: Colors.white,
                   ),
                   child: Center(
-                    // INNER LIGHT GREEN CIRCLE
                     child: Container(
                       width: 120,
                       height: 120,
@@ -86,8 +84,6 @@ class RegistrationView extends GetView<RegistrationController> {
                     ),
                   ),
                 ),
-
-                // CAMERA BUTTON
                 GestureDetector(
                   onTap: controller.pickProfileImage,
                   child: Container(
@@ -144,9 +140,7 @@ class RegistrationView extends GetView<RegistrationController> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Container(
               height: 56,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -178,9 +172,7 @@ class RegistrationView extends GetView<RegistrationController> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Container(
               height: 56,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -221,9 +213,7 @@ class RegistrationView extends GetView<RegistrationController> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Container(
               height: 56,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -243,7 +233,7 @@ class RegistrationView extends GetView<RegistrationController> {
 
             const SizedBox(height: 24),
 
-            // ================= YEAR =================
+            // ================= YEAR OF GRADUATION =================
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -255,13 +245,10 @@ class RegistrationView extends GetView<RegistrationController> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Obx(() {
               final year =
                   controller.graduationYear.value?.year.toString() ?? 'YYYY';
-
               return GestureDetector(
                 onTap: controller.pickGraduationYear,
                 child: Container(
@@ -276,6 +263,147 @@ class RegistrationView extends GetView<RegistrationController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(year),
+                      const Icon(
+                        Icons.calendar_month_outlined,
+                        size: 20,
+                        color: Color(0xFF0D9488),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+
+            const SizedBox(height: 24),
+
+            // ================= MOBILE NUMBER =================
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Mobile Number',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: Row(
+                children: [
+                  const Text(
+                    '+91  ',
+                    style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Container(
+                    width: 1,
+                    height: 24,
+                    color: const Color(0xFFE5E7EB),
+                    margin: const EdgeInsets.only(right: 12),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: controller.mobileController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '98765 43210',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // ================= EMAIL =================
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Email Address',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: TextField(
+                controller: controller.emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'doctor@example.com',
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // ================= BIRTH DATE =================
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Date of Birth',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Obx(() {
+              final dob = controller.birthDate.value;
+              final text = dob != null
+                  ? '${dob.day.toString().padLeft(2, '0')}/${dob.month.toString().padLeft(2, '0')}/${dob.year}'
+                  : 'DD / MM / YYYY';
+              return GestureDetector(
+                onTap: controller.pickBirthDate,
+                child: Container(
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        text,
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 14,
+                          color: dob != null
+                              ? Colors.black
+                              : const Color(0xFF9CA3AF),
+                        ),
+                      ),
                       const Icon(
                         Icons.calendar_month_outlined,
                         size: 20,

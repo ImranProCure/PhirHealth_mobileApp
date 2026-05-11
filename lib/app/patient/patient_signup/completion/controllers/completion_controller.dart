@@ -111,9 +111,11 @@ class CompletionController extends GetxController {
     }
     isLoading.value = true;
     ApiResponse response = await api.commonApi.authenticationApi.login(
-        mobile: controller1.mobileController.text,
-        country_code: "+91",
-        flag: "register");
+      mobile: controller1.mobileController.text,
+      country_code: "+91",
+      flag: "register",
+      role: 'patient',
+    );
     isLoading.value = false;
     final messageData = response.data['message'];
 

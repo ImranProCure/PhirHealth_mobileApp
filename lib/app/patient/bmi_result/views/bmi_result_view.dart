@@ -67,13 +67,7 @@ class BmiResultView extends GetView<BmiResultController> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [ Color(0xFF0D5C8A), Color(0xFF0D5C8A)],
-          ),
-        ),
+        color: const Color(0xFF0D5C8A),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
         child: SizedBox(
           height: 54,
@@ -114,7 +108,7 @@ class BmiResultView extends GetView<BmiResultController> {
             width: 180,
             height: 180,
             child: CustomPaint(
-              painter: _BmiCirclePainter(bmi: controller.bmi),
+              painter: BmiCirclePainter(bmi: controller.bmi),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -139,9 +133,9 @@ class BmiResultView extends GetView<BmiResultController> {
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
-                      '-1.2 Since May',
-                      style: TextStyle(
+                    Text(
+                      controller.bmi < 25 ? 'Healthy Range' : 'Above Normal',
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
                         color: Color(0xFF4ADE80),
@@ -193,11 +187,11 @@ class BmiResultView extends GetView<BmiResultController> {
           ),
           const SizedBox(height: 16),
 
-          // Gradient slider
+          // Gradient slider bar
           SizedBox(
             height: 20,
             child: CustomPaint(
-              painter: _SliderPainter(position: controller.sliderPosition),
+              painter: SliderPainter(position: controller.sliderPosition),
               size: const Size(double.infinity, 20),
             ),
           ),
@@ -206,19 +200,21 @@ class BmiResultView extends GetView<BmiResultController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: ['UNDERWEIGHT', 'NORMAL', 'OVERWEIGHT', 'OBESE']
-                .map((l) => Text(
-                      l,
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 9,
-                        fontWeight: l == controller.category.toUpperCase()
-                            ? FontWeight.w800
-                            : FontWeight.w500,
-                        color: l == controller.category.toUpperCase()
-                            ? Colors.white
-                            : Colors.white54,
-                      ),
-                    ))
+                .map(
+                  (l) => Text(
+                    l,
+                    style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 9,
+                      fontWeight: l == controller.category.toUpperCase()
+                          ? FontWeight.w800
+                          : FontWeight.w500,
+                      color: l == controller.category.toUpperCase()
+                          ? Colors.white
+                          : Colors.white54,
+                    ),
+                  ),
+                )
                 .toList(),
           ),
         ],
@@ -432,10 +428,10 @@ class BmiResultView extends GetView<BmiResultController> {
   }
 }
 
-// ===== PAINTERS =====
-class _BmiCirclePainter extends CustomPainter {
+// ===== BMI CIRCLE PAINTER =====
+class BmiCirclePainter extends CustomPainter {
   final double bmi;
-  const _BmiCirclePainter({required this.bmi});
+  const BmiCirclePainter({required this.bmi});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -443,6 +439,7 @@ class _BmiCirclePainter extends CustomPainter {
     final radius = size.width / 2 - 12;
     const strokeWidth = 12.0;
 
+    // Background circle
     final bgPaint = Paint()
       ..color = Colors.white12
       ..strokeWidth = strokeWidth
@@ -450,6 +447,7 @@ class _BmiCirclePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawCircle(center, radius, bgPaint);
 
+    // Progress arc
     final double progress = (bmi / 40).clamp(0.0, 1.0);
     final progressPaint = Paint()
       ..shader = const LinearGradient(
@@ -469,15 +467,17 @@ class _BmiCirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_BmiCirclePainter old) => old.bmi != bmi;
+  bool shouldRepaint(BmiCirclePainter old) => old.bmi != bmi;
 }
 
-class _SliderPainter extends CustomPainter {
+// ===== SLIDER PAINTER =====
+class SliderPainter extends CustomPainter {
   final double position;
-  const _SliderPainter({required this.position});
+  const SliderPainter({required this.position});
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Gradient bar
     final barRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 4, size.width, 8),
       const Radius.circular(4),
@@ -493,10 +493,15 @@ class _SliderPainter extends CustomPainter {
       ).createShader(Rect.fromLTWH(0, 0, size.width, 8));
     canvas.drawRRect(barRect, barPaint);
 
-    final dotX = size.width * position;
-    canvas.drawCircle(Offset(dotX, 8), 8, Paint()..color = Colors.white);
+    // Dot
+    final double dotX = (size.width * position).clamp(8.0, size.width - 8.0);
+    canvas.drawCircle(
+      Offset(dotX, 8),
+      8,
+      Paint()..color = Colors.white,
+    );
   }
 
   @override
-  bool shouldRepaint(_SliderPainter old) => old.position != position;
+  bool shouldRepaint(SliderPainter old) => old.position != position;
 }

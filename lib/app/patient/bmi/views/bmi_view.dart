@@ -46,6 +46,7 @@ class BmiView extends GetView<BmiController> {
                   ],
                 ),
               ),
+
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -70,43 +71,47 @@ class BmiView extends GetView<BmiController> {
                       // ===== AGE =====
                       _fieldLabel('Age'),
                       const SizedBox(height: 8),
-                      _inputRow(
-                        imagePath: 'assets/icons/Group 189.png',
-                        controller: TextEditingController(
-                            text: controller.age.value.toString()),
-                        unit: 'yrs',
-                        onChanged: controller.onAgeChanged,
-                        displayText: () => '${controller.age.value} Years',
-                        keyboardType: TextInputType.number,
-                      ),
+                      Obx(() => _inputRow(
+                            imagePath: 'assets/icons/Group 189.png',
+                            tec: controller.ageTec,
+                            unit: 'yrs',
+                            onChanged: controller.onAgeChanged,
+                            displayText: '${controller.age.value} Years',
+                            keyboardType: TextInputType.number,
+                            isNumberOnly: true,
+                            maxLength: 3,
+                          )),
                       const SizedBox(height: 20),
 
                       // ===== HEIGHT =====
                       _fieldLabel('Height'),
                       const SizedBox(height: 8),
-                      _inputRow(
-                        imagePath: 'assets/icons/Frame 21.png',
-                        controller: TextEditingController(
-                            text: controller.height.value),
-                        unit: 'ft',
-                        onChanged: controller.onHeightChanged,
-                        displayText: () => '${controller.height.value} ft',
-                        keyboardType: TextInputType.text,
-                      ),
+                      Obx(() => _inputRow(
+                            imagePath: 'assets/icons/Frame 21.png',
+                            tec: controller.heightTec,
+                            unit: 'ft',
+                            onChanged: controller.onHeightChanged,
+                            displayText: "${controller.height.value} ft",
+                            keyboardType: TextInputType.text,
+                            isNumberOnly: false,
+                          )),
                       const SizedBox(height: 20),
 
                       // ===== WEIGHT =====
                       _fieldLabel('Weight'),
                       const SizedBox(height: 8),
-                      _inputRow(
-                        imagePath: 'assets/icons/Group 189-1.png',
-                        controller: TextEditingController(
-                            text: controller.weight.value.toString()),
-                        unit: 'kg',
-                        onChanged: controller.onWeightChanged,
-                        displayText: () => '${controller.weight.value} kg',
-                        keyboardType: TextInputType.number,
-                      ),
+                      Obx(() => _inputRow(
+                            imagePath: 'assets/icons/Group 189-1.png',
+                            tec: controller.weightTec,
+                            unit: 'kg',
+                            onChanged: controller.onWeightChanged,
+                            displayText: '${controller.weight.value} kg',
+                            keyboardType: TextInputType.number,
+                            isNumberOnly: true,
+                            maxLength: 3,
+                            dismissKeyboard:
+                                true, // weight ke baad keyboard hatega
+                          )),
                       const SizedBox(height: 100),
                     ],
                   ),
@@ -117,13 +122,7 @@ class BmiView extends GetView<BmiController> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [ Color(0xFF0D5C8A), Color(0xFF0D5C8A)],
-          ),
-        ),
+        color: const Color(0xFF0D5C8A),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
         child: SizedBox(
           height: 54,
@@ -152,16 +151,19 @@ class BmiView extends GetView<BmiController> {
 
   Widget _genderSelector() {
     return Obx(() => Row(
-          children: controller.genders.map((g) {
+          children: controller.genders.asMap().entries.map((entry) {
+            final int index = entry.key;
+            final Map<String, dynamic> g = entry.value;
             final bool isSelected =
                 controller.selectedGender.value == g['label'];
+            final bool isLast = index == controller.genders.length - 1;
+
             return Expanded(
               child: GestureDetector(
                 onTap: () => controller.selectGender(g['label'] as String),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  margin:
-                      EdgeInsets.only(right: g['label'] != 'Other' ? 10 : 0),
+                  margin: EdgeInsets.only(right: isLast ? 0 : 10),
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
                     gradient: isSelected
@@ -214,11 +216,14 @@ class BmiView extends GetView<BmiController> {
 
   Widget _inputRow({
     required String imagePath,
-    required TextEditingController controller,
+    required TextEditingController tec,
     required String unit,
     required Function(String) onChanged,
-    required String Function() displayText,
+    required String displayText,
     TextInputType keyboardType = TextInputType.text,
+    bool isNumberOnly = false,
+    int maxLength = 10, // add karo
+    bool dismissKeyboard = false, // add karo
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -228,18 +233,18 @@ class BmiView extends GetView<BmiController> {
       ),
       child: Row(
         children: [
-          // Image icon
           Image.asset(
             imagePath,
             width: 40,
             height: 40,
             color: Colors.white70,
-            errorBuilder: (_, __, ___) =>
-                const Icon(Icons.info_outline, color: Colors.white70, size: 28),
+            errorBuilder: (_, __, ___) => const Icon(
+              Icons.info_outline,
+              color: Colors.white70,
+              size: 28,
+            ),
           ),
           const SizedBox(width: 12),
-
-          // Input box
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -252,12 +257,16 @@ class BmiView extends GetView<BmiController> {
                 SizedBox(
                   width: 50,
                   child: TextField(
-                    controller: controller,
+                    controller: tec,
                     keyboardType: keyboardType,
-                    inputFormatters: keyboardType == TextInputType.number
+                    maxLength: maxLength, // ← yeh
+                    inputFormatters: isNumberOnly
                         ? [FilteringTextInputFormatter.digitsOnly]
                         : [],
                     onChanged: onChanged,
+                    onEditingComplete: dismissKeyboard // ← yeh
+                        ? () => FocusManager.instance.primaryFocus?.unfocus()
+                        : null,
                     style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 16,
@@ -268,6 +277,7 @@ class BmiView extends GetView<BmiController> {
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                       border: InputBorder.none,
+                      counterText: '', // ← maxLength ka counter hide karo
                     ),
                   ),
                 ),
@@ -283,17 +293,15 @@ class BmiView extends GetView<BmiController> {
             ),
           ),
           const Spacer(),
-
-          // Live display
-          Obx(() => Text(
-                displayText(),
-                style: const TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              )),
+          Text(
+            displayText,
+            style: const TextStyle(
+              fontFamily: 'Mulish',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );
