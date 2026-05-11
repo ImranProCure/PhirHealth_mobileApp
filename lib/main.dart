@@ -25,6 +25,7 @@ void main() async {
   if (Platform.isAndroid) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
+  await Firebase.initializeApp();
 
   // ── Hive init ──────────────────────────────────────────
   await Hive.initFlutter();
@@ -33,7 +34,6 @@ void main() async {
   Hive.registerAdapter(AdherenceModelAdapter());
   await Hive.openBox<MedicineModel>('medicines');
   await Hive.openBox<AdherenceModel>('adherence');
-
   // ── Notification init ──────────────────────────────────
   await NotificationService.instance.init();
 
