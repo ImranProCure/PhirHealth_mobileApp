@@ -152,6 +152,7 @@ class ProfileDetailsController extends GetxController {
       'patientName': fullName,
       'data': doctorData,
       'type': "doctor",
+      'id': Get.arguments?['id'] ?? '',
     });
   }
 
@@ -230,7 +231,7 @@ class ProfileDetailsController extends GetxController {
     final String doctorId = args?['id']?.toString() ?? '';
 
     final Map<String, dynamic> body = {
-      "practitioner": "HLC-PRAC-2026-00002",
+      "practitioner": doctorId,
       "rating": rating,
       "review_text": reviewText
     };
@@ -338,7 +339,7 @@ class ProfileDetailsController extends GetxController {
     final args = Get.arguments;
     final String doctorId = args?['id']?.toString() ?? '';
     final Map<String, String> params = {
-      'practitioner': "HLC-PRAC-2026-00002",
+      'practitioner': doctorId,
     };
     ApiResponse response = await api.commonApi.doctorConsultApi
         .getDoctorProfile(queryParams: params);

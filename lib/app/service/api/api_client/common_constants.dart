@@ -72,7 +72,7 @@ class CommonApiConstants {
       "/api/method/vhealthcare.api.patient.counsellors.dr_profile_details.get_doctor_profile";
 
   final bookCounsallerAppointment =
-      "/api/method/vhealthcare.api.patient.counsellors.book_appointment.book_appointment";
+      "/api/method/vhealthcare.api.patient.counsellors.book_appointment.counsellor_book_appointment";
 
   //Doctor Visit
   final doctorVisitApi =

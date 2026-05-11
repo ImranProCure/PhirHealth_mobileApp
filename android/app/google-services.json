@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "400254214624",
+    "project_id": "phir-health-a9ec1",
+    "storage_bucket": "phir-health-a9ec1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400254214624:android:84408094bfad5cb3038b85",
+        "android_client_info": {
+          "package_name": "com.phir.health"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWWSLZKq-hfiLrtvzaPtU7ee-q5G5bsnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

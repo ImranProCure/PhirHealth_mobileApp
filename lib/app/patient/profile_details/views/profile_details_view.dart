@@ -1134,6 +1134,7 @@ class ProfileDetailsView extends GetView<ProfileDetailsController> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 12,
+                    direction: Axis.vertical,
                     children: controller.specializations.map((s) {
                       return SizedBox(
                         width:

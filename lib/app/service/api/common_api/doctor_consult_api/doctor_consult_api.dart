@@ -50,11 +50,11 @@ class DoctorConsultApi {
       'appointment_date': appointmentDate,
       'start_time': startTime,
       'end_time': endTime,
-      'appointment_type': appointmentType,
+      'consultation_type':
+          appointmentType == "In-Clinic Appointmen" ? "Clinic" : "Video",
       'fees': fees.toString(),
       'mode_of_payment': modeOfPayment,
       'patient_id ': patientId,
-
       // reports[] — each file as multipart
       'reports': [
         for (final file in reports)
@@ -63,7 +63,6 @@ class DoctorConsultApi {
             filename: file.path.split('/').last,
           ),
       ],
-
       // report_data[] — JSON-encoded per item so index matches reports[]
       'report_data': reportData.map((e) => jsonEncode(e)).toList(),
     });

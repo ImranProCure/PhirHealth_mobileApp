@@ -189,6 +189,7 @@ class PatientDetailsController extends GetxController {
       'patientName': selected['name'] ?? '',
       'patientId': selected['patient_id'] ?? '',
       'type': Get.arguments?['type'] ?? '',
+      'id': Get.arguments?['id'] ?? '',
     });
   }
 

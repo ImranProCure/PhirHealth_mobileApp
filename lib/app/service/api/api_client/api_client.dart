@@ -245,7 +245,6 @@ class ApiClient {
 
       final (isSuccess, extractedMessage) = _extractResponseStatus(body);
       final bool isActuallySuccess = statusCode == 200 && isSuccess;
-
       _setCookiesFromResponse(response);
 
       // if (debugLoggingEnabled) {
