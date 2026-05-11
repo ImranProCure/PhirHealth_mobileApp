@@ -50,8 +50,8 @@ class _PhoneAddMedicineView extends StatelessWidget {
                   const SizedBox(height: 20),
                   _StrengthUnitRow(controller: controller),
                   const SizedBox(height: 16),
-                  _EmrToggle(controller: controller),
-                  const SizedBox(height: 80),
+                  // _EmrToggle(controller: controller),
+                  // const SizedBox(height: 80),
                 ],
               ),
             ),
@@ -92,8 +92,8 @@ class _TabletAddMedicineView extends StatelessWidget {
                 children: [
                   // Header badge
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE0F2F1),
                       borderRadius: BorderRadius.circular(20),
@@ -161,7 +161,7 @@ class _TabletAddMedicineView extends StatelessWidget {
                 children: [
                   _StrengthUnitRow(controller: controller),
                   const SizedBox(height: 20),
-                  _EmrToggle(controller: controller),
+                  // _EmrToggle(controller: controller),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 32),
@@ -247,8 +247,8 @@ class _NameField extends StatelessWidget {
           prefixIcon:
               const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
           hintText: 'Dolo 650',
-          hintStyle: const TextStyle(
-              fontFamily: 'Mulish', color: Color(0xFF9CA3AF)),
+          hintStyle:
+              const TextStyle(fontFamily: 'Mulish', color: Color(0xFF9CA3AF)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -284,8 +284,7 @@ class _TypeGrid extends StatelessWidget {
           mainAxisSpacing: 12,
           childAspectRatio: childAspectRatio,
           children: controller.types.map((t) {
-            final bool isSelected =
-                controller.selectedType.value == t['label'];
+            final bool isSelected = controller.selectedType.value == t['label'];
             return GestureDetector(
               onTap: () => controller.selectType(t['label'] as String),
               child: AnimatedContainer(
@@ -445,8 +444,7 @@ class _Dropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down,
-              color: Color(0xFF6B7280)),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF6B7280)),
           style: const TextStyle(
             fontFamily: 'Mulish',
             fontSize: 15,
@@ -466,61 +464,61 @@ class _Dropdown extends StatelessWidget {
 }
 
 // ── EMR Toggle ────────────────────────────────────────────
-class _EmrToggle extends StatelessWidget {
-  final AddMedicineController controller;
-  const _EmrToggle({required this.controller});
+// class _EmrToggle extends StatelessWidget {
+//   final AddMedicineController controller;
+//   const _EmrToggle({required this.controller});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Familiar with EMR Systems?',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  'Alert when 2 pills left',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 12,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Obx(() => Switch(
-                value: controller.emrAlert.value,
-                onChanged: controller.toggleEmr,
-                activeColor: const Color(0xFF0D9488),
-              )),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(14),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.04),
+//             blurRadius: 8,
+//             offset: const Offset(0, 2),
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: const [
+//                 Text(
+//                   'Familiar with EMR Systems?',
+//                   style: TextStyle(
+//                     fontFamily: 'Mulish',
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.w700,
+//                   ),
+//                 ),
+//                 SizedBox(height: 2),
+//                 Text(
+//                   'Alert when 2 pills left',
+//                   style: TextStyle(
+//                     fontFamily: 'Mulish',
+//                     fontSize: 12,
+//                     color: Color(0xFF9CA3AF),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Obx(() => Switch(
+//                 value: controller.emrAlert.value,
+//                 onChanged: controller.toggleEmr,
+//                 activeColor: const Color(0xFF0D9488),
+//               )),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // ── Next Button ───────────────────────────────────────────
 class _NextButton extends StatelessWidget {
@@ -544,8 +542,8 @@ class _NextButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           ),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,

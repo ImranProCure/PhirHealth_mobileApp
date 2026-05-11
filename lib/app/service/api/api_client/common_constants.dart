@@ -77,4 +77,27 @@ class CommonApiConstants {
   //Doctor Visit
   final doctorVisitApi =
       "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visits.get_my_doctor_visits";
+
+  // Emergency Contacts
+  final String getEmergencyContacts =
+      "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.get_patient_emergency_contacts";
+  final String addEmergencyContact =
+      "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.add_patient_emergency_contact";
+
+  // Medical Records
+  final String getMedicalRecords =
+      "/api/method/vhealthcare.api.patient.my_medical_records.medical_records.get_medical_records";
+
+  final String uploadMedicalFile =
+      "/api/method/vhealthcare.api.patient.my_medical_records.upload_records.upload_medical_file";
+
+  // Medicine Reminder
+  final String addMedicine =
+      "/api/method/vhealthcare.api.patient.medicine_reminder.add_medicine.add_medication";
+
+  final String setSchedule =
+      "/api/method/vhealthcare.api.patient.medicine_reminder.set_schedule.create_medication_request";
+
+  final String getMyMedications =
+      "/api/method/vhealthcare.api.patient.medicine_reminder.my_meds.get_my_medications";
 }

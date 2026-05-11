@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart'; // CHANGE 1: shimmer import kiya skeleton ke liye
 import '../controllers/emergency_contacts_controller.dart';
 
 class EmergencyContactsView extends GetView<EmergencyContactsController> {
@@ -27,8 +28,6 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
           ),
         ),
       ),
-      // CHANGED: Spacer() hataaya, Column ko SingleChildScrollView mein wrap kiya
-      // aur _addNewContact() ko body ke bahar bottom mein fix kiya
       body: Column(
         children: [
           Expanded(
@@ -49,21 +48,118 @@ class EmergencyContactsView extends GetView<EmergencyContactsController> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Obx(() => Column(
-                        children: controller.contacts
-                            .map((c) => _contactTile(c))
-                            .toList(),
-                      )),
+                  // ─────────────────────────────────────────────
+                  // CHANGE 2: CircularProgressIndicator hata diya
+                  // Ab 3 cases hain:
+                  //   1. isLoading = true  → skeleton tiles dikhao
+                  //   2. contacts empty    → "No contacts" message
+                  //   3. contacts hai      → actual list
+                  // ─────────────────────────────────────────────
+                  Obx(() {
+                    if (controller.isLoading.value) {
+                      // Skeleton — 3 placeholder tiles dikhao
+                      return Column(
+                        children: List.generate(3, (_) => _skeletonTile()),
+                      );
+                    }
+                    if (controller.contacts.isEmpty) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text(
+                            'No contacts added yet',
+                            style: TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 14,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return Column(
+                      children: controller.contacts
+                          .map((c) => _contactTile(c))
+                          .toList(),
+                    );
+                  }),
                 ],
               ),
             ),
           ),
-          // CHANGED: Add button ab scroll se bahar — hamesha screen ke bottom pe fixed
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             child: _addNewContact(),
           ),
         ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // CHANGE 3: _skeletonTile() naya widget
+  // Shimmer effect se real tile jaisa dikhta hai
+  // Loading ke waqt yeh 3 baar dikhega
+  // ─────────────────────────────────────────────
+  Widget _skeletonTile() {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFFE5E7EB),
+      highlightColor: const Color(0xFFF9FAFB),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          children: [
+            // Icon placeholder
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Name + relation placeholder
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 14,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    height: 11,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Phone button placeholder
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -306,7 +306,12 @@ class ApiClient {
     if (messageValue is Map<String, dynamic>) {
       final messageObj = messageValue;
 
-      final status = messageObj['status'] as bool?;
+      final statusRaw = messageObj['status'];
+      final bool? status = statusRaw is bool
+          ? statusRaw
+          : statusRaw is String
+              ? statusRaw == 'true' || statusRaw == 'success'
+              : null;
       if (status == false) {
         final errorMessage = messageObj['message'] as String? ??
             messageObj['error_code'] as String? ??
@@ -504,5 +509,25 @@ class ApiClient {
 
     final logMessage = buffer.toString();
     debugPrint('🔵 $logMessage', wrapWidth: 1024);
+  }
+
+  // ===== PRIVATE FILE FETCH — authenticated =====
+  Future<Uint8List?> fetchPrivateFile(String url) async {
+    try {
+      debugPrint('🔵 fetchPrivateFile: $url');
+
+      // Full URL hai toh baseUrl mat lagao — direct fetch karo
+      final response = await _dio.get<List<int>>(
+        url,
+        options: _withAuth(Options(responseType: ResponseType.bytes)),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        return Uint8List.fromList(response.data!);
+      }
+    } catch (e) {
+      debugPrint('❌ fetchPrivateFile error: $e');
+    }
+    return null;
   }
 }

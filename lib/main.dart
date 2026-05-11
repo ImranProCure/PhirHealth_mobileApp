@@ -1,3 +1,12 @@
+import 'package:get/get.dart';
+import 'package:sample/app/controllers/role_controller.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import './app/model/medicine_model.dart';
+import './app/service/notification_service/notification_service.dart';
+
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
+import 'app/modules/translations/app_translations.dart';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,11 +22,20 @@ import 'app/routes/app_routes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
-
   if (Platform.isAndroid) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
+
+  // ── Hive init ──────────────────────────────────────────
+  await Hive.initFlutter();
+  Hive.registerAdapter(MedicineModelAdapter());
+  Hive.registerAdapter(DoseModelAdapter());
+  Hive.registerAdapter(AdherenceModelAdapter());
+  await Hive.openBox<MedicineModel>('medicines');
+  await Hive.openBox<AdherenceModel>('adherence');
+
+  // ── Notification init ──────────────────────────────────
+  await NotificationService.instance.init();
 
   Get.put(RoleController());
   runApp(const MyApp());

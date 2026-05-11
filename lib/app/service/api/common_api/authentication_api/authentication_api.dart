@@ -10,8 +10,14 @@ class AuthenticationApi {
     required String flag,
     required String country_code,
     required String mobile,
+    required String role,
   }) async {
-    final data = {'flag': flag, 'country_code': country_code, "mobile": mobile};
+    final data = {
+      'flag': flag,
+      'country_code': country_code,
+      "mobile": mobile,
+      'role': role,
+    };
     final ApiResponse response = await _client.post(
       ApiConstants.commonApiConstants.login,
       data: data,
@@ -23,8 +29,14 @@ class AuthenticationApi {
     required String country_code,
     required String mobile,
     required String flag,
+    required String role,
   }) async {
-    final data = {'flag': flag, 'country_code': country_code, "mobile": mobile};
+    final data = {
+      'flag': flag,
+      'country_code': country_code,
+      "mobile": mobile,
+      'role': role,
+    };
     final ApiResponse response = await _client.post(
       ApiConstants.commonApiConstants.resendOtp,
       data: data,

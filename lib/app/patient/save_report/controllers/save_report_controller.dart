@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SaveReportController extends GetxController {
-  late String imagePath;
+  // ===== MULTIPLE IMAGES — list hai ab =====
+  final RxList<String> imagePaths = <String>[].obs;
+  final RxInt currentImageIndex = 0.obs;
 
   final RxString selectedType = 'Prescriptions'.obs;
   final RxString selectedDate = ''.obs;
@@ -11,13 +13,34 @@ class SaveReportController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    imagePath = Get.arguments?['imagePath'] ?? '';
+    // Single ya multiple — dono handle karo
+    final args = Get.arguments;
+    if (args is Map) {
+      final single = args['imagePath'] as String? ?? '';
+      final multiple = args['imagePaths'] as List<String>? ?? [];
+      if (multiple.isNotEmpty) {
+        imagePaths.value = multiple;
+      } else if (single.isNotEmpty) {
+        imagePaths.value = [single];
+      }
+    }
+
     final now = DateTime.now();
     selectedDate.value = '${now.day} ${_monthName(now.month)} ${now.year}';
     fileNameController.text = 'Prescription_${now.day}${_monthName(now.month)}';
   }
 
+  // Current image jo preview mein dikh rahi hai
+  String get currentImagePath =>
+      imagePaths.isNotEmpty ? imagePaths[currentImageIndex.value] : '';
+
   void selectType(String type) => selectedType.value = type;
+
+  void goToImage(int index) {
+    if (index >= 0 && index < imagePaths.length) {
+      currentImageIndex.value = index;
+    }
+  }
 
   Future<void> pickDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -48,11 +71,24 @@ class SaveReportController extends GetxController {
         ? '${selectedType.value} ${selectedDate.value}'
         : fileNameController.text.trim();
 
+    final Map<String, String> typeMapping = {
+      'Prescriptions': 'Prescriptions',
+      'Lab Reports': 'Lab Reports',
+      'Doctor Notes': 'Doctor Notes',
+      'Vitals Tracking': 'Vitals Tracking',
+      'Imaging Reports': 'Imaging Reports',
+      'Discharge Summary': 'Discharge Summary',
+      'Medical History': 'Medical History',
+    };
+
+    final String apiType =
+        typeMapping[selectedType.value] ?? selectedType.value;
+
     Get.back(result: {
-      'type': selectedType.value,
+      'type': apiType,
       'title': title,
       'date': selectedDate.value,
-      'imagePath': imagePath,
+      'imagePaths': imagePaths.toList(), // ← list return karo
       'isAsset': false,
     });
   }

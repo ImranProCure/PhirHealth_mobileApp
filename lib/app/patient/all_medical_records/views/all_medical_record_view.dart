@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
-import '../controllers/medical_records_controller.dart';
+import '../../../patient/medical_records/controllers/medical_records_controller.dart';
 
-class MedicalRecordsView extends GetView<MedicalRecordsController> {
-  const MedicalRecordsView({super.key});
+class AllMedicalRecordsView extends GetView<MedicalRecordsController> {
+  const AllMedicalRecordsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
         ),
         centerTitle: true,
         title: const Text(
-          "My Medical Records",
+          "All Medical Records",
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -37,34 +37,15 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _addReportCard(),
-            const SizedBox(height: 20),
             _filterTabs(),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Recent Files",
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: controller.seeAll,
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF0D9488),
-                    ),
-                  ),
-                ),
-              ],
+            const Text(
+              "All Files",
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 12),
             Obx(() {
@@ -72,143 +53,6 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
               return _recordsGrid();
             }),
           ],
-        ),
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: controller.showPickerOptions,
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF00897B).withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Icon(Icons.add, color: Colors.white, size: 28),
-        ),
-      ),
-    );
-  }
-
-  // ===== SKELETON GRID =====
-  Widget _skeletonGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 0.85,
-      ),
-      itemCount: 4,
-      itemBuilder: (_, __) => Shimmer.fromColors(
-        baseColor: const Color(0xFFE5E7EB),
-        highlightColor: const Color(0xFFF9FAFB),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ===== ADD REPORT CARD =====
-  Widget _addReportCard() {
-    return GestureDetector(
-      onTap: controller.showPickerOptions,
-      child: CustomPaint(
-        painter: _DashedBorderPainter(),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0D9488).withOpacity(0.10),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.camera_alt_outlined,
-                    color: Color(0xFF0D9488), size: 28),
-              ),
-              const SizedBox(height: 14),
-              const Text(
-                "Add New Report",
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                "Tab to take a photo of your report",
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 12,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-              const SizedBox(height: 18),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-                  ),
-                ),
-                child: ElevatedButton(
-                  onPressed: controller.showPickerOptions,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.crop_free_outlined,
-                          color: Colors.white, size: 18),
-                      SizedBox(width: 8),
-                      Text(
-                        "Capture Now",
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -295,7 +139,7 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
 
   // ===== RECORDS GRID =====
   Widget _recordsGrid() {
-    final records = controller.filteredRecords;
+    final records = controller.allFilteredRecords;
     if (records.isEmpty) {
       return const Center(
         child: Padding(
@@ -322,6 +166,31 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
       ),
       itemCount: records.length,
       itemBuilder: (context, i) => _recordCard(records[i]),
+    );
+  }
+
+  // ===== SKELETON GRID =====
+  Widget _skeletonGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.85,
+      ),
+      itemCount: 4,
+      itemBuilder: (_, __) => Shimmer.fromColors(
+        baseColor: const Color(0xFFE5E7EB),
+        highlightColor: const Color(0xFFF9FAFB),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
     );
   }
 
@@ -522,7 +391,7 @@ class MedicalRecordsView extends GetView<MedicalRecordsController> {
 }
 
 // =====================================================
-// GRID PRIVATE IMAGE — thumbnail ke liye
+// GRID PRIVATE IMAGE
 // =====================================================
 class _GridPrivateImage extends StatefulWidget {
   final String url;
@@ -598,53 +467,4 @@ class _GridPrivateImageState extends State<_GridPrivateImage> {
         return Icons.folder_outlined;
     }
   }
-}
-
-// ===== DASHED BORDER PAINTER =====
-class _DashedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF0D9488)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-    const double dashW = 6.0, gapW = 4.0, r = 16.0;
-    _dash(canvas, paint, Offset(r, 0), Offset(size.width - r, 0), dashW, gapW);
-    _dash(canvas, paint, Offset(r, size.height),
-        Offset(size.width - r, size.height), dashW, gapW);
-    _dash(canvas, paint, Offset(0, r), Offset(0, size.height - r), dashW, gapW);
-    _dash(canvas, paint, Offset(size.width, r),
-        Offset(size.width, size.height - r), dashW, gapW);
-    canvas.drawArc(
-        Rect.fromLTWH(0, 0, r * 2, r * 2), 3.14159, 3.14159 / 2, false, paint);
-    canvas.drawArc(Rect.fromLTWH(size.width - r * 2, 0, r * 2, r * 2),
-        3.14159 * 1.5, 3.14159 / 2, false, paint);
-    canvas.drawArc(Rect.fromLTWH(0, size.height - r * 2, r * 2, r * 2),
-        3.14159 / 2, 3.14159 / 2, false, paint);
-    canvas.drawArc(
-        Rect.fromLTWH(size.width - r * 2, size.height - r * 2, r * 2, r * 2),
-        0,
-        3.14159 / 2,
-        false,
-        paint);
-  }
-
-  void _dash(Canvas canvas, Paint paint, Offset start, Offset end, double dashW,
-      double gapW) {
-    final dx = end.dx - start.dx, dy = end.dy - start.dy;
-    final dist = dx.abs() + dy.abs();
-    if (dist == 0) return;
-    final ux = dx / dist, uy = dy / dist;
-    double drawn = 0, cx = start.dx, cy = start.dy;
-    while (drawn < dist) {
-      canvas.drawLine(
-          Offset(cx, cy), Offset(cx + ux * dashW, cy + uy * dashW), paint);
-      cx += ux * (dashW + gapW);
-      cy += uy * (dashW + gapW);
-      drawn += dashW + gapW;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DashedBorderPainter old) => false;
 }
