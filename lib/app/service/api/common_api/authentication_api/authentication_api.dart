@@ -156,12 +156,39 @@ class AuthenticationApi {
     required String otp,
     required String country_code,
     required String mobile,
+    required String role,
   }) async {
-    final data = {'otp': otp, 'country_code': country_code, "mobile": mobile};
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      "mobile": mobile,
+      'role': role,
+    };
     final ApiResponse response = await _client.post(
       ApiConstants.commonApiConstants.otpVerify,
       data: data,
     );
+    return response;
+  }
+
+  Future<ApiResponse> verifyDoctorOtp({
+    required String otp,
+    required String country_code,
+    required String mobile,
+    required String role,
+  }) async {
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      "mobile": mobile,
+      'role': role,
+    };
+
+    final ApiResponse response = await _client.post(
+      ApiConstants.commonApiConstants.doctorOtpVerify,
+      data: data,
+    );
+
     return response;
   }
 

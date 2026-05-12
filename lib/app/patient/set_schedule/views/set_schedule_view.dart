@@ -37,8 +37,6 @@ class SetScheduleView extends GetView<SetScheduleController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 4),
-
-                    // ===== HOW MANY TIMES =====
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -68,23 +66,21 @@ class SetScheduleView extends GetView<SetScheduleController> {
                       ],
                     ),
                     const SizedBox(height: 14),
-
-                    // ===== DURATION PILLS =====
                     _durationRow(),
                     const SizedBox(height: 8),
-
-                    // ===== CUSTOM DATE DISPLAY =====
                     _customDateDisplay(),
                     const SizedBox(height: 20),
 
                     // ===== DOSE CARDS =====
-                    ...List.generate(
-                      controller.doses.length,
-                      (i) => Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: _doseCard(i),
-                      ),
-                    ),
+                    Obx(() => Column(
+                          children: List.generate(
+                            controller.doseList.length,
+                            (i) => Padding(
+                              padding: const EdgeInsets.only(bottom: 14),
+                              child: _doseCard(i),
+                            ),
+                          ),
+                        )),
                   ],
                 ),
               ),
@@ -93,44 +89,49 @@ class SetScheduleView extends GetView<SetScheduleController> {
             // ===== SAVE BUTTON =====
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-                    ),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: controller.saveSchedule,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Save Schedule',
-                          style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+              child: Obx(() => SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF00897B), Color(0xFF1565C0)],
                         ),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward,
-                            color: Colors.white, size: 20),
-                      ],
+                      ),
+                      child: ElevatedButton(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : controller.saveSchedule,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        child: controller.isLoading.value
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Save Schedule',
+                                    style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Icon(Icons.arrow_forward,
+                                      color: Colors.white, size: 20),
+                                ],
+                              ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  )),
             ),
           ],
         ),
@@ -138,14 +139,13 @@ class SetScheduleView extends GetView<SetScheduleController> {
     );
   }
 
-  // ===== DURATION ROW — overflow fix =====
+  // ===== DURATION ROW =====
   Widget _durationRow() {
     return Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // ✅ Even spacing
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: controller.durations.map((d) {
             final bool isSelected = controller.selectedDuration.value == d;
             return Expanded(
-              // ✅ Expanded so no overflow
               child: GestureDetector(
                 onTap: () => controller.selectDuration(d),
                 child: Container(
@@ -253,7 +253,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
     });
   }
 
-  // ===== DOSE COUNT PICKER — Edit red screen fix =====
+  // ===== DOSE COUNT PICKER =====
   void _showDoseCountPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -262,7 +262,6 @@ class SetScheduleView extends GetView<SetScheduleController> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext ctx) {
-        // ✅ ctx use karo — context nahi
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
@@ -290,56 +289,60 @@ class SetScheduleView extends GetView<SetScheduleController> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...List.generate(4, (i) {
-                  final count = i + 1;
-                  final label = ['Once', 'Twice', '3 Times', '4 Times'][i];
-                  final isSelected = controller.doses.length == count;
-                  return GestureDetector(
-                    onTap: () {
-                      controller.setDoseCount(count);
-                      Navigator.pop(ctx); // ✅ ctx use karo
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFF0D9488).withOpacity(0.08)
-                            : const Color(0xFFF9FAFB),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected
-                              ? const Color(0xFF0D9488)
-                              : const Color(0xFFE5E7EB),
-                          width: isSelected ? 1.5 : 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '$label ($count dose${count > 1 ? 's' : ''})',
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 14,
-                                fontWeight: isSelected
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
+                // ✅ Obx — doseList.length reactive hai
+                Obx(() => Column(
+                      children: List.generate(4, (i) {
+                        final count = i + 1;
+                        final label =
+                            ['Once', 'Twice', '3 Times', '4 Times'][i];
+                        final isSelected = controller.doseList.length == count;
+                        return GestureDetector(
+                          onTap: () {
+                            controller.setDoseCount(count);
+                            Navigator.pop(ctx);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? const Color(0xFF0D9488).withOpacity(0.08)
+                                  : const Color(0xFFF9FAFB),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
                                 color: isSelected
                                     ? const Color(0xFF0D9488)
-                                    : Colors.black,
+                                    : const Color(0xFFE5E7EB),
+                                width: isSelected ? 1.5 : 1,
                               ),
                             ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '$label ($count dose${count > 1 ? 's' : ''})',
+                                    style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 14,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w700
+                                          : FontWeight.w500,
+                                      color: isSelected
+                                          ? const Color(0xFF0D9488)
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                if (isSelected)
+                                  const Icon(Icons.check_circle,
+                                      color: Color(0xFF0D9488), size: 20),
+                              ],
+                            ),
                           ),
-                          if (isSelected)
-                            const Icon(Icons.check_circle,
-                                color: Color(0xFF0D9488), size: 20),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+                        );
+                      }),
+                    )),
               ],
             ),
           ),
@@ -351,7 +354,10 @@ class SetScheduleView extends GetView<SetScheduleController> {
   // ===== DOSE CARD =====
   Widget _doseCard(int i) {
     return Obx(() {
-      final dose = controller.doses[i];
+      // ✅ Safe check
+      if (i >= controller.doseList.length) return const SizedBox();
+      final dose = controller.doseList[i];
+
       return Container(
         width: double.infinity,
         height: 154,
@@ -377,7 +383,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      dose['label'] as String,
+                      dose.label,
                       style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 11,
@@ -388,7 +394,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      dose['period'] as String,
+                      dose.period,
                       style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 17,
@@ -406,7 +412,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
-                        dose['time'] as String,
+                        dose.time,
                         style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 38,
@@ -417,7 +423,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        dose['ampm'] as String,
+                        dose.ampm,
                         style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 15,
@@ -432,8 +438,8 @@ class SetScheduleView extends GetView<SetScheduleController> {
             ),
             const SizedBox(height: 20),
             Row(
-              children: (dose['options'] as List<String>).map((opt) {
-                final bool isSelected = controller.selectedOptions[i] == opt;
+              children: dose.options.map((opt) {
+                final bool isSelected = dose.selectedOption == opt;
                 return GestureDetector(
                   onTap: () => controller.selectOption(i, opt),
                   child: AnimatedContainer(

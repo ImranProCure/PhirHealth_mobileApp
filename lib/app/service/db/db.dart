@@ -11,6 +11,7 @@ class AuthStorageService {
   static const String _isEmployee = "is_employee";
   static const String _tokenKey = "auth_token";
   static final AuthStorageService _instance = AuthStorageService._internal();
+  static const String _roleKey = 'user_role';
   late final SharedPreferences _prefs;
 
   factory AuthStorageService() {
@@ -76,6 +77,14 @@ class AuthStorageService {
     await _prefs.setString(_tokenKey, token);
   }
 
+  Future<void> saveRole(String role) async {
+    await _prefs.setString(_roleKey, role);
+  }
+
+  String getRole() {
+    return _prefs.getString(_roleKey) ?? 'patient';
+  }
+
   Future<String?> getToken() async {
     return _prefs.getString(_tokenKey);
   }
@@ -87,5 +96,6 @@ class AuthStorageService {
     await _prefs.remove(_userDetails);
     await _prefs.remove(_isEmployee);
     await _prefs.remove(_tokenKey);
+    await _prefs.remove(_roleKey);
   }
 }

@@ -1,4 +1,9 @@
 import 'package:get/get.dart';
+import 'package:sample/app/service/api/api_client/api_client.dart';
+import 'package:sample/app/service/db/db.dart';
+import 'package:flutter/material.dart';
+import 'package:sample/app/modules/home/bindings/home_binding.dart';
+import 'package:sample/app/modules/home/views/home_view.dart';
 
 class DoctorProfileController extends GetxController {
   final RxBool isOnline = true.obs;
@@ -68,7 +73,67 @@ class DoctorProfileController extends GetxController {
   void onShare() {}
   void onTileRoute(String route) => Get.toNamed(route);
 
-  void logout() {
-    Get.offAllNamed('/login');
+  Future<void> logout() async {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text(
+          'Logout',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: const Text(
+          'Are you sure you want to logout?',
+          style: TextStyle(
+            fontFamily: 'Mulish',
+            color: Color(0xFF6B7280),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                color: Color(0xFF6B7280),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+
+              final authStorage = AuthStorageService();
+
+              await authStorage.clearAll();
+
+              final apiClient = ApiClient();
+
+              apiClient.setBearerToken(null);
+
+              apiClient.clearCookies();
+
+              Get.off(
+                () => const HomeView(),
+                binding: HomeBinding(),
+              );
+            },
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                color: Color(0xFFEF4444),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

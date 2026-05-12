@@ -46,11 +46,9 @@ class VerifyMobileController extends GetxController {
       if (phone.length == 10) {
         mobileNumber.value =
             '+91 ${phone.substring(0, 2)}xxxxxx${phone.substring(8)}';
-
         number.value = phone;
       }
 
-      /// Set OTP digits into controllers
       for (int i = 0; i < otp.length && i < otpControllers.length; i++) {
         otpControllers[i].text = otp[i];
       }
@@ -100,7 +98,7 @@ class VerifyMobileController extends GetxController {
       flag: "login",
       mobile: number.value,
       country_code: "+91",
-      role: 'patient',
+      role: _roleController.role == UserRole.doctor ? 'doctor' : 'patient',
     );
     isLoading.value = false;
 
@@ -108,96 +106,119 @@ class VerifyMobileController extends GetxController {
 
     if (messageData["status"] == true) {
       if (messageData is Map<String, dynamic>) {
-        final otp = messageData['opt'];
-
+        final otp = messageData['otp'];
         if (otp != null && otp.isNotEmpty) {
-          // showMessage(
-          //   'OTP sent to +91${number.value}',
-          // );
-
           for (int i = 0; i < otp.length && i < otpControllers.length; i++) {
             otpControllers[i].text = otp[i];
           }
-
-          // All roles go through OTP — role passed in arguments
         }
       } else {
-        showError(
-          messageData["message"],
-        );
-        // Get.offAllNamed(Routes.MAIN_SCREEN);
+        showError(messageData["message"]);
       }
     } else {
-      showError(
-        messageData["message"],
-      );
+      showError(messageData["message"]);
     }
   }
 
   void resendOtp() {
     if (!canResend.value) return;
     for (var c in otpControllers) c.clear();
-    //otpFocusNodes[0].requestFocus();
     _resendApi();
     _startTimer();
-    showMessage(
-      'A new OTP has been sent to ${mobileNumber.value}',
-    );
+    showMessage('A new OTP has been sent to ${mobileNumber.value}');
   }
 
   Future<void> verifyOtpApi() async {
-    ApiResponse response = await api.commonApi.authenticationApi
-        .verifyOtp(mobile: number.value, country_code: "+91", otp: otpValue);
+    ApiResponse response;
+
+    // CHANGE: Role ke hisaab se alag endpoint
+    if (_roleController.role == UserRole.doctor) {
+      response = await api.commonApi.authenticationApi.verifyDoctorOtp(
+        mobile: number.value,
+        country_code: "+91",
+        otp: otpValue,
+        role: "doctor",
+      );
+    } else {
+      response = await api.commonApi.authenticationApi.verifyOtp(
+        mobile: number.value,
+        country_code: "+91",
+        otp: otpValue,
+        role: "patient",
+      );
+    }
+
     isLoading.value = false;
 
     final messageData = response.data['message'];
 
-    if (messageData["status"] == true) {
-      if (messageData is Map<String, dynamic>) {
-        final token = messageData['access_token'] as String?;
-        final user = messageData['user'] as Map<String, dynamic>?;
+    // CHANGE: Status false hone pe seedha error dikhao — aage mat jao
+    if (messageData["status"] != true) {
+      showError(messageData["message"] ?? 'Verification failed');
+      for (var c in otpControllers) c.clear();
+      otpFocusNodes[0].requestFocus();
+      return;
+    }
 
-        if (token != null && token.isNotEmpty) {
-          await authStorage.saveToken(token);
-          apiClient.setBearerToken(token);
-        }
+    if (messageData is Map<String, dynamic>) {
+      final token = messageData['access_token'] as String?;
+      final user = messageData['user'] as Map<String, dynamic>?;
 
-        if (user != null) {
-          await authStorage.saveUserDetail(user);
-          await authStorage.saveLoginStatus(true);
-          //final dashboardRoute = NavigationHelper.getDashboardRoute(roles);
-          showMessage(
-            'Mobile number verified successfully!',
-          );
+      if (token != null && token.isNotEmpty) {
+        await authStorage.saveToken(token);
 
-          // ===== ROLE-BASED NAVIGATION =====
-          final role = _roleController.role;
-          switch (role) {
-            case UserRole.doctor:
-              Get.offAllNamed(Routes.DOCTOR_DASHBOARD);
-              break;
-            case UserRole.patient:
-            default:
-              Get.offAllNamed(Routes.DASHBOARD);
-              break;
-          }
-          //Get.offAllNamed(dashboardRoute);
-        } else {
-          showError(
-            messageData["message"],
-          );
-          //Get.offAllNamed(Routes.MAIN_SCREEN);
+        await authStorage.saveRole(
+          _roleController.role == UserRole.doctor ? "doctor" : "patient",
+        );
+
+        apiClient.setBearerToken(token);
+      }
+
+      if (user != null) {
+        // CHANGE: Backend se role check karo
+        // Agar patient ne doctor number se login karne ki koshish ki
+        // final userRoles = user['roles'] as List? ?? [];
+        // final isDoctor = userRoles.any((r) =>
+        //     r.toString().toLowerCase().contains('doctor') ||
+        //     r.toString().toLowerCase().contains('physician'));
+
+        // if (_roleController.role == UserRole.patient && isDoctor) {
+        //   // Doctor ka number — patient login block karo
+        //   showError(
+        //       'This number is registered as a Doctor. Please use Doctor login.');
+        //   await authStorage.saveToken('');
+        //   apiClient.setBearerToken('');
+        //   return;
+        // }
+
+        // if (_roleController.role == UserRole.doctor && !isDoctor) {
+        //   // Patient ka number — doctor login block karo
+        //   showError(
+        //       'This number is registered as a Patient. Please use Patient login.');
+        //   await authStorage.saveToken('');
+        //   apiClient.setBearerToken('');
+        //   return;
+        // }
+
+        await authStorage.saveUserDetail(user);
+        await authStorage.saveLoginStatus(true);
+        showMessage('Mobile number verified successfully!');
+
+        // CHANGE: Role based navigation
+        switch (_roleController.role) {
+          case UserRole.doctor:
+            Get.offAllNamed(Routes.DOCTOR_DASHBOARD);
+            break;
+          case UserRole.patient:
+          default:
+            Get.offAllNamed(Routes.DASHBOARD);
+            break;
         }
       } else {
-        showError(
-          messageData["message"],
-        );
-        // Get.offAllNamed(Routes.MAIN_SCREEN);
+        showError(messageData["message"] ?? 'Something went wrong');
       }
     } else {
-      showError(
-        messageData["message"],
-      );
+      showError(messageData["message"] ?? 'Something went wrong');
     }
   }
 
@@ -209,14 +230,16 @@ class VerifyMobileController extends GetxController {
       if (otpValue.length == 6) {
         verifyOtpApi();
       } else {
-        Get.snackbar('Invalid OTP', 'Please enter the correct OTP',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.shade100,
-            colorText: Colors.red.shade900,
-            margin: const EdgeInsets.all(16),
-            borderRadius: 12,
-            duration: const Duration(seconds: 2));
-
+        Get.snackbar(
+          'Invalid OTP',
+          'Please enter the correct OTP',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.shade100,
+          colorText: Colors.red.shade900,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 12,
+          duration: const Duration(seconds: 2),
+        );
         for (var c in otpControllers) c.clear();
         otpFocusNodes[0].requestFocus();
       }
