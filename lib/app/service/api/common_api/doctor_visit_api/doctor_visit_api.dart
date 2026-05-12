@@ -24,6 +24,15 @@ class DoctorVisitApi {
     );
   }
 
+    Future<ApiResponse> getVisitDetails(
+      {Map<String, String>? queryParams}) async {
+    return await _client.get(
+      ApiConstants.commonApiConstants.profileDoctorDetails,
+      queryParameters: queryParams,
+      authenticated: true,
+    );
+  }
+
   Future<ApiResponse> getWalletBalance() async {
     return await _client.get(
       ApiConstants.commonApiConstants.walletBalance,

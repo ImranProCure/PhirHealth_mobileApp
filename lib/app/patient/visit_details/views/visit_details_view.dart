@@ -18,7 +18,7 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: Text(
+        title: Obx(() => Text(
           controller.appBarTitle,
           style: const TextStyle(
             fontFamily: 'Mulish',
@@ -26,46 +26,47 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
-        ),
+        )),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ===== DOCTOR CARD =====
-                  _doctorCard(),
-                  const SizedBox(height: 20),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFF0D9488)),
+          );
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _doctorCard(),
+                    const SizedBox(height: 20),
 
-                  // ===== DIGITAL PRESCRIPTION =====
-                  _sectionLabel("Doctor's Prescription"),
-                  const SizedBox(height: 10),
-                  _digitalPrescriptionCard(),
-                  const SizedBox(height: 20),
+                    _sectionLabel("Doctor's Prescription"),
+                    const SizedBox(height: 10),
+                    _digitalPrescriptionCard(),
+                    const SizedBox(height: 20),
 
-                  // ===== DOCTOR NOTES =====
-                  _sectionLabel("Doctor's Prescription"),
-                  const SizedBox(height: 10),
-                  _doctorNotesCard(),
-                  const SizedBox(height: 20),
+                    _sectionLabel("Doctor's Notes"),
+                    const SizedBox(height: 10),
+                    _doctorNotesCard(),
+                    const SizedBox(height: 20),
 
-                  // ===== BILL SUMMARY =====
-                  _sectionLabel("Bill Summary"),
-                  const SizedBox(height: 10),
-                  _billSummaryCard(),
-                  const SizedBox(height: 80),
-                ],
+                    _sectionLabel("Bill Summary"),
+                    const SizedBox(height: 10),
+                    _billSummaryCard(),
+                    const SizedBox(height: 80),
+                  ],
+                ),
               ),
             ),
-          ),
-
-          // ===== CALL CLINIC BUTTON =====
-          _bottomBar(),
-        ],
-      ),
+            _bottomBar(),
+          ],
+        );
+      }),
     );
   }
 
@@ -74,7 +75,6 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
     return _card(
       child: Row(
         children: [
-          // Icon container
           Container(
             width: 52,
             height: 52,
@@ -94,7 +94,7 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  controller.visit['doctor'] ?? 'Dr. Jyoti Wadhwani',
+                  controller.doctorName,
                   style: const TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 15,
@@ -103,7 +103,7 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  controller.visit['specialty'] ?? 'General Physician',
+                  controller.specialty,
                   style: const TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 12,
@@ -112,16 +112,19 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
                 ),
                 const SizedBox(height: 4),
                 Row(
-                  children: const [
-                    Icon(Icons.location_on_outlined,
+                  children: [
+                    const Icon(Icons.location_on_outlined,
                         size: 13, color: Color(0xFF6B7280)),
-                    SizedBox(width: 4),
-                    Text(
-                      "Bombay Hospital, Indore",
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        controller.clinicAddress,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 12,
+                          color: Color(0xFF6B7280),
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -140,7 +143,6 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
       child: Column(
         children: [
           const SizedBox(height: 8),
-          // Prescription icon
           Container(
             width: 64,
             height: 64,
@@ -164,9 +166,9 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            "Updated on 12 Feb, 11:00 AM",
-            style: TextStyle(
+          Text(
+            controller.prescriptionUpdatedLabel,
+            style: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 12,
               color: Color(0xFF6B7280),
@@ -174,7 +176,7 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           ),
           const SizedBox(height: 16),
 
-          // View button — gradient
+          // View button
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -215,7 +217,7 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           ),
           const SizedBox(height: 10),
 
-          // Download PDF — outlined
+          // Download PDF
           OutlinedButton(
             onPressed: controller.downloadPdf,
             style: OutlinedButton.styleFrom(
@@ -255,9 +257,9 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Patient has viral fever and weakness.\nAdvised rest for 3 days.",
-            style: TextStyle(
+          Text(
+            controller.doctorNotes,
+            style: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 13,
               fontStyle: FontStyle.italic,
@@ -269,32 +271,27 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           const Divider(height: 1, thickness: 1, color: Color(0xFFE5E7EB)),
           const SizedBox(height: 16),
 
-          // BP | Temp row with vertical separator
           IntrinsicHeight(
             child: Row(
               children: [
-                // BP
                 Expanded(
                   child: Row(
                     children: [
-                      // BP icon — red with cross/heart
-                      const Icon(
-                        Icons.monitor_heart_outlined,
-                        size: 22,
-                        color: Color(0xFFEF4444),
-                      ),
+                      const Icon(Icons.monitor_heart_outlined,
+                          size: 22, color: Color(0xFFEF4444)),
                       const SizedBox(width: 10),
                       RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontFamily: 'Mulish', fontSize: 13),
+                        text: TextSpan(
+                          style: const TextStyle(
+                              fontFamily: 'Mulish', fontSize: 13),
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: "BP: ",
                               style: TextStyle(color: Color(0xFF6B7280)),
                             ),
                             TextSpan(
-                              text: "120/80",
-                              style: TextStyle(
+                              text: controller.bp,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
@@ -305,35 +302,29 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
                     ],
                   ),
                 ),
-
-                // Vertical separator
                 Container(
                   width: 1,
                   color: const Color(0xFFE5E7EB),
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                 ),
-
-                // Temp
                 Expanded(
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.thermostat_outlined,
-                        size: 22,
-                        color: Color(0xFFFF9800),
-                      ),
+                      const Icon(Icons.thermostat_outlined,
+                          size: 22, color: Color(0xFFFF9800)),
                       const SizedBox(width: 10),
                       RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontFamily: 'Mulish', fontSize: 13),
+                        text: TextSpan(
+                          style: const TextStyle(
+                              fontFamily: 'Mulish', fontSize: 13),
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: "Temp: ",
                               style: TextStyle(color: Color(0xFF6B7280)),
                             ),
                             TextSpan(
-                              text: "101 F",
-                              style: TextStyle(
+                              text: controller.temperature,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
@@ -358,11 +349,10 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
     return _card(
       child: Column(
         children: [
-          // Consultation Fee
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "Consultation Fee",
                 style: TextStyle(
                   fontFamily: 'Mulish',
@@ -371,8 +361,8 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
                 ),
               ),
               Text(
-                "₹500",
-                style: TextStyle(
+                controller.consultationFee,
+                style: const TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -383,7 +373,6 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           ),
           const SizedBox(height: 12),
 
-          // Status
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -396,12 +385,13 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
                 ),
               ),
               Row(
-                children: const [
-                  Icon(Icons.check_circle, size: 15, color: Color(0xFF0D9488)),
-                  SizedBox(width: 5),
+                children: [
+                  const Icon(Icons.check_circle,
+                      size: 15, color: Color(0xFF0D9488)),
+                  const SizedBox(width: 5),
                   Text(
-                    "Paid via UPI",
-                    style: TextStyle(
+                    controller.paymentStatus,
+                    style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -414,7 +404,6 @@ class VisitDetailsView extends GetView<VisitDetailsController> {
           ),
           const SizedBox(height: 14),
 
-          // Download Invoice
           OutlinedButton(
             onPressed: controller.downloadInvoice,
             style: OutlinedButton.styleFrom(
