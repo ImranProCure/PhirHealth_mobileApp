@@ -86,7 +86,7 @@ class LoginController extends GetxController {
     ApiResponse response = await api.commonApi.authenticationApi.login(
         mobile: phoneController.text,
         country_code: "+91",
-        flag: "login",
+        flag: "imran",
         role: role);
     isLoading.value = false;
 
