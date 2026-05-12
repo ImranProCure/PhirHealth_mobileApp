@@ -100,4 +100,7 @@ class CommonApiConstants {
 
   final String getMyMedications =
       "/api/method/vhealthcare.api.patient.medicine_reminder.my_meds.get_my_medications";
+
+  final String doctorOtpVerify =
+      "/api/method/vhealthcare.api.patient.auth.verify_doctor_otp.verify_otp_doctor";
 }

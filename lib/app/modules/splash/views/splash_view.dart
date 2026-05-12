@@ -44,18 +44,28 @@ class _SplashViewState extends State<SplashView> {
 
   Future<void> _initializeApp() async {
     final authStorage = AuthStorageService();
+
     await authStorage.init();
+
     final apiClient = ApiClient();
+
     await apiClient.initializeToken();
+
     final loginStatus = await authStorage.getLoginStatus();
 
     if (!loginStatus) {
-      final user = await authStorage.getUserDetail();
-      final roles = user?['roles'] as List<dynamic>?;
       Get.off(
         () => const HomeView(),
         binding: HomeBinding(),
       );
+
+      return;
+    }
+
+    final role = authStorage.getRole();
+
+    if (role == "doctor") {
+      Get.offAllNamed(Routes.DOCTOR_DASHBOARD);
     } else {
       Get.offAllNamed(Routes.DASHBOARD);
     }
