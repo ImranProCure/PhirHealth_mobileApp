@@ -27,7 +27,7 @@ class DoctorVisitApi {
     Future<ApiResponse> getVisitDetails(
       {Map<String, String>? queryParams}) async {
     return await _client.get(
-      ApiConstants.commonApiConstants.profileDoctorDetails,
+      ApiConstants.commonApiConstants.doctorVisitDetail,
       queryParameters: queryParams,
       authenticated: true,
     );

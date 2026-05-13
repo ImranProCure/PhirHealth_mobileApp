@@ -103,8 +103,8 @@ class _Header extends StatelessWidget {
               }),
           const Row(
             children: [
-              Icon(Icons.search),
-              SizedBox(width: 12),
+              // Icon(Icons.search),
+              // SizedBox(width: 12),
               Icon(Icons.notifications_none),
             ],
           ),
