@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/patient/Dashboard/views/health_tools.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/db/db.dart';
 import '../controllers/dashboard_controller.dart';
@@ -34,6 +35,11 @@ class DashboardView extends GetView<DashboardController> {
                       const SizedBox(height: 24),
                       _AiMedicineFitnessSection(
                           controller: controller, isTablet: tablet),
+                      const SizedBox(height: 24),
+                      HealthMetricsSection(
+                        controller: controller,
+                        isTablet: tablet,
+                      ),
                       const SizedBox(height: 24),
                       const _PromoBanner(),
                       const SizedBox(height: 24),
