@@ -138,6 +138,7 @@ class VerifyMobileController extends GetxController {
         country_code: "+91",
         otp: otpValue,
         role: "doctor",
+        flag: 'login',
       );
     } else {
       response = await api.commonApi.authenticationApi.verifyOtp(
@@ -162,10 +163,23 @@ class VerifyMobileController extends GetxController {
 
     if (messageData is Map<String, dynamic>) {
       final token = messageData['access_token'] as String?;
+      print("TOKEN => $token");
+      final sid = messageData['sid']?.toString() ?? '';
+
+      if (sid.isNotEmpty) {
+        await authStorage.saveCookie(
+          'sid=$sid',
+        );
+      }
       final user = messageData['user'] as Map<String, dynamic>?;
+
+      final doctor = messageData['doctor'] as Map<String, dynamic>? ?? {};
 
       if (token != null && token.isNotEmpty) {
         await authStorage.saveToken(token);
+        ApiClient().setBearerToken(token);
+
+        print("SAVED TOKEN => $token");
 
         await authStorage.saveRole(
           _roleController.role == UserRole.doctor ? "doctor" : "patient",
@@ -200,7 +214,14 @@ class VerifyMobileController extends GetxController {
         //   return;
         // }
 
-        await authStorage.saveUserDetail(user);
+        final mergedData = {
+          ...?user,
+          ...doctor,
+        };
+
+        await authStorage.saveUserDetail(
+          mergedData,
+        );
         await authStorage.saveLoginStatus(true);
         showMessage('Mobile number verified successfully!');
 

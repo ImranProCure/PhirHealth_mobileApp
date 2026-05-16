@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../controllers/final_verification_controller.dart';
 
 class FinalVerificationView extends GetView<FinalVerificationController> {
@@ -8,13 +9,18 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
           onPressed: () => Get.back(),
         ),
+        centerTitle: true,
         title: const Text(
           'Step 4 of 4',
           style: TextStyle(
@@ -24,45 +30,51 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
             color: Colors.black,
           ),
         ),
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
 
-            // ================= TITLE =================
+            /// ================= TITLE =================
+
             const Center(
               child: Text(
                 'Final Verification',
                 style: TextStyle(
                   fontFamily: 'Mulish',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 14),
 
-            // ================= PROGRESS =================
+            /// ================= PROGRESS =================
+
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               child: const LinearProgressIndicator(
                 value: 4 / 4,
-                minHeight: 6,
+                minHeight: 7,
                 backgroundColor: Color(0xFFE5E7EB),
-                valueColor: AlwaysStoppedAnimation(Color(0xFF0D9488)),
+                valueColor: AlwaysStoppedAnimation(
+                  Color(0xFF0D9488),
+                ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 34),
 
-            // ================= LEGAL CHECK =================
+            /// ================= LOCATION =================
+
             const Text(
-              'Legal Check',
+              'Clinic Verification',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
@@ -70,78 +82,121 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
 
-            const Text(
-              'Have you ever faced disciplinary or legal action related to your medical practice?',
-              style: TextStyle(fontSize: 14),
-            ),
-
-            const SizedBox(height: 20),
-
-            Obx(() => Row(
-                  children: [
-                    _chip(
-                      label: "Yes",
-                      selected: controller.hasLegalIssue.value == true,
-                      onTap: () => controller.hasLegalIssue.value = true,
-                    ),
-                    const SizedBox(width: 12),
-                    _chip(
-                      label: "No",
-                      selected: controller.hasLegalIssue.value == false,
-                      onTap: () => controller.hasLegalIssue.value = false,
+            Obx(
+              () => Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: const Color(0xFFE5E7EB),
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0D000000),
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
                     ),
                   ],
-                )),
-
-            const SizedBox(height: 20),
-
-            // ================= DETAILS IF YES =================
-            Obx(() {
-              if (controller.hasLegalIssue.value != true) {
-                return const SizedBox();
-              }
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Please provide details',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontFamily: 'Mulish',
-                      fontWeight: FontWeight.w600,
+                ),
+                child: Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_rounded,
+                          color: Color(0xFF0D9488),
+                          size: 28,
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Verify your clinic location',
+                            style: TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 120,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.red),
-                    ),
-                    child: TextField(
-                      controller: controller.legalDetailsController,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText:
-                            'Provide a brief explanation of the incident and current status...',
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Your live clinic location helps patients discover accurate consultation availability.',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 13,
+                        color: Color(0xFF6B7280),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }),
+                    const SizedBox(height: 22),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            30,
+                          ),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF00786F),
+                              Color(0xFF009689),
+                              Color(0xFF1447E6),
+                            ],
+                          ),
+                        ),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                          ),
+                          onPressed: controller.isFetchingLocation.value
+                              ? null
+                              : controller.getCurrentLocation,
+                          child: controller.isFetchingLocation.value
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.my_location,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Use Current Location',
+                                      style: TextStyle(
+                                        fontFamily: 'Mulish',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-            const SizedBox(height: 30),
-            const Divider(),
-            const SizedBox(height: 30),
+            const SizedBox(height: 34),
 
-            // ================= MOTIVATION =================
+            /// ================= MOTIVATION =================
+
             const Text(
               'Motivation',
               style: TextStyle(
@@ -155,18 +210,30 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
 
             const Text(
               'Why do you want to join PHIR Health?',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 14,
+              ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
 
             Container(
-              height: 120,
+              height: 130,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: const Color(0xFFE5E7EB),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x0D000000),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: TextField(
                 controller: controller.motivationController,
@@ -174,19 +241,22 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText:
-                      'Tell us about your passion for healthcare and what attracts you to our platform...',
+                      'Tell us about your passion for healthcare and why you want to join our platform...',
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 34),
 
-            // ================= CONFIRMATION BOX =================
+            /// ================= CONFIRMATION =================
+
             Obx(
               () => Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(
+                    20,
+                  ),
                   gradient: const LinearGradient(
                     colors: [
                       Color(0xFFE6F5F3),
@@ -209,9 +279,13 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
                         width: 22,
                         height: 22,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(
+                            5,
+                          ),
                           border: Border.all(
-                            color: const Color(0xFF0D9488),
+                            color: const Color(
+                              0xFF0D9488,
+                            ),
                             width: 1.5,
                           ),
                           color: controller.isConfirmed.value
@@ -228,12 +302,12 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            "I confirm that the information provided is true and correct",
+                            'I confirm that the information provided is accurate',
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -242,7 +316,7 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            "By submitting this application, your acknowledge that any false information or misrepresentation may lead to immediate disqualification or termination of contract.",
+                            'Your clinic and professional details will be reviewed securely before approval.',
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 13,
@@ -257,59 +331,70 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 42),
 
-            // ================= SUBMIT BUTTON =================
-            const SizedBox(height: 24),
+            /// ================= SUBMIT =================
 
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF00786F),
-                      Color(0xFF009689),
-                      Color(0xFF1447E6),
-                    ],
-                  ),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  onPressed: controller.submitApplication,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Submit Application for Review',
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+            /// ================= SUBMIT =================
+            Obx(() => SizedBox(
+                  width: double.infinity,
+                  height: 58,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF00786F),
+                          Color(0xFF009689),
+                          Color(0xFF1447E6),
+                        ],
                       ),
-                      SizedBox(width: 8),
-                      Icon(Icons.verified_user, color: Colors.white),
-                    ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : controller.submitApplication,
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Submit Application',
+                                  style: TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Icon(Icons.verified_user, color: Colors.white),
+                              ],
+                            ),
+                    ),
                   ),
-                ),
-              ),
-            ),
+                )),
 
             const SizedBox(height: 30),
 
             const Center(
               child: Text(
-                "SECURE MEDICAL VERIFICATION",
+                'SECURE MEDICAL VERIFICATION',
                 style: TextStyle(
                   fontFamily: 'Mulish',
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF6B7280),
                   letterSpacing: 1.2,
@@ -318,47 +403,6 @@ class FinalVerificationView extends GetView<FinalVerificationController> {
             ),
 
             const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ================= CHIP =================
-  Widget _chip({
-    required String label,
-    required bool selected,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected ? const Color(0xFFE6F5F3) : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: selected ? const Color(0xFF0D9488) : const Color(0xFFE5E7EB),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              selected ? Icons.check_circle : Icons.radio_button_unchecked,
-              size: 18,
-              color: const Color(0xFF0D9488),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: selected ? const Color(0xFF0D9488) : Colors.black,
-              ),
-            ),
           ],
         ),
       ),

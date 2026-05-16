@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../controllers/registration_controller.dart';
 
 class RegistrationView extends GetView<RegistrationController> {
@@ -13,11 +16,14 @@ class RegistrationView extends GetView<RegistrationController> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
           onPressed: () => Get.back(),
         ),
         title: const Text(
-          'Step 1 of 4 ',
+          'Step 1 of 4',
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -37,8 +43,8 @@ class RegistrationView extends GetView<RegistrationController> {
               'Doctor Registration',
               style: TextStyle(
                 fontFamily: 'Mulish',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
               ),
             ),
 
@@ -54,32 +60,42 @@ class RegistrationView extends GetView<RegistrationController> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 34),
 
-            // ================= PROFILE IMAGE =================
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                Container(
-                  width: 130,
-                  height: 130,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFE6F5F3),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/icons/account_circle.png',
-                          width: 60,
+                Obx(
+                  () => Container(
+                    width: 130,
+                    height: 130,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFE6F5F3),
                         ),
+                        child: controller.profileImage.value != null
+                            ? ClipOval(
+                                child: Image.file(
+                                  controller.profileImage.value!,
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                ),
+                              )
+                            : Center(
+                                child: Image.asset(
+                                  'assets/icons/account_circle.png',
+                                  width: 60,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -87,8 +103,8 @@ class RegistrationView extends GetView<RegistrationController> {
                 GestureDetector(
                   onTap: controller.pickProfileImage,
                   child: Container(
-                    width: 32,
-                    height: 32,
+                    width: 34,
+                    height: 34,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Color(0xFF0D9488),
@@ -104,165 +120,109 @@ class RegistrationView extends GetView<RegistrationController> {
               ],
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 26),
 
             const Text(
               'Upload Photo',
               style: TextStyle(
                 fontFamily: 'Mulish',
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
 
             const Text(
               'Add a face to your medical profile',
               style: TextStyle(
                 fontFamily: 'Mulish',
-                fontSize: 16,
+                fontSize: 15,
                 color: Color(0xFF6B7280),
               ),
             ),
 
-            const SizedBox(height: 53),
+            const SizedBox(height: 40),
 
-            // ================= FULL NAME =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Full Name',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== FULL NAME =====
+            _title('Full Name'),
             const SizedBox(height: 10),
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
+            _field(
               child: TextField(
                 controller: controller.fullNameController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Dr.',
+                  hintText: 'Dr. Rajesh Sharma',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFF9CA3AF),
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // ================= MEDICAL DEGREE =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Medical Degree',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== DEGREE =====
+            _title('Medical Degree'),
             const SizedBox(height: 10),
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
-              child: Row(
-                children: const [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Select Degree (MBBS, MD, MS, etc.)',
-                      ),
-                    ),
+            _field(
+              child: TextField(
+                controller: controller.degreeController,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'e.g. MBBS, MD, MS',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFF9CA3AF),
                   ),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Color(0xFF0D9488),
-                  ),
-                ],
+                ),
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // ================= REGISTRATION NUMBER =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Registration Number',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== REG NUMBER =====
+            _title('Registration Number'),
             const SizedBox(height: 10),
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
+            _field(
               child: TextField(
                 controller: controller.registrationNumberController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'MCI / State Council ID',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFF9CA3AF),
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // ================= YEAR OF GRADUATION =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Year of Graduation',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== GRADUATION =====
+            _title('Year of Graduation'),
             const SizedBox(height: 10),
             Obx(() {
               final year =
                   controller.graduationYear.value?.year.toString() ?? 'YYYY';
               return GestureDetector(
                 onTap: controller.pickGraduationYear,
-                child: Container(
-                  height: 56,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
-                  ),
+                child: _field(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(year),
+                      Text(
+                        year,
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 14,
+                          color: controller.graduationYear.value != null
+                              ? Colors.black
+                              : const Color(0xFF9CA3AF),
+                        ),
+                      ),
                       const Icon(
                         Icons.calendar_month_outlined,
                         size: 20,
@@ -276,51 +236,36 @@ class RegistrationView extends GetView<RegistrationController> {
 
             const SizedBox(height: 24),
 
-            // ================= MOBILE NUMBER =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Mobile Number',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== MOBILE =====
+            _title('Mobile Number'),
             const SizedBox(height: 10),
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
+            _field(
               child: Row(
                 children: [
                   const Text(
-                    '+91  ',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
+                    '+91',
+                    style: TextStyle(fontFamily: 'Mulish', fontSize: 14),
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 12),
                   Container(
                     width: 1,
                     height: 24,
                     color: const Color(0xFFE5E7EB),
-                    margin: const EdgeInsets.only(right: 12),
                   ),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: TextField(
                       controller: controller.mobileController,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: '98765 43210',
+                        counterText: '',
+                        hintText: '9876543210',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Mulish',
+                          color: Color(0xFF9CA3AF),
+                        ),
                       ),
                     ),
                   ),
@@ -330,51 +275,28 @@ class RegistrationView extends GetView<RegistrationController> {
 
             const SizedBox(height: 24),
 
-            // ================= EMAIL =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Email Address',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== EMAIL =====
+            _title('Email Address'),
             const SizedBox(height: 10),
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
+            _field(
               child: TextField(
                 controller: controller.emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'doctor@example.com',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFF9CA3AF),
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // ================= BIRTH DATE =================
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Date of Birth',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // ===== DOB =====
+            _title('Date of Birth'),
             const SizedBox(height: 10),
             Obx(() {
               final dob = controller.birthDate.value;
@@ -383,14 +305,7 @@ class RegistrationView extends GetView<RegistrationController> {
                   : 'DD / MM / YYYY';
               return GestureDetector(
                 onTap: controller.pickBirthDate,
-                child: Container(
-                  height: 56,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
-                  ),
+                child: _field(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -415,15 +330,15 @@ class RegistrationView extends GetView<RegistrationController> {
               );
             }),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 42),
 
-            // ================= NEXT BUTTON =================
+            // ===== BUTTON =====
             SizedBox(
               width: double.infinity,
               height: 56,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(30),
                   gradient: const LinearGradient(
                     colors: [
                       Color(0xFF00786F),
@@ -458,10 +373,37 @@ class RegistrationView extends GetView<RegistrationController> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 30),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _title(String text) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Mulish',
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget _field({required Widget child}) {
+    return Container(
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: child,
     );
   }
 }

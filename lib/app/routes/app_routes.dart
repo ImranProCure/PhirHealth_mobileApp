@@ -15,12 +15,17 @@ abstract class Routes {
   static const DOCTOR_REGISTRATION = '/doctor/registration';
   static const DOCTOR_EXPERIENCE = '/doctor/experience';
   static const DOCTOR_DIGITAL_READINESS = '/doctor/digital-readiness';
+  static const DOCTOR_REGISTRATION_EDIT = '/doctor/registration/edit';
+  static const DOCTOR_EXPERIENCE_EDIT = '/doctor/experience/edit';
+  static const DOCTOR_DIGITAL_READINESS_EDIT = '/doctor/digital-readiness/edit';
   static const DOCTOR_FINAL_VERIFICATION = '/doctor/final-verification';
+  static const DOCTOR_EDIT_MYPROFILE = '/doctor/edit/myprofile';
+  static const SEE_ALL_APPOINTMENTS = '/see-all-appointments';
 
   //Counsellor
   static const COUNSELLOR_COACHES = '/counsellor-consult';
   static const SELECT_COUNSELLOR = '/counsellor-select';
-  static const COUNSELLOR_PROFILE_DETAILS = '/counsellor-profile'; 
+  static const COUNSELLOR_PROFILE_DETAILS = '/counsellor-profile';
 
   //Doctor Consult
   static const DOCTOR_CONSULT = '/doctor-consult';

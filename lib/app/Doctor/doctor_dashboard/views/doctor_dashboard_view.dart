@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/doctor_dashboard_controller.dart';
 
-// ─────────────────────────────────────────────────────────────
-//  ENTRY POINT — switches between phone and tablet layouts
-// ─────────────────────────────────────────────────────────────
 class DoctorDashboardView extends GetView<DoctorDashboardController> {
   const DoctorDashboardView({super.key});
 
@@ -25,9 +22,6 @@ class DoctorDashboardView extends GetView<DoctorDashboardController> {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  PHONE SCAFFOLD  (original — untouched)
-// ══════════════════════════════════════════════════════════════
 class _PhoneScaffold extends StatelessWidget {
   final DoctorDashboardController controller;
   const _PhoneScaffold({required this.controller});
@@ -66,35 +60,52 @@ Widget _buildPhoneHeader(DoctorDashboardController controller) {
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     child: Row(
       children: [
-        ClipOval(
-          child: Image.asset(
-            'assets/profile.png',
-            width: 48,
-            height: 48,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
-              width: 48,
-              height: 48,
-              color: const Color(0xFFE0F2F1),
-              child: const Icon(Icons.person, color: Color(0xFF0D9488), size: 28),
-            ),
+        Obx(
+          () => ClipOval(
+            child: controller.doctorImage.value.isNotEmpty
+                ? Image.network(
+                    controller.doctorImage.value,
+                    width: 48,
+                    height: 48,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 48,
+                      height: 48,
+                      color: const Color(0xFFE0F2F1),
+                      child: const Icon(Icons.person,
+                          color: Color(0xFF0D9488), size: 28),
+                    ),
+                  )
+                : Container(
+                    width: 48,
+                    height: 48,
+                    color: const Color(0xFFE0F2F1),
+                    child: const Icon(Icons.person,
+                        color: Color(0xFF0D9488), size: 28),
+                  ),
           ),
         ),
         const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Welcome Back',
-                style: TextStyle(
-                    fontFamily: 'Mulish', fontSize: 12, color: Color(0xFF6B7280))),
-            Text(controller.doctorName,
-                style: const TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black)),
-          ],
-        ),
+        Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Welcome Back',
+                  style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 12,
+                      color: Color(0xFF6B7280)),
+                ),
+                Text(
+                  controller.doctorName.value,
+                  style: const TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black),
+                ),
+              ],
+            )),
         const Spacer(),
         GestureDetector(
           onTap: controller.onNotification,
@@ -112,45 +123,56 @@ Widget _buildPhoneBody(DoctorDashboardController controller) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("Today's Overview",
-                style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black)),
-            _DateChip(date: controller.date, fontSize: 13),
-          ],
-        ),
+        Obx(() => _EarningsCard(
+              totalEarnings: controller.totalEarnings.value,
+              padding: const EdgeInsets.all(20),
+              iconSize: 44,
+              valueSize: 30,
+              labelSize: 13,
+            )),
+
+        const SizedBox(height: 18),
+
+        Obx(() => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Today's Overview",
+                  style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black),
+                ),
+                _DateChip(date: controller.date.value, fontSize: 13),
+              ],
+            )),
+
         const SizedBox(height: 14),
-        _EarningsCard(
-          totalEarnings: controller.totalEarnings,
-          padding: const EdgeInsets.all(20),
-          iconSize: 44,
-          valueSize: 30,
-          labelSize: 13,
-        ),
-        const SizedBox(height: 14),
-        _StatsGrid(
-            stats: controller.stats,
-            cardHeight: 110,
-            valueSize: 26,
-            labelSize: 12),
+
+        // ===== STATS GRID — cardHeight hataya =====
+        Obx(() => _StatsGrid(
+              stats: controller.stats.toList(),
+              valueSize: 26,
+              labelSize: 12,
+            )),
+
         const SizedBox(height: 22),
+
         _AppointmentsHeader(onSeeAll: controller.seeAll),
         const SizedBox(height: 12),
-        ...controller.appointments
-            .map((apt) => _AppointmentCard(apt: apt, controller: controller)),
+
+        Obx(() => Column(
+              children: controller.appointments
+                  .map((apt) =>
+                      _AppointmentCard(apt: apt, controller: controller))
+                  .toList(),
+            )),
       ],
     ),
   );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TABLET SCAFFOLD  — side rail + scrollable content
-// ══════════════════════════════════════════════════════════════
 class _TabletScaffold extends StatelessWidget {
   final DoctorDashboardController controller;
   const _TabletScaffold({required this.controller});
@@ -160,10 +182,7 @@ class _TabletScaffold extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // ── Fixed side rail ──────────────────────────────
         _TabletSideRail(controller: controller),
-
-        // ── Scrollable main area ─────────────────────────
         Expanded(
           child: SafeArea(
             left: false,
@@ -174,23 +193,25 @@ class _TabletScaffold extends StatelessWidget {
                 children: [
                   _TabletHeader(controller: controller),
                   const SizedBox(height: 28),
-                  const Text("Today's Overview",
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black)),
-                  const SizedBox(height: 18),
-                  _EarningsCard(
-                    totalEarnings: controller.totalEarnings,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 24),
-                    iconSize: 52,
-                    valueSize: 36,
-                    labelSize: 15,
+                  Obx(() => _EarningsCard(
+                        totalEarnings: controller.totalEarnings.value,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 28, vertical: 24),
+                        iconSize: 52,
+                        valueSize: 36,
+                        labelSize: 15,
+                      )),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Today's Overview",
+                    style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black),
                   ),
                   const SizedBox(height: 18),
-                  _TabletStatsRow(stats: controller.stats),
+                  Obx(() => _TabletStatsRow(stats: controller.stats.toList())),
                   const SizedBox(height: 28),
                   _AppointmentsHeader(onSeeAll: controller.seeAll),
                   const SizedBox(height: 16),
@@ -205,9 +226,6 @@ class _TabletScaffold extends StatelessWidget {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TABLET SIDE RAIL
-// ══════════════════════════════════════════════════════════════
 class _TabletSideRail extends StatelessWidget {
   final DoctorDashboardController controller;
   const _TabletSideRail({required this.controller});
@@ -294,8 +312,7 @@ class _RailNavItem extends StatelessWidget {
         width: 70,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color:
-              isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
+          color: isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
@@ -338,9 +355,6 @@ class _RailNavItem extends StatelessWidget {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TABLET HEADER
-// ══════════════════════════════════════════════════════════════
 class _TabletHeader extends StatelessWidget {
   final DoctorDashboardController controller;
   const _TabletHeader({required this.controller});
@@ -354,24 +368,26 @@ class _TabletHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Welcome Back',
-                  style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 14,
-                      color: Color(0xFF6B7280))),
-              const SizedBox(height: 2),
-              Text(
-                controller.doctorName,
-                style: const TextStyle(
+              const Text(
+                'Welcome Back',
+                style: TextStyle(
                     fontFamily: 'Mulish',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black),
+                    fontSize: 14,
+                    color: Color(0xFF6B7280)),
               ),
+              const SizedBox(height: 2),
+              Obx(() => Text(
+                    controller.doctorName.value,
+                    style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black),
+                  )),
             ],
           ),
         ),
-        _DateChip(date: controller.date, fontSize: 14),
+        Obx(() => _DateChip(date: controller.date.value, fontSize: 14)),
         const SizedBox(width: 12),
         GestureDetector(
           onTap: controller.onNotification,
@@ -397,9 +413,6 @@ class _TabletHeader extends StatelessWidget {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TABLET — 4 stat cards in a single equal-width row
-// ══════════════════════════════════════════════════════════════
 class _TabletStatsRow extends StatelessWidget {
   final List<Map<String, dynamic>> stats;
   const _TabletStatsRow({required this.stats});
@@ -468,9 +481,6 @@ class _TabletStatsRow extends StatelessWidget {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TABLET — 2-column appointment grid
-// ══════════════════════════════════════════════════════════════
 class _TabletAppointmentsGrid extends StatelessWidget {
   final DoctorDashboardController controller;
   const _TabletAppointmentsGrid({required this.controller});
@@ -484,13 +494,11 @@ class _TabletAppointmentsGrid extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-              child:
-                  _AppointmentCard(apt: apts[i], controller: controller)),
+              child: _AppointmentCard(apt: apts[i], controller: controller)),
           const SizedBox(width: 16),
           Expanded(
             child: i + 1 < apts.length
-                ? _AppointmentCard(
-                    apt: apts[i + 1], controller: controller)
+                ? _AppointmentCard(apt: apts[i + 1], controller: controller)
                 : const SizedBox(),
           ),
         ],
@@ -499,10 +507,6 @@ class _TabletAppointmentsGrid extends StatelessWidget {
     return Column(children: rows);
   }
 }
-
-// ══════════════════════════════════════════════════════════════
-//  SHARED WIDGETS
-// ══════════════════════════════════════════════════════════════
 
 class _DateChip extends StatelessWidget {
   final String date;
@@ -593,23 +597,14 @@ class _EarningsCard extends StatelessWidget {
 
 class _StatsGrid extends StatelessWidget {
   final List<Map<String, dynamic>> stats;
-  final double cardHeight;
   final double valueSize;
   final double labelSize;
 
   const _StatsGrid({
     required this.stats,
-    required this.cardHeight,
     required this.valueSize,
     required this.labelSize,
   });
-
-  static const _fallbackIcons = [
-    Icons.group_outlined,
-    Icons.check_circle_outline,
-    Icons.access_time_outlined,
-    Icons.cancel_outlined,
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -620,7 +615,6 @@ class _StatsGrid extends StatelessWidget {
               child: _StatCard(
                   s: stats[0],
                   i: 0,
-                  height: cardHeight,
                   valueSize: valueSize,
                   labelSize: labelSize)),
           const SizedBox(width: 12),
@@ -628,7 +622,6 @@ class _StatsGrid extends StatelessWidget {
               child: _StatCard(
                   s: stats[1],
                   i: 1,
-                  height: cardHeight,
                   valueSize: valueSize,
                   labelSize: labelSize)),
         ]),
@@ -638,7 +631,6 @@ class _StatsGrid extends StatelessWidget {
               child: _StatCard(
                   s: stats[2],
                   i: 2,
-                  height: cardHeight,
                   valueSize: valueSize,
                   labelSize: labelSize)),
           const SizedBox(width: 12),
@@ -646,7 +638,6 @@ class _StatsGrid extends StatelessWidget {
               child: _StatCard(
                   s: stats[3],
                   i: 3,
-                  height: cardHeight,
                   valueSize: valueSize,
                   labelSize: labelSize)),
         ]),
@@ -658,14 +649,12 @@ class _StatsGrid extends StatelessWidget {
 class _StatCard extends StatelessWidget {
   final Map<String, dynamic> s;
   final int i;
-  final double height;
   final double valueSize;
   final double labelSize;
 
   const _StatCard({
     required this.s,
     required this.i,
-    required this.height,
     required this.valueSize,
     required this.labelSize,
   });
@@ -680,7 +669,6 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -694,7 +682,7 @@ class _StatCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
             s['iconPath'] as String,
@@ -708,21 +696,20 @@ class _StatCard extends StatelessWidget {
               size: 28,
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(s['value'] as String,
-                  style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: valueSize,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black)),
-              Text(s['label'] as String,
-                  style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: labelSize,
-                      color: const Color(0xFF6B7280))),
-            ],
+          const SizedBox(height: 10),
+          Text(s['value'] as String,
+              style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: valueSize,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.black)),
+          const SizedBox(height: 2),
+          Text(
+            s['label'] as String,
+            style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: labelSize,
+                color: const Color(0xFF6B7280)),
           ),
         ],
       ),
@@ -768,10 +755,10 @@ class _AppointmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -783,87 +770,102 @@ class _AppointmentCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // ===== IMAGE — 80x80 =====
               ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  apt['imagePath'] as String,
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFE0F2F1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Icon(Icons.person,
-                        color: Color(0xFF0D9488), size: 32),
-                  ),
-                ),
+                borderRadius: BorderRadius.circular(14),
+                child: apt['imagePath'].toString().startsWith('http')
+                    ? Image.network(
+                        apt['imagePath'] as String,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _placeholder(),
+                      )
+                    : Image.asset(
+                        apt['imagePath'] as String,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _placeholder(),
+                      ),
               ),
-              const SizedBox(width: 12),
+
+              const SizedBox(width: 14),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Name on its own line to prevent overflow
-                    Text(
-                      apt['name'] as String,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black),
+                    // ===== NAME + TIME IN SAME ROW =====
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            apt['name'] as String,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE0F2F1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.access_time_outlined,
+                                  size: 12, color: Color(0xFF0D9488)),
+                              const SizedBox(width: 4),
+                              Text(apt['time'] as String,
+                                  style: const TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF0D9488))),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    // Time chip on its own line
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE0F2F1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.access_time_outlined,
-                              size: 12, color: Color(0xFF0D9488)),
-                          const SizedBox(width: 4),
-                          Text(apt['time'] as String,
-                              style: const TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF0D9488))),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+
+                    const SizedBox(height: 6),
+
                     Text(apt['details'] as String,
                         style: const TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Color(0xFF6B7280))),
+
                     const SizedBox(height: 2),
+
                     Text(apt['type'] as String,
                         style: const TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Color(0xFF6B7280))),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 14),
+
+          // ===== JOIN CALL BUTTON =====
           SizedBox(
             width: double.infinity,
-            height: 44,
+            height: 48,
             child: OutlinedButton.icon(
               onPressed: () => controller.joinCall(apt),
               style: OutlinedButton.styleFrom(
@@ -872,11 +874,11 @@ class _AppointmentCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30)),
               ),
               icon: const Icon(Icons.video_call_outlined,
-                  color: Color(0xFF0D9488), size: 20),
+                  color: Color(0xFF0D9488), size: 22),
               label: const Text('Join Call',
                   style: TextStyle(
                       fontFamily: 'Mulish',
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF0D9488))),
             ),
@@ -885,11 +887,20 @@ class _AppointmentCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _placeholder() {
+    return Container(
+      width: 80,
+      height: 80,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE0F2F1),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: const Icon(Icons.person, color: Color(0xFF0D9488), size: 36),
+    );
+  }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  PHONE BOTTOM NAV  (original — untouched)
-// ══════════════════════════════════════════════════════════════
 class _PhoneBottomNav extends StatelessWidget {
   final DoctorDashboardController controller;
   const _PhoneBottomNav({required this.controller});
