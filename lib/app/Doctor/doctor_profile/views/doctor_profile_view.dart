@@ -99,8 +99,8 @@ class _TabletLayout extends StatelessWidget {
                 // Top bar
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 28, vertical: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
                   child: Row(
                     children: [
                       GestureDetector(
@@ -209,28 +209,45 @@ class _TabletLayout extends StatelessWidget {
 // ══════════════════════════════════════════════════════════════
 //  PROFILE CARD
 // ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  PROFILE CARD
+// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  PROFILE CARD
+// ══════════════════════════════════════════════════════════════
 class _ProfileCard extends StatelessWidget {
   final DoctorProfileController controller;
   final bool isTablet;
-  const _ProfileCard({required this.controller, this.isTablet = false});
+
+  const _ProfileCard({
+    required this.controller,
+    this.isTablet = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final double avatarSize = isTablet ? 80 : 60;
+
     final double nameSize = isTablet ? 20 : 16;
+
     final double subSize = isTablet ? 13 : 12;
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isTablet ? 20 : 16),
+      padding: EdgeInsets.all(
+        isTablet ? 20 : 16,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
+            color: Colors.black.withOpacity(
+              0.04,
+            ),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
@@ -239,118 +256,224 @@ class _ProfileCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar
-              ClipOval(
-                child: Image.asset(
-                  controller.imagePath,
-                  width: avatarSize,
-                  height: avatarSize,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: avatarSize,
-                    height: avatarSize,
-                    color: const Color(0xFFE0F2F1),
-                    child: Icon(Icons.person,
-                        color: const Color(0xFF0D9488),
-                        size: avatarSize * 0.55),
+              /// ================= AVATAR =================
+              Obx(
+                () => ClipOval(
+                  child: controller.imagePath.value.startsWith(
+                    'http',
+                  )
+                      ? Image.network(
+                          controller.imagePath.value,
+                          width: avatarSize,
+                          height: avatarSize,
+                          fit: BoxFit.cover,
+                          errorBuilder: (
+                            _,
+                            __,
+                            ___,
+                          ) =>
+                              Container(
+                            width: avatarSize,
+                            height: avatarSize,
+                            color: const Color(
+                              0xFFE0F2F1,
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              color: const Color(
+                                0xFF0D9488,
+                              ),
+                              size: avatarSize * 0.55,
+                            ),
+                          ),
+                        )
+                      : Image.asset(
+                          controller.imagePath.value,
+                          width: avatarSize,
+                          height: avatarSize,
+                          fit: BoxFit.cover,
+                          errorBuilder: (
+                            _,
+                            __,
+                            ___,
+                          ) =>
+                              Container(
+                            width: avatarSize,
+                            height: avatarSize,
+                            color: const Color(
+                              0xFFE0F2F1,
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              color: const Color(
+                                0xFF0D9488,
+                              ),
+                              size: avatarSize * 0.55,
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+
+              const SizedBox(width: 14),
+
+              /// ================= PROFILE INFO =================
+              Expanded(
+                child: Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.name.value,
+                        style: TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: nameSize,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      if (controller.credentials.value.isNotEmpty)
+                        Text(
+                          controller.credentials.value,
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: subSize,
+                            color: const Color(
+                              0xFF6B7280,
+                            ),
+                          ),
+                        ),
+                      if (controller.credentials.value.isNotEmpty)
+                        const SizedBox(
+                          height: 3,
+                        ),
+                      if (controller.regNo.value.isNotEmpty)
+                        Text(
+                          controller.regNo.value,
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: subSize,
+                            color: const Color(
+                              0xFF6B7280,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(controller.name,
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: nameSize,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black)),
-                    const SizedBox(height: 3),
-                    Text(controller.credentials,
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: subSize,
-                            color: const Color(0xFF6B7280))),
-                    const SizedBox(height: 3),
-                    Text(controller.regNo,
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: subSize,
-                            color: const Color(0xFF6B7280))),
-                  ],
-                ),
-              ),
-              // Edit icon
+
+              /// ================= EDIT BUTTON =================
               GestureDetector(
                 onTap: controller.onEdit,
                 child: Container(
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE0F2F1),
-                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(
+                      0xFFE0F2F1,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
                   ),
-                  child: const Icon(Icons.edit_outlined,
-                      color: Color(0xFF0D9488), size: 18),
+                  child: const Icon(
+                    Icons.edit_outlined,
+                    color: Color(
+                      0xFF0D9488,
+                    ),
+                    size: 18,
+                  ),
                 ),
               ),
             ],
           ),
+
           const SizedBox(height: 16),
+
+          /// ================= ONLINE + VERIFIED =================
           Row(
             children: [
-              // Online toggle
-              Obx(() => Row(
-                    children: [
-                      Switch(
-                        value: controller.isOnline.value,
-                        onChanged: controller.toggleOnline,
-                        activeColor: Colors.white,
-                        activeTrackColor: const Color(0xFF0D9488),
-                        inactiveThumbColor: Colors.white,
-                        inactiveTrackColor: const Color(0xFFD1D5DB),
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
+              Obx(
+                () => Row(
+                  children: [
+                    Switch(
+                      value: controller.isOnline.value,
+                      onChanged: controller.toggleOnline,
+                      activeColor: Colors.white,
+                      activeTrackColor: const Color(
+                        0xFF0D9488,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        controller.isOnline.value ? 'Online' : 'Offline',
-                        style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: controller.isOnline.value
-                              ? const Color(0xFF0D9488)
-                              : const Color(0xFF9CA3AF),
-                        ),
+                      inactiveThumbColor: Colors.white,
+                      inactiveTrackColor: const Color(
+                        0xFFD1D5DB,
                       ),
-                    ],
-                  )),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      controller.isOnline.value ? 'Online' : 'Offline',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: controller.isOnline.value
+                            ? const Color(
+                                0xFF0D9488,
+                              )
+                            : const Color(
+                                0xFF9CA3AF,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(width: 12),
-              // Verified badge
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(
+                    20,
+                  ),
                   border: Border.all(
-                      color: const Color(0xFF0D9488), width: 1.5),
+                    color: const Color(
+                      0xFF0D9488,
+                    ),
+                    width: 1.5,
+                  ),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.verified_user_outlined,
-                        color: Color(0xFF0D9488), size: 14),
+                    Icon(
+                      Icons.verified_user_outlined,
+                      color: Color(
+                        0xFF0D9488,
+                      ),
+                      size: 14,
+                    ),
                     SizedBox(width: 5),
-                    Text('Verified Doctor',
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF0D9488))),
+                    Text(
+                      'Verified Doctor',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Color(
+                          0xFF0D9488,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -392,11 +515,10 @@ class _MenuCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap: () =>
-                    controller.onTileRoute(item['route'] as String),
+                onTap: () => controller.onTileRoute(item['route'] as String),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   child: Row(
                     children: [
                       // Icon box
@@ -510,9 +632,7 @@ class _VersionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text('PHIR Health version 1.0.2',
         style: TextStyle(
-            fontFamily: 'Mulish',
-            fontSize: 12,
-            color: Color(0xFF9CA3AF)));
+            fontFamily: 'Mulish', fontSize: 12, color: Color(0xFF9CA3AF)));
   }
 }
 
@@ -551,8 +671,8 @@ class _TabletSideRail extends StatelessWidget {
                   width: 46,
                   height: 46,
                   color: Colors.white24,
-                  child: const Icon(Icons.person,
-                      color: Colors.white, size: 26),
+                  child:
+                      const Icon(Icons.person, color: Colors.white, size: 26),
                 ),
               ),
             ),
@@ -624,9 +744,7 @@ class _RailNavItem extends StatelessWidget {
         width: 70,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isActive
-              ? Colors.white.withOpacity(0.2)
-              : Colors.transparent,
+          color: isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
@@ -640,8 +758,7 @@ class _RailNavItem extends StatelessWidget {
                 fontFamily: 'Mulish',
                 color: Colors.white,
                 fontSize: 11,
-                fontWeight:
-                    isActive ? FontWeight.w700 : FontWeight.w400,
+                fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
               ),
             ),
             if (isActive) ...[

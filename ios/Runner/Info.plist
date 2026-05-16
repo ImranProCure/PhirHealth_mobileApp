@@ -41,6 +41,9 @@
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need your location to verify clinic address.</string>
+
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

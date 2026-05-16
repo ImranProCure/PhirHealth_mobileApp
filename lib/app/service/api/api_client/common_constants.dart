@@ -27,54 +27,53 @@ class CommonApiConstants {
   final String createSymton =
       "/api/method/vhealthcare.api.patient.auth.create_patient.create_common_symptoms?";
 
+  // Doctor Auth — ADDED
+  final String doctorGenerateOtp =
+      "/api/method/vhealthcare.api.patient.auth.login_otp.generate_otp";
+  final String doctorSignup =
+      "/api/method/vhealthcare.api.doctor.dr_registration.dr.create_doctor";
+
+  // Doctor Experience — ADDED
+  final String getDoctorPracticePlace =
+      "/api/method/vhealthcare.api.doctor.dr_registration.dr.get_current_practice_place";
+  final String createDoctorPracticePlace =
+      "/api/method/vhealthcare.api.doctor.dr_registration.dr.create_practice_place";
+
   // Doctor Consult
   final doctorList =
       "/api/method/vhealthcare.api.patient.doctor_consult.get_doctors.get_doctors_list";
-
   final specialistList =
       "/api/method/vhealthcare.api.patient.doctor_consult.get_speciality.get_specialities_list";
-
   final profileDoctorDetails =
       "/api/method/vhealthcare.api.patient.doctor_consult.dr_profile_details.get_doctor_profile";
-
   final submmitReview =
       "/api/method/vhealthcare.api.patient.doctor_consult.add_review.add_patient_review";
-
   final reviewListApi =
       "/api/method/vhealthcare.api.patient.doctor_consult.review_list.get_review_list";
-
   final relationListApi =
       "/api/method/vhealthcare.api.patient.doctor_consult.get_patient_relation.get_patient_relations";
-
   final relationAddApi =
       "/api/method/vhealthcare.api.patient.doctor_consult.patient_details.add_member_patient";
-
   final walletBalance =
       "/api/method/vhealthcare.api.patient.doctor_consult.get_wallet_balance.get_wallet_balance";
-
   final bookAppointment =
       "/api/method/vhealthcare.api.patient.doctor_consult.book_appointment.book_appointment";
 
-  // Counsaller Consult
+  // Counsellor Consult
   final counsallerList =
       "/api/method/vhealthcare.api.patient.counsellors.get_counsellor.get_counsellors_list";
-
   final specialistCousallerList =
       "/api/method/vhealthcare.api.patient.counsellors.get_speciality.get_specialities_list";
-
   final reviewListCounsallerApi =
       "/api/method/vhealthcare.api.patient.counsellors.review_list.get_review_list";
-
   final submitCounsallerReview =
       "/api/method/vhealthcare.api.patient.counsellors.add_review.add_patient_review";
-
   final profileCounsallerDetails =
       "/api/method/vhealthcare.api.patient.counsellors.dr_profile_details.get_doctor_profile";
-
   final bookCounsallerAppointment =
       "/api/method/vhealthcare.api.patient.counsellors.book_appointment.counsellor_book_appointment";
 
-  //Doctor Visit
+  // Doctor Visit
   final doctorVisitApi =
       "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visits.get_my_doctor_visits";
 
@@ -90,20 +89,34 @@ class CommonApiConstants {
   // Medical Records
   final String getMedicalRecords =
       "/api/method/vhealthcare.api.patient.my_medical_records.medical_records.get_medical_records";
-
   final String uploadMedicalFile =
       "/api/method/vhealthcare.api.patient.my_medical_records.upload_records.upload_medical_file";
 
   // Medicine Reminder
   final String addMedicine =
       "/api/method/vhealthcare.api.patient.medicine_reminder.add_medicine.add_medication";
-
   final String setSchedule =
       "/api/method/vhealthcare.api.patient.medicine_reminder.set_schedule.create_medication_request";
-
   final String getMyMedications =
       "/api/method/vhealthcare.api.patient.medicine_reminder.my_meds.get_my_medications";
 
   final String doctorOtpVerify =
       "/api/method/vhealthcare.api.patient.auth.verify_doctor_otp.verify_otp_doctor";
+  // final String saveDoctorExperience =
+  //     "/api/method/vhealthcare.api.doctor.dr_registration.dr.save_doctor_experience";
+
+  // final String getDoctorExperience =
+  //     "/api/method/vhealthcare.api.doctor.dr_registration.dr.get_doctor_experience";
+
+  // Doctor My Profile
+  final String getDoctorProfile =
+      "/api/method/vhealthcare.api.doctor.my_profile.dr_profile.get_doctor_profile";
+
+  final String updateDoctorProfile =
+      '/api/method/vhealthcare.api.doctor.my_profile.update_profile.update_doctor_profile';
+
+  final String getDoctorDashboard =
+      "/api/method/vhealthcare.api.doctor.dr_dashboard.dashboard.get_doctor_dashboard";
+  final String getAllBookings =
+      '/api/method/vhealthcare.api.doctor.dr_dashboard.get_all_bookings.get_all_bookings';
 }

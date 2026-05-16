@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'dart:convert';
 
 class AuthenticationApi {
   final ApiClient _client = ApiClient();
@@ -18,11 +19,8 @@ class AuthenticationApi {
       "mobile": mobile,
       'role': role,
     };
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.login,
-      data: data,
-    );
-    return response;
+    return await _client.post(ApiConstants.commonApiConstants.login,
+        data: data);
   }
 
   Future<ApiResponse> resendOtp({
@@ -37,51 +35,29 @@ class AuthenticationApi {
       "mobile": mobile,
       'role': role,
     };
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.resendOtp,
-      data: data,
-    );
-    return response;
+    return await _client.post(ApiConstants.commonApiConstants.resendOtp,
+        data: data);
   }
 
   Future<ApiResponse> getMedicalSymptoms() async {
-    // final queryParameters = {'batch_id': batchId};
-
-    return await _client.get(
-      ApiConstants.commonApiConstants.getSymstom,
-      // queryParameters: queryParameters,
-      authenticated: true,
-    );
+    return await _client.get(ApiConstants.commonApiConstants.getSymstom,
+        authenticated: true);
   }
 
   Future<ApiResponse> getAllergies() async {
-    // final queryParameters = {'batch_id': batchId};
-
-    return await _client.get(
-      ApiConstants.commonApiConstants.getAllergy,
-      // queryParameters: queryParameters,
-      authenticated: true,
-    );
+    return await _client.get(ApiConstants.commonApiConstants.getAllergy,
+        authenticated: true);
   }
 
   Future<ApiResponse> getMedicalConditions() async {
-    // final queryParameters = {'batch_id': batchId};
-
     return await _client.get(
-      ApiConstants.commonApiConstants.getexistingConditions,
-      // queryParameters: queryParameters,
-      authenticated: true,
-    );
+        ApiConstants.commonApiConstants.getexistingConditions,
+        authenticated: true);
   }
 
   Future<ApiResponse> getProfileDetail() async {
-    // final queryParameters = {'batch_id': batchId};
-
-    return await _client.get(
-      ApiConstants.commonApiConstants.patientProfileView,
-      // queryParameters: queryParameters,
-      authenticated: true,
-    );
+    return await _client.get(ApiConstants.commonApiConstants.patientProfileView,
+        authenticated: true);
   }
 
   Future<ApiResponse> patientSignup({
@@ -89,9 +65,7 @@ class AuthenticationApi {
     required String filePath,
   }) async {
     fields!['photo'] = await MultipartFile.fromFile(filePath);
-
-    final formData = FormData.fromMap(fields); // ← This was missing
-
+    final formData = FormData.fromMap(fields);
     return await _client.postMultipart(
       ApiConstants.commonApiConstants.patientSignup,
       formData: formData,
@@ -101,17 +75,13 @@ class AuthenticationApi {
 
   Future<ApiResponse> patientEditProfile({
     Map<String, dynamic>? fields,
-    String? filePath, // 👈 make optional
+    String? filePath,
   }) async {
     fields ??= {};
-
-    // 👇 Only add photo if filePath is provided
     if (filePath != null && filePath.isNotEmpty) {
       fields['photo'] = await MultipartFile.fromFile(filePath);
     }
-
     final formData = FormData.fromMap(fields);
-
     return await _client.postMultipart(
       ApiConstants.commonApiConstants.patientProfileEdit,
       formData: formData,
@@ -119,37 +89,19 @@ class AuthenticationApi {
     );
   }
 
-  Future<ApiResponse> createMedicalCondition({
-    required String name,
-  }) async {
-    final data = {"condition": name};
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.createConditions,
-      data: data,
-    );
-    return response;
+  Future<ApiResponse> createMedicalCondition({required String name}) async {
+    return await _client.post(ApiConstants.commonApiConstants.createConditions,
+        data: {"condition": name});
   }
 
-  Future<ApiResponse> createAllergy({
-    required String name,
-  }) async {
-    final data = {"allergy": name};
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.createAllergy,
-      data: data,
-    );
-    return response;
+  Future<ApiResponse> createAllergy({required String name}) async {
+    return await _client.post(ApiConstants.commonApiConstants.createAllergy,
+        data: {"allergy": name});
   }
 
-  Future<ApiResponse> createMedicalSymptom({
-    required String name,
-  }) async {
-    final data = {"symptom": name};
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.createSymton,
-      data: data,
-    );
-    return response;
+  Future<ApiResponse> createMedicalSymptom({required String name}) async {
+    return await _client.post(ApiConstants.commonApiConstants.createSymton,
+        data: {"symptom": name});
   }
 
   Future<ApiResponse> verifyOtp({
@@ -162,13 +114,10 @@ class AuthenticationApi {
       'otp': otp,
       'country_code': country_code,
       "mobile": mobile,
-      'role': role,
+      'role': role
     };
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.otpVerify,
-      data: data,
-    );
-    return response;
+    return await _client.post(ApiConstants.commonApiConstants.otpVerify,
+        data: data);
   }
 
   Future<ApiResponse> verifyDoctorOtp({
@@ -176,49 +125,162 @@ class AuthenticationApi {
     required String country_code,
     required String mobile,
     required String role,
+    required String flag, // ✅ Yeh add karo
   }) async {
     final data = {
       'otp': otp,
       'country_code': country_code,
-      "mobile": mobile,
+      'mobile': mobile,
       'role': role,
+      'flag': flag, // ✅ Yeh add karo
     };
-
-    final ApiResponse response = await _client.post(
-      ApiConstants.commonApiConstants.doctorOtpVerify,
-      data: data,
-    );
-
-    return response;
+    return await _client.post(ApiConstants.commonApiConstants.doctorOtpVerify,
+        data: data);
   }
 
-//   Future<ApiResponse> signup({
-//     required String email,
-//     required String fullName,
-//     required String password,
-//     required String mobileNo,
-//     required String roles,
-//   }) async {
-//     final data = {
-//       'email': email,
-//       'full_name': fullName,
-//       'password': password,
-//       'mobile_no': mobileNo,
-//       'roles': roles,
-//     };
-//     final ApiResponse response = await _client.post(
-//       ApiConstants.commonApiConstants.signup,
-//       data: data,
-//     );
-//     return response;
-//   }
+  // ADDED: Doctor signup — multipart (profile photo + clinic photos)
+  Future<ApiResponse> doctorSignup({
+    required Map<String, dynamic> fields,
+    String? profileImagePath,
+    List<String> clinicPhotoPaths = const [],
+  }) async {
+    if (profileImagePath != null && profileImagePath.isNotEmpty) {
+      fields['photo'] = await MultipartFile.fromFile(profileImagePath);
+    }
 
-//   Future<ApiResponse> logout() async {
-//     final ApiResponse response = await _client.post(
-//       ApiConstants.commonApiConstants.logout,
-//       authenticated: true,
-//     );
-//     return response;
-//   }
-// }
+    if (clinicPhotoPaths.isNotEmpty) {
+      fields['clinic_photos'] = await Future.wait(
+        clinicPhotoPaths.map((p) => MultipartFile.fromFile(p)),
+      );
+    }
+
+    final formData = FormData.fromMap(fields);
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.doctorSignup,
+      formData: formData,
+      authenticated: false,
+    );
+  }
+
+  // Future<ApiResponse> getDoctorExperience() async {
+  //   return await _client.get(
+  //     ApiConstants.commonApiConstants.getDoctorExperience,
+  //     authenticated: true,
+  //   );
+  // }
+
+  // Future<ApiResponse> saveDoctorExperience({
+  //   required Map<String, dynamic> data,
+  // }) async {
+  //   return await _client.post(
+  //     ApiConstants.commonApiConstants.saveDoctorExperience,
+  //     data: data,
+  //     authenticated: true,
+  //   );
+  // }
+
+  Future<ApiResponse> getCareExperience() async {
+    return await _client.get(
+      '/api/method/vhealthcare.api.doctor.dr_registration.care_experience.get_care_experience',
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> createCareExperience({
+    required String name,
+  }) async {
+    return await _client.post(
+      '/api/method/vhealthcare.api.doctor.dr_registration.care_experience.add_care_experience',
+      data: {
+        'care_experience': name,
+      },
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> getDoctorProfile() async {
+    return await _client.get(
+      '/api/method/vhealthcare.api.doctor.my_profile.dr_profile.get_doctor_profile',
+      authenticated: true,
+    );
+  }
+
+  Future<ApiResponse> updateDoctorProfile({
+    required Map<String, dynamic> fields,
+    String? profileImagePath,
+    List<String> clinicPhotoPaths = const [],
+  }) async {
+    final FormData formData = FormData();
+
+    /// ===== NORMAL FIELDS =====
+    fields.forEach((key, value) {
+      if (key != 'custom_current_practice_place' &&
+          key != 'custom_care_experience' &&
+          key != 'existing_clinic_photos') {
+        formData.fields.add(MapEntry(key, value.toString()));
+      }
+    });
+
+    final List<String> practicePlaces = List<String>.from(
+      fields['custom_current_practice_place'] ?? [],
+    );
+
+    formData.fields.add(
+      MapEntry(
+        'custom_current_practice_place',
+        jsonEncode(practicePlaces),
+      ),
+    );
+
+    /// ===== CARE EXPERIENCE — send as single string list =====
+    final List<String> careExperiences = List<String>.from(
+      fields['custom_care_experience'] ?? [],
+    );
+
+    formData.fields.add(
+      MapEntry(
+        'custom_care_experience',
+        jsonEncode(careExperiences),
+      ),
+    );
+
+    /// ===== EXISTING CLINIC PHOTOS =====
+    final List<String> existingPhotos = List<String>.from(
+      fields['existing_clinic_photos'] ?? [],
+    );
+    for (final photo in existingPhotos) {
+      formData.fields.add(
+        MapEntry('existing_clinic_photos', photo),
+      );
+    }
+
+    /// ===== PROFILE IMAGE =====
+    if (profileImagePath != null && profileImagePath.isNotEmpty) {
+      formData.files.add(
+        MapEntry(
+          'photo',
+          await MultipartFile.fromFile(profileImagePath),
+        ),
+      );
+    }
+
+    /// ===== CLINIC PHOTOS =====
+    for (final path in clinicPhotoPaths) {
+      formData.files.add(
+        MapEntry(
+          'clinic_photos',
+          await MultipartFile.fromFile(path),
+        ),
+      );
+    }
+
+    print("FIELDS => ${formData.fields}");
+    print("FILES  => ${formData.files}");
+
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.updateDoctorProfile,
+      formData: formData,
+      authenticated: true,
+    );
+  }
 }

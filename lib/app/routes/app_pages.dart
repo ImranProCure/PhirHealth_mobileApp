@@ -1,6 +1,16 @@
 import 'package:get/get.dart';
+import 'package:sample/app/Doctor/digital_readiness_edit/bindings/digital_readiness_edit_binding.dart';
+import 'package:sample/app/Doctor/digital_readiness_edit/views/digital_readiness_edit_view.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/bindings/doctor_edit_clinic_binding.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/views/doctor_edit_clinic_view.dart';
+import 'package:sample/app/Doctor/doctor_edit_myprofile/bindings/doctor_edit_myprofile_binding.dart';
+import 'package:sample/app/Doctor/doctor_edit_myprofile/views/doctor_edit_myprofile_view.dart';
+import 'package:sample/app/Doctor/experience_edit/bindings/experience_edit_binding.dart';
+import 'package:sample/app/Doctor/experience_edit/views/experience_edit_view.dart';
+import 'package:sample/app/Doctor/registration_edit/bindings/registration_edit_binding.dart';
+import 'package:sample/app/Doctor/registration_edit/views/registration_edit_view.dart';
+import 'package:sample/app/Doctor/see_all_appointments/controllers/see_all_appointments_controller.dart';
+import 'package:sample/app/Doctor/see_all_appointments/views/see_all_appointments_view.dart';
 import 'package:sample/app/coaches/coaches_registration/coach_step1/bindings/coach_step1_binding.dart';
 import 'package:sample/app/coaches/coaches_registration/coach_step1/views/coach_step1_view.dart';
 import 'package:sample/app/coaches/coaches_registration/coach_step2/bindings/coach_step2_binding.dart';
@@ -372,6 +382,30 @@ class AppPages {
       name: Routes.DOCTOR_DIGITAL_READINESS,
       page: () => const DigitalReadinessView(),
       binding: DigitalReadinessBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_REGISTRATION_EDIT,
+      page: () => const RegistrationEditView(),
+      binding: RegistrationEditBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_EXPERIENCE_EDIT,
+      page: () => const ExperienceEditView(),
+      binding: ExperienceEditBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_DIGITAL_READINESS_EDIT,
+      page: () => const DigitalReadinessEditView(),
+      binding: DigitalReadinessEditBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DOCTOR_EDIT_MYPROFILE,
+      page: () => const DoctorEditMyProfileView(),
+      binding: DoctorEditMyProfileBinding(),
     ),
 
     GetPage(
@@ -864,5 +898,13 @@ class AppPages {
         name: '/coach-step6',
         page: () => const CoachStep6View(),
         binding: CoachStep6Binding()),
+
+    GetPage(
+      name: '/see-all-appointments',
+      page: () => const SeeAllAppointmentsView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => SeeAllAppointmentsController());
+      }),
+    ),
   ];
 }

@@ -17,8 +17,8 @@ class ApiClient {
           ),
         );
 
-  static final ApiClient _instance = ApiClient._internal();
-  factory ApiClient() => _instance;
+  static final ApiClient instance = ApiClient._internal();
+  factory ApiClient() => instance;
 
   final Dio _dio;
 
@@ -73,6 +73,7 @@ class ApiClient {
   }
 
   Options _withAuth([Options? options]) {
+    print('AUTH HEADER => token $_bearerToken');
     final Map<String, dynamic> headers = {
       ...?options?.headers,
       if (_bearerToken != null && _bearerToken!.isNotEmpty)
@@ -89,6 +90,11 @@ class ApiClient {
     bool authenticated = false,
   }) async {
     try {
+      // ===== AUTO LOAD TOKEN =====
+      if (authenticated && (_bearerToken == null || _bearerToken!.isEmpty)) {
+        await initializeToken();
+      }
+
       final response = await _dio.get<dynamic>(
         path,
         queryParameters: queryParameters,
@@ -156,6 +162,11 @@ class ApiClient {
     bool authenticated = false,
   }) async {
     try {
+      // ===== AUTO LOAD TOKEN =====
+      if (authenticated && (_bearerToken == null || _bearerToken!.isEmpty)) {
+        await initializeToken();
+      }
+
       final response = await _dio.post<dynamic>(
         path,
         data: formData,
@@ -229,6 +240,11 @@ class ApiClient {
     bool authenticated = false,
   }) async {
     try {
+      // ===== AUTO LOAD TOKEN =====
+      if (authenticated && (_bearerToken == null || _bearerToken!.isEmpty)) {
+        await initializeToken();
+      }
+
       final response = await _dio.post<dynamic>(
         path,
         data: data,
@@ -246,18 +262,6 @@ class ApiClient {
       final (isSuccess, extractedMessage) = _extractResponseStatus(body);
       final bool isActuallySuccess = statusCode == 200 && isSuccess;
       _setCookiesFromResponse(response);
-
-      // if (debugLoggingEnabled) {
-      //   _log(
-      //     method: 'POST',
-      //     path: path,
-      //     statusCode: statusCode,
-      //     query: queryParameters,
-      //     requestBody: data,
-      //     data: body,
-      //     isError: !isActuallySuccess,
-      //   );
-      // }
 
       return ApiResponse(
         status: isActuallySuccess,
@@ -327,11 +331,8 @@ class ApiClient {
         return (false, errorMessage);
       }
 
-      // Handle nested message structure: message.message.data
-      // Check if message is another Map (nested structure)
       final innerMessage = messageObj['message'];
       if (innerMessage is Map<String, dynamic>) {
-        // This is a nested structure, extract from inner message
         final innerStatus = innerMessage['status'] as String?;
         if (innerStatus == 'fail' ||
             innerStatus == 'error' ||
@@ -354,7 +355,6 @@ class ApiClient {
         return (true, successMessage);
       }
 
-      // Non-nested structure: message is a String
       final successMessage = messageObj['message'] is String
           ? messageObj['message'] as String
           : '';
@@ -515,13 +515,10 @@ class ApiClient {
   Future<Uint8List?> fetchPrivateFile(String url) async {
     try {
       debugPrint('🔵 fetchPrivateFile: $url');
-
-      // Full URL hai toh baseUrl mat lagao — direct fetch karo
       final response = await _dio.get<List<int>>(
         url,
         options: _withAuth(Options(responseType: ResponseType.bytes)),
       );
-
       if (response.statusCode == 200 && response.data != null) {
         return Uint8List.fromList(response.data!);
       }

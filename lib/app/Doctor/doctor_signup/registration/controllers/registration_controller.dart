@@ -34,15 +34,118 @@ class RegistrationController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> pickProfileImage() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-    );
+  /// ================= PICK IMAGE =================
 
-    if (image != null) {
-      profileImage.value = File(image.path);
-    }
+  Future<void> pickProfileImage() async {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(24),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Select Profile Photo',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: _imageOption(
+                    icon: Icons.camera_alt_rounded,
+                    title: 'Camera',
+                    onTap: () async {
+                      Get.back();
+
+                      final XFile? image = await _picker.pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 80,
+                      );
+
+                      if (image != null) {
+                        profileImage.value = File(image.path);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _imageOption(
+                    icon: Icons.photo_library_rounded,
+                    title: 'Gallery',
+                    onTap: () async {
+                      Get.back();
+
+                      final XFile? image = await _picker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 80,
+                      );
+
+                      if (image != null) {
+                        profileImage.value = File(image.path);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// ================= IMAGE OPTION =================
+
+  Widget _imageOption({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 24,
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: const Color(0xFFE5E7EB),
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              size: 34,
+              color: const Color(0xFF0D9488),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// ================= PICK GRADUATION YEAR =================
@@ -67,12 +170,8 @@ class RegistrationController extends GetxController {
   Future<void> pickBirthDate() async {
     final picked = await showDatePicker(
       context: Get.context!,
-      initialDate: DateTime(
-        2000,
-      ),
-      firstDate: DateTime(
-        1950,
-      ),
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1950),
       lastDate: DateTime.now(),
       helpText: "Select Date of Birth",
     );
@@ -89,20 +188,22 @@ class RegistrationController extends GetxController {
         degreeController.text.trim().isNotEmpty &&
         registrationNumberController.text.trim().isNotEmpty &&
         mobileController.text.trim().isNotEmpty &&
+        mobileController.text.trim().length == 10 &&
         emailController.text.trim().isNotEmpty &&
         graduationYear.value != null &&
         birthDate.value != null;
   }
 
-  /// ================= NAVIGATION =================
+  /// ================= NEXT STEP =================
 
   void goToNextStep() {
     if (!validateForm()) {
       Get.snackbar(
         "Incomplete",
-        "Please fill all fields",
+        "Please fill all required fields",
         snackPosition: SnackPosition.BOTTOM,
       );
+
       return;
     }
 

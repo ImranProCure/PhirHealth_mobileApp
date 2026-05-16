@@ -12,32 +12,51 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:get/get.dart';
-
-import 'app/controllers/role_controller.dart';
-import 'app/modules/translations/app_translations.dart';
-import 'app/routes/app_pages.dart';
-import 'app/routes/app_routes.dart';
+import 'package:sample/app/service/api/api_client/api_client.dart';
+import 'package:sample/app/service/db/db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final authStorage = AuthStorageService();
+
+  await authStorage.init();
+  await ApiClient().initializeToken();
+
   if (Platform.isAndroid) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(
+      true,
+    );
   }
+
   await Firebase.initializeApp();
 
-  // ── Hive init ──────────────────────────────────────────
   await Hive.initFlutter();
-  Hive.registerAdapter(MedicineModelAdapter());
-  Hive.registerAdapter(DoseModelAdapter());
-  Hive.registerAdapter(AdherenceModelAdapter());
-  await Hive.openBox<MedicineModel>('medicines');
-  await Hive.openBox<AdherenceModel>('adherence');
-  // ── Notification init ──────────────────────────────────
+
+  Hive.registerAdapter(
+    MedicineModelAdapter(),
+  );
+
+  Hive.registerAdapter(
+    DoseModelAdapter(),
+  );
+
+  Hive.registerAdapter(
+    AdherenceModelAdapter(),
+  );
+
+  await Hive.openBox<MedicineModel>(
+    'medicines',
+  );
+
+  await Hive.openBox<AdherenceModel>(
+    'adherence',
+  );
+
   await NotificationService.instance.init();
 
   Get.put(RoleController());
+
   runApp(const MyApp());
 }
 

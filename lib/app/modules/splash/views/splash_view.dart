@@ -45,8 +45,6 @@ class _SplashViewState extends State<SplashView> {
   Future<void> _initializeApp() async {
     final authStorage = AuthStorageService();
 
-    await authStorage.init();
-
     final apiClient = ApiClient();
 
     await apiClient.initializeToken();
