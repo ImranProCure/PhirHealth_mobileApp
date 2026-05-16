@@ -94,8 +94,26 @@ class DashboardController extends GetxController {
     },
   ];
 
+  final List<Map<String, dynamic>> healthTools = [
+    {
+      'title': 'ASCVD\nHeart Disease',
+      'icon': 'assets/Group 177.png',
+      'route': '/ascvd-info'
+    },
+    {
+      'title': 'patient_dash_diet',
+      'icon': 'assets/icons/salad 1.png',
+      'route': '/ai-nutritionist'
+    },
+    {
+      'title': 'patient_dash_reminder',
+      'icon': 'assets/icons/time 1.png',
+      'route': '/add-medicine'
+    },
+  ];
+
   void onSmartToolTap(int index) {
-    final route = smartTools[index]['route'] as String;
+    final route = healthTools[index]['route'] as String;
     if (smartTools[index]['title'] == "patient_dash_diet") {
       showMessage("Coming soon");
     } else {

@@ -77,6 +77,9 @@ class CommonApiConstants {
   final doctorVisitApi =
       "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visits.get_my_doctor_visits";
 
+  final doctorVisitDetail =
+      "/api/method/vhealthcare.api.patient.my_doctor_visits.my_doctor_visit_details.get_visit_details";
+
   // Emergency Contacts
   final String getEmergencyContacts =
       "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.get_patient_emergency_contacts";

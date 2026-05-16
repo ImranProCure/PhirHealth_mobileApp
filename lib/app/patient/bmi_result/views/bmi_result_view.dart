@@ -66,31 +66,31 @@ class BmiResultView extends GetView<BmiResultController> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        color: const Color(0xFF0D5C8A),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-        child: SizedBox(
-          height: 54,
-          child: ElevatedButton(
-            onPressed: controller.viewPlan,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-            ),
-            child: const Text(
-              'View Personalized Plan',
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF0D7377),
-              ),
-            ),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   color: const Color(0xFF0D5C8A),
+      //   padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      //   child: SizedBox(
+      //     height: 54,
+      //     child: ElevatedButton(
+      //       onPressed: controller.viewPlan,
+      //       style: ElevatedButton.styleFrom(
+      //         backgroundColor: Colors.white,
+      //         shadowColor: Colors.transparent,
+      //         shape: RoundedRectangleBorder(
+      //             borderRadius: BorderRadius.circular(30)),
+      //       ),
+      //       child: const Text(
+      //         'View Personalized Plan',
+      //         style: TextStyle(
+      //           fontFamily: 'Mulish',
+      //           fontSize: 16,
+      //           fontWeight: FontWeight.w700,
+      //           color: Color(0xFF0D7377),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

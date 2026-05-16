@@ -76,6 +76,10 @@ import 'package:sample/app/patient/cancer_stomach_assessment/bindings/cancer_sto
 import 'package:sample/app/patient/cancer_stomach_assessment/views/cancer_stomach_assessment_view.dart';
 import 'package:sample/app/patient/cancer_throat_assessment%20/bindings/cancer_throat_assessment_binding.dart';
 import 'package:sample/app/patient/cancer_throat_assessment%20/views/cancer_throat_assessment_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_binding.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_form_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_info_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_result_view.dart';
 import 'package:sample/app/patient/pre_scan_questions/bindings/pre_scan_questions_binding.dart';
 import 'package:sample/app/patient/pre_scan_questions/views/pre_scan_questions_view.dart';
 import 'package:sample/app/patient/profile_details/views/all_review.dart';
@@ -421,6 +425,22 @@ class AppPages {
       name: Routes.SELECT_COUNSELLOR,
       page: () => const SelectCounsellorView(),
       binding: SelectCounsellorBinding(),
+    ),
+
+    GetPage(
+      name: '/ascvd-info',
+      page: () => const AscvdInfoView(),
+      binding: AscvdBinding(),
+    ),
+    GetPage(
+      name: '/ascvd-form',
+      page: () => const AscvdFormView(),
+      binding: AscvdBinding(),
+    ),
+    GetPage(
+      name: '/ascvd-result',
+      page: () => const AscvdResultView(),
+      binding: AscvdBinding(),
     ),
 
     GetPage(

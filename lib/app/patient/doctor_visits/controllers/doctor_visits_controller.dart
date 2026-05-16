@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sample/app/common_function.dart';
+import 'package:sample/app/routes/app_routes.dart';
 import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 
@@ -126,8 +127,7 @@ class DoctorVisitsController extends GetxController {
     final meetingLink = d['meeting_link'] as String? ?? '';
 
     // ── Join button: Upcoming + Video Call + has a meeting link ──
-    final bool showJoinButton =
-        status == 'Upcoming' &&
+    final bool showJoinButton = status == 'Upcoming' &&
         visitType.toLowerCase().contains('video') &&
         meetingLink.isNotEmpty;
 
@@ -188,6 +188,8 @@ class DoctorVisitsController extends GetxController {
   }
 
   void bookAgain(Map<String, dynamic> visit) {
-    Get.toNamed('/profile-details');
+    Get.toNamed(Routes.PROFILE_DETAILS, arguments: {
+      'id': visit["doctor_id"],
+    });
   }
 }
