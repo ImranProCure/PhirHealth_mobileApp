@@ -101,9 +101,9 @@ class DashboardController extends GetxController {
       'route': '/ascvd-info'
     },
     {
-      'title': 'patient_dash_diet',
-      'icon': 'assets/icons/salad 1.png',
-      'route': '/ai-nutritionist'
+      'title': 'QRISK3\nHeart Risk',
+      'icon': 'assets/Group 177.png',
+      'route': '/qrisk-info'
     },
     {
       'title': 'patient_dash_reminder',
@@ -113,9 +113,18 @@ class DashboardController extends GetxController {
   ];
 
   void onSmartToolTap(int index) {
-    final route = healthTools[index]['route'] as String;
+    final route = smartTools[index]['route'] as String;
     if (smartTools[index]['title'] == "patient_dash_diet") {
       showMessage("Coming soon");
+    } else {
+      Get.toNamed(route);
+    }
+  }
+
+    void onHealthToolTap(int index) {
+    final route = healthTools[index]['route'] as String;
+    if (healthTools[index]['title'] == "patient_dash_diet") {
+      showMessage("Comng soon");
     } else {
       Get.toNamed(route);
     }

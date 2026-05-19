@@ -4,7 +4,7 @@ class ApiConstants {
   ApiConstants._();
 
   static const String baseUrl =
-      "https://scaphoid-donte-uncompellable.ngrok-free.dev";
+      "http://devcal.phirhealth.com";
 
   static const CommonApiConstants commonApiConstants = CommonApiConstants();
 }

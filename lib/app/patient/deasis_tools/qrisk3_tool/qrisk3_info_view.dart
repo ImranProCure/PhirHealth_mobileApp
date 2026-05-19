@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_controller.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_controller.dart';
+import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_controller.dart';
 
-class AscvdInfoView extends GetView<AscvdController> {
-  const AscvdInfoView({super.key});
+class Qrisk3InfoView extends GetView<Qrisk3Controller> {
+  const Qrisk3InfoView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class AscvdInfoView extends GetView<AscvdController> {
         ),
         centerTitle: true,
         title: const Text(
-          'ASCVD Risk Estimator',
+          'QRISK®3  risk calculator',
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -72,7 +73,7 @@ class AscvdInfoView extends GetView<AscvdController> {
 
                   // Title
                   const Text(
-                    'ASCVD (Atherosclerotic Cardiovascular Disease) 2013 Risk Calculator from AHA/ACC',
+                    'Welcome to the QRISK®3 risk calculator',
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 20,
@@ -82,46 +83,21 @@ class AscvdInfoView extends GetView<AscvdController> {
                   ),
                   const SizedBox(height: 10),
 
-                  // Subtitle
-                  const Text(
-                    'Determine 10-year risk of hard ASCVD, i.e. myocardial infarction, stroke, or death due to coronary heart disease or stroke.',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF6B7280),
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Important card
                   _InfoCard(
                     icon: Icons.warning_amber_rounded,
                     iconColor: const Color(0xFFF59E0B),
                     title: 'Important',
                     titleColor: const Color(0xFFF59E0B),
                     bullets: const [
-                      'This calculator includes inputs based on race, which may or may not provide better estimates, so we have decided to make race optional.',
-                      'This tool often estimates higher risk for Black/African American adults than for other groups with the same profile, but this is not universal.',
-                      'Looking for a race-free equation to calculate CVD risk? Check out the new PREVENT score.',
+                      'This demonstrator is intended for reference purposes only, and as a guide.',
+                      'Note that this calculator is not intended for clinical use.',
+                      'Professionals intending to use thus calculator should ensure they are using a clinical management system that has been accredited in their country for this purpose.',
+                      'This site uses the QRISK3 calculator to present and an approximation of a persons risk of developing a heart attack or stroke over the next 10 years, ( assuming they do not already have cardiovascular disease and are not on statins) . A score is produced as described in this academic paper:',
+                      'Development and validation of QRISK3 risk prediction algorithms to estimate future risk of cardiovascular disease: prospective cohort study, BMJ 2017;357:j2099',
                     ],
                     highlightIndices: const [2],
                   ),
                   const SizedBox(height: 14),
-
-                  // Instructions card
-                  _InfoCard(
-                    icon: Icons.menu_book_rounded,
-                    iconColor: const Color(0xFF10B981),
-                    title: 'Instructions',
-                    titleColor: const Color(0xFF10B981),
-                    bullets: const [
-                      'Our ASCVD Risk Algorithm is a step-wise approach for all adult patients – including those with known ASCVD.',
-                      'This calculator is for use only in adult patients without known ASCVD and LDL 70-189 mg/dL (1.81-4.90 mmol/L).'
-                    ],
-                    isCollapsed: true,
-                  ),
                 ],
               ),
             ),

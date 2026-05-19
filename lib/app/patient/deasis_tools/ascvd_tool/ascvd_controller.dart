@@ -38,8 +38,6 @@ class AscvdController extends GetxController {
   // Controllers
   // ─────────────────────────────────────────────────────────────
 
-  final nameController = TextEditingController();
-
   final ageController = TextEditingController();
 
   final totalCholesterolController = TextEditingController();
@@ -51,8 +49,6 @@ class AscvdController extends GetxController {
   // ─────────────────────────────────────────────────────────────
   // Errors
   // ─────────────────────────────────────────────────────────────
-
-  final RxString nameError = ''.obs;
 
   final RxString ageError = ''.obs;
 
@@ -102,8 +98,6 @@ class AscvdController extends GetxController {
   // Clear Errors
   // ─────────────────────────────────────────────────────────────
 
-  void clearNameError() => nameError.value = '';
-
   void clearAgeError() => ageError.value = '';
 
   void clearTotalCholesterolError() => totalCholesterolError.value = '';
@@ -119,14 +113,6 @@ class AscvdController extends GetxController {
   bool _validateAll() {
     bool valid = true;
 
-    // Name
-    if (nameController.text.trim().isEmpty) {
-      nameError.value = 'Full name is required';
-      valid = false;
-    } else {
-      nameError.value = '';
-    }
-
     // Age
     final ageText = ageController.text.trim();
 
@@ -139,8 +125,8 @@ class AscvdController extends GetxController {
       if (age == null) {
         ageError.value = 'Enter valid age';
         valid = false;
-      } else if (age < 20 || age > 79) {
-        ageError.value = 'Age must be between 20 and 79';
+      } else if (age < 40 || age > 75) {
+        ageError.value = 'Age must be between 40 and 75';
         valid = false;
       } else {
         ageError.value = '';
@@ -457,8 +443,6 @@ class AscvdController extends GetxController {
 
   @override
   void onClose() {
-    nameController.dispose();
-
     ageController.dispose();
 
     totalCholesterolController.dispose();
