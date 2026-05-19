@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/doctor_appointment_accepted_controller.dart';
 
-class DoctorAppointmentAcceptedView extends StatelessWidget {
+class DoctorAppointmentAcceptedView
+    extends GetView<DoctorAppointmentAcceptedController> {
   const DoctorAppointmentAcceptedView({super.key});
 
   @override
@@ -60,18 +62,18 @@ class DoctorAppointmentAcceptedView extends StatelessWidget {
               // ===== SUBTITLE =====
               RichText(
                 textAlign: TextAlign.center,
-                text: const TextSpan(
-                  style: TextStyle(
+                text: TextSpan(
+                  style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 14,
                       color: Color(0xFF6B7280),
                       height: 1.5),
                   children: [
                     TextSpan(
-                        text: 'Akansha Tripathi',
-                        style: TextStyle(
+                        text: controller.patientName,
+                        style: const TextStyle(
                             fontWeight: FontWeight.w700, color: Colors.black)),
-                    TextSpan(
+                    const TextSpan(
                         text:
                             ' has been notified. The appointment has been added to your schedule.'),
                   ],
@@ -96,21 +98,22 @@ class DoctorAppointmentAcceptedView extends StatelessWidget {
                             fontSize: 13,
                             color: Color(0xFF374151))),
                     const SizedBox(height: 6),
-                    const Text('Video Consultation',
-                        style: TextStyle(
+                    Text(controller.sessionType,
+                        style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF0D9488))),
                     const SizedBox(height: 4),
-                    const Text('10:00 AM • 30 min',
-                        style: TextStyle(
+                    Text(
+                        '${controller.appointmentTime} • ${controller.duration}',
+                        style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 13,
                             color: Color(0xFF374151))),
                     const SizedBox(height: 4),
-                    const Text('Earnings: ₹500',
-                        style: TextStyle(
+                    Text('Earnings: ${controller.earnings}',
+                        style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 13,
                             fontWeight: FontWeight.w600,

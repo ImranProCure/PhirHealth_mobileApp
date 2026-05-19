@@ -119,4 +119,16 @@ class CommonApiConstants {
       "/api/method/vhealthcare.api.doctor.dr_dashboard.dashboard.get_doctor_dashboard";
   final String getAllBookings =
       '/api/method/vhealthcare.api.doctor.dr_dashboard.get_all_bookings.get_all_bookings';
+  final String getPendingRequests =
+      '/api/method/vhealthcare.api.doctor.pending_request.pending_request.get_pending_requests';
+
+  final String acceptAppointment =
+      '/api/method/vhealthcare.api.doctor.pending_request.pending_request.accept_appointment';
+  final String cancelAppointment =
+      '/api/method/vhealthcare.api.doctor.pending_request.pending_request.cancel_appointment';
+
+  final String getAppointmentDetails =
+      '/api/method/vhealthcare.api.doctor.pending_request.accept_booking.get_appointment_details';
+  final String getConfirmedAppointmentDetails =
+      '/api/method/vhealthcare.api.doctor.pending_request.accept_booking.get_confirmed_appointment_details';
 }

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sample/app/Doctor/digital_readiness_edit/bindings/digital_readiness_edit_binding.dart';
 import 'package:sample/app/Doctor/digital_readiness_edit/views/digital_readiness_edit_view.dart';
+import 'package:sample/app/Doctor/doctor_appointment_accepted/bindings/doctor_appointment_accepted_binding.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/bindings/doctor_edit_clinic_binding.dart';
 import 'package:sample/app/Doctor/doctor_edit_clinic/views/doctor_edit_clinic_view.dart';
 import 'package:sample/app/Doctor/doctor_edit_myprofile/bindings/doctor_edit_myprofile_binding.dart';
@@ -722,7 +723,8 @@ class AppPages {
 
     GetPage(
         name: '/doctor-appointment-accepted',
-        page: () => const DoctorAppointmentAcceptedView()),
+        page: () => const DoctorAppointmentAcceptedView(),
+        binding: DoctorAppointmentAcceptedBinding()),
 
     GetPage(
         name: '/doctor-todays-session',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import '../controllers/doctor_requests_controller.dart';
 
 class DoctorRequestsView extends GetView<DoctorRequestsController> {
@@ -20,7 +21,7 @@ class DoctorRequestsView extends GetView<DoctorRequestsController> {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  PHONE LAYOUT  (original — untouched)
+//  PHONE LAYOUT
 // ══════════════════════════════════════════════════════════════
 class _PhoneLayout extends StatelessWidget {
   final DoctorRequestsController controller;
@@ -46,7 +47,25 @@ class _PhoneLayout extends StatelessWidget {
                 color: Colors.black)),
       ),
       body: Obx(() {
+        if (controller.isLoading.value) {
+          return _buildSkeleton();
+        }
+
         final requests = controller.requests;
+
+        if (requests.isEmpty) {
+          return const Center(
+            child: Text(
+              'No pending requests',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 15,
+                color: Color(0xFF6B7280),
+              ),
+            ),
+          );
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,8 +85,8 @@ class _PhoneLayout extends StatelessWidget {
               child: ListView.builder(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 itemCount: requests.length,
-                itemBuilder: (context, i) =>
-                    _RequestCard(r: requests[i], index: i, controller: controller),
+                itemBuilder: (context, i) => _RequestCard(
+                    r: requests[i], index: i, controller: controller),
               ),
             ),
           ],
@@ -75,10 +94,84 @@ class _PhoneLayout extends StatelessWidget {
       }),
     );
   }
+
+  // ===== SKELETON =====
+  Widget _buildSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFFE5E7EB),
+      highlightColor: const Color(0xFFF9FAFB),
+      child: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        itemCount: 4,
+        itemBuilder: (_, __) => Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 66,
+                    height: 66,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _sBox(width: 130, height: 14, radius: 6),
+                        const SizedBox(height: 8),
+                        _sBox(width: 160, height: 12, radius: 6),
+                        const SizedBox(height: 6),
+                        _sBox(width: 120, height: 12, radius: 6),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                      child: _sBox(
+                          width: double.infinity, height: 44, radius: 30)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                      child: _sBox(
+                          width: double.infinity, height: 44, radius: 30)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _sBox(
+      {required double width, required double height, required double radius}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+    );
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TABLET LAYOUT  — side rail + 2-column grid
+//  TABLET LAYOUT
 // ══════════════════════════════════════════════════════════════
 class _TabletLayout extends StatelessWidget {
   final DoctorRequestsController controller;
@@ -89,17 +182,13 @@ class _TabletLayout extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // ── Side rail ──────────────────────────────────────
         _TabletSideRail(controller: controller),
-
-        // ── Main content ───────────────────────────────────
         Expanded(
           child: SafeArea(
             left: false,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Top bar ──────────────────────────────────
                 Container(
                   color: Colors.white,
                   padding:
@@ -129,17 +218,21 @@ class _TabletLayout extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // ── Subtitle + grid ───────────────────────────
                 Expanded(
                   child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(
+                        child:
+                            CircularProgressIndicator(color: Color(0xFF0D9488)),
+                      );
+                    }
+
                     final requests = controller.requests;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(28, 20, 28, 16),
+                          padding: const EdgeInsets.fromLTRB(28, 20, 28, 16),
                           child: Text(
                             'You have ${requests.length} new appointment requests',
                             style: const TextStyle(
@@ -171,8 +264,7 @@ class _TabletLayout extends StatelessWidget {
 class _TwoColumnGrid extends StatelessWidget {
   final List requests;
   final DoctorRequestsController controller;
-  const _TwoColumnGrid(
-      {required this.requests, required this.controller});
+  const _TwoColumnGrid({required this.requests, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -228,175 +320,189 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ── Patient info ────────────────────────────────
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  r['imagePath'] as String,
-                  width: 66,
-                  height: 66,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 66,
-                    height: 66,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.person,
-                        color: Color(0xFF0D9488), size: 36),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      r['name'] as String,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time_outlined,
-                            size: 13, color: Color(0xFF6B7280)),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            r['time'] as String,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 12,
-                              color: Color(0xFF6B7280),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.video_call_outlined,
-                            size: 13, color: Color(0xFF6B7280)),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            r['type'] as String,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF374151),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+    final imagePath = r['imagePath'] as String;
+    final isNetwork = imagePath.startsWith('http');
+
+    return GestureDetector(
+        onTap: () => controller.onCardTap(index),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2))
             ],
           ),
-          const SizedBox(height: 14),
-
-          // ── Accept + Decline buttons ─────────────────────
-          Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Accept — solid green gradient
-              Expanded(
-                child: SizedBox(
-                  height: 44,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF16A34A), Color(0xFF15803D)],
-                      ),
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () => controller.accept(index),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
-                      icon: const Icon(Icons.check_circle_outline,
-                          color: Colors.white, size: 17),
-                      label: const Text('Accept',
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white)),
-                    ),
+              // ── Patient info ────────────────────────────────
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: isNetwork
+                        ? Image.network(
+                            imagePath,
+                            width: 66,
+                            height: 66,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _placeholder(),
+                          )
+                        : Image.asset(
+                            imagePath,
+                            width: 66,
+                            height: 66,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _placeholder(),
+                          ),
                   ),
-                ),
-              ),
-              const SizedBox(width: 10),
-
-              // Decline — red outlined
-              Expanded(
-                child: SizedBox(
-                  height: 44,
-                  child: OutlinedButton.icon(
-                    onPressed: () => controller.decline(index),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                          color: Color(0xFFEF4444), width: 1.5),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    icon: const Icon(Icons.cancel_outlined,
-                        color: Color(0xFFEF4444), size: 17),
-                    label: const Text('Decline',
-                        style: TextStyle(
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          r['name'] as String,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
                             fontFamily: 'Mulish',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFEF4444))),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time_outlined,
+                                size: 13, color: Color(0xFF6B7280)),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                r['time'] as String,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 12,
+                                  color: Color(0xFF6B7280),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.video_call_outlined,
+                                size: 13, color: Color(0xFF6B7280)),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                r['type'] as String,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF374151),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
+              ),
+              const SizedBox(height: 14),
+
+              // ── Accept + Decline buttons ─────────────────────
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF16A34A), Color(0xFF15803D)],
+                          ),
+                        ),
+                        child: ElevatedButton.icon(
+                          onPressed: () => controller.accept(index),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          icon: const Icon(Icons.check_circle_outline,
+                              color: Colors.white, size: 17),
+                          label: const Text('Accept',
+                              style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: OutlinedButton.icon(
+                        onPressed: () => controller.decline(index),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                              color: Color(0xFFEF4444), width: 1.5),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        icon: const Icon(Icons.cancel_outlined,
+                            color: Color(0xFFEF4444), size: 17),
+                        label: const Text('Decline',
+                            style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFFEF4444))),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ));
+  }
+
+  Widget _placeholder() {
+    return Container(
+      width: 66,
+      height: 66,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE0F2F1),
+        borderRadius: BorderRadius.circular(10),
       ),
+      child: const Icon(Icons.person, color: Color(0xFF0D9488), size: 36),
     );
   }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TABLET SIDE RAIL  (matches dashboard style exactly)
+//  TABLET SIDE RAIL
 // ══════════════════════════════════════════════════════════════
 class _TabletSideRail extends StatelessWidget {
   final DoctorRequestsController controller;
@@ -419,7 +525,6 @@ class _TabletSideRail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 28),
-            // Avatar
             ClipOval(
               child: Image.asset(
                 'assets/profile.png',
@@ -438,8 +543,6 @@ class _TabletSideRail extends StatelessWidget {
             const SizedBox(height: 10),
             Container(width: 28, height: 1.5, color: Colors.white38),
             const SizedBox(height: 20),
-
-            // Nav items — Request tab is active
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -504,9 +607,7 @@ class _RailNavItem extends StatelessWidget {
         width: 70,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isActive
-              ? Colors.white.withOpacity(0.2)
-              : Colors.transparent,
+          color: isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
@@ -520,8 +621,7 @@ class _RailNavItem extends StatelessWidget {
                 fontFamily: 'Mulish',
                 color: Colors.white,
                 fontSize: 11,
-                fontWeight:
-                    isActive ? FontWeight.w700 : FontWeight.w400,
+                fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
               ),
             ),
             if (isActive) ...[
