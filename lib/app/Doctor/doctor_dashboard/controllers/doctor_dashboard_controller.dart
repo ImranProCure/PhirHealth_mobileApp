@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/db/db.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
-import '../../../service/api/doctor_dashboard_api/doctor_dashboard_api.dart';
+import '../../../service/api/common_api/doctor_dashboard_api/doctor_dashboard_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DoctorDashboardController extends GetxController {
@@ -200,6 +200,10 @@ class DoctorDashboardController extends GetxController {
     } else {
       showError('No link available');
     }
+  }
+
+  void onAppointmentTap(Map<String, dynamic> apt) {
+    Get.toNamed('/doctor-patient-detail', arguments: apt);
   }
 
   void onNotification() => Get.toNamed('/doctor-notifications');

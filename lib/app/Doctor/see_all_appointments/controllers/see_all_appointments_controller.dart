@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
-import '../../../service/api/doctor_dashboard_api/doctor_dashboard_api.dart';
+import '../../../service/api/common_api/doctor_dashboard_api/doctor_dashboard_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SeeAllAppointmentsController extends GetxController {

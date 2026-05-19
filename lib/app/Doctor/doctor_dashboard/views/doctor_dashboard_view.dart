@@ -162,12 +162,25 @@ Widget _buildPhoneBody(DoctorDashboardController controller) {
         _AppointmentsHeader(onSeeAll: controller.seeAll),
         const SizedBox(height: 12),
 
-        Obx(() => Column(
-              children: controller.appointments
-                  .map((apt) =>
-                      _AppointmentCard(apt: apt, controller: controller))
-                  .toList(),
-            )),
+        Obx(
+          () => Column(
+            children: controller.appointments
+                .map(
+                  (apt) => GestureDetector(
+                    onTap: () {
+                      controller.onAppointmentTap(
+                        apt,
+                      );
+                    },
+                    child: _AppointmentCard(
+                      apt: apt,
+                      controller: controller,
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
       ],
     ),
   );
