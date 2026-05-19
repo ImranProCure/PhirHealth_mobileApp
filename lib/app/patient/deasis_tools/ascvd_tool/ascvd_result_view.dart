@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_controller.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_controller.dart';
 
 class AscvdResultView extends GetView<AscvdController> {
   const AscvdResultView({super.key});
@@ -56,87 +56,57 @@ class AscvdResultView extends GetView<AscvdController> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     // RISK CARD
 
                     _RiskGaugeCard(
-                      riskLevel:
-                          controller.riskLevel,
-                      tenYearRisk: controller
-                          .tenYearRisk.value,
-                      optimalRisk: controller
-                          .optimalRisk.value,
-                      statinRecommended:
-                          controller
-                              .statinRecommended
-                              .value,
-                      gaugeAngle:
-                          controller.gaugeAngle,
+                      riskLevel: controller.riskLevel,
+                      tenYearRisk: controller.tenYearRisk.value,
+                      optimalRisk: controller.optimalRisk.value,
+                      statinRecommended: controller.statinRecommended.value,
+                      gaugeAngle: controller.gaugeAngle,
                     ),
 
-                    const SizedBox(
-                        height: 16),
+                    const SizedBox(height: 16),
 
                     // DETAILS CARD
 
                     _HeartScoreDetailsCard(
-                      riskLevel:
-                          controller.riskLevel,
-                      tenYearRisk: controller
-                          .tenYearRisk.value,
-                      optimalRisk: controller
-                          .optimalRisk.value,
-                      statinRecommended:
-                          controller
-                              .statinRecommended
-                              .value,
+                      riskLevel: controller.riskLevel,
+                      tenYearRisk: controller.tenYearRisk.value,
+                      optimalRisk: controller.optimalRisk.value,
+                      statinRecommended: controller.statinRecommended.value,
                     ),
 
-                    const SizedBox(
-                        height: 16),
+                    const SizedBox(height: 16),
 
                     // DISCLAIMER
 
                     Container(
-                      padding:
-                          const EdgeInsets.all(
-                              14),
-                      decoration:
-                          BoxDecoration(
-                        color: const Color(
-                            0xFFFFFBEB),
-                        borderRadius:
-                            BorderRadius
-                                .circular(14),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFBEB),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: const Row(
-                        crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(
                             Icons.info_outline,
                             size: 18,
-                            color: Color(
-                                0xFFD97706),
+                            color: Color(0xFFD97706),
                           ),
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               'This calculator provides an estimate and should not replace professional medical advice.',
-                              style:
-                                  TextStyle(
-                                fontFamily:
-                                    'Mulish',
-                                fontSize:
-                                    12,
-                                height:
-                                    1.5,
-                                color: Color(
-                                    0xFF92400E),
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 12,
+                                height: 1.5,
+                                color: Color(0xFF92400E),
                               ),
                             ),
                           ),
@@ -196,17 +166,13 @@ class _RiskGaugeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-          const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color:
-                Colors.black.withOpacity(
-                    0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -221,8 +187,7 @@ class _RiskGaugeCard extends StatelessWidget {
             width: 240,
             child: CustomPaint(
               painter: _GaugePainter(
-                needleAngle:
-                    gaugeAngle,
+                needleAngle: gaugeAngle,
               ),
             ),
           ),
@@ -232,48 +197,35 @@ class _RiskGaugeCard extends StatelessWidget {
           // LABELS
 
           const Padding(
-            padding:
-                EdgeInsets.symmetric(
-                    horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Low',
                   style: TextStyle(
-                    fontFamily:
-                        'Mulish',
+                    fontFamily: 'Mulish',
                     fontSize: 13,
-                    fontWeight:
-                        FontWeight.w700,
-                    color: Color(
-                        0xFF22C55E),
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF22C55E),
                   ),
                 ),
                 Text(
                   'Intermediate',
                   style: TextStyle(
-                    fontFamily:
-                        'Mulish',
+                    fontFamily: 'Mulish',
                     fontSize: 13,
-                    fontWeight:
-                        FontWeight.w700,
-                    color:
-                        Colors.black,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
                   ),
                 ),
                 Text(
                   'High',
                   style: TextStyle(
-                    fontFamily:
-                        'Mulish',
+                    fontFamily: 'Mulish',
                     fontSize: 13,
-                    fontWeight:
-                        FontWeight.w700,
-                    color: Color(
-                        0xFFEF4444),
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFEF4444),
                   ),
                 ),
               ],
@@ -289,8 +241,7 @@ class _RiskGaugeCard extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 22,
-              fontWeight:
-                  FontWeight.w800,
+              fontWeight: FontWeight.w800,
               color: riskColor,
             ),
           ),
@@ -301,14 +252,12 @@ class _RiskGaugeCard extends StatelessWidget {
 
           Text(
             'Your estimated 10-year risk of atherosclerotic cardiovascular disease (ASCVD) is $tenYearRisk%. An optimal risk for someone with ideal risk factors is approximately $optimalRisk%. ${statinRecommended ? 'Guideline-based statin therapy discussion may be considered.' : 'Lifestyle optimization is currently the primary recommendation.'}',
-            textAlign:
-                TextAlign.center,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontFamily: 'Mulish',
               fontSize: 13,
               height: 1.7,
-              color:
-                  Color(0xFF6B7280),
+              color: Color(0xFF6B7280),
             ),
           ),
         ],
@@ -321,8 +270,7 @@ class _RiskGaugeCard extends StatelessWidget {
 // GAUGE PAINTER
 // ─────────────────────────────────────────────────────────────
 
-class _GaugePainter
-    extends CustomPainter {
+class _GaugePainter extends CustomPainter {
   final double needleAngle;
 
   const _GaugePainter({
@@ -330,16 +278,12 @@ class _GaugePainter
   });
 
   @override
-  void paint(
-      Canvas canvas,
-      Size size) {
+  void paint(Canvas canvas, Size size) {
     final cx = size.width / 2;
 
-    final cy =
-        size.height - 10;
+    final cy = size.height - 10;
 
-    final radius =
-        size.width / 2 - 10;
+    final radius = size.width / 2 - 10;
 
     const strokeWidth = 18.0;
 
@@ -350,13 +294,10 @@ class _GaugePainter
 
     final paint = Paint()
       ..strokeWidth = strokeWidth
-      ..style =
-          PaintingStyle.stroke
-      ..strokeCap =
-          StrokeCap.round;
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
 
-    paint.shader =
-        SweepGradient(
+    paint.shader = SweepGradient(
       startAngle: pi,
       endAngle: 2 * pi,
       colors: const [
@@ -383,28 +324,18 @@ class _GaugePainter
 
     // NEEDLE
 
-    final angle =
-        pi +
-            ((needleAngle + 1) /
-                    2) *
-                pi;
+    final angle = pi + ((needleAngle + 1) / 2) * pi;
 
-    final needleLength =
-        radius - 12;
+    final needleLength = radius - 12;
 
-    final x = cx +
-        needleLength *
-            cos(angle);
+    final x = cx + needleLength * cos(angle);
 
-    final y = cy +
-        needleLength *
-            sin(angle);
+    final y = cy + needleLength * sin(angle);
 
     final needlePaint = Paint()
       ..color = Colors.black
       ..strokeWidth = 3
-      ..strokeCap =
-          StrokeCap.round;
+      ..strokeCap = StrokeCap.round;
 
     canvas.drawLine(
       Offset(cx, cy),
@@ -415,23 +346,19 @@ class _GaugePainter
     canvas.drawCircle(
       Offset(cx, cy),
       8,
-      Paint()
-        ..color = Colors.black,
+      Paint()..color = Colors.black,
     );
 
     canvas.drawCircle(
       Offset(cx, cy),
       4,
-      Paint()
-        ..color = Colors.white,
+      Paint()..color = Colors.white,
     );
   }
 
   @override
-  bool shouldRepaint(
-      covariant _GaugePainter old) {
-    return old.needleAngle !=
-        needleAngle;
+  bool shouldRepaint(covariant _GaugePainter old) {
+    return old.needleAngle != needleAngle;
   }
 }
 
@@ -439,8 +366,7 @@ class _GaugePainter
 // DETAILS CARD
 // ─────────────────────────────────────────────────────────────
 
-class _HeartScoreDetailsCard
-    extends StatelessWidget {
+class _HeartScoreDetailsCard extends StatelessWidget {
   final String riskLevel;
   final double tenYearRisk;
   final double optimalRisk;
@@ -472,76 +398,51 @@ class _HeartScoreDetailsCard
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-          const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color:
-                Colors.black.withOpacity(
-                    0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Risk Summary',
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 16,
-              fontWeight:
-                  FontWeight.w800,
+              fontWeight: FontWeight.w800,
               color: Colors.black,
             ),
           ),
-
           const SizedBox(height: 18),
-
           _ScoreRow(
-            icon:
-                Icons.warning_rounded,
+            icon: Icons.warning_rounded,
             iconColor: riskColor,
-            label:
-                'Current 10-Year Risk',
-            value:
-                '$tenYearRisk% ($riskLevel)',
+            label: 'Current 10-Year Risk',
+            value: '$tenYearRisk% ($riskLevel)',
           ),
-
           const SizedBox(height: 16),
-
           _ScoreRow(
-            icon: Icons
-                .monitor_heart_outlined,
-            iconColor:
-                const Color(
-                    0xFF2563EB),
-            label:
-                'Optimal Risk Target',
-            value:
-                '$optimalRisk%',
+            icon: Icons.monitor_heart_outlined,
+            iconColor: const Color(0xFF2563EB),
+            label: 'Optimal Risk Target',
+            value: '$optimalRisk%',
           ),
-
           const SizedBox(height: 16),
-
           _ScoreRow(
             icon: Icons.history,
-            iconColor:
-                const Color(
-                    0xFF0D9488),
-            label:
-                'Statin Therapy',
+            iconColor: const Color(0xFF0D9488),
+            label: 'Statin Therapy',
             value:
-                statinRecommended
-                    ? 'Consider Discussion'
-                    : 'Lifestyle Focus',
+                statinRecommended ? 'Consider Discussion' : 'Lifestyle Focus',
           ),
         ],
       ),
@@ -574,12 +475,8 @@ class _ScoreRow extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color:
-                iconColor.withOpacity(
-                    0.12),
-            borderRadius:
-                BorderRadius
-                    .circular(14),
+            color: iconColor.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(
             icon,
@@ -587,42 +484,27 @@ class _ScoreRow extends StatelessWidget {
             size: 22,
           ),
         ),
-
         const SizedBox(width: 14),
-
         Expanded(
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment
-                    .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style:
-                    const TextStyle(
-                  fontFamily:
-                      'Mulish',
+                style: const TextStyle(
+                  fontFamily: 'Mulish',
                   fontSize: 14,
-                  fontWeight:
-                      FontWeight
-                          .w700,
-                  color:
-                      Colors.black,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
                 ),
               ),
-
-              const SizedBox(
-                  height: 2),
-
+              const SizedBox(height: 2),
               Text(
                 value,
-                style:
-                    const TextStyle(
-                  fontFamily:
-                      'Mulish',
+                style: const TextStyle(
+                  fontFamily: 'Mulish',
                   fontSize: 13,
-                  color: Color(
-                      0xFF6B7280),
+                  color: Color(0xFF6B7280),
                 ),
               ),
             ],
@@ -637,116 +519,81 @@ class _ScoreRow extends StatelessWidget {
 // ACTION BUTTONS
 // ─────────────────────────────────────────────────────────────
 
-class _ActionButtons
-    extends StatelessWidget {
+class _ActionButtons extends StatelessWidget {
   const _ActionButtons();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(
-              16, 8, 16, 32),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
       child: Column(
         children: [
           GestureDetector(
             onTap: () {},
             child: Container(
               height: 56,
-              width:
-                  double.infinity,
-              decoration:
-                  BoxDecoration(
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            32),
-                gradient:
-                    const LinearGradient(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                gradient: const LinearGradient(
                   colors: [
-                    Color(
-                        0xFF0D9488),
-                    Color(
-                        0xFF2563EB),
+                    Color(0xFF0D9488),
+                    Color(0xFF2563EB),
                   ],
                 ),
               ),
               child: const Center(
                 child: Text(
                   'View Risk Reduction Tips',
-                  style:
-                      TextStyle(
-                    fontFamily:
-                        'Mulish',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
                     fontSize: 16,
-                    fontWeight:
-                        FontWeight
-                            .w700,
-                    color: Colors
-                        .white,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
           ),
-
           const SizedBox(height: 12),
-
           GestureDetector(
             onTap: () {},
             child: Container(
               height: 56,
-              width:
-                  double.infinity,
-              decoration:
-                  BoxDecoration(
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            32),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
                 border: Border.all(
-                  color: const Color(
-                      0xFF0D9488),
+                  color: const Color(0xFF0D9488),
                   width: 1.5,
                 ),
-                color:
-                    Colors.white,
+                color: Colors.white,
               ),
               child: const Center(
                 child: Text(
                   'Download ASCVD Report',
-                  style:
-                      TextStyle(
-                    fontFamily:
-                        'Mulish',
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
                     fontSize: 16,
-                    fontWeight:
-                        FontWeight
-                            .w700,
-                    color: Color(
-                        0xFF0D9488),
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF0D9488),
                   ),
                 ),
               ),
             ),
           ),
-
           const SizedBox(height: 16),
-
           GestureDetector(
             onTap: () => Get.until(
-              (route) =>
-                  route.isFirst,
+              (route) => route.isFirst,
             ),
             child: const Text(
               'Go to Home',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
-                fontWeight:
-                    FontWeight.w700,
-                color:
-                    Color(0xFF0D9488),
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF0D9488),
               ),
             ),
           ),

@@ -77,10 +77,14 @@ import 'package:sample/app/patient/cancer_stomach_assessment/bindings/cancer_sto
 import 'package:sample/app/patient/cancer_stomach_assessment/views/cancer_stomach_assessment_view.dart';
 import 'package:sample/app/patient/cancer_throat_assessment%20/bindings/cancer_throat_assessment_binding.dart';
 import 'package:sample/app/patient/cancer_throat_assessment%20/views/cancer_throat_assessment_view.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_binding.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_form_view.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_info_view.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_result_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_binding.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_form_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_info_view.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_result_view.dart';
+import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_binding.dart';
+import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_form_view.dart';
+import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_info_view.dart';
+import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_result_view.dart';
 import 'package:sample/app/patient/pre_scan_questions/bindings/pre_scan_questions_binding.dart';
 import 'package:sample/app/patient/pre_scan_questions/views/pre_scan_questions_view.dart';
 import 'package:sample/app/patient/profile_details/views/all_review.dart';
@@ -152,8 +156,6 @@ import '../Doctor/doctor_signup/final_verification/bindings/final_verification_b
 
 import 'package:sample/app/patient/appointment_confirmed/views/appointment_confirmed_view.dart';
 
-import 'package:sample/app/patient/Dashboard/Bindings/dashboard_binding.dart';
-import 'package:sample/app/patient/Dashboard/views/dashboard_view.dart';
 
 import 'package:sample/app/patient/profile_details/bindings/profile_details_binding.dart';
 import 'package:sample/app/patient/profile_details/views/profile_details_view.dart';
@@ -428,6 +430,8 @@ class AppPages {
       binding: SelectCounsellorBinding(),
     ),
 
+    
+
     GetPage(
       name: '/ascvd-info',
       page: () => const AscvdInfoView(),
@@ -442,6 +446,22 @@ class AppPages {
       name: '/ascvd-result',
       page: () => const AscvdResultView(),
       binding: AscvdBinding(),
+    ),
+
+    GetPage(
+      name: '/qrisk-info',
+      page: () => const Qrisk3InfoView(),
+      binding: Qrisk3Binding(),
+    ),
+    GetPage(
+      name: '/qrisk3-form',
+      page: () => const Qrisk3FormView(),
+      binding: Qrisk3Binding(),
+    ),
+    GetPage(
+      name: '/qrisk3-result',
+      page: () => const Qrisk3ResultView(),
+      binding: Qrisk3Binding(),
     ),
 
     GetPage(

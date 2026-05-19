@@ -87,7 +87,7 @@ class HealthMetricsSection extends StatelessWidget {
                               : (tool['subtitle'] as String? ?? ''),
                           isTablet: isTablet,
                           onTap: () => controller
-                              .onSmartToolTap(rowIndex * 3 + colIndex),
+                              .onHealthToolTap(rowIndex * 3 + colIndex),
                         );
 
                         return Expanded(

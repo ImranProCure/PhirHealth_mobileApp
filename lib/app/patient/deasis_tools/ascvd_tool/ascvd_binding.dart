@@ -2,7 +2,7 @@
 // ascvd_binding.dart
 
 import 'package:get/get.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_controller.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_controller.dart';
 
 class AscvdBinding extends Bindings {
   @override

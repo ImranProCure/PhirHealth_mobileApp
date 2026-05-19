@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sample/app/patient/deasis_tools/ascvd_controller.dart';
+import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_controller.dart';
 
 class AscvdFormView extends GetView<AscvdController> {
   const AscvdFormView({super.key});
@@ -70,33 +70,12 @@ class AscvdFormView extends GetView<AscvdController> {
 
                   const SizedBox(height: 14),
 
-                  // FULL NAME
-
-                  const _FieldLabel(
-                    label: 'Full Name',
-                    subtitle:
-                        'ASCVD risk screening for adults aged 20–79 years.',
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  Obx(
-                    () => _PlainTextField(
-                      textController: controller.nameController,
-                      hint: 'Enter your full name',
-                      errorText: controller.nameError.value,
-                      onChanged: (_) => controller.clearNameError(),
-                      inputType: TextInputType.name,
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
                   // AGE
 
                   const _FieldLabel(
                     label: 'Age',
-                    subtitle: 'Must be between 20 and 79 years.',
+                    subtitle:
+                        'This calculator only applies to individuals 40-75 years of age.',
                   ),
 
                   const SizedBox(height: 8),
@@ -104,7 +83,7 @@ class AscvdFormView extends GetView<AscvdController> {
                   Obx(
                     () => _UnitInputField(
                       textController: controller.ageController,
-                      hint: 'e.g. 45',
+                      hint: 'e.g. 20 - 79',
                       unit: 'yrs',
                       rangeHint: '20 – 79',
                       errorText: controller.ageError.value,
@@ -426,93 +405,6 @@ class _FieldLabel extends StatelessWidget {
               fontSize: 12,
               color: Color(0xFF9CA3AF),
             ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-// ─── Plain Text Field (name) ──────────────────────────────────────────────────
-
-class _PlainTextField extends StatelessWidget {
-  final TextEditingController textController;
-  final String hint;
-  final String errorText;
-  final ValueChanged<String>? onChanged;
-  final TextInputType inputType;
-
-  const _PlainTextField({
-    required this.textController,
-    required this.hint,
-    required this.errorText,
-    this.onChanged,
-    this.inputType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final hasError = errorText.isNotEmpty;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: hasError ? const Color(0xFFEF4444) : Colors.transparent,
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: textController,
-            keyboardType: inputType,
-            onChanged: onChanged,
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 14,
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: const TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 14,
-                color: Color(0xFFD1D5DB),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-        if (hasError) ...[
-          const SizedBox(height: 5),
-          Row(
-            children: [
-              const Icon(Icons.info_outline,
-                  size: 13, color: Color(0xFFEF4444)),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  errorText,
-                  style: const TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 11,
-                    color: Color(0xFFEF4444),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ],
