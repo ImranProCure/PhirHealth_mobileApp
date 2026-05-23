@@ -44,10 +44,12 @@ class DoctorConsultApi {
     required String type,
     required List<File> reports,
     required List<Map<String, String>> reportData,
+    required String transactionId,
   }) async {
     final formData = FormData.fromMap({
       'practitioner': practitioner,
       'appointment_date': appointmentDate,
+     // 'transaction_id':transactionId,
       'start_time': startTime,
       'end_time': endTime,
       'consultation_type':

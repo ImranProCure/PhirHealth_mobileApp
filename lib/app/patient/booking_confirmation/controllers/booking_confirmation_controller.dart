@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/db/db.dart';
+
+const String _redirectScheme = 'phirhealth://';
 
 // ===================================================
 // REPORT ENTRY MODEL
@@ -23,6 +28,9 @@ class ReportEntry {
   });
 }
 
+// ===================================================
+// CONTROLLER
+// ===================================================
 class BookingConfirmationController extends GetxController {
   // ===== ARGUMENTS =====
   late String selectedDate;
@@ -31,12 +39,9 @@ class BookingConfirmationController extends GetxController {
   late String patientName;
   late String patientId;
 
-  // ===== PAYMENT METHOD =====
+  // ===== PAYMENT =====
   final RxString selectedPayment = ''.obs;
-
-  void selectPayment(String method) {
-    selectedPayment.value = method;
-  }
+  void selectPayment(String method) => selectedPayment.value = method;
 
   final RxString doctorName = ''.obs;
   final RxString doctorDegree = ''.obs;
@@ -54,6 +59,7 @@ class BookingConfirmationController extends GetxController {
 
   final RxDouble walletBalance = 0.0.obs;
   final RxBool isWalletLoading = false.obs;
+  final RxBool isBookingLoading = false.obs;
 
   // ===== REPORTS =====
   final RxList<ReportEntry> reports = <ReportEntry>[].obs;
@@ -66,7 +72,9 @@ class BookingConfirmationController extends GetxController {
     'X-Ray/Scan',
     'Imaging',
   ];
+
   Api api = Api.instance;
+  final authStorage = AuthStorageService();
 
   String get appointmentType => tabType == 0
       ? 'patient_book_clinic_type'.tr
@@ -80,112 +88,11 @@ class BookingConfirmationController extends GetxController {
       ? 'patient_book_clinic_slots'.tr
       : 'patient_book_video_slots'.tr;
 
-  // ================= PICK & ADD REPORT =================
-  Future<void> pickAndAddReport() async {
-    final source = await Get.bottomSheet<ImageSource>(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE5E7EB),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Select Image Source",
-              style: TextStyle(
-                fontFamily: 'Mulish',
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _SourceButton(
-                    icon: Icons.camera_alt_outlined,
-                    label: "Camera",
-                    onTap: () => Get.back(result: ImageSource.camera),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _SourceButton(
-                    icon: Icons.photo_library_outlined,
-                    label: "Gallery",
-                    onTap: () => Get.back(result: ImageSource.gallery),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-    );
-
-    if (source == null) return;
-
-    final XFile? picked = await _picker.pickImage(
-      source: source,
-      imageQuality: 85,
-    );
-    
-    if (picked == null) return;
-
-    final result = await Get.dialog<Map<String, String>>(
-      ReportDetailsDialog(reportTypes: reportTypes),
-      barrierDismissible: false,
-    );
-
-    if (result == null) return;
-
-    reports.add(ReportEntry(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      imageFile: File(picked.path),
-      subject: result['subject'] ?? '',
-      reportType: result['reportType'] ?? reportTypes.first,
-    ));
-  }
-
-  void removeReport(String id) {
-    reports.removeWhere((r) => r.id == id);
-  }
-
-  // // ===== CONFIRM =====
-  // void confirmBooking() {
-  // }
-
-  Future<void> fetchWalletBalanceApi() async {
-    isWalletLoading.value = true;
-    ApiResponse response =
-        await api.commonApi.doctorConsultApi.getWalletBalance();
-    isWalletLoading.value = false;
-
-    final messageData = response.data['message'];
-    if (messageData["status"] == true) {
-      walletBalance.value =
-          (messageData["data"]["wallet_balance"] as num?)?.toDouble() ?? 0.0;
-    } else {
-      showError(messageData["message"] ?? "Failed to fetch wallet balance");
-    }
-  }
-
-// Add a getter for easy insufficient check:
   bool get isWalletInsufficient => walletBalance.value < fees.value;
 
+  // ─────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────
   @override
   void onInit() {
     super.onInit();
@@ -195,9 +102,9 @@ class BookingConfirmationController extends GetxController {
     patientName = Get.arguments?['patientName'] ?? '';
     patientId = Get.arguments?['patientId'] ?? '';
     doctorData.value = Get.arguments?['data'] ?? {};
-    type.value = Get.arguments?['type'] ?? {};
-    id.value = Get.arguments?['id'] ?? {};
-
+    type.value = Get.arguments?['type']?.toString() ?? '';
+    id.value = Get.arguments?['id']?.toString() ?? '';
+    
     doctorName.value = doctorData.value['name']?.toString() ?? '';
     doctorDegree.value = doctorData.value['degree']?.toString() ?? '';
     doctorSpecialty.value = doctorData.value['specialty']?.toString() ?? '';
@@ -218,14 +125,197 @@ class BookingConfirmationController extends GetxController {
       ].where((s) => s.isNotEmpty).toList();
       address.value = parts.join(', ');
     }
-    fetchWalletBalanceApi(); // ← ADD THIS
+
+    fetchWalletBalanceApi();
   }
 
-// ===== CONFIRM =====
+  // ─────────────────────────────────────────────
+  // CONFIRM BOOKING — entry point from UI button
+  // ─────────────────────────────────────────────
   Future<void> confirmBooking() async {
+    if (selectedPayment.value == 'Online') {
+      await _initiateOnlinePayment();
+    } else {
+      await _callBookingApi(); // Wallet — no gateway needed
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // STEP 1 — Create PhonePe Payment Link
+  // ─────────────────────────────────────────────
+  Future<void> _initiateOnlinePayment() async {
     try {
-      // ── Parse start_time & end_time from selectedSlot ──────────────────
-      // selectedSlot format: "7:30 AM" or "03:00 PM"
+      isBookingLoading.value = true;
+
+      final data = await authStorage.getUserDetail();
+      final mobile = data!['mobile_no'] ?? '';
+      final email = data['email'] ?? '';
+
+      final ApiResponse linkResponse =
+          await api.commonApi.phonePayApi.createPaymentLink(
+        merchantReferenceId: id.value,
+        customerName: patientId,
+        amount: fees.value.toDouble(),
+        phoneNo: mobile,
+        email: email,
+       // redirectUrl: '${_redirectScheme}payment/callback',
+      );
+
+      isBookingLoading.value = false;
+
+      final linkMessage = linkResponse.data['message'];
+      if (linkMessage == null || linkMessage['success'] != true) {
+        showError(linkMessage?['message'] ?? 'Failed to create payment link.');
+        return;
+      }
+
+      final linkData = linkMessage['data'] as Map<String, dynamic>;
+      final String paymentLink = linkData['payment_link']?.toString() ?? '';
+      final String paymentId = linkData['payment_id']?.toString() ?? '';
+
+      if (paymentLink.isEmpty) {
+        showError('Payment link is empty. Please try again.');
+        return;
+      }
+
+      // ── Suspend here until user finishes / cancels payment ───────────────
+      final String? callbackUrl =
+          await _launchPaymentAndWaitForCallback(paymentLink);
+
+
+
+
+      // ── User closed the webview without completing payment ───────────────
+      if (callbackUrl == null) {
+        showError('Payment was cancelled. Please try again.');
+        return;
+      }
+
+      // ── Parse status & payment_id from callback URL ──────────────────────
+      // e.g. yourapp://payment/callback?status=SUCCESS&payment_id=xxx
+      final Uri callbackUri = Uri.parse(callbackUrl);
+      final String status =
+          callbackUri.queryParameters['status']?.toUpperCase() ?? '';
+      final String returnedPaymentId =
+          callbackUri.queryParameters['payment_id'] ?? paymentId;
+
+      debugPrint('[Payment] Callback URL : $callbackUrl');
+      debugPrint('[Payment] Status       : $status');
+      debugPrint('[Payment] Payment ID   : $returnedPaymentId');
+
+      // if (status == 'SUCCESS') {
+      //   await _createPaymentTransaction(
+      //     paymentId: returnedPaymentId,
+      //     merchantReferenceId: id.value,
+      //     status: 'SUCCESS',
+      //   );
+      // } else if (status == 'PENDING') {
+      //   // Record as PENDING — backend verifies via webhook
+      //   await _createPaymentTransaction(
+      //     paymentId: returnedPaymentId,
+      //     merchantReferenceId: id.value,
+      //     status: 'PENDING',
+      //   );
+      // } else {
+      //   // FAILED or unknown
+      //   showError('Payment failed. Please try again.');
+      // }
+    } catch (e) {
+      isBookingLoading.value = false;
+      debugPrint('[Payment] Exception: $e');
+      showError('Unable to initiate payment. Please try again.');
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // LAUNCH — opens InAppWebView without awaiting
+  // Get.to, then suspends on completer.future.
+  // Resolves ONLY when:
+  //   • PhonePe redirects  → onRedirect(url)
+  //   • User closes webview → onCancelled()
+  // ─────────────────────────────────────────────
+  Future<String?> _launchPaymentAndWaitForCallback(String paymentLink) async {
+    final completer = Completer<String?>();
+
+    // Do NOT await — Get.to returns immediately.
+    // The completer stays open until the webview fires a callback.
+    Get.to(
+      () => _InAppPaymentPage(
+        paymentUrl: paymentLink,
+        redirectScheme: _redirectScheme,
+        onRedirect: (url) {
+          if (!completer.isCompleted) completer.complete(url);
+        },
+        onCancelled: () {
+          if (!completer.isCompleted) completer.complete(null);
+        },
+      ),
+      transition: Transition.downToUp,
+    );
+
+    // Suspends here until onRedirect OR onCancelled fires
+    return completer.future;
+  }
+
+  // ─────────────────────────────────────────────
+  // STEP 2 — Record Payment Transaction
+  // Called only after redirect confirms outcome
+  // ─────────────────────────────────────────────
+  Future<void> _createPaymentTransaction({
+    required String paymentId,
+    required String merchantReferenceId,
+    String status = 'SUCCESS',
+  }) async {
+    try {
+      isBookingLoading.value = true;
+
+      final String transactionDate = DateTime.now()
+          .toIso8601String()
+          .replaceFirst('T', ' ')
+          .substring(0, 19);
+
+      final ApiResponse txnResponse =
+          await api.commonApi.phonePayApi.createPaymentTransaction(
+        transactionDate: transactionDate,
+        transactionId: paymentId,
+        merchantReferenceId: merchantReferenceId,
+        customer: patientId,
+        phonePeTransactionId: paymentId,
+        mandateType: 'UPI',
+        instrumentBreakdown: {'mode': 'UPI', 'bank': ''},
+        transactionNote: 'Appointment payment',
+        amount: fees.value.toDouble(),
+        status: status,
+      );
+
+      isBookingLoading.value = false;
+
+      final txnMessage = txnResponse.data['message'];
+      if (txnMessage == null || txnMessage['success'] != true) {
+        showError(txnMessage?['message'] ?? 'Failed to record transaction.');
+        return;
+      }
+
+      // Proceed to booking only for SUCCESS or PENDING
+      if (status != 'FAILED') {
+        await _callBookingApi(transactionId: paymentId);
+      }
+    } catch (e) {
+      isBookingLoading.value = false;
+      debugPrint('[Transaction] Exception: $e');
+      showError('Failed to record payment. Please contact support.');
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // STEP 3 — Book Appointment
+  // Called after payment transaction recorded
+  // OR directly for Wallet payments
+  // ─────────────────────────────────────────────
+  Future<void> _callBookingApi({String transactionId = ''}) async {
+    try {
+      isBookingLoading.value = true;
+
       String startTime = '';
       String endTime = '';
 
@@ -247,28 +337,28 @@ class BookingConfirmationController extends GetxController {
         endTime =
             '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}:00';
       }
-      
-      var id = Get.arguments?['id'] ?? '';
-      // ── Call API ────────────────────────────────────────────────────────
-      final ApiResponse response = await api.commonApi.doctorConsultApi
-          .bookAppointment(
-              practitioner: id,
-              appointmentDate: selectedDate, // "2026-04-27"
-              startTime: startTime, // "07:30:00"
-              endTime: endTime, // "08:00:00"
-              appointmentType:
-                  appointmentType, // "In-Clinic Appointment" | "Video Consultation"
-              fees: fees.value,
-              modeOfPayment: selectedPayment.value, // "Wallet" | "PayOnline"
-              patientId: patientId,
-              reports: reports.map((r) => r.imageFile).toList(),
-              reportData: reports
-                  .map((r) => {
-                        'reportType': r.reportType,
-                        'subject': r.subject,
-                      })
-                  .toList(),
-              type: type.value);
+
+      final String doctorId = Get.arguments?['id']?.toString() ?? '';
+
+      final ApiResponse response =
+          await api.commonApi.doctorConsultApi.bookAppointment(
+        practitioner: doctorId,
+        appointmentDate: selectedDate,
+        startTime: startTime,
+        endTime: endTime,
+        appointmentType: appointmentType,
+        fees: fees.value,
+        modeOfPayment: selectedPayment.value,
+        patientId: patientId,
+        reports: reports.map((r) => r.imageFile).toList(),
+        reportData: reports
+            .map((r) => {'reportType': r.reportType, 'subject': r.subject})
+            .toList(),
+        type: type.value,
+        transactionId: transactionId,
+      );
+
+      isBookingLoading.value = false;
 
       final messageData = response.data['message'];
       if (messageData['status'] == true) {
@@ -278,8 +368,173 @@ class BookingConfirmationController extends GetxController {
             messageData['message'] ?? 'Booking failed. Please try again.');
       }
     } catch (e) {
+      isBookingLoading.value = false;
+      debugPrint('[Booking] Exception: $e');
       showError('Something went wrong. Please try again.');
     }
+  }
+
+  // ─────────────────────────────────────────────
+  // WALLET BALANCE
+  // ─────────────────────────────────────────────
+  Future<void> fetchWalletBalanceApi() async {
+    isWalletLoading.value = true;
+    final ApiResponse response =
+        await api.commonApi.doctorConsultApi.getWalletBalance();
+    isWalletLoading.value = false;
+
+    final messageData = response.data['message'];
+    if (messageData['status'] == true) {
+      walletBalance.value =
+          (messageData['data']['wallet_balance'] as num?)?.toDouble() ?? 0.0;
+    } else {
+      showError(messageData['message'] ?? 'Failed to fetch wallet balance');
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // REPORTS — pick & remove
+  // ─────────────────────────────────────────────
+  Future<void> pickAndAddReport() async {
+    final source = await Get.bottomSheet<ImageSource>(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E7EB),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Select Image Source',
+              style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                    child: _SourceButton(
+                        icon: Icons.camera_alt_outlined,
+                        label: 'Camera',
+                        onTap: () => Get.back(result: ImageSource.camera))),
+                const SizedBox(width: 12),
+                Expanded(
+                    child: _SourceButton(
+                        icon: Icons.photo_library_outlined,
+                        label: 'Gallery',
+                        onTap: () => Get.back(result: ImageSource.gallery))),
+              ],
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+    );
+
+    if (source == null) return;
+
+    final XFile? picked =
+        await _picker.pickImage(source: source, imageQuality: 85);
+    if (picked == null) return;
+
+    final result = await Get.dialog<Map<String, String>>(
+      ReportDetailsDialog(reportTypes: reportTypes),
+      barrierDismissible: false,
+    );
+
+    if (result == null) return;
+
+    reports.add(ReportEntry(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      imageFile: File(picked.path),
+      subject: result['subject'] ?? '',
+      reportType: result['reportType'] ?? reportTypes.first,
+    ));
+  }
+
+  void removeReport(String id) => reports.removeWhere((r) => r.id == id);
+}
+
+// ===================================================
+// IN-APP PAYMENT WEBVIEW PAGE
+// ===================================================
+class _InAppPaymentPage extends StatelessWidget {
+  final String paymentUrl;
+  final String redirectScheme;
+  final void Function(String url) onRedirect;
+  final VoidCallback onCancelled;
+
+  const _InAppPaymentPage({
+    required this.paymentUrl,
+    required this.redirectScheme,
+    required this.onRedirect,
+    required this.onCancelled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      onPopInvoked: (_) => onCancelled(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Complete Payment',
+            style: TextStyle(
+              fontFamily: 'Mulish',
+              fontWeight: FontWeight.w700,
+              fontSize: 17,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              onCancelled();
+              Get.back();
+            },
+          ),
+          backgroundColor: const Color(0xFF0D9488),
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        body: InAppWebView(
+          initialUrlRequest: URLRequest(url: WebUri(paymentUrl)),
+          initialSettings: InAppWebViewSettings(
+            useShouldOverrideUrlLoading: true,
+            javaScriptEnabled: true,
+            domStorageEnabled: true,
+            useHybridComposition: true,
+            allowsInlineMediaPlayback: true,
+          ),
+          // Fires before EVERY navigation — catches PhonePe redirect
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            final url = navigationAction.request.url?.toString() ?? '';
+            debugPrint('[WebView] Navigating to: $url');
+
+            if (url.startsWith(redirectScheme)) {
+              onRedirect(url);
+              Get.back();
+              return NavigationActionPolicy.CANCEL;
+            }
+
+            return NavigationActionPolicy.ALLOW;
+          },
+        ),
+      ),
+    );
   }
 }
 
@@ -290,6 +545,7 @@ class _SourceButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+
   const _SourceButton(
       {required this.icon, required this.label, required this.onTap});
 
@@ -362,7 +618,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Report Details",
+              'Report Details',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontWeight: FontWeight.w700,
@@ -372,7 +628,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
             ),
             const SizedBox(height: 16),
             const Text(
-              "Report Subject",
+              'Report Subject',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 13,
@@ -385,7 +641,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
               controller: subjectCtrl,
               style: const TextStyle(fontFamily: 'Mulish', fontSize: 14),
               decoration: InputDecoration(
-                hintText: "e.g. Blood Test Report",
+                hintText: 'e.g. Blood Test Report',
                 hintStyle: const TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 14,
@@ -412,7 +668,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
             ),
             const SizedBox(height: 16),
             const Text(
-              "Report Type",
+              'Report Type',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 13,
@@ -430,8 +686,8 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
                   onTap: () => setState(() => selectedType = type),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 7),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: isSel
@@ -449,7 +705,8 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
                         fontFamily: 'Mulish',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: isSel ? Colors.white : const Color(0xFF374151),
+                        color:
+                            isSel ? Colors.white : const Color(0xFF374151),
                       ),
                     ),
                   ),
@@ -469,7 +726,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
                       minimumSize: const Size(double.infinity, 44),
                     ),
                     child: const Text(
-                      "Cancel",
+                      'Cancel',
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
@@ -501,7 +758,7 @@ class _ReportDetailsDialogState extends State<ReportDetailsDialog> {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       child: const Text(
-                        "Confirm",
+                        'Confirm',
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 13,

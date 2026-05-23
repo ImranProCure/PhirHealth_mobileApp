@@ -79,9 +79,9 @@ class Qrisk3ResultView extends GetView<Qrisk3Controller> {
             ),
 
             // BOTTOM BUTTONS
-            _BottomButtons(
-              tenYearRisk: controller.tenYearRisk.value,
-            ),
+            // _BottomButtons(
+            //   tenYearRisk: controller.tenYearRisk.value,
+            // ),
           ],
         ),
       ),

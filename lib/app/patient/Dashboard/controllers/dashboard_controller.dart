@@ -105,11 +105,6 @@ class DashboardController extends GetxController {
       'icon': 'assets/Group 177.png',
       'route': '/qrisk-info'
     },
-    {
-      'title': 'patient_dash_reminder',
-      'icon': 'assets/icons/time 1.png',
-      'route': '/add-medicine'
-    },
   ];
 
   void onSmartToolTap(int index) {
