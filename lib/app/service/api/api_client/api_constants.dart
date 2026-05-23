@@ -4,7 +4,7 @@ class ApiConstants {
   ApiConstants._();
 
   static const String baseUrl =
-      "http://devcal.phirhealth.com";
+      "https://devcal.phirhealth.com";
 
   static const CommonApiConstants commonApiConstants = CommonApiConstants();
 }

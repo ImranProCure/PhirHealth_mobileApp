@@ -81,6 +81,7 @@ import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_binding.dart';
 import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_form_view.dart';
 import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_info_view.dart';
 import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_result_view.dart';
+import 'package:sample/app/patient/deasis_tools/main_tools.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_binding.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_form_view.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_info_view.dart';
@@ -155,7 +156,6 @@ import '../Doctor/doctor_signup/final_verification/views/final_verification_view
 import '../Doctor/doctor_signup/final_verification/bindings/final_verification_binding.dart';
 
 import 'package:sample/app/patient/appointment_confirmed/views/appointment_confirmed_view.dart';
-
 
 import 'package:sample/app/patient/profile_details/bindings/profile_details_binding.dart';
 import 'package:sample/app/patient/profile_details/views/profile_details_view.dart';
@@ -430,8 +430,6 @@ class AppPages {
       binding: SelectCounsellorBinding(),
     ),
 
-    
-
     GetPage(
       name: '/ascvd-info',
       page: () => const AscvdInfoView(),
@@ -582,6 +580,11 @@ class AppPages {
       name: '/family-wellbeing-edit',
       page: () => const FamilyWellbeingEditView(),
       binding: FamilyWellbeingEditBinding(),
+    ),
+
+    GetPage(
+      name: '/health-tools',
+      page: () => HealthToolsView(),
     ),
 
     GetPage(

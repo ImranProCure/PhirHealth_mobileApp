@@ -35,6 +35,13 @@ class MyProfileController extends GetxController {
             'iconBg': const Color(0xFFE0F2F1),
           },
           {
+            'icon': Icons.assignment_outlined,
+            'label': 'Health Metrics',
+            'route': '/health-tools',
+            'iconColor': const Color(0xFF0D9488),
+            'iconBg': const Color(0xFFE0F2F1),
+          },
+          {
             'icon': Icons.emergency_outlined,
             'label': 'patient_menu_emergency'.tr,
             'route': '/emergency-contacts',

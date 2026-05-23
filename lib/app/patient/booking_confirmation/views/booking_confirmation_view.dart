@@ -981,7 +981,10 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                 Expanded(
                   child: Obx(() {
                     final isEnabled =
-                        controller.selectedPayment.value.isNotEmpty;
+                        controller.selectedPayment.value.isNotEmpty &&
+                            !controller.isBookingLoading
+                                .value; // ← also disable while loading
+
                     return Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -1003,37 +1006,46 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                           disabledBackgroundColor: Colors.transparent,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                              borderRadius: BorderRadius.circular(30)),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              controller.tabType == 0
-                                  ? Icons.add_box_outlined
-                                  : Icons.videocam_outlined,
-                              color: isEnabled
-                                  ? Colors.white
-                                  : const Color(0xFF9CA3AF),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              controller.tabType == 0
-                                  ? "patient_book_confirm_clinic".tr
-                                  : "patient_book_confirm_video".tr,
-                              style: TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: isEnabled
-                                    ? Colors.white
-                                    : const Color(0xFF9CA3AF),
+                        child: controller.isBookingLoading
+                                .value // ← show spinner while processing
+                            ? const SizedBox(
+                                height: 22,
+                                width: 22,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    controller.tabType == 0
+                                        ? Icons.add_box_outlined
+                                        : Icons.videocam_outlined,
+                                    color: isEnabled
+                                        ? Colors.white
+                                        : const Color(0xFF9CA3AF),
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    controller.tabType == 0
+                                        ? "patient_book_confirm_clinic".tr
+                                        : "patient_book_confirm_video".tr,
+                                    style: TextStyle(
+                                      fontFamily: 'Mulish',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: isEnabled
+                                          ? Colors.white
+                                          : const Color(0xFF9CA3AF),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
                       ),
                     );
                   }),

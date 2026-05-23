@@ -19,6 +19,7 @@ class LoginController extends GetxController {
   ToastService toastService = ToastService.instance;
   AuthStorageService authStorage = AuthStorageService();
   ApiClient apiClient = ApiClient();
+  
   // ===== GET OTP — same for all roles =====
   void getOTP() {
     final phone = phoneController.text.trim();
@@ -83,6 +84,7 @@ class LoginController extends GetxController {
     if (_roleController.role == UserRole.doctor) {
       role = 'doctor';
     }
+   
     ApiResponse response = await api.commonApi.authenticationApi.login(
         mobile: phoneController.text,
         country_code: "+91",
@@ -102,7 +104,7 @@ class LoginController extends GetxController {
           );
 
           // All roles go through OTP — role passed in arguments
-          Get.to(
+          Get.to(  
             () => const VerifyMobileView(),
             binding: VerifyMobileBinding(),
             arguments: {

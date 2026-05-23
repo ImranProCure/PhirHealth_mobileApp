@@ -131,4 +131,12 @@ class CommonApiConstants {
       '/api/method/vhealthcare.api.doctor.pending_request.accept_booking.get_appointment_details';
   final String getConfirmedAppointmentDetails =
       '/api/method/vhealthcare.api.doctor.pending_request.accept_booking.get_confirmed_appointment_details';
+
+  // Payment Phone Pay
+  final String createPaymentlinkAPI =
+      '/api/method/phonepe.api.create_payment_link.create_payment_link';
+  final String createTransactionPaymentAPI =
+      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
+  final String statusPaymentAPI =
+      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
 }
