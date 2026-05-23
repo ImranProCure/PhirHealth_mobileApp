@@ -151,4 +151,12 @@ class CommonApiConstants {
       '/api/method/vhealthcare.api.doctor.sessions.reshedule_appointment.reschedule_appointment';
   final String getDoctorReviews =
       '/api/method/vhealthcare.api.doctor.Dr_review.patient_review.get_doctor_reviews';
+
+  // Payment Phone Pay
+  final String createPaymentlinkAPI =
+      '/api/method/phonepe.api.create_payment_link.create_payment_link';
+  final String createTransactionPaymentAPI =
+      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
+  final String statusPaymentAPI =
+      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
 }

@@ -8,7 +8,7 @@ import 'package:sample/app/service/api/api_client/api_response.dart';
 class PhonePayApi {
   final ApiClient _client = ApiClient();
 
-  Future<ApiResponse> getAppointments() async {
+  Future<ApiResponse> getPaymentStatus() async {
     return await _client.get(
       ApiConstants.commonApiConstants.doctorVisitApi,
       authenticated: true,
