@@ -8,6 +8,7 @@ import 'package:sample/app/service/api/api_client/api_response.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/db/db.dart';
+import '../../../service/api/api_client/api_constants.dart';
 
 import '../../../../app/routes/app_routes.dart';
 
@@ -118,8 +119,7 @@ class RegistrationEditController extends GetxController {
         final image =
             doctor['image']?.toString() ?? user['user_image']?.toString() ?? '';
         if (image.isNotEmpty) {
-          existingImageUrl.value =
-              image.startsWith('http') ? image : 'http://217.216.58.35$image';
+          existingImageUrl.value = ApiConstants.imageUrl(image);
         }
       } else {
         showError(

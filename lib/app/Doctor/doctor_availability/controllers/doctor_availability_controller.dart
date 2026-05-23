@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
+import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/api/common_api/doctor_availability_api/doctor_availability_api.dart';
 
 class DoctorAvailabilityController extends GetxController {
-  final RxString slotDuration = '30 Mins'.obs;
-  final List<String> slotOptions = ['15 Mins', '30 Mins', '45 Mins', '60 Mins'];
+  final DoctorAvailabilityApi _api = DoctorAvailabilityApi();
 
-  // Each day has its own RxBool for enabled state
-  final RxBool mon = true.obs;
-  final RxBool tue = true.obs;
-  final RxBool wed = true.obs;
-  final RxBool thu = true.obs;
-  final RxBool fri = true.obs;
-  final RxBool sat = false.obs;
-  final RxBool sun = false.obs;
+  // ===== LOADING =====
+  final RxBool isLoading = false.obs;
 
-  List<RxBool> get enabledList => [mon, tue, wed, thu, fri, sat, sun];
+  // ===== DATA =====
+  final RxString scheduleType = ''.obs;
+  final RxString slotDuration = ''.obs;
 
+  // ===== DAY DATA =====
   final List<String> dayNames = [
     'Monday',
     'Tuesday',
@@ -26,55 +25,103 @@ class DoctorAvailabilityController extends GetxController {
     'Sunday'
   ];
 
-  final List<String> dayTimes = List.filled(7, '10:00 AM - 08:00 PM');
+  final List<RxBool> enabledList = List.generate(7, (_) => false.obs);
+  final List<RxString> dayTimes = List.generate(7, (_) => ''.obs);
+  final List<RxList<String>> daySessions =
+      List.generate(7, (_) => <String>[].obs);
+  final List<RxList<Map<String, dynamic>>> daySessionDetails =
+      List.generate(7, (_) => <Map<String, dynamic>>[].obs);
 
-  final List<List<String>> daySessions = [
-    ['Morning', 'Afternoon', 'Evening'],
-    ['Morning', 'Afternoon', 'Evening'],
-    ['Morning', 'Evening'],
-    ['Morning', 'Afternoon', 'Evening'],
-    ['Afternoon', 'Evening'],
-    [],
-    [],
-  ];
-
-  void toggleDay(int i, bool val) => enabledList[i].value = val;
-
-  void editDay(int i) {
-    Get.toNamed('/doctor-edit-schedule', arguments: {'day': dayNames[i]});
+  @override
+  void onInit() {
+    super.onInit();
+    fetchSlots();
   }
 
-  void saveSchedule() => Get.back();
+  // ===== FETCH API =====
+  Future<void> fetchSlots() async {
+    try {
+      isLoading.value = true;
 
-  void showSlotPicker() {
-    Get.bottomSheet(
-      Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Select Slot Duration',
-                style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700)),
-            const SizedBox(height: 12),
-            ...slotOptions.map((o) => ListTile(
-                  title: Text(o,
-                      style:
-                          const TextStyle(fontFamily: 'Mulish', fontSize: 14)),
-                  onTap: () {
-                    slotDuration.value = o;
-                    Get.back();
-                  },
-                )),
-          ],
-        ),
-      ),
+      final ApiResponse response = await _api.getAvailabilitySlots();
+      final message = response.data['message'];
+
+      if (message != null && message['status'] == true) {
+        final data = message['data'] as Map<String, dynamic>? ?? {};
+
+        final schedules = data['schedules'] as List? ?? [];
+        if (schedules.isEmpty) {
+          showError('No schedules found');
+          return;
+        }
+
+        final schedule = schedules[0] as Map<String, dynamic>;
+
+        scheduleType.value = schedule['schedule_type']?.toString() ?? '';
+        slotDuration.value = schedule['slot_duration']?.toString() ?? '';
+
+        final rawDays = schedule['days'] as List? ?? [];
+
+        for (int i = 0; i < dayNames.length; i++) {
+          final matching =
+              rawDays.where((d) => d['day'] == dayNames[i]).toList();
+          if (matching.isEmpty) continue;
+
+          final dayData = matching.first;
+
+          enabledList[i].value = dayData['enabled'] == true;
+          dayTimes[i].value = dayData['time_range']?.toString() ?? '';
+
+          final sessions = dayData['sessions'] as List? ?? [];
+
+          daySessions[i].assignAll(
+            sessions
+                .where((s) => s['active'] == true)
+                .map((s) => s['name'].toString())
+                .toList(),
+          );
+
+          daySessionDetails[i].assignAll(
+            sessions
+                .map((s) => {
+                      'name': s['name']?.toString() ?? '',
+                      'active': s['active'] == true,
+                      'from': s['from']?.toString() ?? '',
+                      'to': s['to']?.toString() ?? '',
+                      'slot_count': s['slot_count']?.toString() ?? '0',
+                    })
+                .toList(),
+          );
+        }
+      } else {
+        showError(message?['message'] ?? 'Something went wrong');
+      }
+    } catch (e) {
+      showError(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ===== TOGGLE DAY =====
+  void toggleDay(int i, bool val) {
+    enabledList[i].value = val;
+  }
+
+  // ===== EDIT DAY =====
+  void editDay(int i) {
+    Get.toNamed(
+      '/doctor-edit-schedule',
+      arguments: {
+        'day': dayNames[i],
+        'schedule': scheduleType.value,
+      },
     );
+  }
+
+  // ===== SAVE =====
+  Future<void> saveSchedule() async {
+    // TODO: Save API
+    showMessage('Schedule saved!');
   }
 }

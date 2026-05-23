@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_dotenv: ^5.1.0
+
   # UI
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
@@ -70,8 +72,10 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env   
     - assets/
     - assets/icons/
+  
 
   fonts:
     - family: Mulish

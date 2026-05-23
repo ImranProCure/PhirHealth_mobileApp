@@ -132,11 +132,23 @@ class CommonApiConstants {
   final String getConfirmedAppointmentDetails =
       '/api/method/vhealthcare.api.doctor.pending_request.accept_booking.get_confirmed_appointment_details';
 
-  // Payment Phone Pay
-  final String createPaymentlinkAPI =
-      '/api/method/phonepe.api.create_payment_link.create_payment_link';
-  final String createTransactionPaymentAPI =
-      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
-  final String statusPaymentAPI =
-      '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
+  // common_constants.dart mein yeh add karo
+  final String getAvailabilitySlots =
+      '/api/method/vhealthcare.api.doctor.my_availabilty_slot.slot_details.get_my_availability_slots';
+
+  final String getDayAvailabilitySlots =
+      '/api/method/vhealthcare.api.doctor.my_availabilty_slot.edit_schedule.get_day_availability_slots';
+
+  final String updateDayAvailabilitySlots =
+      '/api/method/vhealthcare.api.doctor.my_availabilty_slot.edit_schedule.update_slots';
+  final String getCurrentSessionDetails =
+      '/api/method/vhealthcare.api.doctor.sessions.current_session.get_current_session_details';
+
+  final String getAvailableSlots =
+      '/api/method/vhealthcare.api.doctor.sessions.available_slots.get_available_slots';
+
+  final String rescheduleAppointment =
+      '/api/method/vhealthcare.api.doctor.sessions.reshedule_appointment.reschedule_appointment';
+  final String getDoctorReviews =
+      '/api/method/vhealthcare.api.doctor.Dr_review.patient_review.get_doctor_reviews';
 }

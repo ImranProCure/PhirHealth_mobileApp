@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sample/app/modules/home/bindings/home_binding.dart';
 import 'package:sample/app/modules/home/views/home_view.dart';
 import '../../../routes/app_routes.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
 
 class DoctorProfileController extends GetxController {
   final AuthStorageService _authStorage = AuthStorageService();
@@ -115,8 +116,7 @@ class DoctorProfileController extends GetxController {
     print('IMAGE => $image');
 
     if (image.isNotEmpty) {
-      imagePath.value =
-          image.startsWith('http') ? image : 'http://217.216.58.35$image';
+      imagePath.value = ApiConstants.imageUrl(image); // ✅
     }
 
     /// ================= CREDENTIALS =================

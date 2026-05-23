@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
 
 import '../controllers/digital_readiness_edit_controller.dart';
 
@@ -128,9 +129,7 @@ class DigitalReadinessEditView extends GetView<DigitalReadinessEditController> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(18),
                                       child: Image.network(
-                                        url.startsWith('http')
-                                            ? url
-                                            : 'http://217.216.58.35$url',
+                                        ApiConstants.imageUrl(url),
                                         width: 110,
                                         height: 110,
                                         fit: BoxFit.cover,

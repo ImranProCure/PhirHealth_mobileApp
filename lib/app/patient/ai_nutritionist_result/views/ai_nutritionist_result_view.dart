@@ -55,7 +55,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
     );
   }
 
-  // ===== DAILY TARGET CARD =====
+  // ===== DAILY TARGET CARD — DYNAMIC =====
   Widget _dailyTargetCard() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -72,10 +72,9 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ===== Badge + updated =====
+          // Badge + updated
           Row(
             children: [
-              // Gradient badge
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -93,7 +92,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                         color: Colors.white)),
               ),
               const SizedBox(width: 10),
-              const Text('Updated 1m ago',
+              const Text('Just now',
                   style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 12,
@@ -102,35 +101,33 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
           ),
           const SizedBox(height: 12),
 
-          // ===== Description =====
-          RichText(
-            text: const TextSpan(
-              style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 15,
-                  color: Colors.black,
-                  height: 1.5,
-                  fontWeight: FontWeight.w600),
-              children: [
-                TextSpan(
-                    text:
-                        "Based on your height (5'9\") & weight (110kg), you need "),
-                TextSpan(
-                  text: '1,800 Calories',
-                  style: TextStyle(
-                      color: Color(0xFF0D9488), fontWeight: FontWeight.w800),
+          // ✅ DYNAMIC — calories from Groq
+          Obx(() => RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 15,
+                      color: Colors.black,
+                      height: 1.5,
+                      fontWeight: FontWeight.w600),
+                  children: [
+                    const TextSpan(
+                        text: 'Your personalized plan is ready. You need '),
+                    TextSpan(
+                      text: '${controller.dailyCalories.value} Calories',
+                      style: const TextStyle(
+                          color: Color(0xFF0D9488),
+                          fontWeight: FontWeight.w800),
+                    ),
+                    const TextSpan(text: ' to achieve your goal.'),
+                  ],
                 ),
-                TextSpan(text: ' to maintain weight.'),
-              ],
-            ),
-          ),
+              )),
           const SizedBox(height: 14),
 
-          // ===== Icons + Quote on same row =====
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Two overlapping circle icons — outline only, no fill
               SizedBox(
                 width: 68,
                 height: 40,
@@ -147,17 +144,19 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                 ),
               ),
               const SizedBox(width: 10),
-              const Expanded(
-                child: Text(
-                  '"This plan is optimized for muscle retention."',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 12,
-                    color: Color(0xFF6B7280),
-                    fontStyle: FontStyle.italic,
-                    height: 1.4,
-                  ),
-                ),
+
+              // ✅ DYNAMIC — tagline from Groq
+              Expanded(
+                child: Obx(() => Text(
+                      '"${controller.tagline.value}"',
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                        fontStyle: FontStyle.italic,
+                        height: 1.4,
+                      ),
+                    )),
               ),
             ],
           ),
@@ -188,171 +187,175 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
     );
   }
 
-  // ===== MEAL TIMELINE =====
+  // ===== MEAL TIMELINE — DYNAMIC =====
   Widget _mealTimeline() {
-    final meals = controller.meals;
-    return Column(
-      children: List.generate(meals.length, (i) {
-        final meal = meals[i];
-        final bool isFirst = i == 0;
-        final bool isLast = i == meals.length - 1;
+    return Obx(() {
+      final meals = controller.meals;
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ===== TIMELINE COLUMN =====
-            SizedBox(
-              width: 54,
-              child: Column(
-                children: [
-                  // Top dot (only first)
-                  if (isFirst)
-                    Column(children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                            color: Color(0xFF0D9488), shape: BoxShape.circle),
+      // Loading state
+      if (meals.isEmpty) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.all(40),
+            child: CircularProgressIndicator(color: Color(0xFF0D9488)),
+          ),
+        );
+      }
+
+      return Column(
+        children: List.generate(meals.length, (i) {
+          final meal = meals[i];
+          final bool isFirst = i == 0;
+          final bool isLast = i == meals.length - 1;
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // TIMELINE COLUMN
+              SizedBox(
+                width: 54,
+                child: Column(
+                  children: [
+                    if (isFirst)
+                      Column(children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF0D9488), shape: BoxShape.circle),
+                        ),
+                        const SizedBox(height: 4),
+                      ]),
+                    if (!isFirst)
+                      SizedBox(
+                        height: 16,
+                        child: CustomPaint(
+                            painter: _DashedLinePainter(),
+                            child: const SizedBox(width: 2)),
                       ),
-                      const SizedBox(height: 4),
-                    ]),
-
-                  // Top dashed line connecting from previous card
-                  if (!isFirst)
-                    SizedBox(
-                      height: 16,
-                      child: CustomPaint(
-                          painter: _DashedLinePainter(),
-                          child: const SizedBox(width: 2)),
-                    ),
-
-                  // Icon circle
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Color(meal['iconBg'] as int),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(11),
-                      child: Image.asset(
-                        meal['imagePath'] as String,
-                        fit: BoxFit.contain,
-                        color: Color(meal['iconColor'] as int),
-                        errorBuilder: (_, __, ___) => Icon(Icons.restaurant,
-                            color: Color(meal['iconColor'] as int), size: 20),
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Color(meal['iconBg'] as int),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(11),
+                        child: Image.asset(
+                          meal['imagePath'] as String,
+                          fit: BoxFit.contain,
+                          color: Color(meal['iconColor'] as int),
+                          errorBuilder: (_, __, ___) => Icon(Icons.restaurant,
+                              color: Color(meal['iconColor'] as int), size: 20),
+                        ),
                       ),
                     ),
-                  ),
-
-                  // Bottom dashed line to next card
-                  if (!isLast)
-                    SizedBox(
-                      // Height = card height + bottom margin - icon height / 2
-                      height: 148,
-                      child: CustomPaint(
-                          painter: _DashedLinePainter(),
-                          child: const SizedBox(width: 2)),
-                    ),
-
-                  // Bottom dot (only last)
-                  if (isLast)
-                    Column(children: [
-                      const SizedBox(height: 4),
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                            color: Color(0xFF0D9488), shape: BoxShape.circle),
+                    if (!isLast)
+                      SizedBox(
+                        height: 148,
+                        child: CustomPaint(
+                            painter: _DashedLinePainter(),
+                            child: const SizedBox(width: 2)),
                       ),
-                    ]),
-                ],
-              ),
-            ),
-
-            const SizedBox(width: 10),
-
-            // ===== MEAL CARD =====
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 14),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2))
+                    if (isLast)
+                      Column(children: [
+                        const SizedBox(height: 4),
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF0D9488), shape: BoxShape.circle),
+                        ),
+                      ]),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(meal['type'] as String,
-                            style: TextStyle(
+              ),
+
+              const SizedBox(width: 10),
+
+              // MEAL CARD
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 14),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2))
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(meal['type'] as String,
+                              style: TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: Color(meal['iconColor'] as int),
+                                letterSpacing: 0.5,
+                              )),
+                          Text(meal['cal'] as String,
+                              style: const TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black)),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(meal['time'] as String,
+                          style: const TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 12,
+                              color: Color(0xFF9CA3AF))),
+                      const SizedBox(height: 8),
+                      Text(meal['meal'] as String,
+                          style: const TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
-                              color: Color(meal['iconColor'] as int),
-                              letterSpacing: 0.5,
-                            )),
-                        Text(meal['cal'] as String,
-                            style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black)),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(meal['time'] as String,
-                        style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 12,
-                            color: Color(0xFF9CA3AF))),
-                    const SizedBox(height: 8),
-                    Text(meal['meal'] as String,
-                        style: const TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                            height: 1.4)),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 8,
-                      children: (meal['tags'] as List<String>)
-                          .map((tag) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: const Color(0xFFE5E7EB), width: 1),
-                                ),
-                                child: Text(tag,
-                                    style: const TextStyle(
-                                        fontFamily: 'Mulish',
-                                        fontSize: 11,
-                                        color: Color(0xFF6B7280))),
-                              ))
-                          .toList(),
-                    ),
-                  ],
+                              color: Colors.black,
+                              height: 1.4)),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 8,
+                        children: (meal['tags'] as List<String>)
+                            .map((tag) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        color: const Color(0xFFE5E7EB),
+                                        width: 1),
+                                  ),
+                                  child: Text(tag,
+                                      style: const TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 11,
+                                          color: Color(0xFF6B7280))),
+                                ))
+                            .toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      }),
-    );
+            ],
+          );
+        }),
+      );
+    });
   }
 
   // ===== BUTTONS =====
@@ -414,18 +417,17 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Regenerate',
+                  Text('Regenerate',
                       style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0D9488))),
-                  const SizedBox(width: 8),
-                  const Icon(Icons.rotate_right,
-                      color: Color(0xFF0D9488), size: 18),
+                  SizedBox(width: 8),
+                  Icon(Icons.rotate_right, color: Color(0xFF0D9488), size: 18),
                 ],
               ),
             ),

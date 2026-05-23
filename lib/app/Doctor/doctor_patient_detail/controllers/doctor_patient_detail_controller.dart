@@ -152,6 +152,11 @@ class DoctorPatientDetailController extends GetxController {
     }
   }
 
-  void reschedule() => Get.toNamed('/doctor-patient-reschedule');
+  void reschedule() => Get.toNamed(
+        '/doctor-patient-reschedule',
+        arguments: {
+          'appointment_id': appointment['id']?.toString() ?? '',
+        },
+      );
   void cancelSession() => Get.toNamed('/doctor-cancel-session');
 }

@@ -138,176 +138,180 @@ class _AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // ===== IMAGE 80x80 =====
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: apt['imagePath'].toString().startsWith('http')
-                    ? Image.network(
-                        apt['imagePath'] as String,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _placeholder(),
-                      )
-                    : Image.asset(
-                        apt['imagePath'] as String,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _placeholder(),
-                      ),
-              ),
+    return GestureDetector(
+      onTap: () => controller.onAppointmentTap(apt),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // ===== IMAGE 80x80 =====
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: apt['imagePath'].toString().startsWith('http')
+                      ? Image.network(
+                          apt['imagePath'] as String,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => _placeholder(),
+                        )
+                      : Image.asset(
+                          apt['imagePath'] as String,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => _placeholder(),
+                        ),
+                ),
 
-              const SizedBox(width: 14),
+                const SizedBox(width: 14),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // ===== NAME + TIME SAME ROW =====
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            apt['name'] as String,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ===== NAME + TIME SAME ROW =====
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              apt['name'] as String,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE0F2F1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.access_time_outlined,
-                                size: 12,
-                                color: Color(0xFF0D9488),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                apt['time'] as String,
-                                style: const TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0F2F1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.access_time_outlined,
+                                  size: 12,
                                   color: Color(0xFF0D9488),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  apt['time'] as String,
+                                  style: const TextStyle(
+                                    fontFamily: 'Mulish',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0D9488),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      Text(
+                        apt['details'] as String,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 13,
+                          color: Color(0xFF6B7280),
                         ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    Text(
-                      apt['details'] as String,
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 13,
-                        color: Color(0xFF6B7280),
                       ),
-                    ),
 
-                    const SizedBox(height: 2),
+                      const SizedBox(height: 2),
 
-                    Text(
-                      apt['type'] as String,
-                      style: const TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 13,
-                        color: Color(0xFF6B7280),
+                      Text(
+                        apt['type'] as String,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 13,
+                          color: Color(0xFF6B7280),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          const SizedBox(height: 14),
+            const SizedBox(height: 14),
 
-          // ===== JOIN CALL BUTTON =====
-          Builder(
-            builder: (_) {
-              final canJoin = controller.canJoin(apt);
-              final timeStr = apt['time']?.toString() ?? '';
-              return SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton.icon(
-                  onPressed: () => controller.joinCall(apt),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: canJoin
-                          ? const Color(0xFF0D9488)
-                          : const Color(0xFFD1D5DB),
-                      width: 1.5,
+            // ===== JOIN CALL BUTTON =====
+            Builder(
+              builder: (_) {
+                final canJoin = controller.canJoin(apt);
+                final timeStr = apt['time']?.toString() ?? '';
+                return SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton.icon(
+                    onPressed: () => controller.joinCall(apt),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: canJoin
+                            ? const Color(0xFF0D9488)
+                            : const Color(0xFFD1D5DB),
+                        width: 1.5,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: canJoin
+                          ? Colors.transparent
+                          : const Color(0xFFF9FAFB),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    backgroundColor:
-                        canJoin ? Colors.transparent : const Color(0xFFF9FAFB),
-                  ),
-                  icon: Icon(
-                    Icons.video_call_outlined,
-                    color: canJoin
-                        ? const Color(0xFF0D9488)
-                        : const Color(0xFF9CA3AF),
-                    size: 22,
-                  ),
-                  label: Text(
-                    canJoin ? 'Join Call' : 'Available at $timeStr',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                    icon: Icon(
+                      Icons.video_call_outlined,
                       color: canJoin
                           ? const Color(0xFF0D9488)
                           : const Color(0xFF9CA3AF),
+                      size: 22,
+                    ),
+                    label: Text(
+                      canJoin ? 'Join Call' : 'Available at $timeStr',
+                      style: TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: canJoin
+                            ? const Color(0xFF0D9488)
+                            : const Color(0xFF9CA3AF),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
