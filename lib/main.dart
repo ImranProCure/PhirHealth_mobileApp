@@ -14,9 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/db/db.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // ← yeh add karo
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   final authStorage = AuthStorageService();
 

@@ -8,7 +8,7 @@ class DashboardController extends GetxController {
   void selectNav(int index) {
     selectedNavIndex.value = index;
     if (index == 1) Get.toNamed('/doctor-visits');
-    if (index == 3) showMessage("Coming soon");
+    if (index == 3) showMessage("Coming Soon");
     //Get.toNamed('/shorts-reels');
     if (index == 4) Get.toNamed('/my-profile');
   }
@@ -114,14 +114,10 @@ class DashboardController extends GetxController {
 
   void onSmartToolTap(int index) {
     final route = smartTools[index]['route'] as String;
-    if (smartTools[index]['title'] == "patient_dash_diet") {
-      showMessage("Coming soon");
-    } else {
-      Get.toNamed(route);
-    }
+    Get.toNamed(route);
   }
 
-    void onHealthToolTap(int index) {
+  void onHealthToolTap(int index) {
     final route = healthTools[index]['route'] as String;
     if (healthTools[index]['title'] == "patient_dash_diet") {
       showMessage("Comng soon");

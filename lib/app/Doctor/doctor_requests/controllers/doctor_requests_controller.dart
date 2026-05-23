@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 import '../../../service/api/common_api/doctor_pending_request_api/doctor_pending_request_api.dart';
+import 'package:sample/app/service/api/api_client/api_constants.dart';
 
 class DoctorRequestsController extends GetxController {
   final DoctorPendingRequestApi _requestsApi = DoctorPendingRequestApi();
@@ -91,9 +92,7 @@ class DoctorRequestsController extends GetxController {
               'type': apt['appointment_mode']?.toString() ?? '',
               'status': apt['status']?.toString() ?? '',
               'imagePath': image.isNotEmpty
-                  ? (image.startsWith('http')
-                      ? image
-                      : 'http://217.216.58.35$image')
+                  ? ApiConstants.imageUrl(image) // ✅
                   : 'assets/icons/account_circle.png',
             };
           }).toList(),

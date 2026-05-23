@@ -23,7 +23,7 @@ class AiNutritionistView extends GetView<AiNutritionistController> {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PHONE LAYOUT  (original — untouched)
+//  PHONE LAYOUT
 // ═══════════════════════════════════════════════════════════
 class _PhoneAiNutritionistView extends StatelessWidget {
   final AiNutritionistController controller;
@@ -84,7 +84,10 @@ class _PhoneAiNutritionistView extends StatelessWidget {
                 ),
               ),
             ),
-            _GenerateButton(controller: controller),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              child: _GenerateButton(controller: controller),
+            ),
           ],
         ),
       ),
@@ -125,7 +128,6 @@ class _TabletAiNutritionistView extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── LEFT PANEL: Goal + Food Preference ───────────
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.44,
               child: Container(
@@ -134,7 +136,6 @@ class _TabletAiNutritionistView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header badge
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 5),
@@ -174,21 +175,15 @@ class _TabletAiNutritionistView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // Goal section
                     const _SectionTitle("What's your Goal?"),
                     const SizedBox(height: 12),
                     _GoalGrid(controller: controller, tablet: true),
                     const SizedBox(height: 24),
-
-                    // Food preference
                     const _SectionTitle('Food Preference'),
                     _SectionSub('Select your primary dietary habit'),
                     const SizedBox(height: 12),
                     _FoodRow(controller: controller, tablet: true),
-
                     const Spacer(),
-                    // Generate button anchored bottom-left
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: _GenerateButton(controller: controller),
@@ -197,8 +192,6 @@ class _TabletAiNutritionistView extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ── RIGHT PANEL: Activity + Allergies ────────────
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
@@ -279,16 +272,14 @@ class _GoalGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Row(
           children: controller.goals.map((g) {
-            final bool isSelected =
-                controller.selectedGoal.value == g['label'];
+            final bool isSelected = controller.selectedGoal.value == g['label'];
             final bool isFirst = g['label'] == controller.goals.first['label'];
             return Expanded(
               child: GestureDetector(
                 onTap: () => controller.selectGoal(g['label'] as String),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  margin: EdgeInsets.only(
-                      right: isFirst ? 12 : 0),
+                  margin: EdgeInsets.only(right: isFirst ? 12 : 0),
                   padding: EdgeInsets.fromLTRB(
                       12, tablet ? 20 : 16, 12, tablet ? 18 : 14),
                   decoration: BoxDecoration(
@@ -392,8 +383,7 @@ class _FoodRow extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: controller.foods.map((f) {
-            final bool isSelected =
-                controller.selectedFood.value == f['label'];
+            final bool isSelected = controller.selectedFood.value == f['label'];
             return GestureDetector(
               onTap: () => controller.selectFood(f['label'] as String),
               child: AnimatedContainer(
@@ -771,59 +761,69 @@ class _AllergiesRow extends StatelessWidget {
   }
 }
 
-// ── Generate Button ───────────────────────────────────────
+// ── Generate Button — LOADING STATE ADDED ────────────────
 class _GenerateButton extends StatelessWidget {
   final AiNutritionistController controller;
   const _GenerateButton({required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 54,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-          ),
-        ),
-        child: ElevatedButton(
-          onPressed: controller.generatePlan,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Generate AI Plan',
-                style: TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+    return Obx(() => SizedBox(
+          width: double.infinity,
+          height: 54,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF00897B), Color(0xFF1565C0)],
               ),
-              const SizedBox(width: 8),
-              Image.asset(
-                'assets/icons/wand_stars.png',
-                width: 20,
-                height: 20,
-                color: Colors.white,
-                colorBlendMode: BlendMode.srcIn,
-                errorBuilder: (_, __, ___) => const Icon(
-                    Icons.auto_awesome,
-                    color: Colors.white,
-                    size: 20),
+            ),
+            child: ElevatedButton(
+              onPressed:
+                  controller.isLoading.value ? null : controller.generatePlan,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
               ),
-            ],
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2.5,
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Generate AI Plan',
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Image.asset(
+                          'assets/icons/wand_stars.png',
+                          width: 20,
+                          height: 20,
+                          color: Colors.white,
+                          colorBlendMode: BlendMode.srcIn,
+                          errorBuilder: (_, __, ___) => const Icon(
+                              Icons.auto_awesome,
+                              color: Colors.white,
+                              size: 20),
+                        ),
+                      ],
+                    ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
