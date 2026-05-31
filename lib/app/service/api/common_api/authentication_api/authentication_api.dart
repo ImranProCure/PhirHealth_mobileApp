@@ -145,7 +145,7 @@ class AuthenticationApi {
     List<String> clinicPhotoPaths = const [],
   }) async {
     if (profileImagePath != null && profileImagePath.isNotEmpty) {
-      fields['photo'] = await MultipartFile.fromFile(profileImagePath);
+      fields['profile_image'] = await MultipartFile.fromFile(profileImagePath);
     }
 
     if (clinicPhotoPaths.isNotEmpty) {
@@ -258,7 +258,7 @@ class AuthenticationApi {
     if (profileImagePath != null && profileImagePath.isNotEmpty) {
       formData.files.add(
         MapEntry(
-          'photo',
+          'profile_image',
           await MultipartFile.fromFile(profileImagePath),
         ),
       );

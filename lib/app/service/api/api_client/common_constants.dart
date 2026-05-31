@@ -82,7 +82,7 @@ class CommonApiConstants {
 
   // Emergency Contacts
   final String getEmergencyContacts =
-      "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.get_patient_emergency_contacts";
+      "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.get_emergency_contacts";
   final String addEmergencyContact =
       "/api/method/vhealthcare.api.patient.my_profile.emergency_contacts.add_patient_emergency_contact";
 
