@@ -292,6 +292,44 @@ const Map<String, String> hiIN = {
   'patient_book_confirm_clinic': 'क्लिनिक विज़िट की पुष्टि करें',
   'patient_book_confirm_video': 'वीडियो विज़िट की पुष्टि करें',
 
+  // ── BMI Calculator ─────────────────────────────────
+  'bmi_title': 'BMI कैलकुलेटर',
+  'bmi_subtitle': 'अपना बॉडी मास इंडेक्स तुरंत जांचें',
+  'bmi_gender_male': 'पुरुष',
+  'bmi_gender_female': 'महिला',
+  'bmi_age': 'आयु',
+  'bmi_age_unit': 'वर्ष',
+  'bmi_height': 'ऊंचाई',
+  'bmi_height_unit': 'फ़ीट',
+  'bmi_weight': 'वज़न',
+  'bmi_weight_unit': 'किग्रा',
+  'bmi_calculate': 'BMI कैलकुलेट करें',
+
+// ── BMI Result ─────────────────────────────────────
+  'bmi_result_title': 'BMI विश्लेषण',
+  'bmi_result_your_bmi': 'आपका BMI',
+  'bmi_result_healthy': 'स्वस्थ सीमा',
+  'bmi_result_above': 'सामान्य से अधिक',
+  'bmi_result_status': 'वर्तमान स्थिति',
+  'bmi_result_category': 'श्रेणी: ',
+  'bmi_result_underweight': 'कम वज़न',
+  'bmi_result_normal': 'सामान्य',
+  'bmi_result_overweight': 'अधिक वज़न',
+  'bmi_result_obese': 'मोटापा',
+  'bmi_result_target_title': 'वज़न घटाने का लक्ष्य',
+  'bmi_result_target_weight': 'लक्ष्य वज़न',
+  'bmi_result_weight_loss': 'वज़न घटाना',
+  'bmi_result_info_prefix': 'आपका BMI ',
+  'bmi_result_info_mid': ' ऊंचाई और ',
+
+  // ── Counsellor / Coaches ───────────────────────────
+  'counsellor_title': 'विशेषज्ञ काउंसलर',
+  'counsellor_choose': 'अपना विशेषज्ञ चुनें',
+  'counsellor_sub':
+      'आपका स्वास्थ्य हमारी प्राथमिकता है। विश्वसनीय चिकित्सा मार्गदर्शन और मानसिक स्वास्थ्य के लिए आज ही प्रमाणित डॉक्टरों और काउंसलरों से बात करें।',
+  'counsellor_book': 'काउंसलर बुक करें',
+  'counsellor_history': 'परामर्श इतिहास देखें',
+
   // ── Common ─────────────────────────────────────────
   'or': 'या',
   'cancel': 'रद्द करें',

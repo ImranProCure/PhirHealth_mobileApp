@@ -14,7 +14,10 @@ class RegistrationEditView extends GetView<RegistrationEditController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0, // ✅ 0 rakho
+        surfaceTintColor: Colors.transparent, // ✅ yeh add karo
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),

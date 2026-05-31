@@ -13,9 +13,9 @@ class BmiController extends GetxController {
   final TextEditingController weightTec = TextEditingController(text: '110');
 
   final List<Map<String, dynamic>> genders = [
-    {'label': 'Male', 'icon': Icons.male},
-    {'label': 'Female', 'icon': Icons.female},
-    {'label': 'Other', 'icon': Icons.male},
+    {'label': 'bmi_gender_male'.tr, 'icon': Icons.male},
+    {'label': 'bmi_gender_female'.tr, 'icon': Icons.female},
+    {'label': 'patient_step1_gender_other'.tr, 'icon': Icons.male},
   ];
 
   void selectGender(String g) => selectedGender.value = g;

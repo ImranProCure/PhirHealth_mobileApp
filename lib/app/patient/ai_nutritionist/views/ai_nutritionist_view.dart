@@ -84,9 +84,51 @@ class _PhoneAiNutritionistView extends StatelessWidget {
                 ),
               ),
             ),
+
+            // ===== BOTTOM BUTTONS =====
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              child: _GenerateButton(controller: controller),
+              child: Column(
+                children: [
+                  _GenerateButton(controller: controller),
+                  const SizedBox(height: 12),
+
+                  // ===== VIEW SAVED PLAN =====
+                  Obx(() => SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: OutlinedButton.icon(
+                          onPressed: controller.isLoadingSaved.value
+                              ? null
+                              : controller.viewSavedPlan,
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                                color: Color(0xFF0D9488), width: 1.5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          icon: controller.isLoadingSaved.value
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                      color: Color(0xFF0D9488), strokeWidth: 2),
+                                )
+                              : const Icon(Icons.bookmark_outline,
+                                  color: Color(0xFF0D9488), size: 20),
+                          label: const Text(
+                            'View Saved Plan',
+                            style: TextStyle(
+                              fontFamily: 'Mulish',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF0D9488),
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
             ),
           ],
         ),
@@ -185,8 +227,45 @@ class _TabletAiNutritionistView extends StatelessWidget {
                     _FoodRow(controller: controller, tablet: true),
                     const Spacer(),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
+                      padding: const EdgeInsets.only(bottom: 12),
                       child: _GenerateButton(controller: controller),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: Obx(() => SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: OutlinedButton.icon(
+                              onPressed: controller.isLoadingSaved.value
+                                  ? null
+                                  : controller.viewSavedPlan,
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                    color: Color(0xFF0D9488), width: 1.5),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                              ),
+                              icon: controller.isLoadingSaved.value
+                                  ? const SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                          color: Color(0xFF0D9488),
+                                          strokeWidth: 2),
+                                    )
+                                  : const Icon(Icons.bookmark_outline,
+                                      color: Color(0xFF0D9488), size: 20),
+                              label: const Text(
+                                'View Saved Plan',
+                                style: TextStyle(
+                                  fontFamily: 'Mulish',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF0D9488),
+                                ),
+                              ),
+                            ),
+                          )),
                     ),
                   ],
                 ),
@@ -761,7 +840,7 @@ class _AllergiesRow extends StatelessWidget {
   }
 }
 
-// ── Generate Button — LOADING STATE ADDED ────────────────
+// ── Generate Button ────────────────────────────────────────
 class _GenerateButton extends StatelessWidget {
   final AiNutritionistController controller;
   const _GenerateButton({required this.controller});

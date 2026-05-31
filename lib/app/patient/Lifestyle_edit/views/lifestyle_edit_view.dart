@@ -123,8 +123,8 @@ class LifestyleEditView extends GetView<LifestyleEditController> {
                           label: 'patient_step3_diet_egg'.tr,
                           icon: 'assets/icons/eggs 1.png',
                           selected:
-                              controller.selectedDiet.value == 'Eggitarian',
-                          onTap: () => controller.selectDiet('Eggitarian'),
+                              controller.selectedDiet.value == 'Eggiterian',
+                          onTap: () => controller.selectDiet('Eggiterian'),
                         ),
                       ],
                     )),

@@ -221,6 +221,7 @@ class DoctorDashboardController extends GetxController {
     Get.toNamed('/see-all-appointments');
   }
 
+  // Controller mein joinCall - WAPAS launchUrl pe aa jao
   void joinCall(Map<String, dynamic> apt) async {
     if (!canJoin(apt)) {
       final timeStr = apt['time']?.toString() ?? '';
@@ -228,16 +229,13 @@ class DoctorDashboardController extends GetxController {
       return;
     }
     final link = apt['video_link']?.toString() ?? '';
-    if (link.isNotEmpty) {
-      final uri = Uri.parse(link);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        showError('Could not open the link');
-      }
-    } else {
+    if (link.isEmpty) {
       showError('No link available');
+      return;
     }
+
+    final uri = Uri.parse(link);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   void onAppointmentTap(Map<String, dynamic> apt) {

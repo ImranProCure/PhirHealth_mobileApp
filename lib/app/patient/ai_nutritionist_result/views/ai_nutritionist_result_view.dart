@@ -364,74 +364,98 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: 54,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                gradient: const LinearGradient(
-                    colors: [Color(0xFF00897B), Color(0xFF1565C0)]),
-              ),
-              child: ElevatedButton(
-                onPressed: controller.acceptPlan,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Accept Plan',
-                        style: TextStyle(
-                            fontFamily: 'Mulish',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white)),
-                    const SizedBox(width: 8),
-                    Image.asset(
-                      'assets/icons/wand_stars.png',
-                      width: 20,
-                      height: 20,
-                      color: Colors.white,
-                      errorBuilder: (_, __, ___) => const Icon(
-                          Icons.auto_awesome,
-                          color: Colors.white,
-                          size: 20),
+          // ===== ACCEPT PLAN — saved plan pe hide =====
+          Obx(() => controller.isSavedPlan.value
+              ? const SizedBox.shrink()
+              : Obx(() => SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: const LinearGradient(
+                            colors: [Color(0xFF00897B), Color(0xFF1565C0)]),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: controller.isSaving.value
+                            ? null
+                            : controller.acceptPlan,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        child: controller.isSaving.value
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                    color: Colors.white, strokeWidth: 2),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('Accept Plan',
+                                      style: TextStyle(
+                                          fontFamily: 'Mulish',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white)),
+                                  const SizedBox(width: 8),
+                                  Image.asset(
+                                    'assets/icons/wand_stars.png',
+                                    width: 20,
+                                    height: 20,
+                                    color: Colors.white,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.auto_awesome,
+                                        color: Colors.white,
+                                        size: 20),
+                                  ),
+                                ],
+                              ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+                  ))),
+
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: OutlinedButton(
-              onPressed: controller.regenerate,
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF0D9488), width: 1.5),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Regenerate',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0D9488))),
-                  SizedBox(width: 8),
-                  Icon(Icons.rotate_right, color: Color(0xFF0D9488), size: 18),
-                ],
-              ),
-            ),
-          ),
+
+          // ===== REGENERATE / GO BACK =====
+          Obx(() => SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton(
+                  onPressed: controller.regenerate,
+                  style: OutlinedButton.styleFrom(
+                    side:
+                        const BorderSide(color: Color(0xFF0D9488), width: 1.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        controller.isSavedPlan.value ? 'Go Back' : 'Regenerate',
+                        style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF0D9488)),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        controller.isSavedPlan.value
+                            ? Icons.arrow_back
+                            : Icons.rotate_right,
+                        color: const Color(0xFF0D9488),
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         ],
       ),
     );

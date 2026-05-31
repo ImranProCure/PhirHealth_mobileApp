@@ -159,4 +159,15 @@ class CommonApiConstants {
       '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
   final String statusPaymentAPI =
       '/api/method/phonepe.api.payment_transaction.create_payment_transaction';
+
+  final String getClinicProfile =
+      '/api/method/vhealthcare.api.doctor.edit_clinic_details.edit_get_clinic_details.get_clinic_profile';
+
+  final String updateClinicProfile =
+      '/api/method/vhealthcare.api.doctor.edit_clinic_details.edit_get_clinic_details.update_clinic_profile';
+  final String saveNutritionPlan =
+      '/api/method/vhealthcare.api.patient.ai_nutrition.ai_nutrition.save_nutrition_plan';
+
+  final String getNutritionPlan =
+      '/api/method/vhealthcare.api.patient.ai_nutrition.ai_nutrition.get_nutrition_plan';
 }

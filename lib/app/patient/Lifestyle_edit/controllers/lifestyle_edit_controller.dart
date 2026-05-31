@@ -10,7 +10,7 @@ class LifestyleEditController extends GetxController {
   // ================= OPTIONS =================
   final smokingOptions = ['Never', 'Former', 'Current'].obs;
   final alcoholOptions = ['Never', 'Occasional', 'Frequent'].obs;
-  final dietOptions = ['Vegetarian', 'Non-Veg', 'Vegan', 'Eggitarian'].obs;
+  final dietOptions = ['Vegetarian', 'Non-Veg', 'Vegan', 'Eggiterian'].obs;
 
   // ================= SELECTIONS =================
   final selectedSmoking = 'Never'.obs;
@@ -114,8 +114,8 @@ class LifestyleEditController extends GetxController {
       "average_sleep": sleepMap[sleepIndex.value],
     };
 
-    ApiResponse response = await api.commonApi.authenticationApi
-        .patientEditProfile(fields: data);
+    ApiResponse response =
+        await api.commonApi.authenticationApi.patientEditProfile(fields: data);
     isLoading.value = false;
 
     final messageData = response.data['message'];

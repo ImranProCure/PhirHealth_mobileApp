@@ -18,7 +18,7 @@ class SeeAllAppointmentsController extends GetxController {
     fetchAllBookings();
   }
 
-  // ===== FETCH ALL BOOKINGS — no date filter =====
+  // ===== FETCH ALL BOOKINGS =====
   Future<void> fetchAllBookings() async {
     try {
       isLoading.value = true;
@@ -53,7 +53,7 @@ class SeeAllAppointmentsController extends GetxController {
           try {
             final da = DateTime.parse(a['date'] ?? '');
             final db = DateTime.parse(b['date'] ?? '');
-            return db.compareTo(da); // descending
+            return da.compareTo(db); // ascending
           } catch (_) {
             return 0;
           }
@@ -70,12 +70,68 @@ class SeeAllAppointmentsController extends GetxController {
     }
   }
 
+  // ===== GROUPED APPOINTMENTS =====
+  Map<String, List<Map<String, dynamic>>> get groupedAppointments {
+    final Map<String, List<Map<String, dynamic>>> grouped = {};
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
+    for (final apt in appointments) {
+      final dateStr = apt['date']?.toString() ?? '';
+      String label;
+      try {
+        final parsed = DateTime.parse(dateStr);
+        final dateOnly = DateTime(parsed.year, parsed.month, parsed.day);
+        if (dateOnly == today) {
+          label = 'Today';
+        } else if (dateOnly == tomorrow) {
+          label = 'Tomorrow';
+        } else {
+          label = '${_monthName(parsed.month)} ${parsed.day}, ${parsed.year}';
+        }
+      } catch (_) {
+        label = dateStr;
+      }
+
+      grouped.putIfAbsent(label, () => []);
+      grouped[label]!.add(apt);
+    }
+
+    return grouped;
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
+  }
+
   // ===== 5 MIN JOIN CHECK =====
   bool canJoin(Map<String, dynamic> apt) {
     final timeStr = apt['time']?.toString() ?? '';
-    if (timeStr.isEmpty) return false;
+    final dateStr = apt['date']?.toString() ?? '';
+    if (timeStr.isEmpty || dateStr.isEmpty) return false;
     try {
       final now = DateTime.now();
+
+      final dateParts = dateStr.split('-');
+      final year = int.parse(dateParts[0]);
+      final month = int.parse(dateParts[1]);
+      final day = int.parse(dateParts[2]);
+
       final parts = timeStr.trim().split(' ');
       final timeParts = parts[0].split(':');
       final isPm = parts.length > 1 && parts[1].toUpperCase() == 'PM';
@@ -83,9 +139,10 @@ class SeeAllAppointmentsController extends GetxController {
       final int minute = int.parse(timeParts[1]);
       if (isPm && hour != 12) hour += 12;
       if (!isPm && hour == 12) hour = 0;
-      final appointmentTime =
-          DateTime(now.year, now.month, now.day, hour, minute);
+
+      final appointmentTime = DateTime(year, month, day, hour, minute);
       final enableFrom = appointmentTime.subtract(const Duration(minutes: 5));
+
       return now.isAfter(enableFrom);
     } catch (_) {
       return false;
@@ -109,11 +166,8 @@ class SeeAllAppointmentsController extends GetxController {
       showError('No link available for this appointment');
       return;
     }
+
     final uri = Uri.parse(link);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      showError('Could not open the link');
-    }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }

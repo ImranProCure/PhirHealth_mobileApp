@@ -30,9 +30,9 @@ class BmiView extends GetView<BmiController> {
                           color: Colors.white, size: 20),
                       onPressed: () => Get.back(),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'BMI Calculator',
+                        'bmi_title'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Mulish',
@@ -53,8 +53,8 @@ class BmiView extends GetView<BmiController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Check your body mass index instantly',
+                      Text(
+                        'bmi_subtitle'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 16,
@@ -69,14 +69,15 @@ class BmiView extends GetView<BmiController> {
                       const SizedBox(height: 24),
 
                       // ===== AGE =====
-                      _fieldLabel('Age'),
+                      _fieldLabel('bmi_age'.tr),
                       const SizedBox(height: 8),
                       Obx(() => _inputRow(
                             imagePath: 'assets/icons/Group 189.png',
                             tec: controller.ageTec,
-                            unit: 'yrs',
+                            unit: 'bmi_age_unit'.tr,
                             onChanged: controller.onAgeChanged,
-                            displayText: '${controller.age.value} Years',
+                            displayText:
+                                "${controller.age.value} ${'bmi_age_unit'.tr}",
                             keyboardType: TextInputType.number,
                             isNumberOnly: true,
                             maxLength: 3,
@@ -84,28 +85,30 @@ class BmiView extends GetView<BmiController> {
                       const SizedBox(height: 20),
 
                       // ===== HEIGHT =====
-                      _fieldLabel('Height'),
+                      _fieldLabel('bmi_height'.tr),
                       const SizedBox(height: 8),
                       Obx(() => _inputRow(
                             imagePath: 'assets/icons/Frame 21.png',
                             tec: controller.heightTec,
-                            unit: 'ft',
+                            unit: 'bmi_height_unit'.tr,
                             onChanged: controller.onHeightChanged,
-                            displayText: "${controller.height.value} ft",
+                            displayText:
+                                "${controller.height.value} ${'patient_step1_height_unit'.tr}",
                             keyboardType: TextInputType.text,
                             isNumberOnly: false,
                           )),
                       const SizedBox(height: 20),
 
                       // ===== WEIGHT =====
-                      _fieldLabel('Weight'),
+                      _fieldLabel('bmi_weight'.tr),
                       const SizedBox(height: 8),
                       Obx(() => _inputRow(
                             imagePath: 'assets/icons/Group 189-1.png',
                             tec: controller.weightTec,
-                            unit: 'kg',
+                            unit: 'bmi_weight_unit'.tr,
                             onChanged: controller.onWeightChanged,
-                            displayText: '${controller.weight.value} kg',
+                            displayText:
+                                "${controller.weight.value} ${'patient_step1_weight_unit'.tr}",
                             keyboardType: TextInputType.number,
                             isNumberOnly: true,
                             maxLength: 3,
@@ -134,8 +137,8 @@ class BmiView extends GetView<BmiController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
             ),
-            child: const Text(
-              'Calculate BMI',
+            child: Text(
+              'bmi_calculate'.tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,

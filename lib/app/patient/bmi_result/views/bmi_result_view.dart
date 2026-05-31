@@ -30,9 +30,9 @@ class BmiResultView extends GetView<BmiResultController> {
                           color: Colors.white, size: 20),
                       onPressed: () => Get.back(),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'BMI Analysis',
+                        'bmi_result_title'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Mulish',
@@ -113,8 +113,8 @@ class BmiResultView extends GetView<BmiResultController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'YOUR BMI',
+                    Text(
+                      'bmi_result_your_bmi'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 11,
@@ -134,7 +134,9 @@ class BmiResultView extends GetView<BmiResultController> {
                       ),
                     ),
                     Text(
-                      controller.bmi < 25 ? 'Healthy Range' : 'Above Normal',
+                      controller.bmi < 25
+                          ? 'bmi_result_healthy'.tr
+                          : 'bmi_result_above'.tr,
                       style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
@@ -148,8 +150,8 @@ class BmiResultView extends GetView<BmiResultController> {
           ),
           const SizedBox(height: 20),
 
-          const Text(
-            'CURRENT STATUS',
+          Text(
+            'bmi_result_status'.tr,
             style: TextStyle(
               fontFamily: 'Mulish',
               fontSize: 11,
@@ -162,8 +164,8 @@ class BmiResultView extends GetView<BmiResultController> {
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
-                  text: 'Category: ',
+                TextSpan(
+                  text: 'bmi_result_category'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 22,
@@ -199,14 +201,19 @@ class BmiResultView extends GetView<BmiResultController> {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: ['UNDERWEIGHT', 'NORMAL', 'OVERWEIGHT', 'OBESE']
+            children: [
+              'bmi_result_underweight'.tr,
+              'bmi_result_normal'.tr,
+              'bmi_result_overweight'.tr,
+              'bmi_result_obese'.tr,
+            ]
                 .map(
                   (l) => Text(
                     l,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 9,
-                      fontWeight: l == controller.category.toUpperCase()
+                      fontWeight: l == controller.category
                           ? FontWeight.w800
                           : FontWeight.w500,
                       color: l == controller.category.toUpperCase()
@@ -246,8 +253,8 @@ class BmiResultView extends GetView<BmiResultController> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Weight Loss Goal',
+              Text(
+                'bmi_result_target_title'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,
@@ -271,8 +278,8 @@ class BmiResultView extends GetView<BmiResultController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'TARGET WEIGHT',
+                      Text(
+                        'bmi_result_target_weight'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 10,
@@ -294,8 +301,8 @@ class BmiResultView extends GetView<BmiResultController> {
                                 color: Colors.white,
                               ),
                             ),
-                            const TextSpan(
-                              text: ' KG',
+                            TextSpan(
+                              text: ' ${'patient_step1_weight_unit'.tr}',
                               style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 14,
@@ -322,8 +329,8 @@ class BmiResultView extends GetView<BmiResultController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'WEIGHT LOSS',
+                      Text(
+                        'bmi_result_weight_loss'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 10,
@@ -345,8 +352,8 @@ class BmiResultView extends GetView<BmiResultController> {
                                 color: Colors.white,
                               ),
                             ),
-                            const TextSpan(
-                              text: ' KG',
+                            TextSpan(
+                              text: 'bmi_weight_unit'.tr,
                               style: TextStyle(
                                 fontFamily: 'Mulish',
                                 fontSize: 14,
@@ -405,14 +412,13 @@ class BmiResultView extends GetView<BmiResultController> {
                   height: 1.5,
                 ),
                 children: [
-                  const TextSpan(
-                      text: 'Your BMI is calculated based on a height of '),
+                  TextSpan(text: 'bmi_result_info_prefix'.tr),
                   TextSpan(
                     text: controller.height,
                     style: const TextStyle(
                         fontWeight: FontWeight.w700, color: Colors.white),
                   ),
-                  const TextSpan(text: ' and current weight of '),
+                  TextSpan(text: 'bmi_result_info_mid'.tr),
                   TextSpan(
                     text: '${controller.weight}kg',
                     style: const TextStyle(

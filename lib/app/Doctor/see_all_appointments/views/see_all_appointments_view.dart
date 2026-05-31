@@ -13,6 +13,9 @@ class SeeAllAppointmentsView extends GetView<SeeAllAppointmentsController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0, // ✅ 0 rakho
+        surfaceTintColor: Colors.transparent, // ✅ yeh add karo
+        shadowColor: Colors.transparent,
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
         title: const Text(
@@ -43,13 +46,70 @@ class SeeAllAppointmentsView extends GetView<SeeAllAppointmentsController> {
           );
         }
 
-        return ListView.separated(
+        final grouped = controller.groupedAppointments;
+        final keys = grouped.keys.toList();
+
+        return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          itemCount: controller.appointments.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 14),
-          itemBuilder: (_, index) {
-            final apt = controller.appointments[index];
-            return _AppointmentCard(apt: apt, controller: controller);
+          itemCount: keys.length,
+          itemBuilder: (_, i) {
+            final label = keys[i];
+            final apts = grouped[label]!;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ===== DATE HEADER =====
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 4),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: label == 'Today'
+                              ? const Color(0xFF0D9488)
+                              : label == 'Tomorrow'
+                                  ? const Color(0xFFE0F2F1)
+                                  : const Color(0xFFF3F4F6),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: label == 'Today'
+                                ? const Color(0xFF0D9488)
+                                : const Color(0xFFE5E7EB),
+                          ),
+                        ),
+                        child: Text(
+                          label,
+                          style: TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: label == 'Today'
+                                ? Colors.white
+                                : label == 'Tomorrow'
+                                    ? const Color(0xFF0D9488)
+                                    : const Color(0xFF6B7280),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // ===== CARDS =====
+                ...apts.map((apt) => Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: _AppointmentCard(
+                        apt: apt,
+                        controller: controller,
+                      ),
+                    )),
+
+                const SizedBox(height: 6),
+              ],
+            );
           },
         );
       }),
@@ -130,7 +190,7 @@ class SeeAllAppointmentsView extends GetView<SeeAllAppointmentsController> {
   }
 }
 
-// ===== SAME CARD AS DASHBOARD =====
+// ===== APPOINTMENT CARD =====
 class _AppointmentCard extends StatelessWidget {
   final Map<String, dynamic> apt;
   final SeeAllAppointmentsController controller;
@@ -159,7 +219,7 @@ class _AppointmentCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // ===== IMAGE 80x80 =====
+                // ===== IMAGE =====
                 ClipRRect(
                   borderRadius: BorderRadius.circular(14),
                   child: apt['imagePath'].toString().startsWith('http')
@@ -185,7 +245,7 @@ class _AppointmentCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ===== NAME + TIME SAME ROW =====
+                      // ===== NAME + TIME =====
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -204,9 +264,7 @@ class _AppointmentCard extends StatelessWidget {
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
+                                horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: const Color(0xFFE0F2F1),
                               borderRadius: BorderRadius.circular(20),
@@ -214,11 +272,8 @@ class _AppointmentCard extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
-                                  Icons.access_time_outlined,
-                                  size: 12,
-                                  color: Color(0xFF0D9488),
-                                ),
+                                const Icon(Icons.access_time_outlined,
+                                    size: 12, color: Color(0xFF0D9488)),
                                 const SizedBox(width: 4),
                                 Text(
                                   apt['time'] as String,
