@@ -13,6 +13,8 @@ class ExperienceEditView extends GetView<ExperienceEditController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0, // ✅ 0 rakho
+        surfaceTintColor: Colors.transparent, // ✅ yeh add karo
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
         title: const Text(

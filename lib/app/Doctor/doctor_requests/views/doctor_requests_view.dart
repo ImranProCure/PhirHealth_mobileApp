@@ -34,6 +34,8 @@ class _PhoneLayout extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0, // ✅ 0 rakho
+        surfaceTintColor: Colors.transparent, // ✅ yeh add karo
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.offAllNamed('/doctor-dashboard'),

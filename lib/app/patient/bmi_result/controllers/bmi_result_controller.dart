@@ -32,16 +32,16 @@ class BmiResultController extends GetxController {
 
     // Category + color + slider
     if (bmi < 18.5) {
-      category = 'Underweight';
+      category = 'bmi_result_underweight'.tr;
       categoryColor = const Color(0xFF60A5FA);
     } else if (bmi < 25) {
-      category = 'Normal';
+      category = 'bmi_result_normal'.tr;
       categoryColor = const Color(0xFF4ADE80);
     } else if (bmi < 30) {
-      category = 'Overweight';
+      category = 'bmi_result_overweight'.tr;
       categoryColor = const Color(0xFFFBBF24);
     } else {
-      category = 'Obese';
+      category = 'bmi_result_obese'.tr;
       categoryColor = const Color(0xFFEF4444);
     }
 

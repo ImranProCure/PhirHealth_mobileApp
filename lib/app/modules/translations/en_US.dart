@@ -288,6 +288,44 @@ const Map<String, String> enUS = {
   'patient_book_confirm_clinic': 'Confirm Clinic Visit',
   'patient_book_confirm_video': 'Confirm Video Visit',
 
+  // ── BMI Calculator ─────────────────────────────────
+  'bmi_title': 'BMI Calculator',
+  'bmi_subtitle': 'Check your body mass index instantly',
+  'bmi_gender_male': 'Male',
+  'bmi_gender_female': 'Female',
+  'bmi_age': 'Age',
+  'bmi_age_unit': 'yrs',
+  'bmi_height': 'Height',
+  'bmi_height_unit': 'ft',
+  'bmi_weight': 'Weight',
+  'bmi_weight_unit': 'kg',
+  'bmi_calculate': 'Calculate BMI',
+
+// ── BMI Result ─────────────────────────────────────
+  'bmi_result_title': 'BMI Analysis',
+  'bmi_result_your_bmi': 'YOUR BMI',
+  'bmi_result_healthy': 'Healthy Range',
+  'bmi_result_above': 'Above Normal',
+  'bmi_result_status': 'CURRENT STATUS',
+  'bmi_result_category': 'Category: ',
+  'bmi_result_underweight': 'UNDERWEIGHT',
+  'bmi_result_normal': 'NORMAL',
+  'bmi_result_overweight': 'OVERWEIGHT',
+  'bmi_result_obese': 'OBESE',
+  'bmi_result_target_title': 'Weight Loss Goal',
+  'bmi_result_target_weight': 'TARGET WEIGHT',
+  'bmi_result_weight_loss': 'WEIGHT LOSS',
+  'bmi_result_info_prefix': 'Your BMI is calculated based on a height of ',
+  'bmi_result_info_mid': ' and current weight of ',
+
+  // ── Counsellor / Coaches ───────────────────────────
+  'counsellor_title': 'Expert Counsellor',
+  'counsellor_choose': 'Choose your Specialist',
+  'counsellor_sub':
+      'our health is our priority. Talk to certified doctors and counsellors today for reliable medical guidance and mental wellness.',
+  'counsellor_book': 'Book a Counsellor',
+  'counsellor_history': 'View Consultation History',
+
   // ── Common ─────────────────────────────────────────
   'or': 'OR',
   'cancel': 'Cancel',

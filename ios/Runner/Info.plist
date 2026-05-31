@@ -82,6 +82,9 @@
 
 		<key>NSDocumentsFolderUsageDescription</key>
 		<string>Access needed to pick PDF files</string>
+
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Microphone needed</string>
 		
 
 	</dict>

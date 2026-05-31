@@ -254,7 +254,7 @@ class SetScheduleController extends GetxController {
       if (dose.ampm == 'AM' && hour == 12) hour = 0;
 
       return {
-        'slot': dose.period.toLowerCase(),
+        'slot': dose.period,
         'time':
             '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00',
         'meal_instruction': dose.selectedOption,

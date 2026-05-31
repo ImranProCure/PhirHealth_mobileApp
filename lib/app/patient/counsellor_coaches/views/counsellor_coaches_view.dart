@@ -8,7 +8,7 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -17,8 +17,8 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          "Expert Counsellor",
+        title: Text(
+          "counsellor_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -57,8 +57,8 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
             const SizedBox(height: 24),
 
             // ================= TITLE =================
-            const Text(
-              "Choose your Specialist",
+            Text(
+              "counsellor_choose".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 26,
@@ -68,8 +68,8 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
 
             const SizedBox(height: 4),
 
-            const Text(
-              "our health is our priority. Talk to certified doctors and counsellors today for reliable medical guidance and mental wellness.",
+            Text(
+              "counsellor_sub".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 14,
@@ -81,7 +81,7 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
 
             // ================= PRIMARY BUTTON =================
             _gradientButton(
-              text: "Book a Counsellor",
+              text: "counsellor_book".tr,
               imagePath: "assets/icons/cognition.png",
               onTap: controller.bookConsultation,
             ),
@@ -90,7 +90,7 @@ class CounsellorCoachesView extends GetView<CounsellorCoachesController> {
 
             // ================= OUTLINE BUTTON 1 =================
             _outlineButton(
-              text: "View Consultation History",
+              text: "counsellor_history".tr,
               onTap: controller.viewHistory,
             ),
 

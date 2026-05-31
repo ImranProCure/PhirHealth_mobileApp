@@ -3,9 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/api/common_api/ai_nutrition_api/ai_nutrition_api.dart';
 import '../../ai_nutritionist_result/controllers/ai_nutritionist_result_controller.dart';
 
 class AiNutritionistController extends GetxController {
+  final AiNutritionApi _api = AiNutritionApi();
+
   final RxString selectedGoal = 'Weight Loss'.obs;
   final RxString selectedFood = 'Vegetarian'.obs;
   final RxInt activityLevel = 3.obs;
@@ -14,6 +18,7 @@ class AiNutritionistController extends GetxController {
 
   // Loading + error state
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingSaved = false.obs;
   final RxString errorMessage = ''.obs;
 
   final List<Map<String, dynamic>> goals = [
@@ -62,19 +67,14 @@ class AiNutritionistController extends GetxController {
   List<String> get allAllergies => [...selectedAllergies, ...customAllergies];
   String get activityLabel => activityLabels[activityLevel.value];
 
-  // ─────────────────────────────────────────
-  // GROQ API CALL
-  // ─────────────────────────────────────────
+  // ===== GENERATE PLAN — GROQ =====
   Future<void> generatePlan() async {
     isLoading.value = true;
     errorMessage.value = '';
-    debugPrint('🚀 API Call Start - Goal: ${selectedGoal.value}'); // ← ADD
 
     try {
       final dio = Dio();
       final apiKey = dotenv.env['GROQ_API_KEY'] ?? '';
-
-      debugPrint('🔑 API Key: ${apiKey.isNotEmpty ? "Found" : "EMPTY!"}');
 
       final response = await dio.post(
         'https://api.groq.com/openai/v1/chat/completions',
@@ -104,20 +104,26 @@ class AiNutritionistController extends GetxController {
 
       final content =
           response.data['choices'][0]['message']['content'] as String;
-      debugPrint('✅ Groq Response: $content');
       final json = jsonDecode(content) as Map<String, dynamic>;
 
-      // Pass data to result controller
-      // Yeh karo — pehle clear karo
+      // Filter out any meals that are not in the allowed types
+      const allowedTypes = {'BREAKFAST', 'LUNCH', 'SNACK', 'DINNER'};
+      if (json['meals'] != null) {
+        json['meals'] = (json['meals'] as List)
+            .where((m) => allowedTypes.contains(m['type']))
+            .toList();
+      }
+
       final resultCtrl = Get.find<AiNutritionistResultController>();
       resultCtrl.dailyCalories.value = 0;
       resultCtrl.meals.clear();
+      resultCtrl.goal = selectedGoal.value;
+      resultCtrl.activityLevel = activityLabel;
       resultCtrl.loadFromGroq(json);
 
       Get.toNamed('/ai-nutritionist-result');
     } on DioException catch (e) {
       errorMessage.value = 'Network error. Please try again.';
-      debugPrint('❌ Groq DioError: ${e.response?.data}');
       Get.snackbar(
         'Error',
         'Network error. Please try again.',
@@ -127,7 +133,6 @@ class AiNutritionistController extends GetxController {
       );
     } catch (e) {
       errorMessage.value = 'Something went wrong. Please try again.';
-      debugPrint('❌ Groq Error: $e');
       Get.snackbar(
         'Error',
         'Something went wrong. Please try again.',
@@ -140,6 +145,43 @@ class AiNutritionistController extends GetxController {
     }
   }
 
+  // ===== VIEW SAVED PLAN — GET API =====
+  Future<void> viewSavedPlan() async {
+    try {
+      isLoadingSaved.value = true;
+
+      final ApiResponse response = await _api.getNutritionPlan();
+      final message = response.data['message'];
+
+      if (message != null && message['status'] == true) {
+        final data = message['data'] as Map<String, dynamic>;
+        final resultCtrl = Get.find<AiNutritionistResultController>();
+        resultCtrl.dailyCalories.value = 0;
+        resultCtrl.meals.clear();
+        resultCtrl.loadFromApi(data);
+        Get.toNamed('/ai-nutritionist-result');
+      } else {
+        Get.snackbar(
+          'No Plan Found',
+          message?['message'] ?? 'No saved plan found',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: const Color(0xFFEF4444),
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xFFEF4444),
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoadingSaved.value = false;
+    }
+  }
+
   String _buildPrompt() {
     return '''
 Generate a personalized Indian diet plan for:
@@ -147,6 +189,8 @@ Generate a personalized Indian diet plan for:
 - Diet Type: ${selectedFood.value}
 - Activity Level: $activityLabel
 - Allergies: ${allAllergies.isEmpty ? 'None' : allAllergies.join(', ')}
+
+STRICT RULE: The "type" field in each meal must be EXACTLY one of these 4 values only: "BREAKFAST", "LUNCH", "SNACK", "DINNER". Do NOT use any other values. No "POST WORKOUT", no "BEFORE BED SNACK", nothing else. Only these 4 types are allowed.
 
 Return ONLY this exact JSON format, nothing else:
 {

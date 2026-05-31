@@ -876,25 +876,50 @@ class _AppointmentCard extends StatelessWidget {
           const SizedBox(height: 14),
 
           // ===== JOIN CALL BUTTON =====
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: OutlinedButton.icon(
-              onPressed: () => controller.joinCall(apt),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF0D9488), width: 1.5),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-              ),
-              icon: const Icon(Icons.video_call_outlined,
-                  color: Color(0xFF0D9488), size: 22),
-              label: const Text('Join Call',
-                  style: TextStyle(
+          // ===== JOIN CALL BUTTON =====
+          Builder(
+            builder: (_) {
+              final canJoin = controller.canJoin(apt);
+              final timeStr = apt['time']?.toString() ?? '';
+              return SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: OutlinedButton.icon(
+                  onPressed: () => controller.joinCall(apt),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      color: canJoin
+                          ? const Color(0xFF0D9488)
+                          : const Color(0xFFD1D5DB),
+                      width: 1.5,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    backgroundColor:
+                        canJoin ? Colors.transparent : const Color(0xFFF9FAFB),
+                  ),
+                  icon: Icon(
+                    Icons.video_call_outlined,
+                    color: canJoin
+                        ? const Color(0xFF0D9488)
+                        : const Color(0xFF9CA3AF),
+                    size: 22,
+                  ),
+                  label: Text(
+                    canJoin ? 'Join Call' : 'Available at $timeStr',
+                    style: TextStyle(
                       fontFamily: 'Mulish',
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF0D9488))),
-            ),
+                      color: canJoin
+                          ? const Color(0xFF0D9488)
+                          : const Color(0xFF9CA3AF),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
