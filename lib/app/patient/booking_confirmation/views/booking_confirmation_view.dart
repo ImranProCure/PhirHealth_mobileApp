@@ -155,7 +155,6 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                   const SizedBox(height: 12),
                   _paymentCard(),
                   const SizedBox(height: 12),
-
                   // ===== BILL DETAILS =====
                   _billDetailsCard(),
                 ],
@@ -567,9 +566,7 @@ class BookingConfirmationView extends GetView<BookingConfirmationController> {
                     ),
                   ),
                 ),
-
                 const SizedBox(width: 10),
-
                 // ---- Wallet (disabled if insufficient) ----
                 Expanded(
                   child: GestureDetector(

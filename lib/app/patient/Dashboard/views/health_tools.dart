@@ -61,53 +61,68 @@ class HealthMetricsSection extends StatelessWidget {
             const SizedBox(height: 4),
 
             // ── Grid rows ──────────────────────────────────
-            ...List.generate(rows.length, (rowIndex) {
-              final row = rows[rowIndex];
-              final isLastRow = rowIndex == rows.length - 1;
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
+                childAspectRatio: 1.0, // adjust as needed
+              ),
+              itemCount: rows.fold(0, (sum, row) => sum! + row.length),
+              itemBuilder: (context, index) {
+                // Flatten rows into a single list
+                int flatIndex = 0;
+                Map<String, dynamic>? tool;
+                int rowIndex = 0;
+                int colIndex = 0;
 
-              return Column(
-                children: [
-                  // Horizontal divider above every row except the first
-                  if (rowIndex > 0)
-                    const Divider(
-                        height: 1, thickness: 1, color: Color(0xFFF3F4F6)),
+                for (int r = 0; r < rows.length; r++) {
+                  for (int c = 0; c < rows[r].length; c++) {
+                    if (flatIndex == index) {
+                      tool = rows[r][c] as Map<String, dynamic>;
+                      rowIndex = r;
+                      colIndex = c;
+                      break;
+                    }
+                    flatIndex++;
+                  }
+                  if (tool != null) break;
+                }
 
-                  IntrinsicHeight(
-                    child: Row(
-                      children: List.generate(row.length, (colIndex) {
-                        final tool = row[colIndex];
-                        final isLastCol = colIndex == row.length - 1;
+                if (tool == null) return const SizedBox.shrink();
 
-                        // Fill empty slots when last row has < 3 items
-                        Widget cell = _MetricCell(
-                          iconPath: tool['icon'] as String,
-                          line1: (tool['title'] as String).tr.split('\n').first,
-                          line2: (tool['title'] as String).tr.contains('\n')
-                              ? (tool['title'] as String).tr.split('\n').last
-                              : (tool['subtitle'] as String? ?? ''),
-                          isTablet: isTablet,
-                          onTap: () => controller
-                              .onHealthToolTap(rowIndex * 3 + colIndex),
-                        );
+                final isLastCol = (index + 1) % 3 == 0 ||
+                    index == rows.fold(0, (sum, row) => sum + row.length) - 1;
+                final isLastRow = rowIndex == rows.length - 1;
 
-                        return Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(child: cell),
-                              if (!isLastCol)
-                                Container(
-                                  width: 1,
-                                  color: const Color(0xFFF3F4F6),
-                                ),
-                            ],
-                          ),
-                        );
-                      }),
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: isLastCol
+                          ? BorderSide.none
+                          : const BorderSide(
+                              width: 1, color: Color(0xFFF3F4F6)),
+                      bottom: isLastRow
+                          ? BorderSide.none
+                          : const BorderSide(
+                              width: 1, color: Color(0xFFF3F4F6)),
                     ),
                   ),
-                ],
-              );
-            }),
+                  child: _MetricCell(
+                    iconPath: tool['icon'] as String,
+                    line1: (tool['title'] as String).tr.split('\n').first,
+                    line2: (tool['title'] as String).tr.contains('\n')
+                        ? (tool['title'] as String).tr.split('\n').last
+                        : (tool['subtitle'] as String? ?? ''),
+                    isTablet: isTablet,
+                    onTap: () =>
+                        controller.onHealthToolTap(rowIndex * 3 + colIndex),
+                  ),
+                );
+              },
+            ),
 
             const SizedBox(height: 4),
           ],

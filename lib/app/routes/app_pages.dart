@@ -82,10 +82,20 @@ import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_form_view.dart'
 import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_info_view.dart';
 import 'package:sample/app/patient/deasis_tools/ascvd_tool/ascvd_result_view.dart';
 import 'package:sample/app/patient/deasis_tools/main_tools.dart';
+import 'package:sample/app/patient/deasis_tools/mdrd_tool/mdrd_gfr_binding.dart';
+import 'package:sample/app/patient/deasis_tools/mdrd_tool/mdrd_gfr_form_view.dart';
+import 'package:sample/app/patient/deasis_tools/mdrd_tool/mdrd_gfr_info_view.dart';
+import 'package:sample/app/patient/deasis_tools/mdrd_tool/mdrd_gfr_result_view.dart';
+import 'package:sample/app/patient/deasis_tools/phq9_tool/phq9_binding.dart';
+import 'package:sample/app/patient/deasis_tools/phq9_tool/phq9_form_view.dart';
+import 'package:sample/app/patient/deasis_tools/phq9_tool/phq9_info_view.dart';
+import 'package:sample/app/patient/deasis_tools/phq9_tool/phq9_result_view.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_binding.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_form_view.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_info_view.dart';
 import 'package:sample/app/patient/deasis_tools/qrisk3_tool/qrisk3_result_view.dart';
+import 'package:sample/app/patient/my_profile/views/privacy_policy.dart';
+import 'package:sample/app/patient/my_profile/views/support_help.dart';
 import 'package:sample/app/patient/pre_scan_questions/bindings/pre_scan_questions_binding.dart';
 import 'package:sample/app/patient/pre_scan_questions/views/pre_scan_questions_view.dart';
 import 'package:sample/app/patient/profile_details/views/all_review.dart';
@@ -588,9 +598,48 @@ class AppPages {
     ),
 
     GetPage(
+      name: '/mdrd-tools',
+      page: () => MdrdGfrInfoView(),
+      binding: MdrdGfrBinding(),
+    ),
+
+    GetPage(
+      name: '/mdrd-result',
+      page: () => MdrdGfrResultView(),
+      binding: MdrdGfrBinding(),
+    ),
+
+    GetPage(
+      name: '/phq9-tools',
+      page: () => Phq9InfoView(),
+      binding: Phq9Binding(),
+    ),
+
+    GetPage(
+      name: '/phq9-form',
+      page: () => Phq9FormView(),
+      binding: Phq9Binding(),
+    ),
+
+    GetPage(
+      name: '/phq9-result',
+      page: () => Phq9ResultView(),
+      binding: Phq9Binding(),
+    ),
+
+    GetPage(
+      name: '/mdrd-form',
+      page: () => MdrdGfrFormView(),
+      binding: MdrdGfrBinding(),
+    ),
+
+    GetPage(
         name: '/wallet',
         page: () => const WalletView(),
         binding: WalletBinding()),
+
+    GetPage(name: '/privacypolicy', page: () => const PrivacyPolicyScreen()),
+    GetPage(name: '/support', page: () => const SupportScreen()),
 
     GetPage(
         name: '/add-money',
