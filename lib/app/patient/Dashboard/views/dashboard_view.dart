@@ -36,10 +36,10 @@ class DashboardView extends GetView<DashboardController> {
                       _AiMedicineFitnessSection(
                           controller: controller, isTablet: tablet),
                       const SizedBox(height: 24),
-                      HealthMetricsSection(
-                        controller: controller,
-                        isTablet: tablet,
-                      ),
+                      // HealthMetricsSection(
+                      //   controller: controller,
+                      //   isTablet: tablet,
+                      // ),
                       const SizedBox(height: 24),
                       const _PromoBanner(),
                       const SizedBox(height: 24),
@@ -52,7 +52,7 @@ class DashboardView extends GetView<DashboardController> {
               ),
             ),
           ),
-
+          
           /// Bottom Navigation
           Positioned(
             left: 16,

@@ -35,7 +35,7 @@ class MyProfileController extends GetxController {
             'iconBg': const Color(0xFFE0F2F1),
           },
           {
-            'icon': Icons.assignment_outlined,
+            'icon': Icons.health_and_safety,
             'label': 'Health Metrics',
             'route': '/health-tools',
             'iconColor': const Color(0xFF0D9488),
@@ -70,14 +70,14 @@ class MyProfileController extends GetxController {
           {
             'icon': Icons.help_outline,
             'label': 'patient_menu_help'.tr,
-            'route': '/help',
+            'route': '/support',
             'iconColor': const Color(0xFF0D9488),
             'iconBg': const Color(0xFFE0F2F1),
           },
           {
             'icon': Icons.shield_outlined,
             'label': 'login_privacy'.tr,
-            'route': '/privacy',
+            'route': '/privacypolicy',
             'iconColor': const Color(0xFF0D9488),
             'iconBg': const Color(0xFFE0F2F1),
           },

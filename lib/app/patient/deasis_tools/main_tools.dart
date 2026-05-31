@@ -7,13 +7,23 @@ class HealthToolsView extends StatelessWidget {
   final List<Map<String, dynamic>> healthTools = [
     {
       'title': 'ASCVD\nHeart Disease',
-      'icon': 'assets/Group 177.png',
+      'icon': 'assets/ecg_heart.png',
       'route': '/ascvd-info',
     },
     {
       'title': 'QRISK3\nHeart Risk',
-      'icon': 'assets/Group 177.png',
+      'icon': 'assets/ecg.png',
       'route': '/qrisk-info',
+    },
+    {
+      'title': 'MDRD GFR',
+      'icon': 'assets/urology.png',
+      'route': '/mdrd-tools',
+    },
+    {
+      'title': 'PHQ-9',
+      'icon': 'assets/cognition.png',
+      'route': '/phq9-tools',
     },
   ];
 
@@ -63,6 +73,7 @@ class HealthToolsView extends StatelessWidget {
                       tool['icon'],
                       height: 70,
                       width: 70,
+                      color: Color(0xFF0D9488),
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 16),

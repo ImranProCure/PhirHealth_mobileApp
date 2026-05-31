@@ -105,6 +105,11 @@ class DashboardController extends GetxController {
       'icon': 'assets/Group 177.png',
       'route': '/qrisk-info'
     },
+    {
+      'title': 'MDRD GFR',
+      'icon': 'assets/Group 177.png',
+      'route': '/qrisk-info'
+    },
   ];
 
   void onSmartToolTap(int index) {
