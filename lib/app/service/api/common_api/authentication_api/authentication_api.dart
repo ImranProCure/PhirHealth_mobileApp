@@ -283,4 +283,124 @@ class AuthenticationApi {
       authenticated: true,
     );
   }
+
+  Future<ApiResponse> labSignup({
+    required FormData formData,
+  }) async {
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.createLabProfile,
+      formData: formData,
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> verifyLabOtp({
+    required String otp,
+    required String country_code,
+    required String mobile,
+    required String role,
+    required String flag,
+  }) async {
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      'mobile': mobile,
+      'role': role,
+      'flag': flag,
+    };
+    return await _client.post(
+      ApiConstants.commonApiConstants.labOtpVerify,
+      data: data,
+    );
+  }
+
+  Future<ApiResponse> pharmacySignup({
+    required FormData formData,
+  }) async {
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.createPharmacyProfile,
+      formData: formData,
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> verifyPharmacyOtp({
+    required String otp,
+    required String country_code,
+    required String mobile,
+    required String role,
+    required String flag,
+  }) async {
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      'mobile': mobile,
+      'role': role,
+      'flag': flag,
+    };
+    return await _client.post(
+      ApiConstants.commonApiConstants.pharmacyOtpVerify, // 👈 bas yeh different
+      data: data,
+    );
+  }
+
+  Future<ApiResponse> clinicSignup({
+    required FormData formData,
+  }) async {
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.createClinicProfile,
+      formData: formData,
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> verifyClinicOtp({
+    required String otp,
+    required String country_code,
+    required String mobile,
+    required String role,
+    required String flag,
+  }) async {
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      'mobile': mobile,
+      'role': role,
+      'flag': flag,
+    };
+    return await _client.post(
+      ApiConstants.commonApiConstants.clinicOtpVerify,
+      data: data,
+    );
+  }
+
+  Future<ApiResponse> hospitalSignup({
+    required FormData formData,
+  }) async {
+    return await _client.postMultipart(
+      ApiConstants.commonApiConstants.createHospitalProfile,
+      formData: formData,
+      authenticated: false,
+    );
+  }
+
+  Future<ApiResponse> verifyHospitalOtp({
+    required String otp,
+    required String country_code,
+    required String mobile,
+    required String role,
+    required String flag,
+  }) async {
+    final data = {
+      'otp': otp,
+      'country_code': country_code,
+      'mobile': mobile,
+      'role': role,
+      'flag': flag,
+    };
+    return await _client.post(
+      ApiConstants.commonApiConstants.hospitalOtpVerify,
+      data: data,
+    );
+  }
 }

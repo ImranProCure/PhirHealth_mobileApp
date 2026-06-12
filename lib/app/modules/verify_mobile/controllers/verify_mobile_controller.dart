@@ -57,6 +57,38 @@ class VerifyMobileController extends GetxController {
     _startTimer();
   }
 
+  // ===== HELPER FUNCTIONS =====
+  String _getRoleString() {
+    switch (_roleController.role) {
+      case UserRole.doctor:
+        return 'doctor';
+      case UserRole.corporate:
+        return 'corporate';
+      case UserRole.coach:
+        return 'coach';
+      case UserRole.partner:
+        return _getPartnerRoleString();
+      case UserRole.patient:
+      default:
+        return 'patient';
+    }
+  }
+
+  String _getPartnerRoleString() {
+    switch (_roleController.partnerType) {
+      case PartnerType.clinic:
+        return 'clinic';
+      case PartnerType.hospital:
+        return 'hospital';
+      case PartnerType.pharmacy:
+        return 'pharmacy';
+      case PartnerType.lab:
+        return 'lab manager';
+      default:
+        return 'partner';
+    }
+  }
+
   String get otpValue => otpControllers.map((c) => c.text).join();
 
   String get formattedTime {
@@ -98,7 +130,7 @@ class VerifyMobileController extends GetxController {
       flag: "login",
       mobile: number.value,
       country_code: "+91",
-      role: _roleController.role == UserRole.doctor ? 'doctor' : 'patient',
+      role: _getRoleString(), // 👈 fixed
     );
     isLoading.value = false;
 
@@ -131,7 +163,6 @@ class VerifyMobileController extends GetxController {
   Future<void> verifyOtpApi() async {
     ApiResponse response;
 
-    // CHANGE: Role ke hisaab se alag endpoint
     if (_roleController.role == UserRole.doctor) {
       response = await api.commonApi.authenticationApi.verifyDoctorOtp(
         mobile: number.value,
@@ -140,20 +171,59 @@ class VerifyMobileController extends GetxController {
         role: "doctor",
         flag: 'login',
       );
+    } else if (_roleController.role == UserRole.partner) {
+      switch (_roleController.partnerType) {
+        case PartnerType.hospital:
+          response = await api.commonApi.authenticationApi.verifyHospitalOtp(
+            mobile: number.value,
+            country_code: "+91",
+            otp: otpValue,
+            role: _getPartnerRoleString(),
+            flag: 'login',
+          );
+          break;
+        case PartnerType.pharmacy:
+          response = await api.commonApi.authenticationApi.verifyPharmacyOtp(
+            mobile: number.value,
+            country_code: "+91",
+            otp: otpValue,
+            role: _getPartnerRoleString(),
+            flag: 'login',
+          );
+          break;
+        case PartnerType.clinic: // 👈 yeh add karo
+          response = await api.commonApi.authenticationApi.verifyClinicOtp(
+            mobile: number.value,
+            country_code: "+91",
+            otp: otpValue,
+            role: _getPartnerRoleString(),
+            flag: 'login',
+          );
+          break;
+        case PartnerType.lab:
+        default:
+          response = await api.commonApi.authenticationApi.verifyLabOtp(
+            mobile: number.value,
+            country_code: "+91",
+            otp: otpValue,
+            role: _getPartnerRoleString(),
+            flag: 'login',
+          );
+      }
     } else {
       response = await api.commonApi.authenticationApi.verifyOtp(
         mobile: number.value,
         country_code: "+91",
         otp: otpValue,
-        role: "patient",
+        role: _getRoleString(),
       );
     }
+    // ... baaki code same
 
     isLoading.value = false;
 
     final messageData = response.data['message'];
 
-    // CHANGE: Status false hone pe seedha error dikhao — aage mat jao
     if (messageData["status"] != true) {
       showError(messageData["message"] ?? 'Verification failed');
       for (var c in otpControllers) c.clear();
@@ -167,68 +237,54 @@ class VerifyMobileController extends GetxController {
       final sid = messageData['sid']?.toString() ?? '';
 
       if (sid.isNotEmpty) {
-        await authStorage.saveCookie(
-          'sid=$sid',
-        );
+        await authStorage.saveCookie('sid=$sid');
       }
-      final user = messageData['user'] as Map<String, dynamic>?;
 
+      final user = messageData['user'] as Map<String, dynamic>?;
       final doctor = messageData['doctor'] as Map<String, dynamic>? ?? {};
 
       if (token != null && token.isNotEmpty) {
         await authStorage.saveToken(token);
         ApiClient().setBearerToken(token);
-
         print("SAVED TOKEN => $token");
 
-        await authStorage.saveRole(
-          _roleController.role == UserRole.doctor ? "doctor" : "patient",
-        );
+        await authStorage.saveRole(_getRoleString()); // 👈 fixed
 
         apiClient.setBearerToken(token);
       }
 
       if (user != null) {
-        // CHANGE: Backend se role check karo
-        // Agar patient ne doctor number se login karne ki koshish ki
-        // final userRoles = user['roles'] as List? ?? [];
-        // final isDoctor = userRoles.any((r) =>
-        //     r.toString().toLowerCase().contains('doctor') ||
-        //     r.toString().toLowerCase().contains('physician'));
-
-        // if (_roleController.role == UserRole.patient && isDoctor) {
-        //   // Doctor ka number — patient login block karo
-        //   showError(
-        //       'This number is registered as a Doctor. Please use Doctor login.');
-        //   await authStorage.saveToken('');
-        //   apiClient.setBearerToken('');
-        //   return;
-        // }
-
-        // if (_roleController.role == UserRole.doctor && !isDoctor) {
-        //   // Patient ka number — doctor login block karo
-        //   showError(
-        //       'This number is registered as a Patient. Please use Patient login.');
-        //   await authStorage.saveToken('');
-        //   apiClient.setBearerToken('');
-        //   return;
-        // }
-
         final mergedData = {
           ...?user,
           ...doctor,
         };
 
-        await authStorage.saveUserDetail(
-          mergedData,
-        );
+        await authStorage.saveUserDetail(mergedData);
         await authStorage.saveLoginStatus(true);
         showMessage('Mobile number verified successfully!');
 
-        // CHANGE: Role based navigation
+        // ===== NAVIGATION =====
         switch (_roleController.role) {
           case UserRole.doctor:
             Get.offAllNamed(Routes.DOCTOR_DASHBOARD);
+            break;
+          case UserRole.partner:
+            switch (_roleController.partnerType) {
+              case PartnerType.lab:
+                Get.offAllNamed('/lab-dashboard');
+                break;
+              case PartnerType.clinic:
+                Get.offAllNamed('/clinic-dashboard');
+                break;
+              case PartnerType.hospital:
+                Get.offAllNamed('/hospital-dashboard');
+                break;
+              case PartnerType.pharmacy:
+                Get.offAllNamed('/pharmacy-dashboard');
+                break;
+              default:
+                Get.offAllNamed('/lab-dashboard');
+            }
             break;
           case UserRole.patient:
           default:

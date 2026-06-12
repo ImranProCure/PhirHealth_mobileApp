@@ -3,6 +3,7 @@ import 'package:sample/app/controllers/role_controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import './app/model/medicine_model.dart';
 import './app/service/notification_service/notification_service.dart';
+import 'app/modules/google_calendar_controller_/google_calendar_controller.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
@@ -58,6 +59,7 @@ void main() async {
   await NotificationService.instance.init();
 
   Get.put(RoleController());
+  Get.put(GoogleCalendarController(), permanent: true);
 
   runApp(const MyApp());
 }
@@ -85,6 +87,16 @@ class MyApp extends StatelessWidget {
 
         // ✅ All app routes
         getPages: AppPages.routes,
+
+        unknownRoute: GetPage(
+          name: '/not-found',
+          page: () => const SizedBox.shrink(),
+        ),
+        routingCallback: (routing) {
+          if (routing?.current.contains('status=') == true) {
+            return;
+          }
+        },
       ),
     );
   }

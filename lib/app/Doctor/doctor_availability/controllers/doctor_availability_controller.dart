@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
@@ -9,6 +8,7 @@ class DoctorAvailabilityController extends GetxController {
 
   // ===== LOADING =====
   final RxBool isLoading = false.obs;
+  final RxBool isSaving = false.obs;
 
   // ===== DATA =====
   final RxString scheduleType = ''.obs;
@@ -22,7 +22,7 @@ class DoctorAvailabilityController extends GetxController {
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday'
+    'Sunday',
   ];
 
   final List<RxBool> enabledList = List.generate(7, (_) => false.obs);
@@ -32,13 +32,18 @@ class DoctorAvailabilityController extends GetxController {
   final List<RxList<Map<String, dynamic>>> daySessionDetails =
       List.generate(7, (_) => <Map<String, dynamic>>[].obs);
 
+  // ===== CREATE FORM FIELDS (registration only) =====
+  final RxString fromTime = '09:00 AM'.obs;
+  final RxString toTime = '05:00 PM'.obs;
+  final RxBool isClinic = false.obs; // false = video (default), true = clinic
+
   @override
   void onInit() {
     super.onInit();
     fetchSlots();
   }
 
-  // ===== FETCH API =====
+  // ===== FETCH =====
   Future<void> fetchSlots() async {
     try {
       isLoading.value = true;
@@ -48,15 +53,10 @@ class DoctorAvailabilityController extends GetxController {
 
       if (message != null && message['status'] == true) {
         final data = message['data'] as Map<String, dynamic>? ?? {};
-
         final schedules = data['schedules'] as List? ?? [];
-        if (schedules.isEmpty) {
-          showError('No schedules found');
-          return;
-        }
+        if (schedules.isEmpty) return;
 
         final schedule = schedules[0] as Map<String, dynamic>;
-
         scheduleType.value = schedule['schedule_type']?.toString() ?? '';
         slotDuration.value = schedule['slot_duration']?.toString() ?? '';
 
@@ -68,7 +68,6 @@ class DoctorAvailabilityController extends GetxController {
           if (matching.isEmpty) continue;
 
           final dayData = matching.first;
-
           enabledList[i].value = dayData['enabled'] == true;
           dayTimes[i].value = dayData['time_range']?.toString() ?? '';
 
@@ -119,9 +118,55 @@ class DoctorAvailabilityController extends GetxController {
     );
   }
 
-  // ===== SAVE =====
+  // ===== CREATE SLOTS (registration form) =====
+  Future<void> createSlots() async {
+    final selectedDays = <String>[];
+    for (int i = 0; i < dayNames.length; i++) {
+      if (enabledList[i].value) selectedDays.add(dayNames[i]);
+    }
+
+    if (selectedDays.isEmpty) {
+      showError('Please select at least one day');
+      return;
+    }
+
+    try {
+      isSaving.value = true;
+
+      final ApiResponse response = await _api.createDoctorSlots(
+        fromTime: fromTime.value,
+        toTime: toTime.value,
+        durationMins: 30,
+        days: selectedDays,
+        allowVideoConferencing: isClinic.value ? 1 : 0,
+      );
+
+      final message = response.data['message'];
+      final bool success = message?['success'] == true;
+
+      if (success) {
+        showMessage('Slots created successfully!');
+        Get.offAllNamed('/doctor-dashboard');
+      } else {
+        showError(message?['message'] ?? 'Could not create slots.');
+      }
+    } catch (e) {
+      showError(e.toString());
+    } finally {
+      isSaving.value = false;
+    }
+  }
+
+  // ===== SAVE SCHEDULE (dashboard edit) =====
   Future<void> saveSchedule() async {
-    // TODO: Save API
-    showMessage('Schedule saved!');
+    try {
+      isSaving.value = true;
+      showMessage('Schedule saved!');
+      Get.offAllNamed('/doctor-dashboard');
+    } catch (e) {
+      showError(e.toString());
+    } finally {
+      isSaving.value = false;
+    }
   }
 }

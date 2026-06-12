@@ -131,12 +131,12 @@ class CoachStep2View extends GetView<CoachStep2Controller> {
                       hint: 'e.g. Certified Professional Coach'),
                   const SizedBox(height: 20),
 
-                  _buildLabel('Registering Authority'),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                      controller: controller.registeringAuthorityController,
-                      hint: 'e.g. RCI, ICF'),
-                  const SizedBox(height: 20),
+                  // _buildLabel('Registering Authority'),
+                  // const SizedBox(height: 8),
+                  // _buildTextField(
+                  //     controller: controller.registeringAuthorityController,
+                  //     hint: 'e.g. RCI, ICF'),
+                  // const SizedBox(height: 20),
 
                   // License — optional
                   Row(
@@ -148,12 +148,12 @@ class CoachStep2View extends GetView<CoachStep2Controller> {
                               fontWeight: FontWeight.w600,
                               color: Colors.black87)),
                       const SizedBox(width: 6),
-                      Text(' - OPTIONAL',
-                          style: TextStyle(
-                              fontFamily: 'Mulish',
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.grey.shade500)),
+                      // Text(' - OPTIONAL',
+                      //     style: TextStyle(
+                      //         fontFamily: 'Mulish',
+                      //         fontSize: 12,
+                      //         fontStyle: FontStyle.italic,
+                      //         color: Colors.grey.shade500)),
                     ],
                   ),
                   const SizedBox(height: 8),

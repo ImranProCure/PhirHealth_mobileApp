@@ -195,38 +195,38 @@ class CoachStep3View extends GetView<CoachStep3Controller> {
                   const SizedBox(height: 20),
 
                   // Avg clients + Total hrs — side by side
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('Avg. clients/mo'),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                                controller: controller.avgClientsController,
-                                hint: '20',
-                                keyboardType: TextInputType.number),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('Total 1-on1 hrs'),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                                controller: controller.totalHrsController,
-                                hint: '1500',
-                                keyboardType: TextInputType.number),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           _buildLabel('Avg. clients/mo'),
+                  //           const SizedBox(height: 8),
+                  //           _buildTextField(
+                  //               controller: controller.avgClientsController,
+                  //               hint: '20',
+                  //               keyboardType: TextInputType.number),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 12),
+                  //     Expanded(
+                  //       child: Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           _buildLabel('Total 1-on1 hrs'),
+                  //           const SizedBox(height: 8),
+                  //           _buildTextField(
+                  //               controller: controller.totalHrsController,
+                  //               hint: '1500',
+                  //               keyboardType: TextInputType.number),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 32),
                 ],
               ),
             ),

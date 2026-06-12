@@ -46,77 +46,77 @@ class CoachStep5View extends GetView<CoachStep5Controller> {
                   const SizedBox(height: 24),
 
                   // Commercials
-                  const Text('Commercials',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 16),
+                  // const Text('Commercials',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 16),
 
-                  _buildLabel('Professional Fees'),
-                  const SizedBox(height: 8),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('₹',
-                              style: TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 16,
-                                  color: Colors.grey.shade600)),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: controller.feeController,
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(
-                                fontFamily: 'Mulish',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black87),
-                            decoration: InputDecoration(
-                              hintText: '1500',
-                              hintStyle: TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 14,
-                                  color: Colors.grey.shade400),
-                              border: InputBorder.none,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('Per Session',
-                              style: TextStyle(
-                                  fontFamily: 'Mulish',
-                                  fontSize: 13,
-                                  color: Colors.grey.shade400)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  // _buildLabel('Professional Fees'),
+                  // const SizedBox(height: 8),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     border: Border.all(color: Colors.grey.shade200),
+                  //   ),
+                  //   child: Row(
+                  //     children: [
+                  //       Padding(
+                  //         padding: const EdgeInsets.symmetric(horizontal: 12),
+                  //         child: Text('₹',
+                  //             style: TextStyle(
+                  //                 fontFamily: 'Mulish',
+                  //                 fontSize: 16,
+                  //                 color: Colors.grey.shade600)),
+                  //       ),
+                  //       Expanded(
+                  //         child: TextField(
+                  //           controller: controller.feeController,
+                  //           keyboardType: TextInputType.number,
+                  //           style: const TextStyle(
+                  //               fontFamily: 'Mulish',
+                  //               fontSize: 15,
+                  //               fontWeight: FontWeight.w700,
+                  //               color: Colors.black87),
+                  //           decoration: InputDecoration(
+                  //             hintText: '1500',
+                  //             hintStyle: TextStyle(
+                  //                 fontFamily: 'Mulish',
+                  //                 fontSize: 14,
+                  //                 color: Colors.grey.shade400),
+                  //             border: InputBorder.none,
+                  //             contentPadding:
+                  //                 const EdgeInsets.symmetric(vertical: 14),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       Padding(
+                  //         padding: const EdgeInsets.symmetric(horizontal: 12),
+                  //         child: Text('Per Session',
+                  //             style: TextStyle(
+                  //                 fontFamily: 'Mulish',
+                  //                 fontSize: 13,
+                  //                 color: Colors.grey.shade400)),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 20),
 
-                  _buildLabel('Package Inclusions'),
-                  const SizedBox(height: 8),
-                  _buildMultilineField(
-                      controller: controller.packageController,
-                      hint:
-                          "What's included in your session package?\n(e.g., worksheets, follow-up notes)",
-                      minLines: 4),
-                  const SizedBox(height: 28),
+                  // _buildLabel('Package Inclusions'),
+                  // const SizedBox(height: 8),
+                  // _buildMultilineField(
+                  //     controller: controller.packageController,
+                  //     hint:
+                  //         "What's included in your session package?\n(e.g., worksheets, follow-up notes)",
+                  //     minLines: 4),
+                  // const SizedBox(height: 28),
 
-                  const Divider(height: 1, color: Color(0xFFE5E7EB)),
-                  const SizedBox(height: 20),
+                  // const Divider(height: 1, color: Color(0xFFE5E7EB)),
+                  // const SizedBox(height: 20),
 
                   // Policies
                   const Text('Policies',
@@ -170,31 +170,31 @@ class CoachStep5View extends GetView<CoachStep5Controller> {
                   const SizedBox(height: 20),
 
                   // Behavioural Check
-                  const Text('Behavioural Check',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 16),
+                  // const Text('Behavioural Check',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 16),
 
-                  _buildLabel('Account Ability vs. Support'),
-                  const SizedBox(height: 8),
-                  _buildMultilineField(
-                      controller: controller.accountabilityController,
-                      hint:
-                          'How do you balance holding a client accountable with providing emotional support?',
-                      minLines: 4),
-                  const SizedBox(height: 20),
+                  // _buildLabel('Account Ability vs. Support'),
+                  // const SizedBox(height: 8),
+                  // _buildMultilineField(
+                  //     controller: controller.accountabilityController,
+                  //     hint:
+                  //         'How do you balance holding a client accountable with providing emotional support?',
+                  //     minLines: 4),
+                  // const SizedBox(height: 20),
 
-                  _buildLabel('Handling Resistance'),
-                  const SizedBox(height: 8),
-                  _buildMultilineField(
-                      controller: controller.resistanceController,
-                      hint:
-                          'Describe your approach when a client shows resistance to the coaching process...',
-                      minLines: 4),
-                  const SizedBox(height: 20),
+                  // _buildLabel('Handling Resistance'),
+                  // const SizedBox(height: 8),
+                  // _buildMultilineField(
+                  //     controller: controller.resistanceController,
+                  //     hint:
+                  //         'Describe your approach when a client shows resistance to the coaching process...',
+                  //     minLines: 4),
+                  // const SizedBox(height: 20),
 
                   // Mentor/Supervisor toggle
                   Container(

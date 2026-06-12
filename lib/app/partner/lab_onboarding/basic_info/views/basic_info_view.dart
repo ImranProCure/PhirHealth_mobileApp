@@ -165,6 +165,55 @@ class BasicInfoView extends GetView<BasicInfoController> {
                     hint: 'Enter street address...',
                   ),
                   const SizedBox(height: 20),
+                  Obx(() {
+                    final isFetching = controller.isFetchingLocation.value;
+                    final hasLocation = controller.latitude.value.isNotEmpty;
+
+                    return GestureDetector(
+                      onTap: isFetching ? null : controller.fetchLocation,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xFF0D9488)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            isFetching
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Color(0xFF0D9488),
+                                    ),
+                                  )
+                                : Icon(
+                                    hasLocation
+                                        ? Icons.location_on
+                                        : Icons.location_off,
+                                    color: const Color(0xFF0D9488),
+                                    size: 18,
+                                  ),
+                            const SizedBox(width: 8),
+                            Text(
+                              hasLocation
+                                  ? 'Location fetched ✅'
+                                  : 'Use Current Location',
+                              style: const TextStyle(
+                                fontFamily: 'Mulish',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF0D9488),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
 
                   // City & State
                   _buildLabel('City & State'),

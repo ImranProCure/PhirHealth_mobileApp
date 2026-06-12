@@ -27,8 +27,12 @@ class PatientDetailsController extends GetxController {
 
   final List<String> genders = ['Male', 'Female', 'Other'];
 
+  // ===== SYMPTOMS =====
   final RxList<String> symptoms = <String>[].obs;
   final RxBool isSymptomsLoading = false.obs;
+
+  // ===== SELECTED SYMPTOMS (main screen) =====
+  final RxList<String> selectedSymptoms = <String>[].obs;
 
   // ===== BOTTOM SHEET FORM FIELDS =====
   final sheetNameController = TextEditingController();
@@ -43,10 +47,10 @@ class PatientDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchPatientRelationsApi();
-    fetchSymptomsApi(); // ← ADD THIS
+    fetchSymptomsApi();
   }
 
-// ================= FETCH SYMPTOMS FROM API =================
+  // ================= FETCH SYMPTOMS FROM API =================
   Future<void> fetchSymptomsApi() async {
     isSymptomsLoading.value = true;
     ApiResponse response =
@@ -62,19 +66,37 @@ class PatientDetailsController extends GetxController {
     }
   }
 
+  // ===== SYMPTOM TOGGLE (main screen) =====
+  void toggleSymptom(String symptom) {
+    if (selectedSymptoms.contains(symptom)) {
+      selectedSymptoms.remove(symptom);
+    } else {
+      selectedSymptoms.add(symptom);
+    }
+  }
+
+  // ===== ADD CUSTOM SYMPTOM (main screen — "Add Other") =====
+  void addCustomSymptom(String symptom) {
+    if (!symptoms.contains(symptom)) {
+      symptoms.add(symptom);
+    }
+    if (!selectedSymptoms.contains(symptom)) {
+      selectedSymptoms.add(symptom);
+    }
+  }
+
   void showAddMemberSheet(BuildContext context) {
     resetSheetForm();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => PatientFormBottomSheet(controller: this), // ← public now
+      builder: (_) => PatientFormBottomSheet(controller: this),
     );
   }
 
-// ================= FETCH PATIENT RELATIONS FROM API =================
+  // ================= FETCH PATIENT RELATIONS FROM API =================
   Future<void> fetchPatientRelationsApi({bool resetSelection = true}) async {
-    // ← ADD param
     isPatientLoading.value = true;
 
     ApiResponse response =
@@ -90,7 +112,6 @@ class PatientDetailsController extends GetxController {
       final fetchedPatients = relations.map(_mapPatient).toList();
       patients.assignAll(fetchedPatients);
 
-      // ← Only auto-select on first load, NOT after adding a member
       if (resetSelection) {
         final myselfIndex =
             patients.indexWhere((p) => p['relation'] == 'Myself');
@@ -115,7 +136,7 @@ class PatientDetailsController extends GetxController {
     selectedPatientIndex.value = index;
   }
 
-  // ===== SYMPTOM TOGGLE =====
+  // ===== SYMPTOM TOGGLE (bottom sheet) =====
   void toggleSheetSymptom(String symptom) {
     if (sheetSelectedSymptoms.contains(symptom)) {
       sheetSelectedSymptoms.remove(symptom);
@@ -169,7 +190,7 @@ class PatientDetailsController extends GetxController {
 
     if (messageData["status"] == true) {
       Get.back();
-      await fetchPatientRelationsApi(resetSelection: false); // ← CHANGED
+      await fetchPatientRelationsApi(resetSelection: false);
     } else {
       showError(messageData["message"] ?? "Failed to add member");
     }
@@ -190,6 +211,7 @@ class PatientDetailsController extends GetxController {
       'patientId': selected['patient_id'] ?? '',
       'type': Get.arguments?['type'] ?? '',
       'id': Get.arguments?['id'] ?? '',
+      'symptoms': selectedSymptoms.toList(), // ← selected symptoms pass
     });
   }
 
@@ -490,7 +512,6 @@ class PatientFormBottomSheet extends StatelessWidget {
                   // Symptoms
                   _label("Common Symptoms"),
                   const SizedBox(height: 10),
-                  // In PatientFormBottomSheet build(), replace the symptoms Obx block:
                   Obx(() {
                     if (controller.isSymptomsLoading.value) {
                       return const Center(
@@ -604,6 +625,7 @@ class PatientFormBottomSheet extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
+
                   // Buttons
                   Row(
                     children: [
@@ -647,7 +669,6 @@ class PatientFormBottomSheet extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            // ---- Loading indicator while posting ----
                             child: Obx(() => controller.isAddingMember.value
                                 ? const SizedBox(
                                     height: 20,

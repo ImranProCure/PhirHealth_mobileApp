@@ -46,100 +46,100 @@ class CoachStep6View extends GetView<CoachStep6Controller> {
                   const SizedBox(height: 24),
 
                   // Client Intake Form
-                  const Text('Client Intake Form',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Select questions you want to ask new clients before their first session.',
-                    style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 13,
-                        color: Colors.grey.shade500),
-                  ),
-                  const SizedBox(height: 14),
+                  // const Text('Client Intake Form',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 6),
+                  // Text(
+                  //   'Select questions you want to ask new clients before their first session.',
+                  //   style: TextStyle(
+                  //       fontFamily: 'Mulish',
+                  //       fontSize: 13,
+                  //       color: Colors.grey.shade500),
+                  // ),
+                  // const SizedBox(height: 14),
 
-                  // Questions list
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Obx(() => Column(
-                          children: controller.intakeQuestions
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            final index = entry.key;
-                            final question = entry.value;
-                            final isSelected =
-                                controller.selectedQuestions.contains(index);
-                            final isLast =
-                                index == controller.intakeQuestions.length - 1;
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () => controller.toggleQuestion(index),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 14),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 200),
-                                          width: 22,
-                                          height: 22,
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? const Color(0xFF0D9488)
-                                                : Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            border: Border.all(
-                                              color: isSelected
-                                                  ? const Color(0xFF0D9488)
-                                                  : Colors.grey.shade400,
-                                              width: 1.5,
-                                            ),
-                                          ),
-                                          child: isSelected
-                                              ? const Icon(Icons.check,
-                                                  size: 14, color: Colors.white)
-                                              : null,
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Text(
-                                            question,
-                                            style: const TextStyle(
-                                                fontFamily: 'Mulish',
-                                                fontSize: 14,
-                                                color: Colors.black87),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (!isLast)
-                                  Divider(
-                                      height: 1,
-                                      color: Colors.grey.shade100,
-                                      indent: 16,
-                                      endIndent: 16),
-                              ],
-                            );
-                          }).toList(),
-                        )),
-                  ),
-                  const SizedBox(height: 28),
+                  // // Questions list
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(14),
+                  //     border: Border.all(color: Colors.grey.shade200),
+                  //   ),
+                  //   child: Obx(() => Column(
+                  //         children: controller.intakeQuestions
+                  //             .asMap()
+                  //             .entries
+                  //             .map((entry) {
+                  //           final index = entry.key;
+                  //           final question = entry.value;
+                  //           final isSelected =
+                  //               controller.selectedQuestions.contains(index);
+                  //           final isLast =
+                  //               index == controller.intakeQuestions.length - 1;
+                  //           return Column(
+                  //             children: [
+                  //               GestureDetector(
+                  //                 onTap: () => controller.toggleQuestion(index),
+                  //                 child: Padding(
+                  //                   padding: const EdgeInsets.symmetric(
+                  //                       horizontal: 16, vertical: 14),
+                  //                   child: Row(
+                  //                     crossAxisAlignment:
+                  //                         CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       AnimatedContainer(
+                  //                         duration:
+                  //                             const Duration(milliseconds: 200),
+                  //                         width: 22,
+                  //                         height: 22,
+                  //                         decoration: BoxDecoration(
+                  //                           color: isSelected
+                  //                               ? const Color(0xFF0D9488)
+                  //                               : Colors.white,
+                  //                           borderRadius:
+                  //                               BorderRadius.circular(4),
+                  //                           border: Border.all(
+                  //                             color: isSelected
+                  //                                 ? const Color(0xFF0D9488)
+                  //                                 : Colors.grey.shade400,
+                  //                             width: 1.5,
+                  //                           ),
+                  //                         ),
+                  //                         child: isSelected
+                  //                             ? const Icon(Icons.check,
+                  //                                 size: 14, color: Colors.white)
+                  //                             : null,
+                  //                       ),
+                  //                       const SizedBox(width: 12),
+                  //                       Expanded(
+                  //                         child: Text(
+                  //                           question,
+                  //                           style: const TextStyle(
+                  //                               fontFamily: 'Mulish',
+                  //                               fontSize: 14,
+                  //                               color: Colors.black87),
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               if (!isLast)
+                  //                 Divider(
+                  //                     height: 1,
+                  //                     color: Colors.grey.shade100,
+                  //                     indent: 16,
+                  //                     endIndent: 16),
+                  //             ],
+                  //           );
+                  //         }).toList(),
+                  //       )),
+                  // ),
+                  // const SizedBox(height: 28),
 
                   // Success Story
                   const Text('Success Story',

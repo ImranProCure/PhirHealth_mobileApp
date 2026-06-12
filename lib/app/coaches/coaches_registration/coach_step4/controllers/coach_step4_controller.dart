@@ -3,19 +3,19 @@ import 'package:get/get.dart';
 
 class CoachStep4Controller extends GetxController {
   // Work Preferences
-  final RxBool teleconsultation = true.obs;
-  final RxBool multidisciplinary = true.obs;
+  // final RxBool teleconsultation = true.obs;
+  // final RxBool multidisciplinary = true.obs;
 
   // Languages (reuse from step1 pattern)
-  final List<String> defaultLanguages = [
-    'English',
-    'Hindi',
-    'Spanish',
-    'French'
-  ];
-  final RxList<String> allLanguages =
-      <String>['English', 'Hindi', 'Spanish', 'French'].obs;
-  final RxSet<String> selectedLanguages = <String>{'English', 'Hindi'}.obs;
+  // final List<String> defaultLanguages = [
+  //   'English',
+  //   'Hindi',
+  //   'Spanish',
+  //   'French'
+  // ];
+  // final RxList<String> allLanguages =
+  //     <String>['English', 'Hindi', 'Spanish', 'French'].obs;
+  // final RxSet<String> selectedLanguages = <String>{'English', 'Hindi'}.obs;
 
   // Primary Communication Mode
   final RxString selectedCommMode = 'Video Call'.obs;
@@ -45,48 +45,48 @@ class CoachStep4Controller extends GetxController {
     }
   }
 
-  void toggleLanguage(String lang) {
-    if (selectedLanguages.contains(lang)) {
-      selectedLanguages.remove(lang);
-    } else {
-      selectedLanguages.add(lang);
-    }
-  }
+  // void toggleLanguage(String lang) {
+  //   if (selectedLanguages.contains(lang)) {
+  //     selectedLanguages.remove(lang);
+  //   } else {
+  //     selectedLanguages.add(lang);
+  //   }
+  // }
 
-  void addLanguage(String lang) {
-    final trimmed = lang.trim();
-    if (trimmed.isNotEmpty && !allLanguages.contains(trimmed)) {
-      allLanguages.add(trimmed);
-      selectedLanguages.add(trimmed);
-    }
-  }
+  // void addLanguage(String lang) {
+  //   final trimmed = lang.trim();
+  //   if (trimmed.isNotEmpty && !allLanguages.contains(trimmed)) {
+  //     allLanguages.add(trimmed);
+  //     selectedLanguages.add(trimmed);
+  //   }
+  // }
 
-  void showAddLanguageDialog(BuildContext context) {
-    final ctrl = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Add Language',
-            style:
-                TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w700)),
-        content: TextField(
-          controller: ctrl,
-          autofocus: true,
-          decoration: const InputDecoration(hintText: 'e.g. German'),
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () {
-              addLanguage(ctrl.text);
-              Get.back();
-            },
-            child: const Text('Add'),
-          ),
-        ],
-      ),
-    );
-  }
+  // void showAddLanguageDialog(BuildContext context) {
+  //   final ctrl = TextEditingController();
+  //   showDialog(
+  //     context: context,
+  //     builder: (_) => AlertDialog(
+  //       title: const Text('Add Language',
+  //           style:
+  //               TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w700)),
+  //       content: TextField(
+  //         controller: ctrl,
+  //         autofocus: true,
+  //         decoration: const InputDecoration(hintText: 'e.g. German'),
+  //       ),
+  //       actions: [
+  //         TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
+  //         TextButton(
+  //           onPressed: () {
+  //             addLanguage(ctrl.text);
+  //             Get.back();
+  //           },
+  //           child: const Text('Add'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void showCommModeSheet(BuildContext context) {
     showModalBottomSheet(

@@ -291,6 +291,7 @@ const Map<String, String> hiIN = {
   'patient_book_payment': 'भुगतान विकल्प',
   'patient_book_confirm_clinic': 'क्लिनिक विज़िट की पुष्टि करें',
   'patient_book_confirm_video': 'वीडियो विज़िट की पुष्टि करें',
+  'health_metrics': 'स्वास्थ्य मापदंड',
 
   // ── BMI Calculator ─────────────────────────────────
   'bmi_title': 'BMI कैलकुलेटर',
@@ -329,6 +330,90 @@ const Map<String, String> hiIN = {
       'आपका स्वास्थ्य हमारी प्राथमिकता है। विश्वसनीय चिकित्सा मार्गदर्शन और मानसिक स्वास्थ्य के लिए आज ही प्रमाणित डॉक्टरों और काउंसलरों से बात करें।',
   'counsellor_book': 'काउंसलर बुक करें',
   'counsellor_history': 'परामर्श इतिहास देखें',
+
+  // AI Nutritionist View
+  'ai_nutritionist_title': 'AI पोषण विशेषज्ञ',
+  'ai_nutritionist_goal_title': 'आपका लक्ष्य क्या है?',
+  'ai_nutritionist_food_pref_title': 'खाने की प्राथमिकता',
+  'ai_nutritionist_food_pref_sub': 'अपनी प्राथमिक आहार आदत चुनें',
+  'ai_nutritionist_activity_title': 'गतिविधि स्तर?',
+  'ai_nutritionist_activity_sub':
+      'हम आपके 4-5 दिन/सप्ताह जिम शेड्यूल के आधार पर दैनिक कैलोरी समायोजित करेंगे।',
+  'ai_nutritionist_activity_sub_tablet':
+      'हम आपकी गतिविधि के आधार पर दैनिक कैलोरी समायोजित करेंगे।',
+  'ai_nutritionist_allergies_title': 'एलर्जी',
+  'ai_nutritionist_allergies_sub': 'क्या आपको कोई ज्ञात एलर्जी है?',
+  'ai_nutritionist_personalize': 'अपनी योजना व्यक्तिगत बनाएं',
+  'ai_nutritionist_tagline':
+      'अपने लक्ष्य और प्राथमिकताएं बताएं ताकि हम आपके लिए पोषण योजना बना सकें।',
+  'ai_nutritionist_view_saved': 'सहेजी गई योजना देखें',
+  'ai_nutritionist_generate': 'AI योजना बनाएं',
+  'ai_nutritionist_add_allergy_title': 'एलर्जी जोड़ें',
+  'ai_nutritionist_add_allergy_hint': 'जैसे ग्लूटेन, लैक्टोज...',
+  'ai_nutritionist_add_btn': 'जोड़ें',
+
+// AI Nutritionist Result View
+  'ai_nutritionist_result_title': 'AI पोषण परिणाम',
+  'ai_nutritionist_daily_timeline': 'दैनिक भोजन समयरेखा',
+  'ai_nutritionist_just_now': 'अभी',
+  'ai_nutritionist_accept_plan': 'योजना स्वीकार करें',
+  'ai_nutritionist_regenerate': 'पुनः बनाएं',
+  'ai_nutritionist_go_back': 'वापस जाएं',
+
+  // Add Medicine
+  'add_medicine_title': 'दवा जोड़ें',
+  'add_medicine_badge': 'चरण 1 — दवा विवरण',
+  'add_medicine_heading': 'दवा जोड़ें',
+  'add_medicine_sub': 'दवा का नाम दर्ज करें और प्रकार चुनें।',
+  'add_medicine_name_label': 'दवा का नाम',
+  'add_medicine_name_hint': 'डोलो 650',
+  'add_medicine_type_label': 'दवा का प्रकार',
+  'add_medicine_strength_label': 'मात्रा',
+  'add_medicine_unit_label': 'इकाई',
+  'add_medicine_error_empty': 'कृपया दवा का नाम दर्ज करें',
+  'add_medicine_type_tablet': 'टैबलेट',
+  'add_medicine_type_capsule': 'कैप्सूल',
+  'add_medicine_type_syrup': 'सिरप',
+  'add_medicine_type_injection': 'इंजेक्शन',
+
+  // Set Schedule
+  'set_schedule_title': 'शेड्यूल सेट करें',
+  'set_schedule_times_day': 'दिन में कितनी बार?',
+  'set_schedule_edit': 'संपादित करें',
+  'set_schedule_save': 'शेड्यूल सहेजें',
+  'set_schedule_times_per_day': 'प्रति दिन बार',
+  'set_schedule_once': 'एक बार',
+  'set_schedule_twice': 'दो बार',
+  'set_schedule_3_times': '3 बार',
+  'set_schedule_4_times': '4 बार',
+  'set_schedule_dose': 'खुराक',
+  'set_schedule_doses': 'खुराकें',
+
+// Dose periods & options
+  'set_schedule_morning': 'सुबह',
+  'set_schedule_afternoon': 'दोपहर',
+  'set_schedule_night': 'रात',
+  'set_schedule_evening': 'शाम',
+  'set_schedule_before_food': 'खाने से पहले',
+  'set_schedule_after_breakfast': 'नाश्ते के बाद',
+  'set_schedule_after_lunch': 'दोपहर के खाने के बाद',
+  'set_schedule_with_food': 'खाने के साथ',
+  'set_schedule_before_bed': 'सोने से पहले',
+  'set_schedule_after_dinner': 'रात के खाने के बाद',
+  'set_schedule_after_food': 'खाने के बाद',
+
+// Duration
+  'set_schedule_7_days': '7 दिन',
+  'set_schedule_15_days': '15 दिन',
+  'set_schedule_custom': 'कस्टम',
+  'set_schedule_custom_date_error': 'कृपया शुरू और समाप्ति तिथि चुनें',
+
+  // ── Doctor Visits ──────────────────────────────────
+  'visits_title': 'मेरे डॉक्टर विज़िट',
+  'visits_no_visits': 'विज़िट नहीं मिले',
+  'visits_view_details': 'अधिक विवरण देखें',
+  'visits_book_again': 'फिर से बुक करें',
+  'visits_join_call': 'वीडियो कॉल जॉइन करें',
 
   // ── Common ─────────────────────────────────────────
   'or': 'या',

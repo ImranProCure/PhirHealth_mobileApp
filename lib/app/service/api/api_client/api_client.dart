@@ -250,7 +250,7 @@ class ApiClient {
         queryParameters: queryParameters,
         options: authenticated ? _withAuth(options) : options,
       );
-      
+
       final statusCode = response.statusCode ?? 0;
       final body = response.data;
       if (body is! Map<String, dynamic>) {

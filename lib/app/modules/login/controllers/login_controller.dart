@@ -22,6 +22,7 @@ class LoginController extends GetxController {
 
   // ===== GET OTP — same for all roles =====
   void getOTP() {
+    debugPrint('ROLE IN GET OTP => ${_roleController.role}');
     final phone = phoneController.text.trim();
 
     if (phone.isEmpty) {
@@ -39,10 +40,14 @@ class LoginController extends GetxController {
   // ===== SIGNUP — role based =====
   void goToSignup() {
     final role = _roleController.role;
+    debugPrint('ROLE => $role');
+    debugPrint('PARTNER TYPE => ${_roleController.partnerType}');
+
     if (role == null) {
       _showError('Please select a role first');
       return;
     }
+
     switch (role) {
       case UserRole.patient:
         Get.toNamed(Routes.PATIENT_IDENTITY_VITALS);
@@ -57,8 +62,27 @@ class LoginController extends GetxController {
         Get.toNamed(Routes.COACH_STEP1);
         break;
       case UserRole.partner:
-      case UserRole.coach:
-        _showError('Signup flow not implemented yet for this role');
+        // Partner type check karo pehle
+        if (_roleController.partnerType == null) {
+          _showError('Please select partner type first');
+          return;
+        }
+        switch (_roleController.partnerType) {
+          case PartnerType.clinic:
+            Get.toNamed(Routes.CLINIC_REGISTRATION);
+            break;
+          case PartnerType.hospital:
+            Get.toNamed(Routes.BASIC_INFORMATION);
+            break;
+          case PartnerType.pharmacy:
+            Get.toNamed(Routes.PHARMACY_REGISTRATION);
+            break;
+          case PartnerType.lab:
+            Get.toNamed(Routes.BASIC_INFO);
+            break;
+          default:
+            _showError('Invalid partner type');
+        }
         break;
     }
   }
@@ -80,10 +104,9 @@ class LoginController extends GetxController {
 
   Future<void> _login() async {
     isLoading.value = true;
-    String role = 'patient'; // default
-    if (_roleController.role == UserRole.doctor) {
-      role = 'doctor';
-    }
+
+    // Role string determine karo
+    String role = _getRoleString();
 
     ApiResponse response = await api.commonApi.authenticationApi.login(
         mobile: phoneController.text,
@@ -99,31 +122,56 @@ class LoginController extends GetxController {
         final otp = messageData['otp'];
 
         if (otp != null && otp.isNotEmpty) {
-          showMessage(
-            'OTP sent to +91${phoneController.text}',
-          );
+          showMessage('OTP sent to +91${phoneController.text}');
 
-          // All roles go through OTP — role passed in arguments
           Get.to(
             () => const VerifyMobileView(),
             binding: VerifyMobileBinding(),
             arguments: {
               'phone': phoneController.text,
               'role': _roleController.role,
+              'partnerType': _roleController.partnerType, // 👈 yeh add karo
               'otp': otp,
             },
           );
         }
       } else {
-        showError(
-          messageData["message"],
-        );
-        // Get.offAllNamed(Routes.MAIN_SCREEN);
+        showError(messageData["message"]);
       }
     } else {
-      showError(
-        messageData["message"],
-      );
+      showError(messageData["message"]);
+    }
+  }
+
+// ===== Role string helper =====
+  String _getRoleString() {
+    switch (_roleController.role) {
+      case UserRole.doctor:
+        return 'doctor';
+      case UserRole.corporate:
+        return 'corporate';
+      case UserRole.coach:
+        return 'coach';
+      case UserRole.partner:
+        return _getPartnerRoleString(); // 👈 partner ka alag logic
+      case UserRole.patient:
+      default:
+        return 'patient';
+    }
+  }
+
+  String _getPartnerRoleString() {
+    switch (_roleController.partnerType) {
+      case PartnerType.clinic:
+        return 'clinic';
+      case PartnerType.hospital:
+        return 'hospital';
+      case PartnerType.pharmacy:
+        return 'pharmacy';
+      case PartnerType.lab:
+        return 'lab manager';
+      default:
+        return 'partner'; // fallback
     }
   }
 }

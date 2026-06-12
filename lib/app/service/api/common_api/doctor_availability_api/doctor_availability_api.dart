@@ -1,6 +1,7 @@
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/db/db.dart';
 
 class DoctorAvailabilityApi {
   final ApiClient _apiClient = ApiClient();
@@ -48,5 +49,32 @@ class DoctorAvailabilityApi {
         'session': session,
       },
     );
+  }
+
+  // POST - create slots (called after registration or when no slots exist)
+  Future<ApiResponse> createDoctorSlots({
+    required String fromTime,
+    required String toTime,
+    required int durationMins,
+    required List<String> days,
+    int allowVideoConferencing = 0,
+  }) async {
+    // Token storage se lo aur set karo
+    final authStorage = AuthStorageService();
+    final token = await authStorage.getToken();
+    if (token != null) {
+      _apiClient.setBearerToken(token);
+    }
+
+    return await _apiClient.post(
+        ApiConstants.commonApiConstants.createDoctorSlots,
+        data: {
+          'from_time': fromTime,
+          'to_time': toTime,
+          'duration_mins': durationMins,
+          'days': days,
+          'create_slots': 1,
+        },
+        authenticated: true);
   }
 }

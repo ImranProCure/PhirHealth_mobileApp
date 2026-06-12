@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../routes/app_routes.dart';
 
@@ -156,8 +157,7 @@ class RegistrationController extends GetxController {
       initialDate: DateTime.now(),
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
-      helpText: "Select Graduation Year",
-      fieldLabelText: "Year",
+      helpText: "Select Graduation Date",
     );
 
     if (picked != null) {

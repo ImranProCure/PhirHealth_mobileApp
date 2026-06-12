@@ -17,7 +17,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text('AI Nutritionist Result',
+        title: Text('ai_nutritionist_result_title'.tr,
             style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
@@ -35,7 +35,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                   children: [
                     _dailyTargetCard(),
                     const SizedBox(height: 22),
-                    const Text('Daily Meal Timeline',
+                    Text('ai_nutritionist_daily_timeline'.tr,
                         style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 16,
@@ -84,7 +84,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text('Daily Target',
+                child: Text('Daily Target',
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
@@ -92,7 +92,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                         color: Colors.white)),
               ),
               const SizedBox(width: 10),
-              const Text('Just now',
+              Text('ai_nutritionist_just_now'.tr,
                   style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 12,
@@ -396,7 +396,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text('Accept Plan',
+                                  Text('ai_nutritionist_accept_plan'.tr,
                                       style: TextStyle(
                                           fontFamily: 'Mulish',
                                           fontSize: 16,
@@ -437,7 +437,9 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        controller.isSavedPlan.value ? 'Go Back' : 'Regenerate',
+                        controller.isSavedPlan.value
+                            ? 'ai_nutritionist_go_back'.tr
+                            : 'ai_nutritionist_regenerate'.tr,
                         style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 15,

@@ -13,10 +13,12 @@ class SplashController extends GetxController {
     _hasNavigated = true;
 
     Future.delayed(const Duration(seconds: 3), () {
-      Get.off(
-        () => const HomeView(),
-        binding: HomeBinding(),
-      );
+      if (Get.currentRoute == '/') {
+        Get.off(
+          () => const HomeView(),
+          binding: HomeBinding(),
+        );
+      }
     });
   }
 }

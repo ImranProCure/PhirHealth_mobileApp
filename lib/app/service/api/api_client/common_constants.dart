@@ -170,4 +170,24 @@ class CommonApiConstants {
 
   final String getNutritionPlan =
       '/api/method/vhealthcare.api.patient.ai_nutrition.ai_nutrition.get_nutrition_plan';
+  final String createLabProfile =
+      '/api/method/vhealthcare.api.partnet.lab_onboarding.lab_onboarding.create_lab_profile';
+  final String labOtpVerify =
+      '/api/method/vhealthcare.api.patient.auth.lab_login_verify.verify_otp_lab';
+  final String createPharmacyProfile =
+      '/api/method/vhealthcare.api.partner.pharmacy.pharmacy_onboarding.create_pharmacy_profile';
+  final String pharmacyOtpVerify =
+      '/api/method/vhealthcare.api.patient.auth.pharmacy_otp_verify.verify_otp_pharmacy';
+  final String createClinicProfile =
+      '/api/method/vhealthcare.api.partner.clinic.clinic_onboarding.create_clinic_profile';
+  final String clinicOtpVerify =
+      '/api/method/vhealthcare.api.patient.auth.clinic_otp_verify.verify_otp_clinic';
+  final String createHospitalProfile =
+      '/api/method/vhealthcare.api.partner.hospital.hospital_onboarding.create_hospital_profile';
+  final String hospitalOtpVerify =
+      '/api/method/vhealthcare.api.patient.auth.hospital_verify.verify_otp_hospital';
+  final String connectGoogleCalendar =
+      '/api/method/vhealthcare.api.patient.google_calender.google_calender_api.connect_google_calendar';
+  final String createDoctorSlots =
+      '/api/method/vhealthcare.api.doctor.my_availabilty_slot.create_slots.create_doctor_slots';
 }

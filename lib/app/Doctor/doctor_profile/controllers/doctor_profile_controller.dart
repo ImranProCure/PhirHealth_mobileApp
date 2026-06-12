@@ -59,22 +59,22 @@ class DoctorProfileController extends GetxController {
       'route': '/app-language',
       'value': null,
     },
-    {
-      'label': 'App Language',
-      'iconPath': 'assets/icons/captive_portal.png',
-      'route': '/app-language',
-      'value': 'English',
-    },
+    // {
+    //   'label': 'App Language',
+    //   'iconPath': 'assets/icons/captive_portal.png',
+    //   'route': '/app-language',
+    //   'value': 'English',
+    // },
     {
       'label': 'Help & Support',
       'iconPath': 'assets/icons/chat_info.png',
-      'route': '/help-support',
+      'route': '/doctorsupport',
       'value': null,
     },
     {
       'label': 'Privacy Policy',
       'iconPath': 'assets/icons/shield_locked.png',
-      'route': '/privacy-policy',
+      'route': '/doctorprivacypolicy',
       'value': null,
     },
   ];

@@ -287,6 +287,7 @@ const Map<String, String> enUS = {
   'patient_book_payment': 'Payment Options',
   'patient_book_confirm_clinic': 'Confirm Clinic Visit',
   'patient_book_confirm_video': 'Confirm Video Visit',
+  'health_metrics': 'Health Metrics',
 
   // ── BMI Calculator ─────────────────────────────────
   'bmi_title': 'BMI Calculator',
@@ -325,6 +326,91 @@ const Map<String, String> enUS = {
       'our health is our priority. Talk to certified doctors and counsellors today for reliable medical guidance and mental wellness.',
   'counsellor_book': 'Book a Counsellor',
   'counsellor_history': 'View Consultation History',
+
+  // AI Nutritionist View
+  'ai_nutritionist_title': 'AI Nutritionist',
+  'ai_nutritionist_goal_title': "What's your Goal?",
+  'ai_nutritionist_food_pref_title': 'Food Preference',
+  'ai_nutritionist_food_pref_sub': 'Select your primary dietary habit',
+  'ai_nutritionist_activity_title': 'Activity Level?',
+  'ai_nutritionist_activity_sub':
+      "We'll adjust your daily caloric intake based on your 4-5 days/week gym schedule.",
+  'ai_nutritionist_activity_sub_tablet':
+      "We'll adjust your daily caloric intake based on your activity schedule.",
+  'ai_nutritionist_allergies_title': 'Allergies',
+  'ai_nutritionist_allergies_sub': 'Do you have any known allergies?',
+  'ai_nutritionist_personalize': 'Personalize your plan',
+  'ai_nutritionist_tagline':
+      'Tell us your goals and preferences to generate a personalised nutrition plan.',
+  'ai_nutritionist_view_saved': 'View Saved Plan',
+  'ai_nutritionist_generate': 'Generate AI Plan',
+  'ai_nutritionist_add_allergy_title': 'Add Allergy',
+  'ai_nutritionist_add_allergy_hint': 'e.g. Gluten, Lactose...',
+  'ai_nutritionist_add_btn': 'Add',
+
+// AI Nutritionist Result View
+  'ai_nutritionist_result_title': 'AI Nutritionist Result',
+  'ai_nutritionist_daily_timeline': 'Daily Meal Timeline',
+  'ai_nutritionist_just_now': 'Just now',
+  'ai_nutritionist_accept_plan': 'Accept Plan',
+  'ai_nutritionist_regenerate': 'Regenerate',
+  'ai_nutritionist_go_back': 'Go Back',
+
+  // Add Medicine
+  'add_medicine_title': 'Add Medicine',
+  'add_medicine_badge': 'Step 1 — Medicine Details',
+  'add_medicine_heading': 'Add Medicine',
+  'add_medicine_sub':
+      'Enter the medicine name and select its type to get started.',
+  'add_medicine_name_label': 'Medicine Name',
+  'add_medicine_name_hint': 'Dolo 650',
+  'add_medicine_type_label': 'Medicine Type',
+  'add_medicine_strength_label': 'Strength',
+  'add_medicine_unit_label': 'Unit',
+  'add_medicine_error_empty': 'Please enter medicine name',
+  'add_medicine_type_tablet': 'Tablet',
+  'add_medicine_type_capsule': 'Capsule',
+  'add_medicine_type_syrup': 'Syrup',
+  'add_medicine_type_injection': 'Injection',
+
+  // Set Schedule
+  'set_schedule_title': 'Set Schedule',
+  'set_schedule_times_day': 'How many times a day?',
+  'set_schedule_edit': 'Edit',
+  'set_schedule_save': 'Save Schedule',
+  'set_schedule_times_per_day': 'Times per day',
+  'set_schedule_once': 'Once',
+  'set_schedule_twice': 'Twice',
+  'set_schedule_3_times': '3 Times',
+  'set_schedule_4_times': '4 Times',
+  'set_schedule_dose': 'dose',
+  'set_schedule_doses': 'doses',
+
+// Dose periods & options
+  'set_schedule_morning': 'Morning',
+  'set_schedule_afternoon': 'Afternoon',
+  'set_schedule_night': 'Night',
+  'set_schedule_evening': 'Evening',
+  'set_schedule_before_food': 'Before Food',
+  'set_schedule_after_breakfast': 'After Breakfast',
+  'set_schedule_after_lunch': 'After Lunch',
+  'set_schedule_with_food': 'With Food',
+  'set_schedule_before_bed': 'Before Bed',
+  'set_schedule_after_dinner': 'After Dinner',
+  'set_schedule_after_food': 'After Food',
+
+// Duration
+  'set_schedule_7_days': '7 Days',
+  'set_schedule_15_days': '15 Days',
+  'set_schedule_custom': 'Custom',
+  'set_schedule_custom_date_error': 'Please select start and end date',
+
+  // ── Doctor Visits ──────────────────────────────────
+  'visits_title': 'My Doctor Visits',
+  'visits_no_visits': 'visits found',
+  'visits_view_details': 'View More Details',
+  'visits_book_again': 'Book Again',
+  'visits_join_call': 'Join Video Call',
 
   // ── Common ─────────────────────────────────────────
   'or': 'OR',
