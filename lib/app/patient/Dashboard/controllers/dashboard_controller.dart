@@ -8,7 +8,7 @@ class DashboardController extends GetxController {
   void selectNav(int index) {
     selectedNavIndex.value = index;
     if (index == 1) Get.toNamed('/doctor-visits');
-    if (index == 3) showMessage("Coming Soon");
+    if (index == 3) Get.toNamed('/shorts-reels');
     //Get.toNamed('/shorts-reels');
     if (index == 4) Get.toNamed('/my-profile');
   }
@@ -66,7 +66,7 @@ class DashboardController extends GetxController {
 
   void onDoctorActionTap(int index) {
     if (index == 0) Get.toNamed('/doctor-consult');
-    if (index == 1) showMessage("Coming soon");
+    if (index == 1) Get.toNamed('/face-scan');
     //Get.toNamed('/scan-select-profile');
     if (index == 2) showMessage("Coming soon");
     //Get.toNamed('/find-hospital');
@@ -129,7 +129,7 @@ class DashboardController extends GetxController {
   // ===== AI + MEDICINE + FITNESS =====
   void goToSavingsOffers() => showMessage("Coming soon");
   //Get.toNamed('/savings-offers');
-  void goToFitnessTracker() => showMessage("Coming soon");
+  void goToFitnessTracker() => Get.toNamed('/fitness-tracker');
   //Get.toNamed('/fitness-tracker');
   void goToCancerAiScan() => showMessage("Coming soon");
   //Get.toNamed('/cancer-ai-scan');

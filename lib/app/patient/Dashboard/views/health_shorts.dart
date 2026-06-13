@@ -75,7 +75,7 @@ class ShortsController extends GetxController {
     final reels = [
       ReelModel(
         id: '1',
-        youtubeUrl: 'https://www.youtube.com/shorts/DjZcaVnGrv8',
+        youtubeUrl: 'https://www.youtube.com/shorts/0OZwQuYXvR0',
         doctorName: 'Dr. Priya Sharma',
         specialty: 'Cardiologist',
         hospital: 'AIIMS Delhi',
@@ -89,7 +89,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '2',
-        youtubeUrl: 'https://www.youtube.com/shorts/nMI2uzr4LN4',
+        youtubeUrl: 'https://www.youtube.com/shorts/87mHqOU6tXE',
         doctorName: 'Dr. Rahul Mehta',
         specialty: 'Neurologist',
         hospital: 'Fortis Hospital, Mumbai',
@@ -104,7 +104,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '3',
-        youtubeUrl: 'https://www.youtube.com/shorts/QFag6y19tTs',
+        youtubeUrl: 'https://www.youtube.com/shorts/4dPo640kWmk',
         doctorName: 'Dr. Sneha Iyer',
         specialty: 'Dermatologist',
         hospital: 'Apollo Hospitals, Chennai',
@@ -132,7 +132,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '5',
-        youtubeUrl: 'https://www.youtube.com/shorts/8zNMakm5-y4',
+        youtubeUrl: 'https://www.youtube.com/shorts/eLGTAlNJrcs',
         doctorName: 'Dr. Meera Nair',
         specialty: 'Endocrinologist',
         hospital: 'Kokilaben Hospital, Mumbai',
@@ -146,7 +146,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '6',
-        youtubeUrl: 'https://www.youtube.com/shorts/HxibPFa7nJc',
+        youtubeUrl: 'https://www.youtube.com/shorts/KLnnMH46IZU',
         doctorName: 'Dr. Vikram Bose',
         specialty: 'Pulmonologist',
         hospital: 'PGIMER, Chandigarh',
@@ -161,7 +161,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '7',
-        youtubeUrl: 'https://www.youtube.com/shorts/IJWlJeeAHuo',
+        youtubeUrl: 'https://www.youtube.com/shorts/wrBMw9DIAos',
         doctorName: 'Dr. Ananya Roy',
         specialty: 'Psychiatrist',
         hospital: 'NIMHANS, Bengaluru',
@@ -175,7 +175,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '8',
-        youtubeUrl: 'https://youtube.com/shorts/U2NU8ifBK8A',
+        youtubeUrl: 'https://www.youtube.com/shorts/SET6g-TBVzc',
         doctorName: 'Dr. Suresh Pillai',
         specialty: 'Gastroenterologist',
         hospital: 'CMC Vellore',
@@ -190,7 +190,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '9',
-        youtubeUrl: 'https://www.youtube.com/shorts/KHAm6TBu2OQ',
+        youtubeUrl: 'https://www.youtube.com/shorts/kWCkCV8ruWI',
         doctorName: 'Dr. Ritu Agarwal',
         specialty: 'Gynecologist',
         hospital: 'Manipal Hospital, Delhi',
@@ -205,7 +205,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '10',
-        youtubeUrl: 'https://www.youtube.com/shorts/54gEzerxIIg',
+        youtubeUrl: 'https://www.youtube.com/shorts/P5tmbnFH33k',
         doctorName: 'Dr. Karan Malhotra',
         specialty: 'Diabetologist',
         hospital: 'Max Hospital, New Delhi',
@@ -220,7 +220,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '11',
-        youtubeUrl: 'https://www.youtube.com/shorts/MGqBCV2jenk',
+        youtubeUrl: 'https://www.youtube.com/shorts/vRvJsubQiNQ',
         doctorName: 'Dr. Divya Menon',
         specialty: 'Ophthalmologist',
         hospital: 'Sankara Nethralaya, Chennai',
@@ -234,7 +234,7 @@ class ShortsController extends GetxController {
       ),
       ReelModel(
         id: '12',
-        youtubeUrl: 'https://www.youtube.com/shorts/LpNz-1yyRms',
+        youtubeUrl: 'https://www.youtube.com/shorts/4dPo640kWmk',
         doctorName: 'Dr. Aditya Sharma',
         specialty: 'Nephrologist',
         hospital: 'SGPGI, Lucknow',

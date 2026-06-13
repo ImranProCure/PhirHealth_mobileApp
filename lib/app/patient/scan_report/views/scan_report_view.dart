@@ -11,6 +11,7 @@ class ScanReportView extends GetView<ScanReportController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -27,13 +28,14 @@ class ScanReportView extends GetView<ScanReportController> {
             color: Colors.black,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save_alt, color: Colors.black),
-            onPressed: controller.download,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.save_alt, color: Colors.black),
+        //     onPressed: controller.download,
+        //   ),
+        // ],
       ),
+      
       body: Column(
         children: [
           Expanded(

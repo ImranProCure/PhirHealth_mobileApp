@@ -13,7 +13,7 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        scrolledUnderElevation: 0, 
+        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Get.back(),
@@ -33,11 +33,8 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // ===== ACTIVITY CARD =====
             _activityCard(),
             const SizedBox(height: 16),
-
-            // ===== WEEKLY CHART CARD =====
             _weeklyChartCard(),
           ],
         ),
@@ -62,7 +59,7 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
       ),
       child: Column(
         children: [
-          // Title row
+          // ── Title Row ──
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,27 +85,28 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
                   ),
                 ],
               ),
-              GestureDetector(
-                onTap: controller.openSettings,
-                child: const Icon(Icons.settings_outlined,
-                    color: Color(0xFF6B7280), size: 24),
-              ),
+              // GestureDetector(
+              //   onTap: controller.openSettings,
+              //   child: const Icon(Icons.settings_outlined,
+              //       color: Color(0xFF6B7280), size: 24),
+              // ),
             ],
           ),
           const SizedBox(height: 24),
 
-          // ===== CIRCULAR PROGRESS =====
+          // ── Circular Progress ──
           Obx(() => SizedBox(
                 width: 200,
                 height: 200,
                 child: CustomPaint(
-                  painter: _StepsCirclePainter(progress: controller.progress),
+                  painter:
+                      _StepsCirclePainter(progress: controller.progress),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${controller.steps.value.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}',
+                          _formatNumber(controller.steps.value),
                           style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 36,
@@ -133,13 +131,22 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            'GOAL: ${controller.goal.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}',
+                            'GOAL: ${_formatNumber(controller.goal)}',
                             style: const TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF0D9488),
                             ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          controller.status.value,
+                          style: const TextStyle(
+                            fontFamily: 'Mulish',
+                            fontSize: 11,
+                            color: Color(0xFFB0B0B0),
                           ),
                         ),
                       ],
@@ -149,91 +156,102 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
               )),
           const SizedBox(height: 20),
 
-          // ===== DISTANCE & CALORIES =====
-          Row(
-            children: [
-              Expanded(
-                  child: _statCard(
-                icon: Icons.directions_run,
-                iconColor: const Color(0xFF0D9488),
-                value: '${controller.distance} km',
-                label: 'Distance',
-              )),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: _statCard(
-                icon: Icons.local_fire_department_outlined,
-                iconColor: const Color(0xFFF97316),
-                value: '${controller.calories}',
-                label: 'Calories',
-              )),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // ===== MOTIVATION BANNER =====
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE0F2F1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.emoji_events_outlined,
-                    color: Color(0xFF0D9488), size: 24),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Great Job! Only 15 mins more to reach your goal.',
-                    style: TextStyle(
-                      fontFamily: 'Mulish',
-                      fontSize: 13,
-                      color: Color(0xFF374151),
+          // ── Distance & Calories (dynamic) ──
+          Obx(() => Row(
+                children: [
+                  Expanded(
+                    child: _statCard(
+                      icon: Icons.directions_run,
+                      iconColor: const Color(0xFF0D9488),
+                      value: '${controller.distance} km',
+                      label: 'Distance',
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // ===== SHARE BUTTON =====
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00897B), Color(0xFF1565C0)],
-                ),
-              ),
-              child: ElevatedButton(
-                onPressed: controller.shareOnWhatsApp,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-                child: const Text(
-                  'Share on WhatsApp',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _statCard(
+                      icon: Icons.local_fire_department_outlined,
+                      iconColor: const Color(0xFFF97316),
+                      value: '${controller.calories} kcal',
+                      label: 'Calories',
+                    ),
                   ),
+                ],
+              )),
+          const SizedBox(height: 12),
+
+          // ── Dynamic Motivation Banner ──
+          Obx(() => Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: controller.progress >= 1.0
+                      ? const Color(0xFFD1FAE5)
+                      : const Color(0xFFE0F2F1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
-          ),
+                child: Row(
+                  children: [
+                    Icon(
+                      controller.progress >= 1.0
+                          ? Icons.emoji_events
+                          : Icons.emoji_events_outlined,
+                      color: const Color(0xFF0D9488),
+                      size: 24,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        controller.motivationText,
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 13,
+                          color: Color(0xFF374151),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+          //const SizedBox(height: 16),
+
+          // // ── Share Button ──
+          // SizedBox(
+          //   width: double.infinity,
+          //   height: 52,
+          //   child: DecoratedBox(
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(30),
+          //       gradient: const LinearGradient(
+          //         colors: [Color(0xFF00897B), Color(0xFF1565C0)],
+          //       ),
+          //     ),
+          //     child: ElevatedButton(
+          //       onPressed: controller.shareOnWhatsApp,
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: Colors.transparent,
+          //         shadowColor: Colors.transparent,
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(30)),
+          //       ),
+          //       child: const Text(
+          //         'Share on WhatsApp',
+          //         style: TextStyle(
+          //           fontFamily: 'Mulish',
+          //           fontSize: 15,
+          //           fontWeight: FontWeight.w700,
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
   }
 
+  // ===== STAT CARD =====
   Widget _statCard({
     required IconData icon,
     required Color iconColor,
@@ -291,7 +309,7 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // ── Header ──
           const Text(
             'Last 7 Days',
             style: TextStyle(
@@ -301,52 +319,55 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
               color: Colors.black,
             ),
           ),
-          Text(
-            'Total: ${(controller.totalWeekSteps / 1000).toStringAsFixed(0)},000 Steps',
-            style: const TextStyle(
-              fontFamily: 'Mulish',
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF0D9488),
-            ),
-          ),
+          Obx(() => Text(
+                'Total: ${_formatNumber(controller.totalWeekSteps)} Steps',
+                style: const TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0D9488),
+                ),
+              )),
           const SizedBox(height: 20),
 
-          // ===== BAR CHART =====
+          // ── Bar Chart ──
           _barChart(),
           const SizedBox(height: 20),
 
-          // ===== CHANGE GOAL =====
+          // ── Change Goal ──
           _changeGoalSection(),
           const SizedBox(height: 12),
 
-          // ===== RECOMMENDED =====
+          // ── Recommended Banner ──
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE0F2F1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.favorite_border_outlined,
-                    color: Color(0xFF0D9488), size: 22),
-                SizedBox(width: 10),
-                Text(
-                  'Recommended for Heart\nHealth: 6,000',
-                  style: TextStyle(
-                    fontFamily: 'Mulish',
-                    fontSize: 13,
-                    color: Color(0xFF374151),
-                    height: 1.4,
-                  ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0F2F1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ],
-            ),
-          ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.favorite_border_outlined,
+                        color: Color(0xFF0D9488), size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Recommended for Heart Health: ${_formatNumber(controller.recommendedSteps)}',
+                        style: const TextStyle(
+                          fontFamily: 'Mulish',
+                          fontSize: 13,
+                          color: Color(0xFF374151),
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           const SizedBox(height: 16),
 
-          // ===== SAVE GOAL BUTTON =====
+          // ── Save Goal Button ──
           SizedBox(
             width: double.infinity,
             height: 52,
@@ -382,58 +403,98 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
     );
   }
 
+  // ===== BAR CHART =====
   Widget _barChart() {
-    final maxSteps = controller.weekData
-        .map((d) => d['steps'] as int)
-        .reduce((a, b) => a > b ? a : b);
+    return Obx(() {
+      if (controller.weekData.isEmpty) {
+        return const SizedBox(
+          height: 160,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFF0D9488),
+              strokeWidth: 2,
+            ),
+          ),
+        );
+      }
 
-    return SizedBox(
-      height: 160,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: controller.weekData.map((d) {
-          final int steps = d['steps'] as int;
-          final String colorType = d['color'] as String;
-          final double heightRatio = maxSteps > 0 ? steps / maxSteps : 0;
+      final maxSteps = controller.weekData
+          .map((d) => d['steps'] as int)
+          .reduce((a, b) => a > b ? a : b);
 
-          Color barColor;
-          if (colorType == 'green') {
-            barColor = const Color(0xFF22C55E);
-          } else if (colorType == 'orange') {
-            barColor = const Color(0xFFF97316);
-          } else {
-            barColor = const Color(0xFFE5E7EB);
-          }
+      return SizedBox(
+        height: 160,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: controller.weekData.map((d) {
+            final int steps = d['steps'] as int;
+            final String colorType = d['color'] as String;
+            final bool isToday = d['isToday'] as bool? ?? false;
+            final double heightRatio =
+                maxSteps > 0 ? steps / maxSteps : 0;
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: 32,
-                height: steps == 0 ? 20 : 120 * heightRatio,
-                decoration: BoxDecoration(
-                  color: barColor,
-                  borderRadius: BorderRadius.circular(8),
+            Color barColor;
+            if (colorType == 'green') {
+              barColor = const Color(0xFF22C55E);
+            } else if (colorType == 'orange') {
+              barColor = const Color(0xFFF97316);
+            } else {
+              barColor = const Color(0xFFE5E7EB);
+            }
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Step count label on top of today's bar
+                if (isToday && steps > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      _formatNumber(steps),
+                      style: const TextStyle(
+                        fontFamily: 'Mulish',
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0D9488),
+                      ),
+                    ),
+                  ),
+                Container(
+                  width: 32,
+                  height: steps == 0 ? 20 : 120 * heightRatio,
+                  decoration: BoxDecoration(
+                    color: barColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: isToday
+                        ? Border.all(
+                            color: const Color(0xFF0D9488), width: 2)
+                        : null,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                d['day'] as String,
-                style: const TextStyle(
-                  fontFamily: 'Mulish',
-                  fontSize: 12,
-                  color: Color(0xFF9CA3AF),
-                  fontWeight: FontWeight.w600,
+                const SizedBox(height: 6),
+                Text(
+                  d['day'] as String,
+                  style: TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 12,
+                    color: isToday
+                        ? const Color(0xFF0D9488)
+                        : const Color(0xFF9CA3AF),
+                    fontWeight: isToday
+                        ? FontWeight.w800
+                        : FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
-          );
-        }).toList(),
-      ),
-    );
+              ],
+            );
+          }).toList(),
+        ),
+      );
+    });
   }
 
+  // ===== CHANGE GOAL SECTION =====
   Widget _changeGoalSection() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -472,7 +533,7 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
                   ),
                   const SizedBox(width: 24),
                   Text(
-                    '${(controller.dailyGoal.value / 1000).toStringAsFixed(0)},000',
+                    _formatNumber(controller.dailyGoal.value),
                     style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 36,
@@ -491,8 +552,8 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
                         color: const Color(0xFF0D9488),
                         borderRadius: BorderRadius.circular(22),
                       ),
-                      child:
-                          const Icon(Icons.add, color: Colors.white, size: 22),
+                      child: const Icon(Icons.add,
+                          color: Colors.white, size: 22),
                     ),
                   ),
                 ],
@@ -512,6 +573,12 @@ class FitnessTrackerView extends GetView<FitnessTrackerController> {
       ),
     );
   }
+
+  // ===== HELPER =====
+  String _formatNumber(int n) {
+    return n.toString().replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},');
+  }
 }
 
 // ===== CIRCLE PAINTER =====
@@ -525,7 +592,7 @@ class _StepsCirclePainter extends CustomPainter {
     final radius = size.width / 2 - 12;
     const strokeWidth = 14.0;
 
-    // Background
+    // Background track
     final bgPaint = Paint()
       ..color = const Color(0xFFE5E7EB)
       ..strokeWidth = strokeWidth
@@ -533,7 +600,7 @@ class _StepsCirclePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Progress
+    // Progress arc
     final progressPaint = Paint()
       ..shader = const LinearGradient(
         colors: [Color(0xFF00897B), Color(0xFF1565C0)],
