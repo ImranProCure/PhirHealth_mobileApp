@@ -46,126 +46,126 @@ class CoachStep4View extends GetView<CoachStep4Controller> {
                   const SizedBox(height: 24),
 
                   // Work Preferences
-                  const Text('Work Preferences',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 12),
+                  // const Text('Work Preferences',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 12),
 
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Column(
-                      children: [
-                        _buildInlineToggle(
-                          label: 'Available for Tele consultation?',
-                          rxValue: controller.teleconsultation,
-                          onChanged: (v) =>
-                              controller.teleconsultation.value = v,
-                        ),
-                        Divider(height: 1, color: Colors.grey.shade100),
-                        _buildInlineToggle(
-                          label: 'Willing to work in\nmultidisciplinary teams?',
-                          rxValue: controller.multidisciplinary,
-                          onChanged: (v) =>
-                              controller.multidisciplinary.value = v,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                  // Container(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(12),
+                  //     border: Border.all(color: Colors.grey.shade200),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       _buildInlineToggle(
+                  //         label: 'Available for Tele consultation?',
+                  //         rxValue: controller.teleconsultation,
+                  //         onChanged: (v) =>
+                  //             controller.teleconsultation.value = v,
+                  //       ),
+                  //       Divider(height: 1, color: Colors.grey.shade100),
+                  //       _buildInlineToggle(
+                  //         label: 'Willing to work in\nmultidisciplinary teams?',
+                  //         rxValue: controller.multidisciplinary,
+                  //         onChanged: (v) =>
+                  //             controller.multidisciplinary.value = v,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 24),
 
-                  // Experience Metrics — Languages
-                  const Text('Experience Metrics',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 12),
-                  const Text('Languages Spoken',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 10),
+                  // // Experience Metrics — Languages
+                  // const Text('Experience Metrics',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 12),
+                  // const Text('Languages Spoken',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 10),
 
-                  Obx(() => Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          ...controller.allLanguages.map((lang) {
-                            final sel =
-                                controller.selectedLanguages.contains(lang);
-                            return GestureDetector(
-                              onTap: () => controller.toggleLanguage(lang),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    color: sel
-                                        ? const Color(0xFF0D9488)
-                                        : Colors.grey.shade300,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (sel)
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 6),
-                                        child: Icon(Icons.check_circle,
-                                            size: 16, color: Color(0xFF0D9488)),
-                                      ),
-                                    Text(lang,
-                                        style: TextStyle(
-                                            fontFamily: 'Mulish',
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                            color: sel
-                                                ? const Color(0xFF0D9488)
-                                                : Colors.black87)),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                          GestureDetector(
-                            onTap: () =>
-                                controller.showAddLanguageDialog(context),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  color: const Color(0xFF0D9488),
-                                  width: 1.5,
-                                ),
-                              ),
-                              child: const Text('+ Add',
-                                  style: TextStyle(
-                                      fontFamily: 'Mulish',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF0D9488))),
-                            ),
-                          ),
-                        ],
-                      )),
-                  const SizedBox(height: 20),
+                  // Obx(() => Wrap(
+                  //       spacing: 10,
+                  //       runSpacing: 10,
+                  //       children: [
+                  //         ...controller.allLanguages.map((lang) {
+                  //           final sel =
+                  //               controller.selectedLanguages.contains(lang);
+                  //           return GestureDetector(
+                  //             onTap: () => controller.toggleLanguage(lang),
+                  //             child: Container(
+                  //               padding: const EdgeInsets.symmetric(
+                  //                   horizontal: 14, vertical: 8),
+                  //               decoration: BoxDecoration(
+                  //                 color: Colors.white,
+                  //                 borderRadius: BorderRadius.circular(30),
+                  //                 border: Border.all(
+                  //                   color: sel
+                  //                       ? const Color(0xFF0D9488)
+                  //                       : Colors.grey.shade300,
+                  //                   width: 1.5,
+                  //                 ),
+                  //               ),
+                  //               child: Row(
+                  //                 mainAxisSize: MainAxisSize.min,
+                  //                 children: [
+                  //                   if (sel)
+                  //                     const Padding(
+                  //                       padding: EdgeInsets.only(right: 6),
+                  //                       child: Icon(Icons.check_circle,
+                  //                           size: 16, color: Color(0xFF0D9488)),
+                  //                     ),
+                  //                   Text(lang,
+                  //                       style: TextStyle(
+                  //                           fontFamily: 'Mulish',
+                  //                           fontSize: 13,
+                  //                           fontWeight: FontWeight.w600,
+                  //                           color: sel
+                  //                               ? const Color(0xFF0D9488)
+                  //                               : Colors.black87)),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           );
+                  //         }),
+                  //         GestureDetector(
+                  //           onTap: () =>
+                  //               controller.showAddLanguageDialog(context),
+                  //           child: Container(
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 14, vertical: 8),
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(30),
+                  //               border: Border.all(
+                  //                 color: const Color(0xFF0D9488),
+                  //                 width: 1.5,
+                  //               ),
+                  //             ),
+                  //             child: const Text('+ Add',
+                  //                 style: TextStyle(
+                  //                     fontFamily: 'Mulish',
+                  //                     fontSize: 13,
+                  //                     fontWeight: FontWeight.w600,
+                  //                     color: Color(0xFF0D9488))),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )),
+                  // const SizedBox(height: 20),
 
                   // Primary Communication Mode
                   _buildLabel('Primary communication Mode'),

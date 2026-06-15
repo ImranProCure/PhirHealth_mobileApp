@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 class CoachStep5Controller extends GetxController {
   // Commercials
-  final feeController = TextEditingController();
-  final packageController = TextEditingController();
+  // final feeController = TextEditingController();
+  // final packageController = TextEditingController();
 
   // Policies
   final cancellationController = TextEditingController();
@@ -14,8 +14,8 @@ class CoachStep5Controller extends GetxController {
   final progressController = TextEditingController();
 
   // Behavioural Check
-  final accountabilityController = TextEditingController();
-  final resistanceController = TextEditingController();
+  // final accountabilityController = TextEditingController();
+  // final resistanceController = TextEditingController();
 
   final RxBool hasMentor = true.obs;
 
@@ -23,13 +23,13 @@ class CoachStep5Controller extends GetxController {
 
   @override
   void onClose() {
-    feeController.dispose();
-    packageController.dispose();
+    // feeController.dispose();
+    // packageController.dispose();
     cancellationController.dispose();
     supportController.dispose();
     progressController.dispose();
-    accountabilityController.dispose();
-    resistanceController.dispose();
+    // accountabilityController.dispose();
+    // resistanceController.dispose();
     super.onClose();
   }
 }

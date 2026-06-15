@@ -93,11 +93,13 @@ abstract class Routes {
   static const CAPABILITIES = '/capabilities';
   static const OPERATION_TECH = '/operation-tech';
   static const VERIFICATION_DETAILS = '/verification-details';
+  static const LAB_ONBOARDING_VERIFY_OTP = '//lab-onboarding-verify-otp';
   static const PHARMACY_REGISTRATION = '/pharmacy-registration';
   static const INVENTORY_OFFERINGS = '/inventory-offerings';
   static const LOGISTICS_INTEGRATION = '/logistics-integration';
   static const LEGAL_COMPLIANCE = '/legal-compliance';
   static const BASIC_INFORMATION = '/basic-information';
+  static const CLINIC_REGISTRATION = '/clinic-registration';
   static const HOSPITAL_LEGAL_COMPLIANCE = '/hospital-legal-compliance';
   static const CLINICAL_CAPACITY = '/clinical-capacity';
   static const RESOURCE_ALLOCATION = '/resource-allocation';
@@ -111,4 +113,8 @@ abstract class Routes {
   static const COACH_STEP4 = '/coach-step4';
   static const COACH_STEP5 = '/coach-step5';
   static const COACH_STEP6 = '/coach-step6';
+  static const LAB_DASHBOARD = '/lab-dashboard';
+  static const PHARMACY_DASHBOARD = '/pharmacy-dashboard';
+  static const CLINIC_DASHBOARD = '/clinic-dashboard';
+  static const HOSPITAL_DASHBOARD = '/hospital-dashboard';
 }

@@ -17,8 +17,8 @@ class SetScheduleView extends GetView<SetScheduleController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          'Set Schedule',
+        title: Text(
+          'set_schedule_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -40,8 +40,8 @@ class SetScheduleView extends GetView<SetScheduleController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'How many times a day?',
+                        Text(
+                          'set_schedule_times_day'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 15,
@@ -51,8 +51,8 @@ class SetScheduleView extends GetView<SetScheduleController> {
                         ),
                         GestureDetector(
                           onTap: () => _showDoseCountPicker(context),
-                          child: const Text(
-                            'Edit',
+                          child: Text(
+                            'set_schedule_edit'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 14,
@@ -112,11 +112,11 @@ class SetScheduleView extends GetView<SetScheduleController> {
                         child: controller.isLoading.value
                             ? const CircularProgressIndicator(
                                 color: Colors.white)
-                            : const Row(
+                            : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Save Schedule',
+                                    'set_schedule_save'.tr,
                                     style: TextStyle(
                                       fontFamily: 'Mulish',
                                       fontSize: 16,
@@ -219,7 +219,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
   // ===== CUSTOM DATE DISPLAY =====
   Widget _customDateDisplay() {
     return Obx(() {
-      if (controller.selectedDuration.value != 'Custom') {
+      if (controller.selectedDuration.value != 'set_schedule_custom'.tr) {
         return const SizedBox();
       }
       final start = controller.customStartDate.value;
@@ -280,8 +280,8 @@ class SetScheduleView extends GetView<SetScheduleController> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Times per day',
+                Text(
+                  'set_schedule_times_per_day'.tr,
                   style: TextStyle(
                     fontFamily: 'Mulish',
                     fontSize: 16,
@@ -293,8 +293,12 @@ class SetScheduleView extends GetView<SetScheduleController> {
                 Obx(() => Column(
                       children: List.generate(4, (i) {
                         final count = i + 1;
-                        final label =
-                            ['Once', 'Twice', '3 Times', '4 Times'][i];
+                        final label = [
+                          'set_schedule_once'.tr,
+                          'set_schedule_twice'.tr,
+                          'set_schedule_3_times'.tr,
+                          'set_schedule_4_times'.tr
+                        ][i];
                         final isSelected = controller.doseList.length == count;
                         return GestureDetector(
                           onTap: () {
@@ -321,7 +325,7 @@ class SetScheduleView extends GetView<SetScheduleController> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    '$label ($count dose${count > 1 ? 's' : ''})',
+                                    '$label ($count ${count > 1 ? 'set_schedule_doses'.tr : 'set_schedule_dose'.tr})',
                                     style: TextStyle(
                                       fontFamily: 'Mulish',
                                       fontSize: 14,

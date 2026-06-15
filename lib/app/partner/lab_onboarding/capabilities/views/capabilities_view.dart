@@ -170,11 +170,12 @@ class CapabilitiesView extends GetView<CapabilitiesController> {
       ),
       builder: (_) {
         final options = [
-          'Same Day (4-6 hrs)',
-          'Next Day (24 hrs)',
-          '2-3 Days',
-          '3-5 Days',
-          'Within a Week',
+          '2 Hours',
+          '4 Hours',
+          '6 Hours',
+          '12 Hours',
+          '24 Hours',
+          '48 Hours',
         ];
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),

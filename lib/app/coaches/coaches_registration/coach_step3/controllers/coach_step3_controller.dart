@@ -32,8 +32,8 @@ class CoachStep3Controller extends GetxController {
 
   // Text fields
   final workplacesController = TextEditingController();
-  final avgClientsController = TextEditingController();
-  final totalHrsController = TextEditingController();
+  // final avgClientsController = TextEditingController();
+  // final totalHrsController = TextEditingController();
 
   void toggleSpecialization(String val) {
     if (selectedSpecializations.contains(val)) {
@@ -64,8 +64,8 @@ class CoachStep3Controller extends GetxController {
   @override
   void onClose() {
     workplacesController.dispose();
-    avgClientsController.dispose();
-    totalHrsController.dispose();
+    // avgClientsController.dispose();
+    // totalHrsController.dispose();
     super.onClose();
   }
 }

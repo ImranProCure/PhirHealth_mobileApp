@@ -20,8 +20,8 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          "My Doctor Visits",
+        title: Text(
+          "visits_title".tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -108,7 +108,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                           size: 48, color: Color(0xFF9CA3AF)),
                       const SizedBox(height: 12),
                       Text(
-                        "No ${controller.selectedFilter.value == 'All' ? '' : '${controller.selectedFilter.value} '}visits found",
+                        "No ${controller.selectedFilter.value == 'All' ? '' : '${controller.selectedFilter.value} '}${'visits_no_visits'.tr}",
                         style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 14,
@@ -496,9 +496,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           Text(
             visit['specialty'],
             style: const TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 12,
-                color: Color(0xFF6B7280)),
+                fontFamily: 'Mulish', fontSize: 12, color: Color(0xFF6B7280)),
           ),
           const SizedBox(height: 8),
 
@@ -519,8 +517,7 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
           ),
 
           // ── Note ──
-          if (visit['note'] != null &&
-              visit['note'].toString().isNotEmpty) ...[
+          if (visit['note'] != null && visit['note'].toString().isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               visit['note'],
@@ -549,14 +546,14 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.assignment_outlined,
                       size: 18, color: Color(0xFF0D9488)),
                   SizedBox(width: 8),
                   Text(
-                    "View More Details",
+                    "visits_view_details".tr,
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
@@ -586,13 +583,13 @@ class DoctorVisitsView extends GetView<DoctorVisitsController> {
   Widget _bookAgainButton(Map<String, dynamic> visit) {
     return GestureDetector(
       onTap: () => controller.bookAgain(visit),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.replay_outlined, size: 16, color: Color(0xFF0D9488)),
           SizedBox(width: 6),
           Text(
-            "Book Again",
+            "visits_book_again".tr,
             style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 13,
@@ -715,8 +712,8 @@ class _JoinButtonState extends State<_JoinButton> {
             onPressed: _isEnabled ? _launchMeetingLink : null,
             icon: const Icon(Icons.videocam_outlined,
                 size: 18, color: Colors.white),
-            label: const Text(
-              "Join Video Call",
+            label: Text(
+              "visits_join_call".tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 13,

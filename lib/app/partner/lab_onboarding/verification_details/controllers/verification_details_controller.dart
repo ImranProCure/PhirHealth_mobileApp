@@ -1,32 +1,47 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/common_function.dart';
+import 'package:image_picker/image_picker.dart';
 
 class VerificationDetailsController extends GetxController {
-  // Each entry is unique label + index pair to handle duplicate 'T' (Tue & Thu)
-  final List<String> days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  final panGstController = TextEditingController();
+  final licenseController = TextEditingController();
 
-  // Stores selected day INDICES (0=Mon ... 6=Sun)
-  // Default: Saturday(5) and Sunday(6) selected as holidays (shown red)
-  final RxSet<int> selectedDays = <int>{5, 6}.obs;
+  final RxBool nablAccredited = true.obs;
+  final RxString certificatePath = ''.obs;
 
-  final RxString fromTime = '08:00 AM'.obs;
-  final RxString toTime = '08:00 PM'.obs;
+  final ImagePicker _picker = ImagePicker();
 
-  final RxBool emergencyService = true.obs;
-  final RxBool onlineBookings = true.obs;
-  final RxBool apiIntegration = false.obs;
-
-  /// Toggle day by index — handles duplicate 'T' (Tuesday vs Thursday) correctly
-  void toggleDayByIndex(int index) {
-    if (selectedDays.contains(index)) {
-      selectedDays.remove(index);
-    } else {
-      selectedDays.add(index);
+  Future<void> pickCertificate() async {
+    final XFile? file = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (file != null) {
+      certificatePath.value = file.path;
     }
   }
 
-  void submitRegistration() {
-    // TODO: API call with all collected data
-    // On success navigate to success screen or home
-    Get.offAllNamed('/select-facility-type');
+  void goToNext() {
+    if (panGstController.text.trim().isEmpty) {
+      showError('Please enter PAN / GST number');
+      return;
+    }
+    if (licenseController.text.trim().isEmpty) {
+      showError('Please enter registration / license number');
+      return;
+    }
+    if (certificatePath.value.isEmpty) {
+      showError('Please upload license certificate');
+      return;
+    }
+    Get.toNamed('/operation-tech');
+  }
+
+  @override
+  void onClose() {
+    panGstController.dispose();
+    licenseController.dispose();
+    super.onClose();
   }
 }

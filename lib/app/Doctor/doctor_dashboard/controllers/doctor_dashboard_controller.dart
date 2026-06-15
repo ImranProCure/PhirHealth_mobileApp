@@ -4,6 +4,8 @@ import 'package:sample/app/service/db/db.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 import '../../../service/api/common_api/doctor_dashboard_api/doctor_dashboard_api.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 
 class DoctorDashboardController extends GetxController {
@@ -11,6 +13,7 @@ class DoctorDashboardController extends GetxController {
   final DoctorDashboardApi _dashboardApi = DoctorDashboardApi();
 
   final RxInt currentIndex = 0.obs;
+  final RxBool isEndingMeeting = false.obs; // ← class level pe
 
   // ===== DOCTOR INFO =====
   final RxString doctorName = 'Doctor'.obs;
@@ -94,13 +97,11 @@ class DoctorDashboardController extends GetxController {
   Future<void> _fetchDashboard() async {
     try {
       final ApiResponse response = await _dashboardApi.getDoctorDashboard();
-
       final message = response.data['message'];
 
       if (message != null && message['status'] == true) {
         final data = message['data'] as Map<String, dynamic>? ?? {};
 
-        // ===== OVERVIEW =====
         final overview = data['overview'] as Map<String, dynamic>? ?? {};
 
         final rawDate = overview['date']?.toString() ?? '';
@@ -149,10 +150,8 @@ class DoctorDashboardController extends GetxController {
         };
         stats.refresh();
 
-        // ===== APPOINTMENTS =====
         final apts = data['upcoming_appointments'] as List? ?? [];
 
-        // DEBUG — API response ki keys dekhne ke liye
         if (apts.isNotEmpty) {
           print('🔵 DASHBOARD APT KEYS: ${apts[0].keys.toList()}');
           print('🔵 DASHBOARD APT SAMPLE: ${apts[0]}');
@@ -209,6 +208,78 @@ class DoctorDashboardController extends GetxController {
     }
   }
 
+  // ===== JOIN CALL =====
+  // ===== JOIN CALL =====
+  void joinCall(Map<String, dynamic> apt) async {
+    print('🟡 APT TIME: ${apt['time']}');
+
+    // if (!canJoin(apt)) {
+    //   final timeStr = apt['time']?.toString() ?? '';
+    //   showError('Call will be available 5 minutes before $timeStr');
+    //   return;
+    // }
+
+    String link = apt['video_link']?.toString() ?? '';
+    if (link.isEmpty) {
+      showError('No link available');
+      return;
+    }
+
+    // Dynamic link se seedha meet link nikalo
+    if (link.contains('meet.app.goo.gl') || link.contains('goo.gl')) {
+      final uri = Uri.parse(link);
+      link = uri.queryParameters['link'] ?? link;
+    }
+
+    print('🟢 FINAL MEET LINK: $link');
+
+    // Chrome mein kholo
+    final uri = Uri.parse(link);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    // Meeting WebView screen pe bhi jao — sirf End Meeting button ke liye
+    Get.toNamed('/meeting-webview', arguments: {
+      ...apt,
+      'meet_link': link,
+    });
+  }
+
+  // ===== END MEETING =====
+  Future<void> endMeeting(Map<String, dynamic> apt) async {
+    if (isEndingMeeting.value) return;
+    isEndingMeeting.value = true;
+    try {
+      final appointmentId = apt['id']?.toString() ?? '';
+      final token = await _authStorage.getToken();
+      final cookie = await _authStorage.getCookie();
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            '${ApiConstants.baseUrl}/api/method/vhealthcare.api.patient.doctor_consult.patient_encounter.create_patient_encounterr'),
+      );
+      request.headers.addAll({
+        'Authorization': 'token $token',
+        'Cookie': cookie ?? '',
+      });
+      request.fields['appointment_id'] = appointmentId;
+      final response = await request.send();
+      final resBody = await response.stream.bytesToString();
+      print('🟢 END MEETING RESPONSE: $resBody');
+      final data = jsonDecode(resBody);
+      if (data['message']['status'] == true) {
+        await _fetchDashboard();
+        Get.offAllNamed('/doctor-dashboard');
+      } else {
+        showError('Could not end meeting');
+      }
+    } catch (e) {
+      print('🔴 END MEETING ERROR: $e');
+      showError(e.toString());
+    } finally {
+      isEndingMeeting.value = false;
+    }
+  }
+
   // ===== NAV =====
   void onNavTap(int index) {
     currentIndex.value = index;
@@ -217,30 +288,8 @@ class DoctorDashboardController extends GetxController {
     if (index == 3) Get.toNamed('/doctor-profile');
   }
 
-  void seeAll() {
-    Get.toNamed('/see-all-appointments');
-  }
-
-  // Controller mein joinCall - WAPAS launchUrl pe aa jao
-  void joinCall(Map<String, dynamic> apt) async {
-    if (!canJoin(apt)) {
-      final timeStr = apt['time']?.toString() ?? '';
-      showError('Call will be available 5 minutes before $timeStr');
-      return;
-    }
-    final link = apt['video_link']?.toString() ?? '';
-    if (link.isEmpty) {
-      showError('No link available');
-      return;
-    }
-
-    final uri = Uri.parse(link);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
-  void onAppointmentTap(Map<String, dynamic> apt) {
-    Get.toNamed('/doctor-patient-detail', arguments: apt);
-  }
-
+  void seeAll() => Get.toNamed('/see-all-appointments');
+  void onAppointmentTap(Map<String, dynamic> apt) =>
+      Get.toNamed('/doctor-patient-detail', arguments: apt);
   void onNotification() => Get.toNamed('/doctor-notifications');
 }

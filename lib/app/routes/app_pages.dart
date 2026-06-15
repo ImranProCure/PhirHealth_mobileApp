@@ -6,6 +6,8 @@ import 'package:sample/app/Doctor/doctor_edit_clinic/bindings/doctor_edit_clinic
 import 'package:sample/app/Doctor/doctor_edit_clinic/views/doctor_edit_clinic_view.dart';
 import 'package:sample/app/Doctor/doctor_edit_myprofile/bindings/doctor_edit_myprofile_binding.dart';
 import 'package:sample/app/Doctor/doctor_edit_myprofile/views/doctor_edit_myprofile_view.dart';
+import 'package:sample/app/Doctor/doctor_profile/views/doctor_privacy_policy.dart';
+import 'package:sample/app/Doctor/doctor_profile/views/doctor_support_help.dart';
 import 'package:sample/app/Doctor/experience_edit/bindings/experience_edit_binding.dart';
 import 'package:sample/app/Doctor/experience_edit/views/experience_edit_view.dart';
 import 'package:sample/app/Doctor/registration_edit/bindings/registration_edit_binding.dart';
@@ -32,6 +34,8 @@ import 'package:sample/app/corporate/corporate_registration/corporate_step3/bind
 import 'package:sample/app/corporate/corporate_registration/corporate_step3/views/corporate_step3_view.dart';
 import 'package:sample/app/corporate/corporate_registration/corporate_step4/bindings/corporate_step4_binding.dart';
 import 'package:sample/app/corporate/corporate_registration/corporate_step4/views/corporate_step4_view.dart';
+import 'package:sample/app/modules/meeting_webview_screen.dart';
+import 'package:sample/app/partner/clinic_onboarding/clinic_dashboard/clinic_dashboard_view.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/bindings/clinic_expertise_binding.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/views/clinic_expertise_view.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_legal_compliance/bindings/clinic_legal_compliance_binding.dart';
@@ -44,6 +48,7 @@ import 'package:sample/app/partner/hospital_onboarding/basic_information/binding
 import 'package:sample/app/partner/hospital_onboarding/basic_information/views/basic_information_view.dart';
 import 'package:sample/app/partner/hospital_onboarding/clinical_capacity/bindings/clinical_capacity_binding.dart';
 import 'package:sample/app/partner/hospital_onboarding/clinical_capacity/views/clinical_capacity_view.dart';
+import 'package:sample/app/partner/hospital_onboarding/hospital_dashboard/hospital_dashboard_view.dart';
 import 'package:sample/app/partner/hospital_onboarding/hospital_legal_compliance/bindings/hospital_legal_compliance_binding.dart';
 import 'package:sample/app/partner/hospital_onboarding/hospital_legal_compliance/views/hospital_legal_compliance_view.dart';
 import 'package:sample/app/partner/hospital_onboarding/resource_allocation/bindings/resource_allocation_binding.dart';
@@ -52,6 +57,7 @@ import 'package:sample/app/partner/lab_onboarding/basic_info/bindings/basic_info
 import 'package:sample/app/partner/lab_onboarding/basic_info/views/basic_info_view.dart';
 import 'package:sample/app/partner/lab_onboarding/capabilities/bindings/capabilities_binding.dart';
 import 'package:sample/app/partner/lab_onboarding/capabilities/views/capabilities_view.dart';
+import 'package:sample/app/partner/lab_onboarding/lab_dashboard/lab_dashboard_view.dart';
 import 'package:sample/app/partner/lab_onboarding/operation_tech/bindings/operation_tech_binding.dart';
 import 'package:sample/app/partner/lab_onboarding/operation_tech/views/operation_tech_view.dart';
 import 'package:sample/app/partner/lab_onboarding/verification_details/bindings/verification_details_binding.dart';
@@ -62,6 +68,7 @@ import 'package:sample/app/partner/pharmacy_onboarding/legal_compliance/bindings
 import 'package:sample/app/partner/pharmacy_onboarding/legal_compliance/views/legal_compliance_view.dart';
 import 'package:sample/app/partner/pharmacy_onboarding/logistics_integration/bindings/logistics_integration_binding.dart';
 import 'package:sample/app/partner/pharmacy_onboarding/logistics_integration/views/logistics_integration_view.dart';
+import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_dashboard/lab_dashboard_view.dart';
 import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/bindings/pharmacy_registration_binding.dart';
 import 'package:sample/app/partner/pharmacy_onboarding/pharmacy_registration/views/pharmacy_registration_view.dart';
 import 'package:sample/app/partner/select_facility_type/bindings/select_facility_type_binding.dart';
@@ -672,6 +679,10 @@ class AppPages {
         binding: FaceScanBinding()),
 
     GetPage(
+        name: '/doctorprivacypolicy', page: () => const DoctorPrivacyPolicy()),
+    GetPage(name: '/doctorsupport', page: () => const DoctorSupportScreen()),
+
+    GetPage(
         name: '/scan-report',
         page: () => const ScanReportView(),
         binding: ScanReportBinding()),
@@ -979,6 +990,26 @@ class AppPages {
       binding: BindingsBuilder(() {
         Get.lazyPut(() => SeeAllAppointmentsController());
       }),
+    ),
+    GetPage(
+      name: '/lab-dashboard',
+      page: () => const LabDashboardView(),
+    ),
+    GetPage(
+      name: '/pharmacy-dashboard',
+      page: () => const PharmacyDashboardView(),
+    ),
+    GetPage(
+      name: '/clinic-dashboard',
+      page: () => const ClinicDashboardView(),
+    ),
+    GetPage(
+      name: '/hospital-dashboard',
+      page: () => const HospitalDashboardView(),
+    ),
+    GetPage(
+      name: '/meeting-webview',
+      page: () => const MeetingWebViewScreen(),
     ),
   ];
 }

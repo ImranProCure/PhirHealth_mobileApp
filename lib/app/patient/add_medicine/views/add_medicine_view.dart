@@ -42,7 +42,7 @@ class _PhoneAddMedicineView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _FieldLabel('Medicine Name'),
+                  _FieldLabel('add_medicine_title'.tr),
                   const SizedBox(height: 8),
                   _NameField(controller: controller),
                   const SizedBox(height: 20),
@@ -98,8 +98,8 @@ class _TabletAddMedicineView extends StatelessWidget {
                       color: const Color(0xFFE0F2F1),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      'Step 1 — Medicine Details',
+                    child: Text(
+                      'add_medicine_badge'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
@@ -109,8 +109,8 @@ class _TabletAddMedicineView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text(
-                    'Add Medicine',
+                  Text(
+                    'add_medicine_heading'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 28,
@@ -119,8 +119,8 @@ class _TabletAddMedicineView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Enter the medicine name and select its type to get started.',
+                  Text(
+                    'add_medicine_sub'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 13,
@@ -130,12 +130,12 @@ class _TabletAddMedicineView extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  _FieldLabel('Medicine Name'),
+                  _FieldLabel('add_medicine_name_label'.tr),
                   const SizedBox(height: 8),
                   _NameField(controller: controller),
                   const SizedBox(height: 24),
 
-                  _FieldLabel('Medicine Type'),
+                  _FieldLabel('add_medicine_type_label'.tr),
                   const SizedBox(height: 12),
 
                   // Type grid fills remaining space
@@ -191,7 +191,7 @@ AppBar _buildAppBar({required double fontSize}) {
     ),
     centerTitle: true,
     title: Text(
-      'Add Medicine',
+      'add_medicine_title'.tr,
       style: TextStyle(
         fontFamily: 'Mulish',
         fontSize: fontSize,
@@ -246,7 +246,7 @@ class _NameField extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon:
               const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
-          hintText: 'Dolo 650',
+          hintText: 'add_medicine_name_hint'.tr,
           hintStyle:
               const TextStyle(fontFamily: 'Mulish', color: Color(0xFF9CA3AF)),
           border: OutlineInputBorder(
@@ -383,7 +383,7 @@ class _StrengthUnitRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _FieldLabel('Strength'),
+              _FieldLabel('add_medicine_strength_label'.tr),
               const SizedBox(height: 8),
               Obx(() => _Dropdown(
                     value: controller.strength.value,
@@ -398,7 +398,7 @@ class _StrengthUnitRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _FieldLabel('Unit'),
+              _FieldLabel('add_medicine_unit_label'.tr),
               const SizedBox(height: 8),
               Obx(() => _Dropdown(
                     value: controller.unit.value,
@@ -545,11 +545,11 @@ class _NextButton extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Next Step',
+                'next_button'.tr,
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 16,

@@ -7,6 +7,7 @@ class ClinicRegistrationController extends GetxController {
   final doctorNameController = TextEditingController();
   final contactController = TextEditingController();
   final addressController = TextEditingController();
+  final emailController = TextEditingController();
 
   final List<String> clinicTypes = [
     'General',
@@ -48,6 +49,7 @@ class ClinicRegistrationController extends GetxController {
     doctorNameController.dispose();
     contactController.dispose();
     addressController.dispose();
+    emailController.dispose();
     super.onClose();
   }
 }

@@ -164,6 +164,16 @@ class ClinicRegistrationView extends GetView<ClinicRegistrationController> {
                   ),
                   const SizedBox(height: 20),
 
+// Email
+                  _buildLabel('Email'),
+                  const SizedBox(height: 8),
+                  _buildTextField(
+                    controller: controller.emailController,
+                    hint: 'e.g. clinic@example.com',
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 20),
+
                   // Upload Clinic Logo
                   GestureDetector(
                     onTap: controller.pickLogo,

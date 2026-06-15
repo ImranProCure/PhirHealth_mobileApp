@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:sample/app/service/db/db.dart';
 
 class DoctorAvailabilityApi {
   final ApiClient _apiClient = ApiClient();
@@ -23,6 +25,7 @@ class DoctorAvailabilityApi {
         'schedule': schedule,
         'day': day,
       },
+      authenticated: true,
     );
   }
 
@@ -47,6 +50,37 @@ class DoctorAvailabilityApi {
         'slot_duration': slotDuration,
         'session': session,
       },
+    );
+  }
+
+  // POST - create slots (called after registration or when no slots exist)
+  Future<ApiResponse> createDoctorSlots({
+    required String fromTime,
+    required String toTime,
+    required int durationMins,
+    required List<String> days,
+    required String practitioner,
+    int allowVideoConferencing = 0,
+  }) async {
+    // Token storage se lo aur set karo
+    // final authStorage = AuthStorageService();
+    // final token = await authStorage.getToken();
+    // if (token != null) {
+    //   _apiClient.setBearerToken(token);
+    // }
+
+    return await _apiClient.post(
+      ApiConstants.commonApiConstants.createDoctorSlots,
+      data: {
+        'from_time': fromTime,
+        'to_time': toTime,
+        'duration': durationMins.toString(),
+        'days': days,
+        'create_slots': 1,
+        'practitioner_id': practitioner,
+      },
+      // options: Options(),
+      // authenticated: true
     );
   }
 }

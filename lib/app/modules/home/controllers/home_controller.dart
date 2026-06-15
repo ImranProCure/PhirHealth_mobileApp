@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../login/views/login_view.dart';
 import '../../login/bindings/login_binding.dart';
 import '../../../controllers/role_controller.dart';
+import 'package:sample/app/partner/select_facility_type/views/select_facility_type_view.dart';
+import 'package:sample/app/partner/select_facility_type/bindings/select_facility_type_binding.dart';
 
 class HomeController extends GetxController {
   /// =========================
@@ -66,15 +68,15 @@ class HomeController extends GetxController {
   /// ROLE SELECTION HANDLER
   /// =========================
   void onRoleSelected(UserRole role) {
-    /// 1️⃣ Store role
     _roleController.selectRole(role);
 
-    /// 2️⃣ Handle flow
     if (role == UserRole.partner) {
-      /// 👉 Collaborator flow
-      Get.toNamed('/select-facility-type');
+      Get.to(
+        () => const SelectFacilityTypeView(),
+        binding: SelectFacilityTypeBinding(),
+        transition: Transition.rightToLeft,
+      );
     } else {
-      /// 👉 Normal flow (patient, doctor, etc.)
       Get.to(
         () => const LoginView(),
         binding: LoginBinding(),

@@ -8,6 +8,9 @@ import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 import 'package:sample/app/service/db/db.dart';
+import 'package:intl/intl.dart';
+import '../../../Doctor/doctor_availability/views/doctor_availability_view.dart';
+import '../../../Doctor/doctor_availability/controllers/doctor_availability_controller.dart';
 
 // STEP CONTROLLERS
 import '../../../Doctor/doctor_signup/registration/controllers/registration_controller.dart';
@@ -242,7 +245,7 @@ class DoctorVerifyOtpController extends GetxController {
             reg.registrationNumberController.text.trim(),
 
         'custom_year_of_graduation': reg.graduationYear.value != null
-            ? '${reg.graduationYear.value!.year}-01-01 00:00:00'
+            ? DateFormat('yyyy-MM-dd').format(reg.graduationYear.value!)
             : '',
 
         // STEP 2
@@ -252,7 +255,7 @@ class DoctorVerifyOtpController extends GetxController {
 
         'custom_current_practice_place': exp.selectedPracticePlaces.join(', '),
 
-        'custom_care_experience': exp.selectedCareExperience.join(', '),
+        'custom_care_experience': exp.selectedCareExperience.value!,
 
         'custom_gynaecological_history': exp.historyController.text.trim(),
 
@@ -289,7 +292,6 @@ class DoctorVerifyOtpController extends GetxController {
 
       if (messageData is Map && messageData['status'] == true) {
         final token = messageData['access_token'];
-
         final user = messageData['user'];
 
         if (token != null && token.toString().isNotEmpty) {
@@ -323,8 +325,9 @@ class DoctorVerifyOtpController extends GetxController {
           "Doctor registration successful",
         );
 
-        Get.offAllNamed(
-          Routes.DOCTOR_DASHBOARD,
+        Get.offAll(
+          () => const DoctorAvailabilityView(isFromRegistration: true),
+          binding: BindingsBuilder.put(() => DoctorAvailabilityController()),
         );
       } else {
         showError(

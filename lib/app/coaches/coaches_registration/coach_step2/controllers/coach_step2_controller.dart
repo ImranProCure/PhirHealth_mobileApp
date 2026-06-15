@@ -26,7 +26,7 @@ class CoachStep2Controller extends GetxController {
 
   // Licensing & Certifications
   final certificationController = TextEditingController();
-  final registeringAuthorityController = TextEditingController();
+  // final registeringAuthorityController = TextEditingController();
   final licenseController = TextEditingController();
 
   void showFieldSheet(BuildContext context) {
@@ -105,7 +105,7 @@ class CoachStep2Controller extends GetxController {
     qualificationController.dispose();
     universityController.dispose();
     certificationController.dispose();
-    registeringAuthorityController.dispose();
+    // registeringAuthorityController.dispose();
     licenseController.dispose();
     super.onClose();
   }

@@ -71,7 +71,7 @@ class SelectFacilityTypeView extends GetView<SelectFacilityTypeController> {
                     final f = controller.facilities[index];
 
                     return GestureDetector(
-                      onTap: () => controller.onFacilityTap(f['route']),
+                      onTap: () => controller.onFacilityTap(f['partnerType']),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,

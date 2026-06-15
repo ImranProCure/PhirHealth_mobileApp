@@ -41,8 +41,8 @@ class _PhoneAiNutritionistView extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          'AI Nutritionist',
+        title: Text(
+          'ai_nutritionist_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
@@ -60,23 +60,22 @@ class _PhoneAiNutritionistView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionTitle("What's your Goal?"),
+                    _SectionTitle("ai_nutritionist_goal_title".tr),
                     const SizedBox(height: 12),
                     _GoalGrid(controller: controller),
                     const SizedBox(height: 22),
-                    _SectionTitle('Food Preference'),
-                    _SectionSub('Select your primary dietary habit'),
+                    _SectionTitle('ai_nutritionist_food_pref_title'.tr),
+                    _SectionSub('ai_nutritionist_food_pref_sub'.tr),
                     const SizedBox(height: 12),
                     _FoodRow(controller: controller),
                     const SizedBox(height: 22),
-                    _SectionTitle('Activity Level?'),
-                    _SectionSub(
-                        "We'll adjust your daily caloric intake based on your 4-5 days/week gym schedule."),
+                    _SectionTitle('ai_nutritionist_activity_title'.tr),
+                    _SectionSub("ai_nutritionist_activity_sub".tr),
                     const SizedBox(height: 14),
                     _ActivitySlider(controller: controller),
                     const SizedBox(height: 22),
-                    _SectionTitle('Allergies'),
-                    _SectionSub('Do you have any known allergies?'),
+                    _SectionTitle('ai_nutritionist_allergies_title'.tr),
+                    _SectionSub('ai_nutritionist_allergies_sub'.tr),
                     const SizedBox(height: 12),
                     _AllergiesRow(controller: controller),
                     const SizedBox(height: 80),
@@ -116,8 +115,8 @@ class _PhoneAiNutritionistView extends StatelessWidget {
                                 )
                               : const Icon(Icons.bookmark_outline,
                                   color: Color(0xFF0D9488), size: 20),
-                          label: const Text(
-                            'View Saved Plan',
+                          label: Text(
+                            'ai_nutritionist_view_saved'.tr,
                             style: TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 15,
@@ -156,8 +155,8 @@ class _TabletAiNutritionistView extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         centerTitle: true,
-        title: const Text(
-          'AI Nutritionist',
+        title: Text(
+          'ai_nutritionist_title'.tr,
           style: TextStyle(
             fontFamily: 'Mulish',
             fontSize: 18,
@@ -185,8 +184,8 @@ class _TabletAiNutritionistView extends StatelessWidget {
                         color: const Color(0xFFE0F2F1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text(
-                        'Personalize your plan',
+                      child: Text(
+                        'ai_nutritionist_personalize'.tr,
                         style: TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 12,
@@ -196,8 +195,8 @@ class _TabletAiNutritionistView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    const Text(
-                      'AI Nutritionist',
+                    Text(
+                      'ai_nutritionist_title'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 28,
@@ -207,8 +206,8 @@ class _TabletAiNutritionistView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Tell us your goals and preferences to generate a personalised nutrition plan.',
+                    Text(
+                      'ai_nutritionist_tagline'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
@@ -217,12 +216,12 @@ class _TabletAiNutritionistView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const _SectionTitle("What's your Goal?"),
+                    _SectionTitle("ai_nutritionist_goal_title".tr),
                     const SizedBox(height: 12),
                     _GoalGrid(controller: controller, tablet: true),
                     const SizedBox(height: 24),
-                    const _SectionTitle('Food Preference'),
-                    _SectionSub('Select your primary dietary habit'),
+                    _SectionTitle('ai_nutritionist_food_pref_title'.tr),
+                    _SectionSub('ai_nutritionist_food_pref_sub'.tr),
                     const SizedBox(height: 12),
                     _FoodRow(controller: controller, tablet: true),
                     const Spacer(),
@@ -255,8 +254,8 @@ class _TabletAiNutritionistView extends StatelessWidget {
                                     )
                                   : const Icon(Icons.bookmark_outline,
                                       color: Color(0xFF0D9488), size: 20),
-                              label: const Text(
-                                'View Saved Plan',
+                              label: Text(
+                                'ai_nutritionist_view_saved'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Mulish',
                                   fontSize: 15,
@@ -277,14 +276,13 @@ class _TabletAiNutritionistView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _SectionTitle('Activity Level?'),
-                    _SectionSub(
-                        "We'll adjust your daily caloric intake based on your activity schedule."),
+                    _SectionTitle('ai_nutritionist_activity_title'.tr),
+                    _SectionSub("ai_nutritionist_activity_sub_tablet".tr),
                     const SizedBox(height: 14),
                     _ActivitySlider(controller: controller),
                     const SizedBox(height: 28),
-                    const _SectionTitle('Allergies'),
-                    _SectionSub('Do you have any known allergies?'),
+                    _SectionTitle('ai_nutritionist_allergies_title'.tr),
+                    _SectionSub('ai_nutritionist_allergies_sub'.tr),
                     const SizedBox(height: 12),
                     _AllergiesRow(controller: controller),
                   ],
@@ -726,14 +724,14 @@ class _AllergiesRow extends StatelessWidget {
                   border:
                       Border.all(color: const Color(0xFFD1D5DB), width: 1.5),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.add_circle_outline,
                         color: Colors.black, size: 20),
                     SizedBox(width: 6),
                     Text(
-                      'Add Other',
+                      'add_other'.tr,
                       style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
@@ -767,8 +765,8 @@ class _AllergiesRow extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Add Allergy',
+            Text(
+              'ai_nutritionist_add_allergy_title'.tr,
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
@@ -782,7 +780,7 @@ class _AllergiesRow extends StatelessWidget {
               autofocus: true,
               style: const TextStyle(fontFamily: 'Mulish', fontSize: 14),
               decoration: InputDecoration(
-                hintText: 'e.g. Gluten, Lactose...',
+                hintText: 'ai_nutritionist_add_allergy_hint'.tr,
                 hintStyle: const TextStyle(
                     fontFamily: 'Mulish', color: Color(0xFF9CA3AF)),
                 filled: true,
@@ -820,8 +818,8 @@ class _AllergiesRow extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),
                   ),
-                  child: const Text(
-                    'Add',
+                  child: Text(
+                    'ai_nutritionist_add_btn'.tr,
                     style: TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 15,
@@ -878,8 +876,8 @@ class _GenerateButton extends StatelessWidget {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Generate AI Plan',
+                        Text(
+                          'ai_nutritionist_generate'.tr,
                           style: TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 16,

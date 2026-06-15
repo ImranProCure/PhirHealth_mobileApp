@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../controllers/verification_details_controller.dart';
+import '../../verification_details/controllers/verification_details_controller.dart';
 
 class VerificationDetailsBinding extends Bindings {
   @override

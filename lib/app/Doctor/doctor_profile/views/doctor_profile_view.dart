@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/doctor_profile_controller.dart';
+import '../../../modules/google_calendar_controller_/google_calendar_controller.dart';
 
 class DoctorProfileView extends GetView<DoctorProfileController> {
   const DoctorProfileView({super.key});
@@ -397,90 +398,48 @@ class _ProfileCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           /// ================= ONLINE + VERIFIED =================
-          Row(
-            children: [
-              Obx(
-                () => Row(
-                  children: [
-                    Switch(
-                      value: controller.isOnline.value,
-                      onChanged: controller.toggleOnline,
-                      activeColor: Colors.white,
-                      activeTrackColor: const Color(
-                        0xFF0D9488,
-                      ),
-                      inactiveThumbColor: Colors.white,
-                      inactiveTrackColor: const Color(
-                        0xFFD1D5DB,
-                      ),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      controller.isOnline.value ? 'Online' : 'Offline',
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: controller.isOnline.value
-                            ? const Color(
-                                0xFF0D9488,
-                              )
-                            : const Color(
-                                0xFF9CA3AF,
-                              ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(
-                    20,
-                  ),
-                  border: Border.all(
-                    color: const Color(
-                      0xFF0D9488,
-                    ),
-                    width: 1.5,
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.verified_user_outlined,
-                      color: Color(
-                        0xFF0D9488,
-                      ),
-                      size: 14,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      'Verified Doctor',
-                      style: TextStyle(
-                        fontFamily: 'Mulish',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(
-                          0xFF0D9488,
+          /// ================= GOOGLE CALENDAR BUTTON =================
+          Obx(() {
+            final calCtrl = Get.find<GoogleCalendarController>();
+            return SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: ElevatedButton.icon(
+                onPressed:
+                    calCtrl.isLoading.value ? null : calCtrl.connectCalendar,
+                icon: calCtrl.isLoading.value
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                  ],
+                      )
+                    : const Icon(Icons.calendar_month, size: 18),
+                label: Text(
+                  calCtrl.isConnected.value
+                      ? 'Calendar Connected ✓'
+                      : 'Connect Google Calendar',
+                  style: const TextStyle(
+                    fontFamily: 'Mulish',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: calCtrl.isConnected.value
+                      ? const Color(0xFF16A34A)
+                      : const Color(0xFF0D9488),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          }),
         ],
       ),
     );

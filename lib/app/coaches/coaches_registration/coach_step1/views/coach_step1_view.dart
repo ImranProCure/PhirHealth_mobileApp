@@ -134,25 +134,25 @@ class CoachStep1View extends GetView<CoachStep1Controller> {
                       )),
                   const SizedBox(height: 20),
 
-                  _label('Short Bio'),
-                  const SizedBox(height: 8),
-                  _multiField(
-                      controller: controller.bioController,
-                      hint:
-                          'Tell potential clients about your approach and expertise...',
-                      minLines: 4),
-                  const SizedBox(height: 28),
+                  // _label('Short Bio'),
+                  // const SizedBox(height: 8),
+                  // _multiField(
+                  //     controller: controller.bioController,
+                  //     hint:
+                  //         'Tell potential clients about your approach and expertise...',
+                  //     minLines: 4),
+                  // const SizedBox(height: 28),
 
-                  const Divider(height: 1, color: Color(0xFFE5E7EB)),
-                  const SizedBox(height: 20),
+                  // const Divider(height: 1, color: Color(0xFFE5E7EB)),
+                  // const SizedBox(height: 20),
 
-                  const Text('Demographics & Location',
-                      style: TextStyle(
-                          fontFamily: 'Mulish',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black)),
-                  const SizedBox(height: 16),
+                  // const Text('Demographics & Location',
+                  //     style: TextStyle(
+                  //         fontFamily: 'Mulish',
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.w700,
+                  //         color: Colors.black)),
+                  // const SizedBox(height: 16),
 
                   const Text('Languages Spoken',
                       style: TextStyle(
@@ -244,37 +244,37 @@ class CoachStep1View extends GetView<CoachStep1Controller> {
                       )),
                   const SizedBox(height: 20),
 
-                  _label('City'),
+                  _label('Address'),
                   const SizedBox(height: 8),
                   _field(
-                      controller: controller.cityController,
-                      hint: 'e.g. San Francisco'),
+                      controller: controller.addressController,
+                      hint: 'e.g. Kanadiya'),
                   const SizedBox(height: 16),
 
-                  Row(children: [
-                    Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          _label('State'),
-                          const SizedBox(height: 8),
-                          _field(
-                              controller: controller.stateController,
-                              hint: 'State'),
-                        ])),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          _label('Country'),
-                          const SizedBox(height: 8),
-                          _field(
-                              controller: controller.countryController,
-                              hint: 'Country'),
-                        ])),
-                  ]),
-                  const SizedBox(height: 32),
+                  // Row(children: [
+                  //   Expanded(
+                  //       child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //         _label('State'),
+                  //         const SizedBox(height: 8),
+                  //         _field(
+                  //             controller: controller.stateController,
+                  //             hint: 'State'),
+                  //       ])),
+                  //   const SizedBox(width: 12),
+                  //   Expanded(
+                  //       child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //         _label('Country'),
+                  //         const SizedBox(height: 8),
+                  //         _field(
+                  //             controller: controller.countryController,
+                  //             hint: 'Country'),
+                  //       ])),
+                  // ]),
+                  // const SizedBox(height: 32),
                 ],
               ),
             ),

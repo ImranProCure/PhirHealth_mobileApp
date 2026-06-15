@@ -5,9 +5,9 @@ import 'package:image_picker/image_picker.dart';
 class CoachStep1Controller extends GetxController {
   final fullNameController = TextEditingController();
   final bioController = TextEditingController();
-  final cityController = TextEditingController();
-  final stateController = TextEditingController();
-  final countryController = TextEditingController();
+  final addressController = TextEditingController();
+  // final stateController = TextEditingController();
+  // final countryController = TextEditingController();
 
   final RxString avatarPath = ''.obs;
   final RxString selectedTitle = ''.obs;
@@ -56,9 +56,9 @@ class CoachStep1Controller extends GetxController {
   void onClose() {
     fullNameController.dispose();
     bioController.dispose();
-    cityController.dispose();
-    stateController.dispose();
-    countryController.dispose();
+    addressController.dispose();
+    // stateController.dispose();
+    // countryController.dispose();
     super.onClose();
   }
 }
