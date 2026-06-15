@@ -20,13 +20,13 @@ class MyProfileController extends GetxController {
   // Ab har baar getter call hoga toh fresh .tr milega current locale se
   List<List<Map<String, dynamic>>> get menuSections => [
         [
-          {
-            'icon': Icons.account_balance_wallet_outlined,
-            'label': 'patient_menu_wallet'.tr,
-            'route': '/wallet',
-            'iconColor': const Color(0xFF0D9488),
-            'iconBg': const Color(0xFFE0F2F1),
-          },
+          // {
+          //   'icon': Icons.account_balance_wallet_outlined,
+          //   'label': 'patient_menu_wallet'.tr,
+          //   'route': '/wallet',
+          //   'iconColor': const Color(0xFF0D9488),
+          //   'iconBg': const Color(0xFFE0F2F1),
+          // },
           {
             'icon': Icons.assignment_outlined,
             'label': 'patient_menu_records'.tr,
