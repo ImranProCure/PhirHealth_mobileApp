@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:sample/app/service/api/api_client/api_client.dart';
 import 'package:sample/app/service/api/api_client/api_constants.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
@@ -24,6 +25,7 @@ class DoctorAvailabilityApi {
         'schedule': schedule,
         'day': day,
       },
+      authenticated: true,
     );
   }
 
@@ -57,24 +59,28 @@ class DoctorAvailabilityApi {
     required String toTime,
     required int durationMins,
     required List<String> days,
+    required String practitioner,
     int allowVideoConferencing = 0,
   }) async {
     // Token storage se lo aur set karo
-    final authStorage = AuthStorageService();
-    final token = await authStorage.getToken();
-    if (token != null) {
-      _apiClient.setBearerToken(token);
-    }
+    // final authStorage = AuthStorageService();
+    // final token = await authStorage.getToken();
+    // if (token != null) {
+    //   _apiClient.setBearerToken(token);
+    // }
 
     return await _apiClient.post(
-        ApiConstants.commonApiConstants.createDoctorSlots,
-        data: {
-          'from_time': fromTime,
-          'to_time': toTime,
-          'duration_mins': durationMins,
-          'days': days,
-          'create_slots': 1,
-        },
-        authenticated: true);
+      ApiConstants.commonApiConstants.createDoctorSlots,
+      data: {
+        'from_time': fromTime,
+        'to_time': toTime,
+        'duration': durationMins.toString(),
+        'days': days,
+        'create_slots': 1,
+        'practitioner_id': practitioner,
+      },
+      // options: Options(),
+      // authenticated: true
+    );
   }
 }

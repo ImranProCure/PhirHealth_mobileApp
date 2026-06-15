@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:sample/app/common_function.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
+import 'package:flutter/material.dart';
+import 'package:sample/app/service/db/db.dart';
 import 'package:sample/app/service/api/common_api/doctor_availability_api/doctor_availability_api.dart';
 
 class DoctorAvailabilityController extends GetxController {
@@ -133,16 +135,24 @@ class DoctorAvailabilityController extends GetxController {
     try {
       isSaving.value = true;
 
+      // Token check
+      final authStorage = AuthStorageService();
+      final userDetail = await authStorage.getUserDetail();
+      debugPrint('🟢 FULL USER DETAIL: $userDetail');
+      final practitioner = userDetail?['doctor_id'] ?? '';
+      debugPrint('🟢 Practitioner: $practitioner');
+
       final ApiResponse response = await _api.createDoctorSlots(
         fromTime: fromTime.value,
         toTime: toTime.value,
         durationMins: 30,
         days: selectedDays,
         allowVideoConferencing: isClinic.value ? 1 : 0,
+        practitioner: practitioner,
       );
 
       final message = response.data['message'];
-      final bool success = message?['success'] == true;
+      final bool success = message?['status'] == true;
 
       if (success) {
         showMessage('Slots created successfully!');

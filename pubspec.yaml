@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   
+  http: ^1.1.0
+  
   
   app_links: ^6.0.0
   

@@ -292,7 +292,6 @@ class DoctorVerifyOtpController extends GetxController {
 
       if (messageData is Map && messageData['status'] == true) {
         final token = messageData['access_token'];
-
         final user = messageData['user'];
 
         if (token != null && token.toString().isNotEmpty) {

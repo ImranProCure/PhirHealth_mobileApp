@@ -34,6 +34,7 @@ import 'package:sample/app/corporate/corporate_registration/corporate_step3/bind
 import 'package:sample/app/corporate/corporate_registration/corporate_step3/views/corporate_step3_view.dart';
 import 'package:sample/app/corporate/corporate_registration/corporate_step4/bindings/corporate_step4_binding.dart';
 import 'package:sample/app/corporate/corporate_registration/corporate_step4/views/corporate_step4_view.dart';
+import 'package:sample/app/modules/meeting_webview_screen.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_dashboard/clinic_dashboard_view.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/bindings/clinic_expertise_binding.dart';
 import 'package:sample/app/partner/clinic_onboarding/clinic_expertise/views/clinic_expertise_view.dart';
@@ -1005,6 +1006,10 @@ class AppPages {
     GetPage(
       name: '/hospital-dashboard',
       page: () => const HospitalDashboardView(),
+    ),
+    GetPage(
+      name: '/meeting-webview',
+      page: () => const MeetingWebViewScreen(),
     ),
   ];
 }
