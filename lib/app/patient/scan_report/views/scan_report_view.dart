@@ -28,14 +28,16 @@ class ScanReportView extends GetView<ScanReportController> {
             color: Colors.black,
           ),
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.save_alt, color: Colors.black),
-        //     onPressed: controller.download,
-        //   ),
-        // ],
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.download_rounded,
+              color: Colors.black,
+            ),
+            onPressed: controller.download,
+          ),
+        ],
       ),
-      
       body: Column(
         children: [
           Expanded(

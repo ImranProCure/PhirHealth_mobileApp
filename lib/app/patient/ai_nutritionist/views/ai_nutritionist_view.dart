@@ -34,6 +34,7 @@ class _PhoneAiNutritionistView extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -43,7 +44,7 @@ class _PhoneAiNutritionistView extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'ai_nutritionist_title'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Mulish',
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -89,10 +90,11 @@ class _PhoneAiNutritionistView extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
               child: Column(
                 children: [
+                  // Generate Plan Button
                   _GenerateButton(controller: controller),
                   const SizedBox(height: 12),
 
-                  // ===== VIEW SAVED PLAN =====
+                  // View Saved Plan Button
                   Obx(() => SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -117,7 +119,7 @@ class _PhoneAiNutritionistView extends StatelessWidget {
                                   color: Color(0xFF0D9488), size: 20),
                           label: Text(
                             'ai_nutritionist_view_saved'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Mulish',
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -157,7 +159,7 @@ class _TabletAiNutritionistView extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'ai_nutritionist_title'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Mulish',
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -186,7 +188,7 @@ class _TabletAiNutritionistView extends StatelessWidget {
                       ),
                       child: Text(
                         'ai_nutritionist_personalize'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Mulish',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -197,7 +199,7 @@ class _TabletAiNutritionistView extends StatelessWidget {
                     const SizedBox(height: 14),
                     Text(
                       'ai_nutritionist_title'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 28,
                         fontWeight: FontWeight.w900,
@@ -208,7 +210,7 @@ class _TabletAiNutritionistView extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       'ai_nutritionist_tagline'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
                         color: Color(0xFF6B7280),
@@ -225,10 +227,14 @@ class _TabletAiNutritionistView extends StatelessWidget {
                     const SizedBox(height: 12),
                     _FoodRow(controller: controller, tablet: true),
                     const Spacer(),
+
+                    // Generate Plan Button
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: _GenerateButton(controller: controller),
                     ),
+
+                    // View Saved Plan Button
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: Obx(() => SizedBox(
@@ -256,7 +262,7 @@ class _TabletAiNutritionistView extends StatelessWidget {
                                       color: Color(0xFF0D9488), size: 20),
                               label: Text(
                                 'ai_nutritionist_view_saved'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Mulish',
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
@@ -727,12 +733,12 @@ class _AllergiesRow extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add_circle_outline,
+                    const Icon(Icons.add_circle_outline,
                         color: Colors.black, size: 20),
-                    SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     Text(
                       'add_other'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -767,7 +773,7 @@ class _AllergiesRow extends StatelessWidget {
           children: [
             Text(
               'ai_nutritionist_add_allergy_title'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
@@ -820,7 +826,7 @@ class _AllergiesRow extends StatelessWidget {
                   ),
                   child: Text(
                     'ai_nutritionist_add_btn'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -878,7 +884,7 @@ class _GenerateButton extends StatelessWidget {
                       children: [
                         Text(
                           'ai_nutritionist_generate'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 16,
                             fontWeight: FontWeight.w700,

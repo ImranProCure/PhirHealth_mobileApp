@@ -20,7 +20,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _SectionTitle('Privacy Policy'),
             _BodyText('Effective Date: 01/May/2026'),
             SizedBox(height: 16),
-
             // 1
             _SectionTitle('1. About PHIR Health'),
             _BodyText(

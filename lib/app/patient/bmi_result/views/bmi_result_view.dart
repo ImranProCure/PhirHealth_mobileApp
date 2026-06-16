@@ -9,6 +9,33 @@ class BmiResultView extends GetView<BmiResultController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        color: const Color(0xFF0D5C8A),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+        child: SizedBox(
+          height: 54,
+          child: ElevatedButton(
+            onPressed: () {
+              Get.offAllNamed('/dashboard');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+            ),
+            child: Text(
+              "Back to Dashboard",
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF0D7377),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -42,7 +69,28 @@ class BmiResultView extends GetView<BmiResultController> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    // Download report button — replaces the old spacer
+                    Obx(
+                      () => controller.isGeneratingReport.value
+                          ? const Padding(
+                              padding: EdgeInsets.all(13),
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              ),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.download_rounded,
+                                  color: Colors.white, size: 22),
+                              tooltip: 'bmi_result_download_report'.tr,
+                              onPressed: controller.downloadReport,
+                            ),
+                    ),
                   ],
                 ),
               ),
@@ -52,12 +100,14 @@ class BmiResultView extends GetView<BmiResultController> {
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                   child: Column(
                     children: [
+                      _greetingHeader(),
+                      const SizedBox(height: 12),
                       _bmiScoreCard(),
                       const SizedBox(height: 16),
                       _weightGoalCard(),
                       const SizedBox(height: 16),
                       _infoCard(),
-                      const SizedBox(height: 100),
+                      //const SizedBox(height: 100),
                     ],
                   ),
                 ),
@@ -91,6 +141,40 @@ class BmiResultView extends GetView<BmiResultController> {
       //     ),
       //   ),
       // ),
+    );
+  }
+
+  // ===== GREETING / NAME HEADER =====
+  Widget _greetingHeader() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: 'Hi, ',
+                style: TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white70,
+                ),
+              ),
+              TextSpan(
+                text: controller.name,
+                style: const TextStyle(
+                  fontFamily: 'Mulish',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

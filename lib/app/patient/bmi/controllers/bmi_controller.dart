@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sample/app/service/db/db.dart';
 
 class BmiController extends GetxController {
   final RxString selectedGender = 'Male'.obs;
@@ -17,6 +18,7 @@ class BmiController extends GetxController {
     {'label': 'bmi_gender_female'.tr, 'icon': Icons.female},
     {'label': 'patient_step1_gender_other'.tr, 'icon': Icons.male},
   ];
+  AuthStorageService authStorage = AuthStorageService();
 
   void selectGender(String g) => selectedGender.value = g;
 
@@ -32,7 +34,7 @@ class BmiController extends GetxController {
     if (v != null) weight.value = v;
   }
 
-  void calculateBmi() {
+  Future<void> calculateBmi() async {
     if (age.value <= 0 || age.value > 120) {
       Get.snackbar("Invalid Age", "Please enter a valid age",
           snackPosition: SnackPosition.BOTTOM,
@@ -60,12 +62,16 @@ class BmiController extends GetxController {
           borderRadius: 12);
       return;
     }
+// name
 
+    final userDetail = await authStorage.getUserDetail();
+    String userName = (userDetail?['full_name'] as String? ?? '').trim();
     Get.toNamed('/bmi-result', arguments: {
       'gender': selectedGender.value,
       'age': age.value,
       'height': height.value,
       'weight': weight.value,
+      'name': userName
     });
   }
 

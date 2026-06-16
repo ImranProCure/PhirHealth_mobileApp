@@ -11,6 +11,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0.0,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -18,11 +19,36 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
         ),
         centerTitle: true,
         title: Text('ai_nutritionist_result_title'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: Colors.black)),
+
+        // ===== DOWNLOAD ICON — TOP RIGHT =====
+        actions: [
+          Obx(() => controller.isDownloadingPdf.value
+              ? const Padding(
+                  padding: EdgeInsets.only(right: 14),
+                  child: SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF0D9488),
+                      strokeWidth: 2,
+                    ),
+                  ),
+                )
+              : IconButton(
+                  onPressed: controller.downloadPdf,
+                  icon: const Icon(
+                    Icons.picture_as_pdf_outlined,
+                    color: Color(0xFF0D9488),
+                    size: 26,
+                  ),
+                  tooltip: 'Download PDF',
+                )),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -36,7 +62,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                     _dailyTargetCard(),
                     const SizedBox(height: 22),
                     Text('ai_nutritionist_daily_timeline'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Mulish',
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
@@ -84,7 +110,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text('Daily Target',
+                child: const Text('Daily Target',
                     style: TextStyle(
                         fontFamily: 'Mulish',
                         fontSize: 12,
@@ -93,7 +119,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
               ),
               const SizedBox(width: 10),
               Text('ai_nutritionist_just_now'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Mulish',
                       fontSize: 12,
                       color: Color(0xFF9CA3AF))),
@@ -101,7 +127,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
           ),
           const SizedBox(height: 12),
 
-          // ✅ DYNAMIC — calories from Groq
+          // DYNAMIC — calories from Groq
           Obx(() => RichText(
                 text: TextSpan(
                   style: const TextStyle(
@@ -145,7 +171,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
               ),
               const SizedBox(width: 10),
 
-              // ✅ DYNAMIC — tagline from Groq
+              // DYNAMIC — tagline from Groq
               Expanded(
                 child: Obx(() => Text(
                       '"${controller.tagline.value}"',
@@ -397,7 +423,7 @@ class AiNutritionistResultView extends GetView<AiNutritionistResultController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text('ai_nutritionist_accept_plan'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'Mulish',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
