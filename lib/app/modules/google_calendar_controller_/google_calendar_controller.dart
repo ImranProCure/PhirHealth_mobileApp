@@ -36,7 +36,7 @@ class GoogleCalendarController extends GetxController
         _checkStatus();
       }
 
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 5), () {
         _deepLinkHandled = false;
       });
     });

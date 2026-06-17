@@ -187,7 +187,7 @@ class DigitalReadinessView extends GetView<DigitalReadinessController> {
             /// ================= CONSULTATION FEE =================
 
             const Text(
-              'Consultation Fee',
+              'Video Consultation Fee',
               style: TextStyle(
                 fontFamily: 'Mulish',
                 fontSize: 15,
@@ -224,6 +224,45 @@ class DigitalReadinessView extends GetView<DigitalReadinessController> {
               ),
             ),
 
+            const SizedBox(height: 28),
+
+            const Text(
+              'Clinic Visit Fee',
+              style: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Container(
+              height: 58,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFFE5E7EB),
+                ),
+              ),
+              child: TextField(
+                controller: controller.clinicVisitFeeController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  prefixText: '₹ ',
+                  hintText: '500',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Mulish',
+                    color: Color(0xFF9CA3AF),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 28),
 
             /// ================= WAIT TIME =================

@@ -248,6 +248,10 @@ class DoctorVerifyOtpController extends GetxController {
             ? DateFormat('yyyy-MM-dd').format(reg.graduationYear.value!)
             : '',
 
+        'custom_date_of_birth': reg.birthDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(reg.birthDate.value!)
+            : '',
+
         // STEP 2
         'custom_total_experience': exp.totalExperience.value.toString(),
 
@@ -260,7 +264,8 @@ class DoctorVerifyOtpController extends GetxController {
         'custom_gynaecological_history': exp.historyController.text.trim(),
 
         // STEP 3
-        'custom_per_session_fee': digital.feeController.text.trim(),
+        'custom_video_consult_fee': digital.feeController.text.trim(),
+        'clinic_visit_fee': digital.clinicVisitFeeController.text.trim(),
 
         'custom_wait_time': digital.waitTimeController.text.trim(),
 
