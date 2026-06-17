@@ -16,6 +16,8 @@ class DigitalReadinessController extends GetxController {
   /// ================= CONSULTATION FEE =================
 
   final TextEditingController feeController = TextEditingController();
+  final TextEditingController clinicVisitFeeController =
+      TextEditingController();
 
   /// ================= WAIT TIME =================
 
@@ -47,6 +49,7 @@ class DigitalReadinessController extends GetxController {
 
   bool validateForm() {
     return feeController.text.trim().isNotEmpty &&
+        clinicVisitFeeController.text.trim().isNotEmpty &&
         waitTimeController.text.trim().isNotEmpty;
   }
 
@@ -73,6 +76,7 @@ class DigitalReadinessController extends GetxController {
   @override
   void onClose() {
     feeController.dispose();
+    clinicVisitFeeController.dispose();
 
     waitTimeController.dispose();
 

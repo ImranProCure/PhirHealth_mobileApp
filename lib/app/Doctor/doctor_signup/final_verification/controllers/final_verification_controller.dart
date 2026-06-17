@@ -5,6 +5,7 @@ import 'package:sample/app/modules/doctor_verify_otp/views/doctor_verify_otp_vie
 import 'package:sample/app/service/api/api.dart';
 import 'package:sample/app/service/api/api_client/api_response.dart';
 import 'package:sample/app/common_function.dart';
+import 'dart:async'; // TimeoutException ke liye
 
 import '../../registration/controllers/registration_controller.dart';
 
@@ -36,14 +37,12 @@ class FinalVerificationController extends GetxController {
   Future<void> getCurrentLocation() async {
     try {
       isFetchingLocation.value = true;
+      locationStatus.value = 'Fetching location...';
 
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
       if (!serviceEnabled) {
-        showError(
-          'Please enable location services',
-        );
-
+        await Geolocator.openLocationSettings(); // ← settings open karo
+        showError('Please enable location services');
         return;
       }
 
@@ -53,32 +52,34 @@ class FinalVerificationController extends GetxController {
         permission = await Geolocator.requestPermission();
       }
 
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      // ← deniedForever alag handle karo
+      if (permission == LocationPermission.deniedForever) {
+        await Geolocator.openAppSettings(); // ← app settings open karo
         showError(
-          'Location permission denied',
-        );
+            'Location permission permanently denied. Enable from settings.');
+        return;
+      }
 
+      if (permission == LocationPermission.denied) {
+        showError('Location permission denied');
         return;
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        desiredAccuracy: LocationAccuracy.medium, // ← high se medium, faster
+        timeLimit: const Duration(seconds: 10), // ← timeout add karo
       );
 
       latitude.value = position.latitude.toString();
-
       longitude.value = position.longitude.toString();
-
       locationStatus.value = 'Location fetched successfully';
-
-      showMessage(
-        'Location fetched successfully',
-      );
+      showMessage('Location fetched successfully');
+    } on TimeoutException {
+      showError('Location fetch timed out. Try again.');
+      locationStatus.value = 'Timeout - try again';
     } catch (e) {
-      showError(
-        e.toString(),
-      );
+      showError(e.toString());
+      locationStatus.value = 'Failed to fetch location';
     } finally {
       isFetchingLocation.value = false;
     }
